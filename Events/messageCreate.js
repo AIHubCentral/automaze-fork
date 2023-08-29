@@ -22,7 +22,6 @@ module.exports = {
         }
     
         if (message.content.startsWith(prefix)) {
-            console.log(message.content);
             const args = message.content.slice(prefix.length).trim().split(/ +/);
             const commandName = args.shift().toLowerCase();
             const command = Client.commands.get(commandName) || Client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName) && cmd.aliases !== []); // Use the command alias if there's any, if there's none use the real command name instead
