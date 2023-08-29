@@ -1,3 +1,6 @@
+const { EmbedBuilder } = require("discord.js");
+
+/*
 const { OpenAIApi, Configuration } = require('openai');
 const config = new Configuration({
     apiKey: process.env.gpt_api_key
@@ -75,7 +78,7 @@ const languages = [
         lang: 'Hungarian'
     }
 ]
-
+*/
 
 
 module.exports = {
@@ -92,6 +95,7 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async (client, message, args, prefix) => {
+        /*
         let reference;
         try {
             reference = await message.fetchReference();
@@ -140,5 +144,11 @@ module.exports = {
             return void message.reply(`fungus is a poopyhead <@707400633451282493>`);
         }
         message.reply(response.data.choices[0].text);
+    */
+        const embed = new EmbedBuilder()
+                            .setTitle(`Translate`)
+                            .setDescription(`This command is temporarily unavailable.`)
+                            .setColor(`Orange`);
+        message.reply({embeds: [embed]});
     }
 }
