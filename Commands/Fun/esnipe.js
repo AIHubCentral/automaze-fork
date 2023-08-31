@@ -13,13 +13,12 @@ module.exports = {
      * @param {string[]} args 
      * @param {String} prefix 
      */
-    run: (client, message, args, prefix) => {
+    run: async(client, message, args, prefix) => {
         const embed = new EmbedBuilder()
         .setTitle(`💀 ~~i saw what you edited~~`)
         .setColor(0xFFFF00)
         .setDescription(`:calmcryandsmokin: This command is no longer available.`)
-        .setFooter({text: `Note: -esnipe will be removed soon.`})
-
-        message.channel.send({embeds: [embed]})
+        .setFooter({text: `Note: -esnipe will be removed soon.`});
+        await message.channel.send({embeds: [embed]});
     }
 }
