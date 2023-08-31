@@ -72,6 +72,11 @@ client.bananaCD = new Enmap();
 client.scourCD = new Enmap();
 client.prefix = new Enmap({name: 'prefix'});
 
+// disallow -find and -cfind in these channels
+client.disallowedChannelIds = [];
+client.disallowedChannelIds.push(client.discordIDs.Channel.GetModelMakerRole);
+client.disallowedChannelIds.push(client.discordIDs.Channel.MakingModels);
+
 // Read all handlers of the folder
 const handlerFiles = getAllFiles('./Handlers').filter(file => file.endsWith('.js'));
 for(const handler of handlerFiles) {
