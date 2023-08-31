@@ -6,48 +6,6 @@ module.exports = {
     name: "messageCreate",
     once: false,
     async run(Client, message, _) {
-
-        if (Client.disallowedChannelIds.includes(`${message.channelId}`)) {
-            //console.log('Disallowed channel');
-
-            // delete bot embeds if needed
-            if (message.author.bot && message.author.id == oldAutomazeId && message.embeds.length > 0) {
-                const responseTitle = message.embeds[0].data.title;
-
-                if (responseTitle.includes('found')) {
-                    await message.delete();
-                }
-            }
-
-            let shouldDeleteUserMessage = !message.author.bot && (message.content.startsWith('-find')
-                || message.content.startsWith('-cfind'));
-
-            let shouldDeleteBotMessage = (message.author.bot && message.author.id == oldAutomazeId)
-                && (message.content.includes('no query provided') || message.content.includes('please move to its dedicated channel') || message.content.includes('No result found'));
-            
-            if (shouldDeleteUserMessage) {
-                //console.log('Prefix command on a disallowed channel');
-                const botReply = await message.reply('This command is not allowed in this channel.');
-
-                setTimeout(async () => {
-                    await message.delete();
-                    await botReply.delete();
-                }, 5000);
-
-                /*
-                    .catch(err => {
-                        if (err.code === RESTJSONErrorCodes.MissingPermissions) {
-                            console.log('Missing permission sir :(');
-                        }
-                    });
-                */
-            }
-
-            if (shouldDeleteBotMessage) {
-                await message.delete();
-            }
-        }
-
         if (message.author.bot) return;
 
         const prefix = Client.prefix.ensure(message.guild.id, '-');

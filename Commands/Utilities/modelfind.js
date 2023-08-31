@@ -14,15 +14,26 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async (client, message, args, prefix) => {
+
+        if (client.disallowedChannelIds.includes(`${message.channelId}`)) {
+            if (message.content.startsWith('-find')) {
+                const botReply = await message.reply('This command is not available in this channel.');
+
+                setTimeout(async () => {
+                    await message.delete();
+                    await botReply.delete();
+                }, 6000);
+
+                return;
+            }
+        }
+
         const query = message.content.split(' ').slice(1).join(' ');
 
         if (!query) {
             return void message.reply(`no query provided`);
         }
 
-        if (message.channel.id !== '1135953335388733502') {
-            return void message.reply(`you cannot use this command, please move to its dedicated channel or use \`${prefix}cfind\` instead`);
-        }
         let fuzzyValue = 0;
         
         let allResults = client.modelSearchEngine.search(query, { fuzzy: fuzzyValue }).filter(result => result.downloadURL && result.downloadURL.length);

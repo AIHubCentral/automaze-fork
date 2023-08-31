@@ -14,6 +14,19 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async (client, message, args, prefix) => {
+        if (client.disallowedChannelIds.includes(`${message.channelId}`)) {
+            if (message.content.startsWith('-cfind')) {
+                const botReply = await message.reply('This command is not available in this channel.');
+
+                setTimeout(async () => {
+                    await message.delete();
+                    await botReply.delete();
+                }, 6000);
+
+                return;
+            }
+        }
+
         const query = message.content.split(' ').slice(1).join(' ');
 
         if (!query) {
