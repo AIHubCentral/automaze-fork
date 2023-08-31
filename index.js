@@ -44,7 +44,7 @@ const client = new Discord.Client({
 });
 
 // Discord IDs JSON
-client.discordIDs = require((Env.error != null) ? DiscordIDs.prod: DiscordIDs.dev);
+client.discordIDs = require(DiscordIDs.prod);
 
 // Discord Tables
 client.forumSpammer = {}
