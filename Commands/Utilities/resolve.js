@@ -1,33 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
 
-const prodIds = {
-    role: {
-        'admin': '1090743458320363711',
-        'mod': '1091189761001128018',
-        'suggestionsQC': '1128124686912454779',
-    },
-    channel: {
-        'suggestions': '1127426867767562270',
-        'tasks': '1139248461070467243',
-    }
-}
-
-/*
-const devIds = {
-    role: {
-        'mod': '1136973273540861974',
-        'suggestionsQC': '1141358227112611870',
-    },
-    channel: {
-        'suggestions': '1140188211818266704',
-        'tasks': '1141020043258376214',
-    }
-}
-*/
-
-const channelIds = Object.values(prodIds.channel);
-const roleIds = Object.values(prodIds.role)
-
 module.exports = {
     name: 'resolve',
     category: 'Utilities',
@@ -44,22 +16,32 @@ module.exports = {
     run: async (client, message, args, prefix) => {
         if (!message.channel.isThread()) return;
 
-        // check if it is an allowed channel
-        if (!channelIds.includes(message.channel.parentId)) return;
+        const allowedThreads = [];
+        allowedThreads.push(client.discordIDs.Forum.TaskSTAFF);
+        allowedThreads.push(client.discordIDs.Forum.Suggestions);
+
+        if (!allowedThreads.includes(message.channel.parentId)) {
+            await message.delete();
+            return;
+        };
 
         // check if user has at least one appropriate role
+        const allowedRoles = [];
+        allowedRoles.push(client.discordIDs.Roles.Admin);
+        allowedRoles.push(client.discordIDs.Roles.Mod);
+
         const userRoles = message.member.roles.cache;
 
-        for (const roleId of roleIds) {
+        for (const roleId of allowedRoles) {
             if (userRoles.has(roleId)) {
                 // check if thread is already locked
-                if (message.channel.locked) return await message.reply(`This thread already have been locked.`);
+                if (message.channel.locked) return await message.reply(`This thread have already been locked.`);
     
                 message.channel.setLocked(true, `approved_${message.channel.id}`).then(async thread => {
                     const approvedEmbed = new EmbedBuilder()
                         .setTitle(`This thread has been approved!`)
                         .setColor(`Green`)
-                        .setDescription(`${message.author.username} has found the suggestion contributive and approved it. The suggestion is now being considered and is likely to be put into motion. This thread will be archived in 3 seconds.`);
+                        .setDescription(`${message.author} has found the suggestion contributive and approved it. The suggestion is now being considered and is likely to be put into motion.`);
 
                     const DMEmbed = new EmbedBuilder()
                         .setTitle(`Your thread has been approved!`)
@@ -72,9 +54,11 @@ module.exports = {
                         await threadMember.user.send({ embeds: [DMEmbed] }).catch(() => { })
                     });
 
+                    /*
                     setTimeout(() => {
                         message.channel.setArchived();
                     }, 3000);
+                    */
                 });
                 return;
             }

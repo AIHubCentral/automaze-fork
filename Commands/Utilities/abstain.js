@@ -13,43 +13,52 @@ module.exports = {
      * @param {string[]} args 
      * @param {String} prefix 
      */
-    run: (client, message, args, prefix) => {
-        if (!message.member.roles.cache.has('1128124686912454779')) {
-            return void message.reply(`you aint a part of the suggestions qc`);
+    run: async(client, message, args, prefix) => {
+        if (!message.channel.isThread()) return;
+
+        const allowedThreads = [];
+        allowedThreads.push(client.discordIDs.Forum.TaskSTAFF);
+        allowedThreads.push(client.discordIDs.Forum.Suggestions);
+
+        if (!allowedThreads.includes(message.channel.parentId)) {
+            await message.delete();
+            return;
+        };
+
+        // check if user has at least one appropriate role
+        const allowedRoles = [];
+        allowedRoles.push(client.discordIDs.Roles.Admin);
+        allowedRoles.push(client.discordIDs.Roles.Mod);
+
+        const userRoles = message.member.roles.cache;
+
+        for (const roleId of allowedRoles) {
+            if (userRoles.has(roleId)) {
+                // check if thread is already locked
+                if (message.channel.locked) return await message.reply(`This thread have already been locked.`);
+    
+                message.channel.setLocked(true, `abstain_${message.channel.id}`).then(async thread => {
+                    const approvedEmbed = new EmbedBuilder()
+                        .setTitle(`This thread has been locked!`)
+                        .setColor(`Grey`)
+                        .setDescription(`${message.author} is not sure of the suggestion and has decided to abstain from it. The suggestion is either a joke or is controversial and might be implemented or not depending on the staff team's discretion.`);
+
+                    const DMEmbed = new EmbedBuilder()
+                        .setTitle(`Your thread has been locked!`)
+                        .setColor(`Grey`)
+                        .setDescription(`${message.author.username} is not sure of your suggestion. Your thread is now locked ${message.channel}`);
+
+                    await thread.send({ embeds: [approvedEmbed] });
+                    await thread.fetchOwner().then(async threadMember => {
+                        await message.delete()
+                        await threadMember.user.send({ embeds: [DMEmbed] }).catch(() => { })
+                    });
+                });
+                return;
+            }
         }
 
-        if (!message.channel.isThread()) {
-            return void message.reply(`this isnt a thread channel`);
-        }
-
-        if (message.channel.parentId !== '1127426867767562270') {
-            return void message.reply(`the thread does not belong to suggestion channel`);
-        }
-
-        if (message.channel.locked) {
-            return void message.reply(`the thread already had a verdict`);
-        }
-
-        message.channel.setLocked(true, `abstain_${message.channel.id}`).then(thread => {
-            const abstainedEmbed = new EmbedBuilder()
-            .setTitle(`This thread has been locked!`)
-            .setColor(`Grey`)
-            .setDescription(`${message.author.username} is not sure of the suggestion and has decided to abstain from it. The suggestion is either a joke or is controversial and might be implemented or not depending on the staff team's discretion. This thread will be archived in 3 seconds.`)
-
-            const DMEmbed = new EmbedBuilder()
-            .setTitle(`Your thread has been locked!`)
-            .setColor(`Grey`)
-            .setDescription(`${message.author.username} is not sure of your suggestion. Your thread is now locked ${message.channel}`)
-
-            thread.send({embeds: [abstainedEmbed]});
-            thread.fetchOwner().then(threadMember => {
-                message.delete()
-                threadMember.user.send({embeds: [DMEmbed]}).catch(() => {})
-            });
-        });
-
-        setTimeout(() => {
-            message.channel.setArchived();
-        }, 3000);
+        // otherwise don't do an action on the thread
+        return await message.reply('You are not allowed to perform this action.');
     }
 }

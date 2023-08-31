@@ -13,43 +13,52 @@ module.exports = {
      * @param {string[]} args 
      * @param {String} prefix 
      */
-    run: (client, message, args, prefix) => {
-        if (!message.member.roles.cache.has('1128124686912454779')) {
-            return void message.reply(`you aint a part of the suggestions qc`);
+    run: async(client, message, args, prefix) => {
+        if (!message.channel.isThread()) return;
+
+        const allowedThreads = [];
+        allowedThreads.push(client.discordIDs.Forum.TaskSTAFF);
+        allowedThreads.push(client.discordIDs.Forum.Suggestions);
+
+        if (!allowedThreads.includes(message.channel.parentId)) {
+            await message.delete();
+            return;
+        };
+
+        // check if user has at least one appropriate role
+        const allowedRoles = [];
+        allowedRoles.push(client.discordIDs.Roles.Admin);
+        allowedRoles.push(client.discordIDs.Roles.Mod);
+
+        const userRoles = message.member.roles.cache;
+
+        for (const roleId of allowedRoles) {
+            if (userRoles.has(roleId)) {
+                // check if thread is already locked
+                if (message.channel.locked) return await message.reply(`This thread have already been locked.`);
+    
+                message.channel.setLocked(true, `rejected_${message.channel.id}`).then(async thread => {
+                    const approvedEmbed = new EmbedBuilder()
+                        .setTitle(`This thread has been rejected!`)
+                        .setColor(`Red`)
+                        .setDescription(`${message.author} has found the suggestion improper and decided not to follow. The suggestion is now locked.`);
+
+                    const DMEmbed = new EmbedBuilder()
+                        .setTitle(`Your thread has been rejected!`)
+                        .setColor(`Red`)
+                        .setDescription(`${message.author.username} finds your suggestion to be improper. Your thread is now rejected ${message.channel}`);
+
+                    await thread.send({ embeds: [approvedEmbed] });
+                    await thread.fetchOwner().then(async threadMember => {
+                        await message.delete()
+                        await threadMember.user.send({ embeds: [DMEmbed] }).catch(() => { })
+                    });
+                });
+                return;
+            }
         }
 
-        if (!message.channel.isThread()) {
-            return void message.reply(`this isnt a thread channel`);
-        }
-
-        if (message.channel.parentId !== '1127426867767562270') {
-            return void message.reply(`the thread does not belong to suggestion channel`);
-        }
-
-        if (message.channel.locked) {
-            return void message.reply(`the thread already had a verdict`);
-        }
-
-        message.channel.setLocked(true, `rejected_${message.channel.id}`).then(thread => {
-            const rejectedEmbed = new EmbedBuilder()
-            .setTitle(`This thread has been rejected!`)
-            .setColor(`Red`)
-            .setDescription(`${message.author.username} has found the suggestion improper and decided not to follow. The suggestion is now locked. This thread will be archived in 3 seconds.`)
-
-            const DMEmbed = new EmbedBuilder()
-            .setTitle(`Your thread has been rejected!`)
-            .setColor(`Red`)
-            .setDescription(`${message.author.username} finds your suggestion to be improper. Your thread is now rejected ${message.channel}`)
-
-            thread.send({embeds: [rejectedEmbed]});
-            thread.fetchOwner().then(threadMember => {
-                message.delete();
-                threadMember.user.send({embeds: [DMEmbed]}).catch(() => {})
-            });
-        });
-
-        setTimeout(() => {
-            message.channel.setArchived();
-        }, 3000);
+        // otherwise don't do an action on the thread
+        return await message.reply('You are not allowed to perform this action.');
     }
 }
