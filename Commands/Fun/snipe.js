@@ -14,7 +14,17 @@ module.exports = {
      * @param {string[]} args 
      * @param {String} prefix 
      */
-    run: (client, message, args, prefix) => {
+    run: async(client, message, args, prefix) => {
+        const disallowedChannel = message.channel.id == client.discordIDs.Channel.MakingModels || message.channel.id == client.discordIDs.Channel.GetModelMakerRole;
+        if (disallowedChannel) {
+            const botReply = await message.reply('This command is not available in this channel.');
+            setTimeout(async()=>{
+                await message.delete();
+                await botReply.delete();
+            },6000);
+            return;
+        }
+
         class Extractor {
             static extractAttachmentLinks(msg) {
                 if (!msg?.content) {
@@ -57,7 +67,7 @@ module.exports = {
         .setTitle(`💀 i saw what you deleted`)
         .setColor(0xFF0000)
         .setAuthor({name: snipedAuthor.username, iconURL: snipedAuthor.avatarURL()})
-        .setFooter({text: `Created ${relativeTimestamp} ago in #${channel.name} | requested by ${message.author.username}`})
+        .setFooter({text: `Created ${relativeTimestamp} ago in #${channel.name} | requested by ${message.author.username}\n\nNote: This command will be removed soon.`})
 
         if (snipedMsg.content) {
             embed.setDescription(snipedMsg.content)
