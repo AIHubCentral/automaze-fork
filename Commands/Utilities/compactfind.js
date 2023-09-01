@@ -15,7 +15,7 @@ module.exports = {
      */
     run: async (client, message, args, prefix) => {
         // which channel send to user
-        const targetChannel = message.guild.channels.cache.get(client.discordIDs.Forum.VoiceModel);
+        const targetChannel = message.guild.channels.cache.get(client.discordIDs.Forum.VoiceModel) ?? '**voice-models**';
         const botReply = await message.reply(`This command is currently unavailable. Please visit the ${targetChannel} channel if you wish to search for a model.`);
 
         // delete the messages after 30 seconds

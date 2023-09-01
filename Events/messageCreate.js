@@ -23,7 +23,7 @@ module.exports = {
             let embedDescription = `## Wassup I'm Automaze!`;
             embedDescription += `\n- My prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)`;
 
-            // only show how many guilds the bot is present if in the development sever
+            // only show how many guilds the bot is present if in the development server
             if (message.guild.id == devServerGuildId) {
                 embedDescription += `\n- Currently I'm present in ${Client.guilds.cache.size} servers.`;
             }
