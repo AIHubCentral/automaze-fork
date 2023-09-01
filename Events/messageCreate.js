@@ -19,7 +19,13 @@ module.exports = {
         }
 
         if (message.content.includes('<@' + Client.user.id + '>')) {
-            message.reply({ embeds: [new EmbedBuilder().setColor(`Aqua`).setDescription(`## wassup im automaze\n- my prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)\n- currently im present in ${Client.guilds.cache.size} ${Client.guilds.cache.size <= 1 ? `server` : `servers`}!\n- interested in how im built? [im actually open source!](https://github.com/DeprecatedTable/automaze)\n- feeling a tad bit generous? [buy me a coffee!](https://ko-fi.com/fungusdesu)`)] });
+            const devServerGuildId = '';
+            let embedDescription = `## Wassup I'm Automaze!`;
+            embedDescription += `\n- My prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)`;
+            // \n- currently im present in ${Client.guilds.cache.size}
+            embedDescription += `\n- Interested in how I'm built? [I'm actually open source!](https://github.com/DeprecatedTable/automaze)`;
+            embedDescription += `\n- Feeling a tad bit generous? [Buy me a coffee!](https://ko-fi.com/fungusdesu)`;
+            message.reply({ embeds: [new EmbedBuilder().setColor(`Aqua`).setDescription(embedDescription)] });
         }
 
         if (message.content.startsWith(prefix)) {
