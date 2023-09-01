@@ -19,10 +19,15 @@ module.exports = {
         }
 
         if (message.content.includes('<@' + Client.user.id + '>')) {
-            const devServerGuildId = '';
+            const devServerGuildId = '1136971905354711193';
             let embedDescription = `## Wassup I'm Automaze!`;
             embedDescription += `\n- My prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)`;
-            // \n- currently im present in ${Client.guilds.cache.size}
+
+            // only show how many guilds the bot is present if in the development sever
+            if (message.guild.id == devServerGuildId) {
+                embedDescription += `\n- Currently I'm present in ${Client.guilds.cache.size} servers.`;
+            }
+
             embedDescription += `\n- Interested in how I'm built? [I'm actually open source!](https://github.com/DeprecatedTable/automaze)`;
             embedDescription += `\n- Feeling a tad bit generous? [Buy me a coffee!](https://ko-fi.com/fungusdesu)`;
             message.reply({ embeds: [new EmbedBuilder().setColor(`Aqua`).setDescription(embedDescription)] });
