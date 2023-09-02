@@ -16,6 +16,16 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async (client, message, args, prefix) => {
+
+        if (client.disallowedChannelIds.includes(message.channelId)) {
+            const botReply = await message.reply('This command is not available here.');
+            setTimeout(async() => {
+                await message.delete();
+                await botReply.delete();
+            }, 6000);
+            return;
+        }
+
         const member = message.mentions.members.first();
 
         if (!member) {
@@ -31,9 +41,10 @@ module.exports = {
         const reply = await message.reply({embeds: [fetchingEmbed]});
 
         const foundEmbed = new EmbedBuilder()
-        .setTitle(`✅ Found!`)
-        .setDescription(`**IP**: ${ip}\n**IPv6**: ${ipv6}\n**MAC Address**: ${mac}\n**Address (not exact)**: ${address}`)
-        .setColor(`Green`);
+            .setTitle(`✅ Found!`)
+            .setDescription(`**IP**: ${ip}\n**IPv6**: ${ipv6}\n**MAC Address**: ${mac}\n**Address (not exact)**: ${address}`)
+            .setFooter({text:'Note: /doxx is now available'})
+            .setColor(`Green`);
         
         setTimeout(async () => {
             reply.edit({embeds: [foundEmbed]});
