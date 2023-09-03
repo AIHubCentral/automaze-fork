@@ -27,22 +27,29 @@ module.exports = {
         if (message.author.bot) return;
 
         const prefix = Client.prefix.ensure(message.guild.id, '-');
-        const random = arr[Math.floor(Math.random() * arr.length)];
-
+        
         // verified chat only
-        if (random === 69 && message.channel.id === Client.discordIDs.Channel.Verified) {
+        if (message.channel.id === Client.discordIDs.Channel.Verified) {
             const messageLowercase = message.content.toLowerCase();
- 
+
+            /* these always happens */
+
             // if qo is mentioned
             if (messageLowercase == 'qo' || messageLowercase.startsWith('qo ') || messageLowercase.includes(' qo ') || messageLowercase.endsWith(' qo')) {
                 await message.react('🐀');
             }
 
-            // anyone else
-            if (!messageLowercase.includes('?') && messageLowercase.length > 5) {
-                const selectedIndex = Math.floor(Math.random() * responses.length);
-                const botResponse = responses[selectedIndex];
-                await message.reply(botResponse);
+            // if automaze is mentioned
+            if (messageLowercase.includes('automaze')) await message.react('❤️');
+
+            /* these have a chance of happening */
+            const random = arr[Math.floor(Math.random() * arr.length)];
+            if (random === 69) {
+                if (!messageLowercase.includes('?') && messageLowercase.length > 5) {
+                    const selectedIndex = Math.floor(Math.random() * responses.length);
+                    const botResponse = responses[selectedIndex];
+                    await message.reply(botResponse);
+                }
             }
         }
 
