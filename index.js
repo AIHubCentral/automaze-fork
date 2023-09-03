@@ -44,7 +44,7 @@ const client = new Discord.Client({
 });
 
 // Discord IDs JSON
-client.discordIDs = require(DiscordIDs.prod);
+client.discordIDs = require(DiscordIDs.dev);
 
 // Discord Tables
 client.forumSpammer = {}

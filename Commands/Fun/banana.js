@@ -32,7 +32,7 @@ module.exports = {
         .setDescription(`HEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO\nHEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO\nHEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO`)
         .setImage(`https://media.tenor.com/29FOpiFsnn8AAAAC/banana-meme.gif`)
         .setColor(`Yellow`)
-        .setFooter({text: `BRO GOT BANAN'D ${client.banana.ensure(member.user.id, 0) + 1} TIMES XDDDDDD`});
+        .setFooter({text: `BRO GOT BANAN'D ${client.banana.ensure(member.user.id, 0) + 1} TIMES XDDDDDD\n\nNote: You can now use /banana`});
 
         client.banana.inc(member.user.id);
         client.bananaCD.set(message.author.id, Date.now())
