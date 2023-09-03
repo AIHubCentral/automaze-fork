@@ -1,5 +1,20 @@
 const { EmbedBuilder } = require("discord.js");
-const ms = require(`pretty-ms`)
+
+const responses = [
+    '👀 nice try...',
+    '👀 hmmm...sus',
+    'I saw what you did there 😏',
+    'NOPE 😤',
+    'Snipers...Get down!!! 🤣🤣🤣',
+    'only if you tell me how to make ai cover',
+    'wohoaa epic faill 🤣🤣🤣🤣',
+    'fail', 'EPIC FAIL BRUHHH 😂😂😂😂',
+    'what??? this command was removed 🤪',
+    'BOOMERRR!!! 🤣🤣🤣🤣',
+    '👏👏👏👏 CAUGHT YOU SNIPERRR!!!!',
+    '💩💩💩💩💩', '🧐', '🤭', '😱', '👻', '👀',
+    'https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713'
+];
 
 module.exports = {
     name: 'snipe',
@@ -15,72 +30,7 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async(client, message, args, prefix) => {
-        const disallowedChannel = message.channel.id == client.discordIDs.Channel.MakingModels || message.channel.id == client.discordIDs.Channel.GetModelMakerRole;
-        if (disallowedChannel) {
-            const botReply = await message.reply('This command is not available in this channel.');
-            setTimeout(async()=>{
-                await message.delete();
-                await botReply.delete();
-            },6000);
-            return;
-        }
-
-        class Extractor {
-            static extractAttachmentLinks(msg) {
-                if (!msg?.content) {
-                    return;
-                }
-
-                const text = msg.content;
-
-                const matches = text.match(/\bhttps?:\/\/[^>\s<]+(?![^<]*<>)/gim);
-
-                if (!matches) {
-                    return;
-                }
-              
-                if (matches.filter(url => ['tenor.com', 'giphy.com'].includes(new URL(url).host)).length) {
-                    return matches.filter(url => ['tenor.com', 'giphy.com'].includes(new URL(url).host));
-                }
-
-                if (matches.filter(url => url.endsWith('.gif') || url.endsWith('.jpeg') || url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.img')).length) {
-                    return matches.filter(url => url.endsWith('.gif') || url.endsWith('.jpeg') || url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.img'));
-                }
-
-                return;
-            }
-        }
-
-        const channel = message.mentions.channels.first() || client.channels.cache.get(args[0]) || message.channel;
-        const coll = client.snipes.filter(msg => msg.channelId === channel.id);
-
-        const snipedMsg = coll.last();
-
-        if (!snipedMsg) {
-            return void message.channel.send(`No message was deleted, or incomplete message data`)
-        }
-
-        const snipedAuthor = client.users.cache.get(coll.lastKey().split(`_`)[0]);
-        const relativeTimestamp = ms(message.createdTimestamp - coll.lastKey().split(`_`)[1], {verbose: true});
-
-        const embed = new EmbedBuilder()
-        .setTitle(`💀 i saw what you deleted`)
-        .setColor(0xFF0000)
-        .setAuthor({name: snipedAuthor.username, iconURL: snipedAuthor.avatarURL()})
-        .setFooter({text: `Created ${relativeTimestamp} ago in #${channel.name} | requested by ${message.author.username}\n\nNote: This command will be removed soon.`})
-
-        if (snipedMsg.content) {
-            embed.setDescription(snipedMsg.content)
-        }
-
-        if (snipedMsg.attachments.first()) {
-            embed.setImage(snipedMsg.attachments.first().url);
-        }
-
-        if (Extractor.extractAttachmentLinks(snipedMsg)) {
-            embed.setImage(Extractor.extractAttachmentLinks(snipedMsg)[0]);
-        }
-
-        message.channel.send({embeds: [embed]})
+        const selectedResponse = responses[Math.floor(Math.random() * responses.length)];
+        return await message.reply(selectedResponse);
     }
 }

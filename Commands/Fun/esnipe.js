@@ -38,8 +38,7 @@ module.exports = {
         const embed = new EmbedBuilder()
         .setTitle(`💀 i didn't saw what you edited`)
         .setColor(0xFFFF00)
-        .setDescription(selectedMessage)
-        .setFooter({text: `Note: -esnipe will be removed soon.`});
+        .setDescription(selectedMessage);
         await message.channel.send({embeds: [embed]});
     }
 }
