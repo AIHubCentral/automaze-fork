@@ -2,6 +2,24 @@ const { EmbedBuilder, RESTJSONErrorCodes } = require(`discord.js`);
 
 const oldAutomazeId = '1122821715815321651';
 
+const range = i => [...Array(i).keys()];
+const arr = range(1000);
+
+const responses = [
+    'who asked lmaoooooo', 'rvc 3 when?', 'really?',
+    'lol', 'frfr', 'bruh', 'BRUHHH',
+    'ok but my rank is higher than yours', 'if you say so', 'ok but how to make ai cover?',
+    '🤔', '🤨', '😲', '🤯',
+    // gifs
+    'https://tenor.com/view/shocked-shock-shocking-omg-omg-meme-gif-26225226',
+    'https://tenor.com/view/jonah-hill-annoyed-gif-9220106536573580777',
+    'https://tenor.com/view/nick-young-question-mark-huh-what-confused-gif-4995479',
+    'https://tenor.com/view/ben-stiller-zoolander-god-ugly-gif-20659335',
+    'https://tenor.com/view/go-away-oops-awkward-big-eyes-gif-16408506',
+    'https://tenor.com/view/problematic-stressed-smh-oh-dear-gif-23576897',
+    'https://tenor.com/view/watch-your-tone-goku-mui-gif-23784055'
+];
+
 module.exports = {
     name: "messageCreate",
     once: false,
@@ -9,13 +27,23 @@ module.exports = {
         if (message.author.bot) return;
 
         const prefix = Client.prefix.ensure(message.guild.id, '-');
-        const range = i => [...Array(i).keys()];
-        const arr = range(1000);
         const random = arr[Math.floor(Math.random() * arr.length)];
-        const responses = ['ok but did you wash your ass today', 'ok but my rank is higher than yours', 'who asked lmaoooooo', 'https://tenor.com/view/watch-your-tone-goku-mui-gif-23784055', 'ok but you like men'];
 
+        // verified chat only
         if (random === 69 && message.channel.id === Client.discordIDs.Channel.Verified) {
-            message.reply(responses[Math.round(Math.random() * responses.length)]);
+            const messageLowercase = message.content.toLowerCase();
+ 
+            // if qo is mentioned
+            if (messageLowercase == 'qo' || messageLowercase.startsWith('qo ') || messageLowercase.includes(' qo ') || messageLowercase.endsWith(' qo')) {
+                await message.react('🐀');
+            }
+
+            // anyone else
+            if (!messageLowercase.includes('?') && messageLowercase.length > 5) {
+                const selectedIndex = Math.floor(Math.random() * responses.length);
+                const botResponse = responses[selectedIndex];
+                await message.reply(botResponse);
+            }
         }
 
         if (message.content.includes('<@' + Client.user.id + '>')) {
@@ -42,6 +70,7 @@ module.exports = {
                 return;
             } // If can't find then do nothing
 
+            /*
             if (Client.slashCommands.get(commandName) && (!Client.deprecationCD.get(message.author.id) || Date.now() - Client.deprecationCD.get(message.author.id) >= 300000)) {
                 const deprecationEmbed = new EmbedBuilder()
                     .setTitle(`Deprecation warning!`)
@@ -51,6 +80,7 @@ module.exports = {
                 message.channel.send({ embeds: [deprecationEmbed] });
                 Client.deprecationCD.set(message.author.id, Date.now());
             }
+            */
 
             command.run(Client, message, args, prefix);
         }
