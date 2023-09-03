@@ -1,5 +1,13 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
+const responses = [
+    'NICE TRY KID LOL 🤣',
+    'KID U NEED TO BANAN SOMEONE ELSE 😠',
+    '😂🤣😂🤣',
+    'LOL KID STOP 🤣🤣🤣🤣',
+    'NO, I BANAN YOU INSTEAD 🤪🤣🤣🤣'
+];
+
 module.exports = {
     category: `Fun`,
     scope: `global`,
@@ -17,16 +25,27 @@ module.exports = {
             return;
         }
         
-        const member = interaction.options.getUser('user');
-        //const client = interaction.client;
+        let member = interaction.options.getUser('user');
         const userId = interaction.user.id;
+        let botRevenge = false; // if its true automaze banan the user instead
+        let selectedResponse = null;
 
-        if (!member) {
-            return interaction.reply(`dumbass who you watn to banan?/?/????`);
+        if (!member) return interaction.reply(`dumbass who you watn to banan?/?/????`);
+
+        if (member.id === userId) {
+            return interaction.reply('BANAN YOURSELF??!!! ARE YOU SANE??? 😂🤣😂🤣');
         }
 
         if (member.id === client.user.id) {
-            return interaction.reply(`LOL WHO UR BANNANING KID U AINT SLICK 🤣🤣🤣🤣🤣`);
+            selectedResponse = responses[Math.floor(Math.random() * responses.length)];
+            console.log(selectedResponse);
+            if (!selectedResponse.startsWith('NO,')) {
+                return interaction.reply(selectedResponse);
+            }
+
+            // change the banan target to the user who tried to banan automaze
+            member = interaction.user;
+            botRevenge = true;
         }
 
         if (Date.now() - client.bananaCD.get(userId) < 300000) {
@@ -42,6 +61,11 @@ module.exports = {
 
         interaction.client.banana.inc(member.id);
         interaction.client.bananaCD.set(userId, Date.now())
+
+        if (botRevenge) {
+            await interaction.reply(selectedResponse);
+            return interaction.followUp({ embeds: [bananEmbed]})
+        }
 
         interaction.reply({ embeds: [bananEmbed] })
     }
