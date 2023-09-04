@@ -9,7 +9,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('8ball')
 		.setDescription('Answer questions of your life')
-		.addStringOption(option => option.setName('question').setDescription('Ask questions about your life')),
+		.addStringOption(option => option.setName('question').setDescription('Ask questions about your life').setRequired(true)),
 	async execute(client, interaction) {
 		if (interaction.client.disallowedChannelIds.includes(interaction.channelId)) {
             await interaction.reply({ content: 'This command is not available here.', ephemeral: true});
@@ -52,8 +52,7 @@ module.exports = {
 				const answerEmbed = new EmbedBuilder()
 											.setTitle(question)
 											.setColor(response[1])
-											.setDescription(`## ${response[0]}\n# ${percentToBar(100 - percent)} - ${100 - percent}% possible`)
-											.setFooter({text:'Note: All answers are fake, don\'t take them seriously!'})
+											.setDescription(`## ${response[0]}\n# ${percentToBar(100 - percent)} - ${100 - percent}% possible`);
 				msg.edit({ embeds: [answerEmbed] });
 			}, 3000);
 		}
