@@ -39,9 +39,6 @@ module.exports = {
                 await message.react('🐀');
             }
 
-            // if automaze is mentioned
-            if (messageLowercase.includes('automaze')) await message.react('❤️');
-
             /* these have a chance of happening */
             const random = arr[Math.floor(Math.random() * arr.length)];
             if (random === 69) {
