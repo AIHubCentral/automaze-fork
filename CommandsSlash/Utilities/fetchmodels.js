@@ -1,6 +1,8 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChannelType } = require("discord.js");
 const fs = require(`fs`);
-const ms = require('pretty-ms')
+const ms = require('pretty-ms');
+const dict = require('../../Configs/Forum/dictionaryTags.json');
+const Extractor = require('../../Misc/extractor.js');
 
 module.exports = {
     category: 'Utilities',
@@ -104,17 +106,17 @@ async function fetchBase(props, array) {
         if ((props.totalProcessed) % 50 === 0 && props.totalProcessed !== 0) {
             props.msg.edit({embeds: [props.loadingEmbed.setDescription(`## Processed ${props.totalProcessed}/${props.total} threads\n- ${props.iteration} threads successfully saved\n- ${props.unintended} threads skipped\n- ${props.errored} threads failed\n- Time elapsed: ${ms(Date.now() - props.startTimestamp, {verbose: true})}\n- Current fetching speed: ${(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000)).toFixed(3)} threads/s\n- Estimated time left: ${(Math.round(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000))) * 1000 !== 0 ? ms(Math.round((props.total - props.totalProcessed) / (Math.round(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000))) * 1000), {verbose: true}) : `∞ centuries`}`)]})
         }
-        props.totalProcessed++;
-
+        
         const result = await fetchLoop(i, props.iteration);
         if(result)
             props.result.push(result);
         if (!props.result.find(entry => entry?.id === props.iteration + 1)) {
             console.log(`Unable to find any links in thread named ${i[1].name}, moving to next thread...`);
             props.errored++;
+        } else {
+            props.iteration++;
         }
-        else
-            props.iteration++;  
+        props.totalProcessed++;
     }));
 
     return props
@@ -123,7 +125,8 @@ async function fetchBase(props, array) {
 async function fetchLoop(i, iteration) {
     let result;
     let starterMessage = await i[1].fetchStarterMessage().catch(err => {
-        console.log(`unsuccessfully fetched starter message at iteration ${props.iteration + 1}: ${err.toString()}`)
+        console.log(`unsuccessfully fetched starter message at iteration ${props.iteration + 1}: ${err.toString()}`);
+        return;
     })
 
     if (Extractor.extractDownloadLinks(starterMessage?.content)?.length) {
@@ -138,7 +141,7 @@ async function fetchLoop(i, iteration) {
             creationTimestamp: i[1].createdTimestamp,
             downloadURL: Extractor.extractDownloadLinks(starterMessage?.content),
             illustrationURL: Extractor.extractAttachmentLinks(starterMessage),
-            tags: snowflakeToName(i[1].appliedTags)
+            tags: Extractor.snowflakeToName(i[1].appliedTags)
         };
     } else {
         const fetchedMsgs = await i[1].messages.fetch({limit: 10});
@@ -159,142 +162,13 @@ async function fetchLoop(i, iteration) {
                     creationTimestamp: i[1].createdTimestamp,
                     downloadURL: Extractor.extractDownloadLinks(fetchedMsg[1]?.content),
                     illustrationURL: Extractor.extractAttachmentLinks(fetchedMsg[1]),
-                    tags: snowflakeToName(i[1].appliedTags)
+                    tags: Extractor.snowflakeToName(i[1].appliedTags)
                 };
             }
         }
     }
-    
     return result
 }
-
-class Extractor {
-    static extractDownloadLinks(text) {
-        if (!text) {
-            return;
-        }
-
-        const matches = text.match(/\bhttps?:\/\/[^>\s<]+(?![^<]*<>)/gim);
-
-        if (!matches) {
-            return;
-        }
-
-        return matches.filter(url => ['huggingface.co', 'drive.google.com', 'mega.nz', 'pixeldrain.com', 'www.huggingface.co'].includes(new URL(url).host));
-    }
-
-    static extractAttachmentLinks(msg) {
-        if (!msg?.content) {
-            return;
-        }
-
-        const text = msg.content;
-
-        const matches = text.match(/\bhttps?:\/\/[^>\s<]+(?![^<]*<>)/gim);
-
-        if (!matches) {
-            return;
-        }
-      
-        if (matches.filter(url => ['tenor.com', 'giphy.com'].includes(new URL(url).host)).length) {
-            return matches.filter(url => ['tenor.com', 'giphy.com'].includes(new URL(url).host));
-        }
-
-        if (msg.attachments && msg.attachments.map(i => i).filter(i => i.contentType?.startsWith(`image`))) {
-            return msg.attachments.map(i => i).filter(i => i.contentType.startsWith(`image`))[0]?.url;
-        }
-
-        return;
-    }
-}
-
-function snowflakeToName(tags) { // tags is an array of snowflakes
-    let output = [];
-
-    for (const tag of tags) {
-        output.push(dict.find(entry => entry.snowflake === tag));
-    }
-
-    return output;
-}
-
-const dict = [
-    {
-        snowflake: '1099149952652947456',
-        name: 'RVC',
-        icon: '<a:fire1:1104783491842977943>'
-    },
-    {
-        snowflake: '1111460697482723388',
-        name: 'RVC v2',
-        icon: '<a:purplefire:1093313432889085952>'
-    },
-    {
-        snowflake: '1099150044785021019',
-        name: 'Artist',
-        icon: '🎹'
-    },
-    {
-        snowflake: '1099150093254414358',
-        name: 'Rapper',
-        icon: '🥶'
-    },
-    {
-        snowflake: '1110363117415825569',
-        name: 'Fictional Character',
-        icon: '<:vibe:1093342228149190737>'
-    },
-    {
-        snowflake: '1110364355700199464',
-        name: 'Anime Character',
-        icon: '<:AnimeTagIcon:1110364151357898762>'
-    },
-    {
-        snowflake: '1122951427522834502',
-        name: 'OG Character/Self',
-        icon: '🙂'
-    },
-    {
-        snowflake: '1117999278745473104',
-        name: 'non-Voice/Other',
-        icon: '<:skull5:1093358438878285894>'
-    },
-    {
-        snowflake: '1119718145247166504',
-        name: 'TTS/Realtime',
-        icon: '🗣'
-    },
-    {
-        snowflake: '1114434339397177374',
-        name: 'e-Celebs',
-        icon: '🖥'
-    },
-    {
-        snowflake: '1123794615502377090',
-        name: 'Other Languages',
-        icon: '🌐'
-    },
-    {
-        snowflake: '1108324567069495326',
-        name: 'English',
-        icon: '🍵'
-    },
-    {
-        snowflake: '1108324682735820862',
-        name: 'Espanol',
-        icon: '🌮'
-    },
-    {
-        snowflake: '1121324803773702196',
-        name: 'Japanese',
-        icon: '<:miku47:1135044469616545822>'
-    },
-    {
-        snowflake: '1107670309198372916',
-        name: 'Korean',
-        icon: '<:drake97:1093604726836318249>'
-    }
-];
 
 const failedEmbed = new EmbedBuilder()
     .setTitle(`❌ Error`)
