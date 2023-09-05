@@ -6,7 +6,7 @@ const Enmap = require("enmap");
 const Discord = require(`discord.js`);
 
 // Exports
-const { getAllFiles } = require('./utils')
+const { getAllFiles } = require('./utils');
 
 // JSONs
 const DiscordIDs = {
@@ -71,6 +71,9 @@ client.banana = new Enmap({name: 'banana'});
 client.bananaCD = new Enmap();
 client.scourCD = new Enmap();
 client.prefix = new Enmap({name: 'prefix'});
+
+// bot responses loaded on startup
+client.botResponses = require('./JSON/bot_responses.json');
 
 // disallow -find and -cfind in these channels
 client.disallowedChannelIds = [];

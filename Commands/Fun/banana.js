@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
+
 module.exports = {
     name: 'banana',
     category: 'Fun',
@@ -13,14 +14,25 @@ module.exports = {
      * @param {String} prefix 
      */
     run: (client, message, args, prefix) => {
+        const botResponses = client.botResponses.responses.banana;
         const member = message.mentions.members.first();
         
         if (!member) {
-            return void message.reply(`dumbass who you watn to banan?/?/????`);
+            return message.reply(botResponses.targetNone);
         }
 
         if (member.user.id === client.user.id) {
-            return void message.reply(`LOL WHO UR BANNANING KID U AINT SLICK 🤣🤣🤣🤣🤣`);
+            const responses = botResponses.targetBot;
+            const selectedMessage = responses[Math.floor(Math.random() * responses.length)];
+            return  message.reply(selectedMessage);
+        }
+
+        if (member.user.id === message.author.id) {
+            return message.reply(botResponses.targetSelf);
+        }
+
+        if (member.user.id === client.botResponses.userIds.oldAutomazeId) {
+            return message.reply(botResponses.targetInvalid);
         }
 
         if (Date.now() - client.bananaCD.get(message.author.id) < 300000) {

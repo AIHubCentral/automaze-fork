@@ -1,6 +1,6 @@
 const Chance = require("chance");
 const chance = new Chance;
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js")
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     category: `Fun`,
@@ -24,6 +24,7 @@ module.exports = {
 
         const targetUser = interaction.options.getUser('user');
         const bot = interaction.client.user;
+        const oldAutomazeId = interaction.client.botResponses.userIds.oldAutomazeId;
 
         const [ip, ipv6, mac, address] = interaction.client.doxx.ensure(
             targetUser.id, () => [chance.ip(), chance.ipv6(), chance.mac_address(), chance.address()]
@@ -35,20 +36,44 @@ module.exports = {
 
         const reply = await interaction.reply({embeds: [fetchingEmbed]});
 
-        const embedTitle = targetUser.id === bot.id ? `❌ yo i aint sharing my info sry` : `✅ We found you **${targetUser.username}**!`;
-        const embedColor = targetUser.id === bot.id ? 'Red' : 'Green';
-        let embedDescription = `**IP**: ${targetUser.id === bot.id ? 'N/A' : ip}`;
-        embedDescription += `\n**IPv6**: ${targetUser.id === bot.id ? 'N/A' : ipv6}`;
-        embedDescription += `\n**MAC Address**: ${targetUser.id === bot.id ? 'N/A' : mac}`;
-        embedDescription += `\n**Address (not exact)**: ${targetUser.id === bot.id ? 'under the bridge' : address}`;
+        let doxxData = {
+            'title': '',
+            'IP': 'N/A',
+            'IPv6': 'N/A',
+            'MAC': 'N/A',
+            'address': 'Not found',
+            'embedColor': 'Red'
+        };
+
+        switch(targetUser.id) {
+            case(bot.id):
+                doxxData.title =  '❌ yo i aint sharing my info';
+                doxxData.address = 'under the bridge';
+                break;
+            case(oldAutomazeId):
+                doxxData.title = '❌ Failed to retrieve information!';
+                break;
+            default:
+                doxxData.title = `✅ We found you **${targetUser.username}**!`;
+                doxxData.IP = ip;
+                doxxData.IPv6 = ipv6;
+                doxxData.MAC = mac;
+                doxxData.address = address;
+                doxxData.embedColor = 'Green';
+        }
+
+        let embedDescription = `**IP**: ${doxxData.IP}`;
+        embedDescription += `\n**IPv6**: ${doxxData.IPv6}`;
+        embedDescription += `\n**MAC Address**: ${doxxData.MAC}`;
+        embedDescription += `\n**Address (not exact)**: ${doxxData.address}`;
         embedDescription += `\n\nUsed: \`/doxx\` ${targetUser}`;
 
         const foundEmbed = new EmbedBuilder()
-                                .setTitle(embedTitle)
+                                .setTitle(doxxData.title)
                                 .setDescription(embedDescription)
-                                .setColor(embedColor);
+                                .setColor(doxxData.embedColor);
         setTimeout(async () => {
-            reply.edit({embeds: [foundEmbed]});
+            await reply.edit({embeds: [foundEmbed]});
         }, 3000)
     }
 }

@@ -1,24 +1,7 @@
 const { EmbedBuilder, RESTJSONErrorCodes } = require(`discord.js`);
 
-const oldAutomazeId = '1122821715815321651';
-
 const range = i => [...Array(i).keys()];
 const arr = range(1000);
-
-const responses = [
-    'who asked lmaoooooo', 'rvc 3 when?', 'really?',
-    'lol', 'frfr', 'bruh', 'BRUHHH',
-    'ok but my rank is higher than yours', 'if you say so', 'ok but how to make ai cover?',
-    '🤔', '🤨', '😲', '🤯',
-    // gifs
-    'https://tenor.com/view/shocked-shock-shocking-omg-omg-meme-gif-26225226',
-    'https://tenor.com/view/jonah-hill-annoyed-gif-9220106536573580777',
-    'https://tenor.com/view/nick-young-question-mark-huh-what-confused-gif-4995479',
-    'https://tenor.com/view/ben-stiller-zoolander-god-ugly-gif-20659335',
-    'https://tenor.com/view/go-away-oops-awkward-big-eyes-gif-16408506',
-    'https://tenor.com/view/problematic-stressed-smh-oh-dear-gif-23576897',
-    'https://tenor.com/view/watch-your-tone-goku-mui-gif-23784055'
-];
 
 module.exports = {
     name: "messageCreate",
@@ -43,6 +26,7 @@ module.exports = {
             const random = arr[Math.floor(Math.random() * arr.length)];
             if (random === 69) {
                 if (!messageLowercase.includes('?') && messageLowercase.length > 5) {
+                    const responses = Client.botResponses.responses.verifiedChat;
                     const selectedIndex = Math.floor(Math.random() * responses.length);
                     const botResponse = responses[selectedIndex];
                     await message.reply(botResponse);

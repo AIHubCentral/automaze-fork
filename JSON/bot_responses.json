@@ -1,0 +1,38 @@
+{
+    "userIds": {
+        "oldAutomazeId": "1122821715815321651"
+    },
+    "responses": {
+        "banana": {
+            "targetSelf": "BANAN YOURSELF??!!! ARE YOU SANE??? 😂🤣😂🤣",
+            "targetBot": [
+                "LOL NICE TRY KID 🤣",
+                "KID U NEED TO BANAN SOMEONE ELSE 😠",
+                "😂🤣😂🤣",
+                "LOL KID STOP 🤣🤣🤣🤣",
+                "LOL WHO UR BANNANING KID U AINT SLICK 🤣🤣🤣🤣🤣",
+                "NO, I BANAN YOU INSTEAD 🤪🤣🤣🤣"
+            ],
+            "targetNone": "dumbass who you watn to banan?/?/????",
+            "targetInvalid": "Fail 🤪"
+        },
+        "8ball": {
+            "affirmative": ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes."],
+            "negative": ["Don't count on it.", "My reply is no.", "My sources say no.", "Outlook not so good.", "Very doubtful."],
+            "nonCommital": ["Reply hazy, try again.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again."]
+        },
+        "verifiedChat": [
+            "who asked lmaoooooo", "rvc 3 when?", "really?",
+            "lol", "frfr", "bruh",
+            "ok but my rank is higher than yours", "if you say so", "ok but how to make ai cover?",
+            "🤔", "🤨", "😲", "🤯",
+            "https://tenor.com/view/shocked-shock-shocking-omg-omg-meme-gif-26225226",
+            "https://tenor.com/view/jonah-hill-annoyed-gif-9220106536573580777",
+            "https://tenor.com/view/nick-young-question-mark-huh-what-confused-gif-4995479",
+            "https://tenor.com/view/ben-stiller-zoolander-god-ugly-gif-20659335",
+            "https://tenor.com/view/go-away-oops-awkward-big-eyes-gif-16408506",
+            "https://tenor.com/view/problematic-stressed-smh-oh-dear-gif-23576897",
+            "https://tenor.com/view/watch-your-tone-goku-mui-gif-23784055"
+        ]
+    }
+}

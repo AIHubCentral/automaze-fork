@@ -18,12 +18,13 @@ module.exports = {
 		
 		const question = interaction.options.getString('question');
 		if (!question) {
-			await interaction.reply('You need to provide a question!\n\n> Example: `/8ball` `Gunfus is Fungus?`')
+			await interaction.reply('You need to provide a question!\n\n> Example: `/8ball` `Is RVC better than SVC?`')
 		}
 		else {
-			const affirmativeResponses = [`It is certain.`, `It is decidedly so.`, `Without a doubt.`, `Yes definitely.`, `You may rely on it.`, `As I see it, yes.`, `Most likely.`, `Outlook good.`, `Yes.`, `Signs point to yes.`];
-			const noncommittalResponses = [`Reply hazy, try again.`, `Ask again later.`, `Better not tell you now.`, `Cannot predict now.`, `Concentrate and ask again.`];
-			const negativeResponses = [`Don't count on it.`, `My reply is no.`, `My sources say no.`, `Outlook not so good.`, `Very doubtful.`];
+			const botResponses = interaction.client.botResponses.responses['8ball'];
+			const affirmativeResponses = botResponses.affirmative;
+			const noncommittalResponses = botResponses.nonCommital;
+			const negativeResponses = botResponses.negative;
 
 			const percent = chance.natural({ min: 1, max: 100 });
 			let response;

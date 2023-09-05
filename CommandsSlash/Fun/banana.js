@@ -1,13 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
-const responses = [
-    'NICE TRY KID LOL 🤣',
-    'KID U NEED TO BANAN SOMEONE ELSE 😠',
-    '😂🤣😂🤣',
-    'LOL KID STOP 🤣🤣🤣🤣',
-    'NO, I BANAN YOU INSTEAD 🤪🤣🤣🤣'
-];
-
 module.exports = {
     category: `Fun`,
     scope: `global`,
@@ -28,22 +20,29 @@ module.exports = {
         let member = interaction.options.getUser('user');
         const userId = interaction.user.id;
         let botRevenge = false; // if its true automaze banan the user instead
+        const botResponses = interaction.client.botResponses.responses.banana;
         let selectedResponse = null;
 
-        if (!member) return interaction.reply(`dumbass who you watn to banan?/?/????`);
+        if (!member) return interaction.reply(botResponses.targetNone);
 
-        if (member.id === userId) {
-            return interaction.reply('BANAN YOURSELF??!!! ARE YOU SANE??? 😂🤣😂🤣');
-        }
+        if (member.id === userId) return interaction.reply(botResponses.targetSelf);
 
         if (member.id === client.user.id) {
+            const responses = botResponses.targetBot;
             selectedResponse = responses[Math.floor(Math.random() * responses.length)];
-            console.log(selectedResponse);
             if (!selectedResponse.startsWith('NO,')) {
                 return interaction.reply(selectedResponse);
             }
 
             // change the banan target to the user who tried to banan automaze
+            member = interaction.user;
+            botRevenge = true;
+        }
+
+        // old automaze id, banan the user
+        if (member.id === client.botResponses.userIds.oldAutomazeId) {
+            const responses = botResponses.targetBot;
+            selectedResponse = responses[responses.length - 1];
             member = interaction.user;
             botRevenge = true;
         }
