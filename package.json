@@ -21,6 +21,7 @@
     "openai": "^3.3.0",
     "pretty-ms": "^7.0.1",
     "random-words": "^2.0.0",
+    "read-last-lines": "^1.8.0",
     "shuffle-array": "^1.0.1",
     "sort-es": "^1.6.12"
   },

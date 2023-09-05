@@ -5,11 +5,11 @@ module.exports = {
     name: Events.ChannelDelete,
 
     run(client, channel){
-        const currentChannel = require('../JSON/modlog.json');
+        const channels = require('../JSON/channels.json');
 
-        if(channel.id != currentChannel.id) return;
+        if(channel.id != channels.modlog?.id) return;
 
-        fs.writeFileSync(`${process.cwd()}/JSON/modlog.json`, '{}');
-        console.log(`Modlog channel "${currentChannel.name}" was deleted`);
+        channels.modlog = null;
+        fs.writeFileSync(`${process.cwd()}/JSON/channels.json`, JSON.stringify(channels, null, 2));
     }
 }

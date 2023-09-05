@@ -1,10 +1,11 @@
 .env
 data/
-JSON/models.json
+JSON/_models.json
 node_modules/
 .replit
 replit.nix
 result.json
+JSON/channels.json
 
 # git remote add origin https://github.com/DeprecatedTable/automaze-bot.git
 # git branch -M main
