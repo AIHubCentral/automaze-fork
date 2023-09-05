@@ -72,6 +72,9 @@ client.bananaCD = new Enmap();
 client.scourCD = new Enmap();
 client.prefix = new Enmap({name: 'prefix'});
 
+// banana data as an object instead of enmap
+client.bananaData = {};
+
 // bot responses loaded on startup
 client.botResponses = require('./JSON/bot_responses.json');
 
