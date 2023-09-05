@@ -1,3 +1,5 @@
+const dict = require('../Configs/Forum/dictionaryTags.json')
+
 module.exports = class Extractor {
     static extractDownloadLinks(text) {
         if (!text) {

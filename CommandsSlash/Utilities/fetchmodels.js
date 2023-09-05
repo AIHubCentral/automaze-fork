@@ -34,6 +34,7 @@ module.exports = {
 };
 
 async function fetchmodels(client,interaction) {
+    modelsAdded = 0;
     const startTimestamp = Date.now();
 
     const fetchingEmbed = new EmbedBuilder()
@@ -107,14 +108,14 @@ async function fetchBase(props, array) {
             props.msg.edit({embeds: [props.loadingEmbed.setDescription(`## Processed ${props.totalProcessed}/${props.total} threads\n- ${props.iteration} threads successfully saved\n- ${props.unintended} threads skipped\n- ${props.errored} threads failed\n- Time elapsed: ${ms(Date.now() - props.startTimestamp, {verbose: true})}\n- Current fetching speed: ${(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000)).toFixed(3)} threads/s\n- Estimated time left: ${(Math.round(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000))) * 1000 !== 0 ? ms(Math.round((props.total - props.totalProcessed) / (Math.round(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000))) * 1000), {verbose: true}) : `∞ centuries`}`)]})
         }
         
-        const result = await fetchLoop(i, props.iteration);
-        if(result)
+        const result = await fetchLoop(i);
+        if(result) {
             props.result.push(result);
-        if (!props.result.find(entry => entry?.id === props.iteration + 1)) {
+            props.iteration++;
+        }
+        else {
             console.log(`Unable to find any links in thread named ${i[1].name}, moving to next thread...`);
             props.errored++;
-        } else {
-            props.iteration++;
         }
         props.totalProcessed++;
     }));
@@ -122,7 +123,7 @@ async function fetchBase(props, array) {
     return props
 }
 
-async function fetchLoop(i, iteration) {
+async function fetchLoop(i) {
     let result;
     let starterMessage = await i[1].fetchStarterMessage().catch(err => {
         console.log(`unsuccessfully fetched starter message at iteration ${props.iteration + 1}: ${err.toString()}`);
@@ -133,7 +134,7 @@ async function fetchLoop(i, iteration) {
         let user = starterMessage?.author;
         
         result = {
-            id: iteration + 1,
+            id: i[1].id,
             title: i[1].name,
             starterMessage: starterMessage?.content,
             creator: user?.username,
@@ -154,7 +155,7 @@ async function fetchLoop(i, iteration) {
                 let user = starterMessage?.author;
 
                 result = {
-                    id: props.iteration + 1,
+                    id: i[1].id,
                     title: i[1].name,
                     starterMessage: starterMessage?.content,
                     creator: user?.username,
