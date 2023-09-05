@@ -94,23 +94,27 @@ async function fetchmodels(client,interaction) {
 }
 
 async function fetchBase(props, array) {
+    const a = []
     for (const i of array) {
         if ((props.totalProcessed) % 50 === 0 && props.totalProcessed !== 0) {
             msg.edit({embeds: [props.loadingEmbed.setDescription(`## Processed ${props.totalProcessed}/${props.total} threads\n- ${props.iteration} threads successfully saved\n- ${props.unintended} threads skipped\n- ${props.errored} threads failed\n- Time elapsed: ${ms(Date.now() - props.startTimestamp, {verbose: true})}\n- Current fetching speed: ${(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000)).toFixed(3)} threads/s\n- Estimated time left: ${(Math.round(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000))) * 1000 !== 0 ? ms(Math.round((props.total - props.totalProcessed) / (Math.round(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000))) * 1000), {verbose: true}) : `∞ centuries`}`)]})
         }
+        a.push(i)
         props.totalProcessed++;
-
-        let result = await fetchLoop(i, props.iteration)
-
+    }
+    
+    await Promise.all(a.map(async (i)=>{
+        const result = await fetchLoop(i, props.iteration);
         if(result)
-            props.result.push(result)
-        if (!props.result.find(entry => entry.id === props.iteration + 1)) {
+            props.result.push(result);
+        if (!props.result.find(entry => entry?.id === props.iteration + 1)) {
             console.log(`Unable to find any links in thread named ${i[1].name}, moving to next thread...`);
             props.errored++;
         }
         else
             props.iteration++;
-    }
+    }));
+
     return props
 }
 
