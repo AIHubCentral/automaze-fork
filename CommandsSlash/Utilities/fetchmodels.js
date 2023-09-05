@@ -64,6 +64,7 @@ async function fetchmodels(client,interaction) {
     
     let loopProps = {
         total: filteredActive.size + filteredArchived.size,
+        msg: msg,
         result: [],
         iteration: 0,
         totalProcessed: 0,
@@ -86,7 +87,7 @@ async function fetchmodels(client,interaction) {
         msg.edit({embeds: [successEmbed]});
     } catch (err) {
         console.error(err)
-        msg.edit({embeds: [failedEmbed.setDescription(`The process ran into an unexpected error!\n\`\`\`\n${err.toString()}\n\`\`\`\nA total of ${loopProps.iteration} processed threads are saved anyway.`)]})
+        msg.edit({embeds: [failedEmbed.setDescription(`The process ran into an unexpected error!\n\`\`\`\n${err.toString()}\n\`\`\`\nA total of ${loopProps.iteration} processed threads are saved.`)]})
     } finally {
         fs.writeFileSync(`./JSON/result.json`, JSON.stringify(loopProps.result, null, 2))
         interaction.user.send({content: `Fetching completed. Output:`, files: [`./JSON/result.json`]})
@@ -96,14 +97,15 @@ async function fetchmodels(client,interaction) {
 async function fetchBase(props, array) {
     const a = []
     for (const i of array) {
-        if ((props.totalProcessed) % 50 === 0 && props.totalProcessed !== 0) {
-            msg.edit({embeds: [props.loadingEmbed.setDescription(`## Processed ${props.totalProcessed}/${props.total} threads\n- ${props.iteration} threads successfully saved\n- ${props.unintended} threads skipped\n- ${props.errored} threads failed\n- Time elapsed: ${ms(Date.now() - props.startTimestamp, {verbose: true})}\n- Current fetching speed: ${(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000)).toFixed(3)} threads/s\n- Estimated time left: ${(Math.round(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000))) * 1000 !== 0 ? ms(Math.round((props.total - props.totalProcessed) / (Math.round(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000))) * 1000), {verbose: true}) : `∞ centuries`}`)]})
-        }
         a.push(i)
-        props.totalProcessed++;
     }
     
     await Promise.all(a.map(async (i)=>{
+        if ((props.totalProcessed) % 50 === 0 && props.totalProcessed !== 0) {
+            props.msg.edit({embeds: [props.loadingEmbed.setDescription(`## Processed ${props.totalProcessed}/${props.total} threads\n- ${props.iteration} threads successfully saved\n- ${props.unintended} threads skipped\n- ${props.errored} threads failed\n- Time elapsed: ${ms(Date.now() - props.startTimestamp, {verbose: true})}\n- Current fetching speed: ${(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000)).toFixed(3)} threads/s\n- Estimated time left: ${(Math.round(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000))) * 1000 !== 0 ? ms(Math.round((props.total - props.totalProcessed) / (Math.round(props.totalProcessed / ((Date.now() - props.fetchTimestamp) / 1000))) * 1000), {verbose: true}) : `∞ centuries`}`)]})
+        }
+        props.totalProcessed++;
+
         const result = await fetchLoop(i, props.iteration);
         if(result)
             props.result.push(result);
@@ -112,7 +114,7 @@ async function fetchBase(props, array) {
             props.errored++;
         }
         else
-            props.iteration++;
+            props.iteration++;  
     }));
 
     return props
