@@ -1,21 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
 
-const responses = [
-    '👀 nice try...',
-    '👀 hmmm...sus',
-    'I saw what you did there 😏',
-    'NOPE 😤',
-    'Snipers...Get down!!! 🤣🤣🤣',
-    'only if you tell me how to make ai cover',
-    'wohoaa epic faill 🤣🤣🤣🤣',
-    'fail', 'EPIC FAIL BRUHHH 😂😂😂😂',
-    'what??? this command was removed 🤪',
-    'BOOMERRR!!! 🤣🤣🤣🤣',
-    '👏👏👏👏 CAUGHT YOU SNIPERRR!!!!',
-    '💩💩💩💩💩', '🧐', '🤭', '😱', '👻', '👀',
-    'https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713'
-];
-
 module.exports = {
     name: 'snipe',
     category: 'Fun',
@@ -30,6 +14,7 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async(client, message, args, prefix) => {
+        const responses = client.botResponses.responses.snipe;
         const selectedResponse = responses[Math.floor(Math.random() * responses.length)];
         return await message.reply(selectedResponse);
     }
