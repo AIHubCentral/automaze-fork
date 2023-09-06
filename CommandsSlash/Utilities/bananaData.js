@@ -3,7 +3,7 @@ const { byValue, byNumber } = require('sort-es');
 const fs = require('node:fs');
 const wait = require('node:timers/promises').setTimeout;
 
-const JSON_PATH = './JSON/bananaStats.json';
+const JSON_PATH = './data/bananaStats.json';
 
 function saveBananaData(filepath, data) {
     /* Saves the /topbanana data as a json file and return whether the operation succeded or not */
@@ -30,7 +30,7 @@ module.exports = {
             return await interaction.reply({content:'You are not allowed to use this command.', ephemeral:true});
         }
 
-        await interaction.deferReply();
+        await interaction.deferReply({ephemeral:true});
         await wait(1000);
 
         const lbUnsorted = JSON.parse(interaction.client.banana.export()).keys;
@@ -47,7 +47,7 @@ module.exports = {
         const dataSaved = saveBananaData(JSON_PATH, jsonData);
 
         if (dataSaved) {
-            await interaction.editReply({content:'JSON saved!', files:['./JSON/bananaStats.json']});
+            await interaction.editReply({content:'JSON saved!', files:[JSON_PATH]});
         }
         else {
             await interaction.editReply('Failed to save JSON.');
