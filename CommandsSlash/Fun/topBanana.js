@@ -14,7 +14,23 @@ module.exports = {
             return;
         }
 
+        await interaction.deferReply();
+
+        const bananEmbed = new EmbedBuilder()
+                                .setTitle(`THE FORTNITE BALLS LEADERBANAN`)
+                                .setColor(`Yellow`)
+                                .setTimestamp();
+
+        // lb = leaderboard
         const lbUnsorted = JSON.parse(interaction.client.banana.export()).keys;
+
+        if (lbUnsorted.length < 1) {
+            bananEmbed.setDescription('> The leaderboard is empty, `/banana` someone to show results here!');
+            await interaction.editReply({ embeds: [bananEmbed] });
+            return;
+        }
+
+        // if lbUnsorted is not an empty array, sort it
         const lbSorted = lbUnsorted.sort(byValue(i => i.value, byNumber({ desc: true }))).slice(0, 10);
         
         const embedDescription = [];
@@ -27,12 +43,8 @@ module.exports = {
             rankCounter++;
         }
 
-        const bananEmbed = new EmbedBuilder()
-                                .setTitle(`THE FORTNITE BALLS LEADERBANAN`)
-                                .setColor(`Yellow`)
-                                .setDescription(embedDescription.join('\n'))
-                                .setTimestamp();
+        bananEmbed.setDescription(embedDescription.join('\n'));
         
-        await interaction.reply({ embeds: [bananEmbed] })
+        await interaction.editReply({ embeds: [bananEmbed] })
     }
 }
