@@ -34,7 +34,7 @@ module.exports = {
             }
         }
 
-        if (message.content.includes('<@' + Client.user.id + '>')) {
+        if (!message.content.startsWith('-banan') && message.content.includes('<@' + Client.user.id + '>')) {
             const devServerGuildId = '1136971905354711193';
             let embedDescription = `## Wassup I'm Automaze!`;
             embedDescription += `\n- My prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)`;

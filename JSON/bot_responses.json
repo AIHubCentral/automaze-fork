@@ -7,14 +7,12 @@
             "targetSelf": "BANAN YOURSELF??!!! ARE YOU SANE??? 😂🤣😂🤣",
             "targetBot": [
                 "LOL NICE TRY KID 🤣",
-                "KID U NEED TO BANAN SOMEONE ELSE 😠",
                 "😂🤣😂🤣",
                 "LOL KID STOP 🤣🤣🤣🤣",
                 "LOL WHO UR BANNANING KID U AINT SLICK 🤣🤣🤣🤣🤣",
                 "NO, I BANAN YOU INSTEAD 🤪🤣🤣🤣"
             ],
-            "targetNone": "dumbass who you watn to banan?/?/????",
-            "targetInvalid": "Fail 🤪"
+            "targetNone": "dumbass who you watn to banan?/?/????"
         },
         "8ball": {
             "affirmative": ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes."],

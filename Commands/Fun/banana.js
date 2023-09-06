@@ -21,18 +21,14 @@ module.exports = {
             return message.reply(botResponses.targetNone);
         }
 
-        if (member.user.id === client.user.id) {
+        if (member.user.bot) {
             const responses = botResponses.targetBot;
             const selectedMessage = responses[Math.floor(Math.random() * responses.length)];
-            return  message.reply(selectedMessage);
+            return message.reply(selectedMessage);
         }
 
         if (member.user.id === message.author.id) {
             return message.reply(botResponses.targetSelf);
-        }
-
-        if (member.user.id === client.botResponses.userIds.oldAutomazeId) {
-            return message.reply(botResponses.targetInvalid);
         }
 
         if (Date.now() - client.bananaCD.get(message.author.id) < 300000) {

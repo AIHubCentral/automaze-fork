@@ -27,22 +27,14 @@ module.exports = {
 
         if (member.id === userId) return interaction.reply(botResponses.targetSelf);
 
-        if (member.id === client.user.id) {
+        if (member.bot) {
             const responses = botResponses.targetBot;
             selectedResponse = responses[Math.floor(Math.random() * responses.length)];
             if (!selectedResponse.startsWith('NO,')) {
                 return interaction.reply(selectedResponse);
             }
 
-            // change the banan target to the user who tried to banan automaze
-            member = interaction.user;
-            botRevenge = true;
-        }
-
-        // old automaze id, banan the user
-        if (member.id === client.botResponses.userIds.oldAutomazeId) {
-            const responses = botResponses.targetBot;
-            selectedResponse = responses[responses.length - 1];
+            // change the banan target to the user who tried to banan automaze or any other bot
             member = interaction.user;
             botRevenge = true;
         }
