@@ -30,5 +30,3 @@ function getRandomNumber(min, max) {
 }
 
 exports.getRandomNumber = getRandomNumber;
-
-
