@@ -13,22 +13,26 @@ module.exports = {
             await interaction.reply({ content: 'This command is not available here.', ephemeral: true});
             return;
         }
-        
-        const lbUnsorted = JSON.parse(interaction.client.banana.export()).keys
-        const lbSorted = lbUnsorted.sort(byValue(i => i.value, byNumber({ desc: true }))).slice(0, 10)
 
-        let description = [];
+        const lbUnsorted = JSON.parse(interaction.client.banana.export()).keys;
+        const lbSorted = lbUnsorted.sort(byValue(i => i.value, byNumber({ desc: true }))).slice(0, 10);
+        
+        const embedDescription = [];
+
+        let rankCounter = 1;
         for (const entry of lbSorted) {
             const entryVal = Object.values(entry);
-            const user = await interaction.client.users.fetch(entryVal[0])
-            description.push(`**‣ ${user.username}** - ${entryVal[1]}`)
+            const user = await interaction.client.users.fetch(entryVal[0]);
+            embedDescription.push(`${rankCounter}. ${user} — ${entryVal[1]}`);
+            rankCounter++;
         }
 
         const bananEmbed = new EmbedBuilder()
                                 .setTitle(`THE FORTNITE BALLS LEADERBANAN`)
-                                .setDescription(description.join(`\n`))
-                                .setColor(`Yellow`);
-
+                                .setColor(`Yellow`)
+                                .setDescription(embedDescription.join('\n'))
+                                .setTimestamp();
+        
         await interaction.reply({ embeds: [bananEmbed] })
     }
 }
