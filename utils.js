@@ -23,3 +23,12 @@ async function delay(ms) {
     });
 }
 exports.delay = delay;
+
+function getRandomNumber(min, max) {
+    /* gets a random number between min and max */
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+exports.getRandomNumber = getRandomNumber;
+
+

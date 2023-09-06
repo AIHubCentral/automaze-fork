@@ -1,6 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const Chance = require(`chance`);
 const chance = new Chance;
+const wait = require('node:timers/promises').setTimeout;
+const utils = require('../../utils.js');
 
 module.exports = {
 	category: `Fun`,
@@ -47,15 +49,17 @@ module.exports = {
 				.setTitle(`🎱 Predicting the future... 🎱`)
 				.setColor(`DarkButNotBlack`);
 
-			const msg = await interaction.reply({ embeds: [loadingEmbed] });
+			await interaction.reply({ embeds: [loadingEmbed] });
 
-			setTimeout(() => {
-				const answerEmbed = new EmbedBuilder()
-											.setTitle(question)
-											.setColor(response[1])
-											.setDescription(`## ${response[0]}\n# ${percentToBar(100 - percent)} - ${100 - percent}% possible`);
-				msg.edit({ embeds: [answerEmbed] });
-			}, 3000);
+			// wait between 3 to 5 seconds
+			await wait(utils.getRandomNumber(3000, 5000));
+
+			const answerEmbed = new EmbedBuilder()
+										.setTitle(question)
+										.setColor(response[1])
+										.setDescription(`## ${response[0]}\n# ${percentToBar(100 - percent)} - ${100 - percent}% possible`);
+			
+			interaction.editReply({ embeds: [answerEmbed] });
 		}
 	}
 }
