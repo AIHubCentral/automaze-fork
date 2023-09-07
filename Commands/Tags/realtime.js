@@ -14,10 +14,15 @@ module.exports = {
      * @param {String} prefix 
      */
     run: (client, message, args, prefix) => {
+        const embedDescription = [];
+        embedDescription.push(`## 1. (Local) W-Okada Voice Changer\nThis has more options and is somewhat more convenient to use than Real-time RVC.\n**GUIDE**: https://github.com/YunaOneeChan/Voice-Changer-Settings`);
+        embedDescription.push(`## 2. (Online) W-Okada - Colab Version\nA free, online version of W-Okada that allows you to run code on Google’s powerful GPUs.\n**GUIDE**: https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub`);
+        embedDescription.push(`## 3. (Local) Real-time conversion of RVC\nIt's more accurate but requires a Nvidia RTX card.\n**GUIDE**: https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs/edit`);
+
         const embed = new EmbedBuilder()
-        .setTitle(`Real-time conversion RVC guide`)
-        .setDescription(`## • W-Okada's Voice Changer with RVC\nhttps://docs.google.com/document/d/11eofqJXiHiVsLt_JjCwHROt_0OSryPFb1toyDBuLoXc/\n## • Real-time conversion RVC guide (local)\nhttps://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs/edit`)
-        .setColor(`Yellow`);
+            .setTitle(`Realtime Voice Changer`)
+            .setDescription(embedDescription.join('\n'))
+            .setColor(`Yellow`);
 
         if (message.mentions.members.first()) {
             return void message.channel.send({content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: [embed]});
