@@ -39,7 +39,7 @@ module.exports = {
         for (const entry of lbSorted) {
             const entryVal = Object.values(entry);
             const user = await interaction.client.users.fetch(entryVal[0]);
-            embedDescription.push(`${rankCounter}. ${user} — ${entryVal[1]}`);
+            embedDescription.push(`${rankCounter}. ${user.username} — ${entryVal[1]}`);
             rankCounter++;
         }
 
