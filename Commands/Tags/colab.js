@@ -4,7 +4,7 @@ module.exports = {
     name: 'colab',
     category: 'Tags',
     description: 'Links to inference and training colabs made by kalo',
-    aliases: [],
+    aliases: ['colabs'],
     syntax: `colab [member]`,
     /**
      * 
@@ -15,8 +15,14 @@ module.exports = {
      */
     run: (client, message, args, prefix) => {
         const embedDescription = [];
-        embedDescription.push(`## • Applio Colab 🍏 (NEWEST)\nhttps://colab.research.google.com/drive/157pUQep6txJOYModYFqvz_5OJajeh7Ii`);
+        embedDescription.push('## RVC colabs');
+        embedDescription.push(`### • Applio Colab 🍏 (NEWEST)\nhttps://colab.research.google.com/drive/157pUQep6txJOYModYFqvz_5OJajeh7Ii`);
         embedDescription.push(`### • RVC v2 Easy GUI Colab (outdated)\nhttps://colab.research.google.com/drive/1Gj6UTf2gicndUW_tVheVhTXIIYpFTYc7?usp=sharing`);
+        embedDescription.push('## UVR / MDX Colabs');
+        embedDescription.push('Use these if you wish to isolate vocals or instrumental');
+        embedDescription.push('### • UVR arch colab 5.0.2/c1.04\nhttps://colab.research.google.com/drive/16Q44VBJiIrXOgTINztVDVeb0XKhLKHwl');
+        embedDescription.push('### • MDX Net Colab\nhttps://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb');
+        embedDescription.push('### • MVSep-MDX23 Colab Fork v2.2.1\nhttps://colab.research.google.com/github/jarredou/MVSEP-MDX23-Colab_v2/blob/v2.2/MVSep-MDX23-Colab.ipynb');
 
         const embed = new EmbedBuilder()
             .setTitle(`Google Colabs`)
