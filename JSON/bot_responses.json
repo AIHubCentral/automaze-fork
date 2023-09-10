@@ -45,6 +45,7 @@
             "https://tenor.com/view/go-away-oops-awkward-big-eyes-gif-16408506",
             "https://tenor.com/view/problematic-stressed-smh-oh-dear-gif-23576897",
             "https://tenor.com/view/watch-your-tone-goku-mui-gif-23784055"
-        ]
+        ],
+        "find": "This command has been changed to `/find` and can now be accessed through <@1138318590760718416>."
     }
 }

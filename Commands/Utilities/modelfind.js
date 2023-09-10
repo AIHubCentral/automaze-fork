@@ -12,6 +12,6 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async (client, message, args, prefix) => {
-        await message.reply(`This command has changed to /find`);
+        await message.reply(client.botResponses.responses.find);
     }
 }
