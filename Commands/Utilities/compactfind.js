@@ -1,5 +1,3 @@
-const { EmbedBuilder } = require(`discord.js`);
-
 module.exports = {
     name: 'compactfind',
     category: 'Utilities',
@@ -14,8 +12,6 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async (client, message, args, prefix) => {
-        // which channel send to user
-        const targetChannel = message.guild.channels.cache.get(client.discordIDs.Forum.VoiceModel) ?? '**voice-models**';
-        await message.reply(`This command is currently unavailable. Please visit the ${targetChannel} channel if you wish to search for a model.`);
+        await message.reply(`This command has changed to /find`);
     }
 }
