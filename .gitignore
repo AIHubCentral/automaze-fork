@@ -2,6 +2,7 @@
 data/
 #JSON/_models.json
 node_modules/
+database/db.sqlite
 .replit
 replit.nix
 result.json
