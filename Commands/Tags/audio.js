@@ -15,12 +15,19 @@ module.exports = {
      */
     run: async(client, message, args, prefix) => {
         const embedDescription = [];
-        embedDescription.push('## Guides');
-        embedDescription.push(`### • Perfecting Audio Isolation on Low-End Rigs: A Practical Guide (by Litsa The Dancer and Faze Masta)\nhttps://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing`);
-        embedDescription.push(`### • Guide: Gathering and Isolating Audio (by SCRFilms)\nhttps://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv`);
-        embedDescription.push(`### • Instrumental, Vocal Separation & Mastering Guide\nhttps://docs.google.com/document/d/17fjNvJzj8ZGSer7c7OFe_CNfUKbAxEh_OBv94ZdRG5c/edit`);
-        embedDescription.push('## Tools');
-        embedDescription.push('### • Ultimate Vocal Remover (UVR)\nhttps://ultimatevocalremover.com/');
+        embedDescription.push('# Guides');
+        embedDescription.push(`## • Perfecting Audio Isolation on Low-End Rigs: A Practical Guide (by Litsa The Dancer and Faze Masta)\nhttps://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing`);
+        embedDescription.push(`## • Guide: Gathering and Isolating Audio (by SCRFilms)\nhttps://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv`);
+        embedDescription.push('## • How to make a good model All-In-One guide by LUSBERT\nhttps://rentry.org/RVC_making-models');
+        embedDescription.push('## • Vocal mixing tutorial by Roomie\nhttps://www.youtube.com/watch?v=rSxLF3kkBw0');
+        embedDescription.push('# Tools');
+        embedDescription.push('## Youtube Downloaders');
+        embedDescription.push('- https://github.com/yt-dlp/yt-dlp');
+        embedDescription.push('- https://github.com/dsymbol/yt-dlp-gui');
+        embedDescription.push('## Vocal Removers');
+        embedDescription.push('- https://ultimatevocalremover.com/');
+        embedDescription.push('- https://mvsep.com/');
+        embedDescription.push('- https://goyo.app/ (Note that this plugin is for clean ups only, like removing background noise, reverb, ambience or sustained sounds)')
         embedDescription.push('\n> **Tip:** Use `-colab` command if you\'re looking for UVR/MDX colabs');
 
         const embed = new EmbedBuilder()

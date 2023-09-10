@@ -14,10 +14,16 @@ module.exports = {
      * @param {String} prefix 
      */
     run: (client, message, args, prefix) => {
+        const embedDescription = [];
+        embedDescription.push('## All-In-One Guide on how to make a good model');
+        embedDescription.push('This guide explains how the **D** and **G** files works and much more: https://rentry.org/RVC_making-models\n\nCredits to <@917711764571951144>');
+        embedDescription.push('## Realtime Overtraining Detection (ROD)\nhttps://github.com/grvyscale/RealtimeOvertrainingDetection');
+        embedDescription.push('\n\nClick on the image below for a brief explanation on overtraining');
+
         const embed = new EmbedBuilder()
             .setTitle(`How do I know if my model is overtaining?`)
             .setImage(`https://media.discordapp.net/attachments/1124354352124010536/1126132264569417728/image.png`)
-            .setDescription('## Realtime Overtraining Detection (ROD)\nhttps://github.com/grvyscale/RealtimeOvertrainingDetection\n\nClick on the image below to learn more about overtraining')
+            .setDescription(embedDescription.join('\n'))
             .setColor(`Yellow`);
 
         if (message.mentions.members.first()) {
