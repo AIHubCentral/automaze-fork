@@ -25,8 +25,6 @@ module.exports = {
 
         if (!member) return interaction.reply(botResponses.targetNone);
 
-        if (member.id === userId) return interaction.reply(botResponses.targetSelf);
-
         if (member.bot) {
             const responses = botResponses.targetBot;
             selectedResponse = responses[Math.floor(Math.random() * responses.length)];

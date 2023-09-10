@@ -27,10 +27,6 @@ module.exports = {
             return message.reply(selectedMessage);
         }
 
-        if (member.user.id === message.author.id) {
-            return message.reply(botResponses.targetSelf);
-        }
-
         if (Date.now() - client.bananaCD.get(message.author.id) < 300000) {
             return void message.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${300000 - (Date.now() - client.bananaCD.get(message.author.id))} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`)
         }
