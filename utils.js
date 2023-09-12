@@ -12,7 +12,7 @@ function getAllFiles(currentPath){
             currentFiles.push(filePath);
         }
     }
-    return currentFiles;
+    return [...new Set(currentFiles)];
 }
 exports.getAllFiles = getAllFiles;
 
