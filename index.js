@@ -4,6 +4,7 @@ const Env = require('dotenv').config();
 // Libraries
 const Enmap = require("enmap");
 const Discord = require(`discord.js`);
+const { Sequelize} = require('sequelize');
 
 // Exports
 const { getAllFiles } = require('./utils');
@@ -74,6 +75,31 @@ client.prefix = new Enmap({name: 'prefix'});
 
 // banana data as an object instead of enmap
 client.bananaData = {};
+
+// init database
+client.databaseInfo = {
+    active: false,
+    message: 'Unable to connect to the database.'
+};
+
+client.sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './database/db.sqlite',
+    //logging: false
+});
+
+(async () => {
+    try {
+        await client.sequelize.authenticate();
+        const message = 'Connection has been estabilished successfully.';
+        client.databaseInfo.active = true;
+        client.databaseInfo.message = message;
+        console.log(message);
+    } catch(error) {
+        client.databaseInfo.message = error.message;
+        console.error(error.message);
+    }
+})();
 
 // bot responses loaded on startup
 client.botResponses = require('./JSON/bot_responses.json');
