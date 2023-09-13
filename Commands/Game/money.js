@@ -14,9 +14,20 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async (client, message, args, prefix) => {
+        let description = [];
+        const member = message.mentions.members.first() || message.member;
+
+        if (!client.currencies.has(member.user.id)) {
+            description.push(`Nothing to see here :(`);
+        } else {
+            description.push(Object.values(client.currencies.get(member.user.id)).map(entry => `**‣ ${entry.name}**: ${entry.value}`));
+        }
+
         const embed = new EmbedBuilder()
-            .setColor('Orange')
-            .setDescription(`This command is temporarily unavailable, stay tuned!`);
-        await message.channel.send({embeds: [embed]});
+        .setAuthor({name: member.user.username, iconURL: member.user.avatarURL()})
+        .setDescription(`## Currencies\n${description.join(`\n`)}`)
+        .setColor(`Green`);
+
+        message.reply({embeds: [embed]})
     }
 }

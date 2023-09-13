@@ -19,7 +19,6 @@ module.exports = client => {
         }
     }
 
-    /*
     const itemsPath = `${process.cwd()}/Commands/Game/items`;
     const itemFiles = fs.readdirSync(itemsPath).filter(file => file.endsWith(`.js`));
 
@@ -29,5 +28,4 @@ module.exports = client => {
 
         client.use.set(item.name, item);
     }
-    */
 }
