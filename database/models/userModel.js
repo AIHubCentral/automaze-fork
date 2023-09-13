@@ -15,6 +15,10 @@ const userModel = {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
+    credits: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
     bananaDisabled: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
