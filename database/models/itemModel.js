@@ -10,6 +10,22 @@ const itemModel = {
         type: DataTypes.STRING(128),
         allowNull: false,
         unique: true
+    },
+    keyName: {
+        type: DataTypes.STRING,
+        unique: true
+    },
+    worth: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    equipable: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    itemType: {
+        type: DataTypes.STRING,
+        defaultValue: 'N/A'
     }
 };
 
