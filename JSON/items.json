@@ -1,17 +1,25 @@
 {
+    "banana": {
+        "id": 1,
+        "name": "Banana",
+        "keyName": "banana"
+    },
     "SVC": {
+        "id": 2,
         "name": "SVC Models",
         "keyName": "SVC",
         "aliases": ["svc", "svc model", "svc models"],
         "worth": 200
     },
     "RIAA": {
+        "id": 3,
         "name": "RIAA Subpoenas",
         "keyName": "RIAA",
         "aliases": ["riaa", "riaa subpoena", "riaa subpoenas"],
         "worth": 200
     },
     "Shittium_Pickaxe": {
+        "id": 4,
         "name": "Shittium Pickaxe",
         "keyName": "Shittium_Pickaxe",
         "aliases": ["shittium pickaxe", "shittium pick", "spick"],
@@ -19,6 +27,7 @@
         "type": "Pickaxe"
     },
     "Opium_Pickaxe": {
+        "id": 5,
         "name": "Opium Pickaxe",
         "keyName": "Opium_Pickaxe",
         "aliases": ["opium pickaxe", "opium pick", "opick"],
@@ -26,6 +35,7 @@
         "type": "Pickaxe"
     },
     "Ballinine_Pickaxe": {
+        "id": 6,
         "name": "Ballinine Pickaxe",
         "keyName": "Ballinine_Pickaxe",
         "aliases": ["ballinine pickaxe", "ballinine pick", "bpick"],
@@ -33,6 +43,7 @@
         "type": "Pickaxe"
     },
     "Kysine_Pickaxe": {
+        "id": 7,
         "name": "Kysine Pickaxe",
         "keyName": "Kysine_Pickaxe",
         "aliases": ["kysine pickaxe", "kysine pick", "kpick"],
@@ -40,6 +51,7 @@
         "type": "Pickaxe"
     },
     "Tetoine_Pickaxe": {
+        "id":8,
         "name": "Tetoine Pickaxe",
         "keyName": "Tetoine_Pickaxe",
         "aliases": ["tetoine pickaxe", "tetoine pick", "tpick"],
@@ -47,30 +59,35 @@
         "type": "Pickaxe"
     },
     "Shittium": {
+        "id": 9,
         "name": "Shittium",
         "keyName": "Shittium",
         "aliases": ["shittium"],
         "worth": 10
     },
     "Opium": {
+        "id": 10,
         "name": "Opium",
         "keyName": "Opium",
         "aliases": ["opium"],
         "worth": 20
     },
     "Ballinine": {
+        "id": 11,
         "name": "Ballinine",
         "keyName": "Ballinine",
         "aliases": ["ballinine"],
         "worth": 50
     },
     "Kysine": {
+        "id": 12,
         "name": "Kysine",
         "keyName": "Kysine",
         "aliases": ["kysine"],
         "worth": 70
     },
     "Tetoine": {
+        "id": 13,
         "name": "Tetoine",
         "keyName": "Tetoine",
         "aliases": ["tetoine"],

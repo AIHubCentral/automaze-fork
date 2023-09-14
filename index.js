@@ -4,7 +4,9 @@ const Env = require('dotenv').config();
 // Libraries
 const Enmap = require("enmap");
 const Discord = require(`discord.js`);
-const { Sequelize} = require('sequelize');
+
+// database instance
+const { sequelize } = require('./database/models.js');
 
 // Exports
 const { getAllFiles } = require('./utils');
@@ -14,6 +16,8 @@ const DiscordIDs = {
     prod: "./Configs/idsDiscordProd.json",
     dev: "./Configs/idsDiscordDev.json"
 }
+
+const itemsData = require('./JSON/items.json');
 
 // Hosting? only prod
 // If you are going to fork this, remove line 5-14, they are there for hosting purpose, you don't need them if you run locally
@@ -82,19 +86,35 @@ client.databaseInfo = {
     message: 'Unable to connect to the database.'
 };
 
-client.sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database/db.sqlite',
-    //logging: false
-});
+client.sequelize = sequelize;
 
 (async () => {
     try {
         await client.sequelize.authenticate();
         const message = 'Connection has been estabilished successfully.';
+
+        await client.sequelize.sync({ force: true });
+        console.log("All models were synchronized successfully.");
+
         client.databaseInfo.active = true;
         client.databaseInfo.message = message;
         console.log(message);
+
+        // add game items to db
+        for (let key in itemsData) {
+            let currentItem = itemsData[key]
+            await client.sequelize.Item.create({
+                id: currentItem.id,
+                name: currentItem.name,
+                keyName: currentItem.keyName
+            });
+            //console.log('Added', currentItem.name);
+        }
+
+        // query
+        //const items = await client.sequelize.Item.findAll();
+        //console.log('All items:', JSON.stringify(items, null, 2));
+
     } catch(error) {
         client.databaseInfo.message = error.message;
         console.error(error.message);
