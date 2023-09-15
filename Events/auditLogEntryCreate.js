@@ -9,13 +9,14 @@ module.exports = {
 
 async function addModlogEvent(client, auditLogEntry, guild) {
     const { action, executorId, targetId } = auditLogEntry;
-    const { modlog } = require('../JSON/channels.json');
+    const modlogChannelId = client.discordIDs.Channel.BansAndTimeouts;
+
     const desiredEvents = [
         AuditLogEvent.MemberUpdate, AuditLogEvent.MemberPrune, 
         AuditLogEvent.MemberBanAdd, AuditLogEvent.MemberKick
     ]
 
-    if (!desiredEvents.includes(action) || (modlog == null)) return;
+    if (!desiredEvents.includes(action)) return;
 
     const executor = await client.users.fetch(executorId);
     const guildMember = await guild.members.cache.get(targetId);
@@ -29,28 +30,28 @@ async function addModlogEvent(client, auditLogEntry, guild) {
                 .setTitle(`${target.username} was timed out`)
                 .setColor(`Red`)
                 .setDescription(`until ${guildMember.communicationDisabledUntil}\nExecuted by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
-            await client.channels.cache.get(modlog.id).send({embeds: [eventEmbed]});
+            await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
         case AuditLogEvent.MemberPrune:
             eventEmbed
                 .setTitle(`${target.username} was pruned!`)
                 .setColor(`Red`)
                 .setDescription(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
-            await client.channels.cache.get(modlog.id).send({embeds: [eventEmbed]});
+            await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
         case AuditLogEvent.MemberBanAdd:
             eventEmbed
                 .setTitle(`${target.username} has been banned!`)
                 .setColor(`Red`)
                 .setDescription(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
-            await client.channels.cache.get(modlog.id).send({embeds: [eventEmbed]});
+            await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
         case AuditLogEvent.MemberKick:
             eventEmbed
                 .setTitle(`${target.username} has been kicked!`)
                 .setColor(`Red`)
                 .setDescription(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
-            await client.channels.cache.get(modlog.id).send({embeds: [eventEmbed]});
+            await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
         default:
             console.error(`How did we get here?\nWho let the ${action} in?`);
