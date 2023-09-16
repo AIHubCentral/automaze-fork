@@ -19,21 +19,6 @@ const DiscordIDs = {
 
 const itemsData = require('./JSON/items.json');
 
-// Hosting? only prod
-// If you are going to fork this, remove line 5-14, they are there for hosting purpose, you don't need them if you run locally
-if(Env.error != null){
-    const express = require("express");
-    const app = express();
-    
-    app.listen(3000, () => {
-      console.log("whatever you want here");
-    });
-    
-    app.get("/", (_, res) => {
-      res.send("whatever you want here");
-    });
-}
-
 // Discord Client initialization
 const client = new Discord.Client({
     intents: [
@@ -48,8 +33,11 @@ const client = new Discord.Client({
     }
 });
 
+// set dev=true in .env to use the development guild ids
+const devMode = process.env.dev;
+
 // Discord IDs JSON
-client.discordIDs = require(DiscordIDs.dev);
+client.discordIDs = require(devMode ? DiscordIDs.dev : DiscordIDs.prod);
 
 // Discord Tables
 client.forumSpammer = {}

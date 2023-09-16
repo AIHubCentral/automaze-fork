@@ -24,32 +24,40 @@ async function addModlogEvent(client, auditLogEntry, guild) {
     const target = guildMember.user;
     const eventEmbed = new EmbedBuilder();
 
+    console.log(guildMember.communicationDisabledUntil);
+
+    const embedConfig = {
+        color: 'Red',
+    };
+
+
     switch(action) {
         case AuditLogEvent.MemberUpdate:
+            // assume the timeout was removed if this value is null
             eventEmbed
                 .setTitle(`${target.username} was timed out`)
-                .setColor(`Red`)
+                .setColor(embedConfig.color)
                 .setDescription(`until ${guildMember.communicationDisabledUntil}\nExecuted by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
             await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
         case AuditLogEvent.MemberPrune:
             eventEmbed
                 .setTitle(`${target.username} was pruned!`)
-                .setColor(`Red`)
+                .setColor(embedConfig.color)
                 .setDescription(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
             await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
         case AuditLogEvent.MemberBanAdd:
             eventEmbed
                 .setTitle(`${target.username} has been banned!`)
-                .setColor(`Red`)
+                .setColor(embedConfig.color)
                 .setDescription(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
             await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
         case AuditLogEvent.MemberKick:
             eventEmbed
                 .setTitle(`${target.username} has been kicked!`)
-                .setColor(`Red`)
+                .setColor(embedConfig.color)
                 .setDescription(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
             await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
