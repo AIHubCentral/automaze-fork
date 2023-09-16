@@ -8,7 +8,7 @@ module.exports = {
 };
 
 async function addModlogEvent(client, auditLogEntry, guild) {
-    const { action, executorId, targetId } = auditLogEntry;
+    const { action, executorId, targetId, reason } = auditLogEntry;
     const modlogChannelId = client.discordIDs.Channel.BansAndTimeouts;
 
     const desiredEvents = [
@@ -28,16 +28,32 @@ async function addModlogEvent(client, auditLogEntry, guild) {
 
     const embedConfig = {
         color: 'Red',
+        description: [],
     };
 
+    console.log(auditLogEntry);
 
     switch(action) {
         case AuditLogEvent.MemberUpdate:
             // assume the timeout was removed if this value is null
+            if (!guildMember.communicationDisabledUntil) {
+                embedConfig.color = 'Green';
+                embedConfig.title = `${target.username} timeout removed`;
+                embedConfig.description.push(`${target} timeout was removed by ${executor}`);
+                //embedConfig.description.push(`\n<t:${Math.round(Date.now() / 1000)}:R>`);
+            }
+            else {
+                embedConfig.title = `${target.username} was timed out`;
+                embedConfig.description.push(`${executor} timed out ${target}`);
+                embedConfig.description.push(`\n**User id:** ${target.id}`);
+                embedConfig.description.push(`**Reason:** ${reason}`)
+                embedConfig.description.push(`**Expires in:** ${guildMember.communicationDisabledUntil}`);
+                //embedConfig.description.push(`\n<t:${Math.round(Date.now() / 1000)}:R>`);
+            }
             eventEmbed
-                .setTitle(`${target.username} was timed out`)
+                .setTitle(embedConfig.title)
                 .setColor(embedConfig.color)
-                .setDescription(`until ${guildMember.communicationDisabledUntil}\nExecuted by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
+                .setDescription(embedConfig.description.join('\n'));
             await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
         case AuditLogEvent.MemberPrune:
