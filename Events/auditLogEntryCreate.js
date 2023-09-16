@@ -43,9 +43,10 @@ async function addModlogEvent(client, auditLogEntry, guild) {
                 //embedConfig.description.push(`\n<t:${Math.round(Date.now() / 1000)}:R>`);
             }
             else {
-                embedConfig.title = `${target.username} was timed out`;
+                embedConfig.title = `New Timeout`;
                 embedConfig.description.push(`${executor} timed out ${target}`);
                 embedConfig.description.push(`\n**User id:** ${target.id}`);
+                embedConfig.description.push(`**Username:** ${target.username}`);
                 embedConfig.description.push(`**Reason:** ${reason}`)
                 embedConfig.description.push(`**Expires in:** ${guildMember.communicationDisabledUntil}`);
                 //embedConfig.description.push(`\n<t:${Math.round(Date.now() / 1000)}:R>`);
@@ -71,10 +72,13 @@ async function addModlogEvent(client, auditLogEntry, guild) {
             await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
         case AuditLogEvent.MemberKick:
+            embedConfig.description.push(`${executor} kicked ${target}`);
+            embedConfig.description.push(`\n**User id:** ${target.id}`);
+            embedConfig.description.push(`**Reason:** ${reason}`)
             eventEmbed
                 .setTitle(`${target.username} has been kicked!`)
                 .setColor(embedConfig.color)
-                .setDescription(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
+                .setDescription(embedConfig.description.join('\n'));
             await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
             break;
         default:
