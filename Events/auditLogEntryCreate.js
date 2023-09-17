@@ -19,69 +19,65 @@ async function addModlogEvent(client, auditLogEntry, guild) {
     if (!desiredEvents.includes(action)) return;
 
     const executor = await client.users.fetch(executorId);
+
     const guildMember = await guild.members.cache.get(targetId);
     
-    const target = guildMember.user;
-    const eventEmbed = new EmbedBuilder();
-
-    console.log(guildMember.communicationDisabledUntil);
+    // use the targetId if fail to fetch member
+    const target = guildMember ? guildMember.user : targetId;
 
     const embedConfig = {
         color: 'Red',
         description: [],
     };
 
-    console.log(auditLogEntry);
+    //console.log(auditLogEntry);
 
     switch(action) {
         case AuditLogEvent.MemberUpdate:
             // assume the timeout was removed if this value is null
             if (!guildMember.communicationDisabledUntil) {
                 embedConfig.color = 'Green';
-                embedConfig.title = `${target.username} timeout removed`;
-                embedConfig.description.push(`${target} timeout was removed by ${executor}`);
-                //embedConfig.description.push(`\n<t:${Math.round(Date.now() / 1000)}:R>`);
+                embedConfig.title = `⏳ ${target.username} timeout removed`;
+                embedConfig.description.push(`\n**ID:** ${target.id}`);
+                embedConfig.description.push(`**User:** ${target}`);
+                embedConfig.description.push(`**Username:** ${target.username}`);
             }
             else {
-                embedConfig.title = `New Timeout`;
-                embedConfig.description.push(`${executor} timed out ${target}`);
-                embedConfig.description.push(`\n**User id:** ${target.id}`);
+                embedConfig.title = `User has been timed out ⏳`;
+                embedConfig.description.push(`\n**ID:** ${target.id}`);
+                embedConfig.description.push(`**User:** ${target}`);
                 embedConfig.description.push(`**Username:** ${target.username}`);
-                embedConfig.description.push(`**Reason:** ${reason}`)
-                embedConfig.description.push(`**Expires in:** ${guildMember.communicationDisabledUntil}`);
-                //embedConfig.description.push(`\n<t:${Math.round(Date.now() / 1000)}:R>`);
+                embedConfig.description.push(`\n**Reason:**\n> ${reason ?? 'Not provided.'}`);
             }
-            eventEmbed
-                .setTitle(embedConfig.title)
-                .setColor(embedConfig.color)
-                .setDescription(embedConfig.description.join('\n'));
-            await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
+            embedConfig.description.push(`\nAction performed by ${executor} (${executor.username})`);
             break;
         case AuditLogEvent.MemberPrune:
-            eventEmbed
-                .setTitle(`${target.username} was pruned!`)
-                .setColor(embedConfig.color)
-                .setDescription(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
-            await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
+            embedConfig.title = `${target.username} was pruned!`;
+            embedConfig.description.push(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
             break;
         case AuditLogEvent.MemberBanAdd:
-            eventEmbed
-                .setTitle(`${target.username} has been banned!`)
-                .setColor(embedConfig.color)
-                .setDescription(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
-            await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
+            embedConfig.title = `🚫 ${targetId} has been banned`;
+            embedConfig.description.push(`**User:** <@${targetId}>`);
+            embedConfig.description.push(`\n**Reason:**\n> ${reason ?? 'Not provided.'}`);
+            embedConfig.description.push(`\nAction performed by ${executor} (${executor.username})`);
             break;
         case AuditLogEvent.MemberKick:
-            embedConfig.description.push(`${executor} kicked ${target}`);
-            embedConfig.description.push(`\n**User id:** ${target.id}`);
-            embedConfig.description.push(`**Reason:** ${reason}`)
-            eventEmbed
-                .setTitle(`${target.username} has been kicked!`)
-                .setColor(embedConfig.color)
-                .setDescription(embedConfig.description.join('\n'));
-            await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
+            embedConfig.title = `❌ ${targetId} has been kicked`;
+            embedConfig.color = 'Orange';
+            embedConfig.description.push(`**User:** <@${targetId}>`);
+            embedConfig.description.push(`\n**Reason:**\n> ${reason ?? 'Not provided.'}`);
+            embedConfig.description.push(`\nAction performed by ${executor} (${executor.username})`);
             break;
         default:
             console.error(`How did we get here?\nWho let the ${action} in?`);
+            return;
     }
+
+    // send the embed
+    const eventEmbed = new EmbedBuilder()
+        .setTitle(embedConfig.title)
+        .setColor(embedConfig.color)
+        .setDescription(embedConfig.description.join('\n'))
+        .setTimestamp();
+    await client.channels.cache.get(modlogChannelId).send({embeds: [eventEmbed]});
 }
