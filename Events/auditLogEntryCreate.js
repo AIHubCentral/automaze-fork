@@ -30,23 +30,38 @@ async function addModlogEvent(client, auditLogEntry, guild) {
         description: [],
     };
 
-    //console.log(auditLogEntry);
-
     switch(action) {
         case AuditLogEvent.MemberUpdate:
-            // assume the timeout was removed if this value is null
-            if (!guildMember.communicationDisabledUntil) {
+            // if the action was performed on themselves skip
+            if (executor.id === target.id) return;
+
+            // filter timeouts from other MemberUpdate actions
+            let timeoutChange = auditLogEntry.changes.filter(change => change.key === 'communication_disabled_until');
+
+            if (timeoutChange.length < 1) return;
+
+            // get the first result
+            timeoutChange = timeoutChange[0];
+
+            //const communicationDisabledOld = timeoutChange.old;
+            const communicationDisabledNew = timeoutChange.new;
+
+            // if the new expiration time is null, it means the timeout was removed
+            if (!communicationDisabledNew) {
                 embedConfig.color = 'Green';
-                embedConfig.title = `⏳ ${target.username} timeout removed`;
+                embedConfig.title = `⏳ ${target.username} timeout has been removed`;
                 embedConfig.description.push(`\n**ID:** ${target.id}`);
                 embedConfig.description.push(`**User:** ${target}`);
                 embedConfig.description.push(`**Username:** ${target.username}`);
             }
             else {
-                embedConfig.title = `User has been timed out ⏳`;
+                const expirationDate = communicationDisabledNew.slice(0, 10);
+
+                embedConfig.title = `⏳ User has been timed out`;
                 embedConfig.description.push(`\n**ID:** ${target.id}`);
                 embedConfig.description.push(`**User:** ${target}`);
                 embedConfig.description.push(`**Username:** ${target.username}`);
+                embedConfig.description.push(`**Expiration date:** ${expirationDate ?? 'N/A'}`);
                 embedConfig.description.push(`\n**Reason:**\n> ${reason ?? 'Not provided.'}`);
             }
             embedConfig.description.push(`\nAction performed by ${executor} (${executor.username})`);
