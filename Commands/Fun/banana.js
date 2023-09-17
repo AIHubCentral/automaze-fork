@@ -13,10 +13,10 @@ module.exports = {
      * @param {string[]} args 
      * @param {String} prefix 
      */
-    run: (client, message, args, prefix) => {
+    run: async(client, message, args, prefix) => {
         const botResponses = client.botResponses.responses.banana;
         const member = message.mentions.members.first();
-        
+
         if (!member) {
             return message.reply(botResponses.targetNone);
         }
@@ -30,6 +30,26 @@ module.exports = {
         if (Date.now() - client.bananaCD.get(message.author.id) < 300000) {
             return void message.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${300000 - (Date.now() - client.bananaCD.get(message.author.id))} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`)
         }
+
+        // get banana model from db
+        const bananaModel = await client.sequelize.Item.findByPk(1);
+
+        // check if user exists in database
+        let targetUserModel = await client.sequelize.User.findByPk(`${member.user.id}`);
+
+        if (targetUserModel === null) {
+            console.log(`${member.user.username} not found.`);
+            targetUserModel = await client.sequelize.User.create({
+                discordId: member.user.id,
+                userName: member.user.username
+            });
+            console.log(`${member.user.username} created.`);
+        }
+
+        // add banana item to user inventory
+        await targetUserModel.addItem(bananaModel, {through:{quantity:1}});
+
+        //  TODO: Finish the M:N association
 
         const bananEmbed = new EmbedBuilder()
         .setTitle(`${member.user.username} GOT BANANA LOL LOL LOL`)
