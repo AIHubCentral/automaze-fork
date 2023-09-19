@@ -5,7 +5,7 @@ module.exports = {
     name: 'rvc',
     category: 'Tags',
     description: 'Retrieval-based Voice Conversions guide links made by kalo',
-    aliases: [],
+    aliases: ['paperspace'],
     syntax: `rvc [member]`,
     /**
      * 
@@ -17,10 +17,11 @@ module.exports = {
     run: (client, message, args, prefix) => {
         const embedDescription = [];
         embedDescription.push('## • Applio-RVC-Fork: Guide (EN/ES)\nhttps://docs.google.com/document/d/12YmIQFLFzth1YsZJMGrA0aeTN0Go8DNZVw8LFSf-Hug');
+        embedDescription.push('## • RVC v2 Tutorial for Paperspace (By LollenApe)\nhttps://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing');
         embedDescription.push('## • Russian FAQ for RVC/Voice changer\nhttps://github.com/MaHivka/ultimate-voice-models-FAQ');
-        embedDescription.push(`### • RVC v2 AI Cover Guide (by Kalomaze)\nhttps://docs.google.com/document/d/13_l1bd1Osgz7qlAZn-zhklCbHpVRk6bYOuAuB78qmsE/edit?usp=sharing`);
-        embedDescription.push(`### • Training RVC v2 models guide (by Kalomaze)\nhttps://docs.google.com/document/d/13ebnzmeEBc6uzYCMt-QVFQk-whVrK4zw8k7_Lw3Bv_A/edit?usp=sharing`);
-        embedDescription.push(`### • Installing Mangio RVC v2 Locally (OUTDATED)\nhttps://docs.google.com/document/d/1KKKE7hoyGXMw-Lg0JWx16R8xz3OfxADjwEYJTqzDO1k/edit`);
+        //embedDescription.push(`### • RVC v2 AI Cover Guide (by Kalomaze)\nhttps://docs.google.com/document/d/13_l1bd1Osgz7qlAZn-zhklCbHpVRk6bYOuAuB78qmsE/edit?usp=sharing`);
+        //embedDescription.push(`### • Training RVC v2 models guide (by Kalomaze)\nhttps://docs.google.com/document/d/13ebnzmeEBc6uzYCMt-QVFQk-whVrK4zw8k7_Lw3Bv_A/edit?usp=sharing`);
+        //embedDescription.push(`### • Installing Mangio RVC v2 Locally (OUTDATED)\nhttps://docs.google.com/document/d/1KKKE7hoyGXMw-Lg0JWx16R8xz3OfxADjwEYJTqzDO1k/edit`);
 
         const embed = new EmbedBuilder()
             .setTitle(`RVC Guides (how to make ai cover)`)
