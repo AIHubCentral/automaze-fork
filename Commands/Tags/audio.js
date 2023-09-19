@@ -24,11 +24,12 @@ module.exports = {
         embedDescription.push('## Youtube Downloaders');
         embedDescription.push('- https://github.com/yt-dlp/yt-dlp');
         embedDescription.push('- https://github.com/dsymbol/yt-dlp-gui');
-        embedDescription.push('## Vocal Removers');
+        embedDescription.push('## Audio Separation/Isolation');
         embedDescription.push('- https://ultimatevocalremover.com/');
         embedDescription.push('- https://mvsep.com/');
+        embedDescription.push('- 🆕 https://github.com/Captain-FLAM/KaraFan');
         embedDescription.push('- https://goyo.app/ (Note that this plugin is for clean ups only, like removing background noise, reverb, ambience or sustained sounds)')
-        embedDescription.push('\n> **Tip:** Use `-colab` command if you\'re looking for UVR/MDX colabs');
+        embedDescription.push('\n> **Tip:** Use `-colab` command if you\'re looking for audio separation/isolation colabs.');
 
         const embed = new EmbedBuilder()
             .setTitle(`Audio isolation / Dataset creation`)

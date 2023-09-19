@@ -22,10 +22,11 @@ module.exports = {
         */
         embedDescription.push('### • Applio-RVC-Fork 🍏\nhttps://www.kaggle.com/code/IAHispano/Applio-RVC-Fork');
         embedDescription.push('\n> Note: The code is now on **Kaggle** due to Google restricting colab free tier usage. Use the `-rvc` command to see the new guide.');
-        embedDescription.push('## UVR / MDX Colabs');
-        embedDescription.push('Use these if you wish to isolate vocals or instrumental');
-        embedDescription.push('### • UVR arch colab 5.0.2/c1.04\nhttps://colab.research.google.com/drive/16Q44VBJiIrXOgTINztVDVeb0XKhLKHwl');
+        embedDescription.push('## Audio Separation/Isolation');
         embedDescription.push('### • MDX Net Colab\nhttps://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb');
+        embedDescription.push('### • UVR arch colab 5.0.2/c1.04\nhttps://colab.research.google.com/drive/16Q44VBJiIrXOgTINztVDVeb0XKhLKHwl');
+        embedDescription.push('### • 🆕 KaraFan colab\nhttps://colab.research.google.com/github/Captain-FLAM/KaraFan/blob/master/KaraFan.ipynb');
+        
 
         const embed = new EmbedBuilder()
             .setTitle(`Google Colabs`)
