@@ -15,12 +15,12 @@ module.exports = {
      */
     run: async(client, message, args, prefix) => {
         const targetChannelId = '1148048520566284410'; // Overtraining detector discord thread
-        const targetChannel = message.guild.channels.cache.get(targetChannelId) ?? 'Visit the **how-to-ask** channel to find it.';
+        const targetChannel = message.guild.channels.cache.get(targetChannelId) ?? 'Visit the **how-to-use** channel to find it.';
 
         const embedDescription = [];
         embedDescription.push('## All-In-One Guide on how to make a good model');
         embedDescription.push('This guide explains how the **D** and **G** files works and much more: https://rentry.org/RVC_making-models\n\nCredits to <@917711764571951144>');
-        embedDescription.push(`## Realtime Overtraining Detection (ROD)\n${targetChannel}`);
+        embedDescription.push(`## Automated Overtraining Detection (AOD)\n${targetChannel}`);
         embedDescription.push('\n\nClick on the image below for a brief explanation on overtraining');
 
         const embed = new EmbedBuilder()
