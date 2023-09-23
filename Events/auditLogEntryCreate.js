@@ -56,7 +56,6 @@ async function addModlogEvent(client, auditLogEntry, guild) {
             }
             else {
                 const expirationDate = communicationDisabledNew.slice(0, 10);
-
                 embedConfig.title = `⏳ User has been timed out`;
                 embedConfig.description.push(`\n**ID:** ${target.id}`);
                 embedConfig.description.push(`**User:** ${target}`);
@@ -71,20 +70,23 @@ async function addModlogEvent(client, auditLogEntry, guild) {
             embedConfig.description.push(`Executed by ${executor} <t:${Math.round(Date.now() / 1000)}:R>`);
             break;
         case AuditLogEvent.MemberBanAdd:
-            embedConfig.title = `🚫 ${targetId} has been banned`;
+            embedConfig.title = `🚫 User has been banned`;
+            embedConfig.description.push(`**ID:** ${targetId}`);
             embedConfig.description.push(`**User:** <@${targetId}>`);
             embedConfig.description.push(`\n**Reason:**\n> ${reason ?? 'Not provided.'}`);
             embedConfig.description.push(`\nAction performed by ${executor} (${executor.username})`);
             break;
         case AuditLogEvent.MemberBanRemove:
-            embedConfig.title = `${targetId} has been unbanned`;
+            embedConfig.title = `User has been unbanned`;
             embedConfig.color = 'Green';
+            embedConfig.description.push(`**ID:** ${targetId}`);
             embedConfig.description.push(`**User:** <@${targetId}>`);
             embedConfig.description.push(`\nAction performed by ${executor} (${executor.username})`);
             break;
         case AuditLogEvent.MemberKick:
-            embedConfig.title = `❌ ${targetId} has been kicked`;
+            embedConfig.title = `❌ User has been kicked`;
             embedConfig.color = 'Orange';
+            embedConfig.description.push(`**ID:** ${targetId}`);
             embedConfig.description.push(`**User:** <@${targetId}>`);
             embedConfig.description.push(`\n**Reason:**\n> ${reason ?? 'Not provided.'}`);
             embedConfig.description.push(`\nAction performed by ${executor} (${executor.username})`);
