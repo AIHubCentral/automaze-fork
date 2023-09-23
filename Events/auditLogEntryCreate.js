@@ -55,12 +55,14 @@ async function addModlogEvent(client, auditLogEntry, guild) {
                 embedConfig.description.push(`**Username:** ${target.username}`);
             }
             else {
-                const expirationDate = communicationDisabledNew.slice(0, 10);
+                // parse ISO 8601 date string
+                const expirationDate = new Date(communicationDisabledNew);
+
                 embedConfig.title = `⏳ User has been timed out`;
                 embedConfig.description.push(`\n**ID:** ${target.id}`);
                 embedConfig.description.push(`**User:** ${target}`);
                 embedConfig.description.push(`**Username:** ${target.username}`);
-                embedConfig.description.push(`**Expiration date:** ${expirationDate ?? 'N/A'}`);
+                embedConfig.description.push(`**Expiration:** <t:${Math.floor(expirationDate.getTime() / 1000)}:R>`); // (getTime() / 1000) to convert to timestamp
                 embedConfig.description.push(`\n**Reason:**\n> ${reason ?? 'Not provided.'}`);
             }
             embedConfig.description.push(`\nAction performed by ${executor} (${executor.username})`);
