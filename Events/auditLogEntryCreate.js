@@ -13,7 +13,7 @@ async function addModlogEvent(client, auditLogEntry, guild) {
 
     const desiredEvents = [
         AuditLogEvent.MemberUpdate, AuditLogEvent.MemberPrune, 
-        AuditLogEvent.MemberBanAdd, AuditLogEvent.MemberKick
+        AuditLogEvent.MemberBanAdd, AuditLogEvent.MemberBanRemove, AuditLogEvent.MemberKick
     ]
 
     if (!desiredEvents.includes(action)) return;
@@ -74,6 +74,12 @@ async function addModlogEvent(client, auditLogEntry, guild) {
             embedConfig.title = `🚫 ${targetId} has been banned`;
             embedConfig.description.push(`**User:** <@${targetId}>`);
             embedConfig.description.push(`\n**Reason:**\n> ${reason ?? 'Not provided.'}`);
+            embedConfig.description.push(`\nAction performed by ${executor} (${executor.username})`);
+            break;
+        case AuditLogEvent.MemberBanRemove:
+            embedConfig.title = `${targetId} has been unbanned`;
+            embedConfig.color = 'Green';
+            embedConfig.description.push(`**User:** <@${targetId}>`);
             embedConfig.description.push(`\nAction performed by ${executor} (${executor.username})`);
             break;
         case AuditLogEvent.MemberKick:
