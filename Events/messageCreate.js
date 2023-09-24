@@ -23,6 +23,7 @@ module.exports = {
             }
 
             /* these have a chance of happening */
+            /*
             const random = arr[Math.floor(Math.random() * arr.length)];
             if (random === 69) {
                 if (!messageLowercase.includes('?') && messageLowercase.length > 5) {
@@ -32,6 +33,7 @@ module.exports = {
                     await message.reply(botResponse);
                 }
             }
+            */
         }
 
         if (!message.content.startsWith('-banan') && message.content.includes('<@' + Client.user.id + '>')) {
