@@ -15,7 +15,7 @@ module.exports = {
      */
     run: (client, message, args, prefix) => {
         const embedDescription = [];
-        embedDescription.push(`## • Posting models to AI Hub by FDG\nhttps://rentry.org/fdg_guide`);
+        embedDescription.push(`## • Posting models to AI Hub by FDG\nhttps://rentry.org/fdg_guide_new`);
 
         const embed = new EmbedBuilder()
             .setTitle(`huggingface.co upload Guides`)
