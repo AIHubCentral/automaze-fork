@@ -3,7 +3,6 @@ const { byValue, byNumber } = require('sort-es');
 
 module.exports = {
     category: `Fun`,
-    scope: `global`,
     type: `slash`, 
     data: new SlashCommandBuilder()
                 .setName('topbanana')

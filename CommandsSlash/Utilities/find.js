@@ -2,7 +2,6 @@ const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, StringSelectMenu
 
 module.exports = {
     category: 'Utilities',
-    scope: 'local',
     type: 'slash',
 
     data: new SlashCommandBuilder()

@@ -16,7 +16,6 @@ function saveBananaData(filepath, data) {
 
 module.exports = {
     category: `Fun`,
-    scope: `global`,
     type: `slash`, 
     data: new SlashCommandBuilder()
                 .setName('banana_data')

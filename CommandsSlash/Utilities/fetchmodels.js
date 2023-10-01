@@ -6,7 +6,6 @@ const Extractor = require('../../Misc/extractor.js');
 
 module.exports = {
     category: 'Utilities',
-    scope: 'local',
     type: 'slash',
 
     data: new SlashCommandBuilder()

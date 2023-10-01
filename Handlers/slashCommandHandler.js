@@ -1,5 +1,3 @@
-/* damn, big file name */
-
 const fs = require(`fs`);
 
 module.exports = client => {

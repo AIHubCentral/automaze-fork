@@ -6,7 +6,6 @@ const utils = require('../../utils.js');
 
 module.exports = {
 	category: `Fun`,
-	scope: `global`,
 	type: `slash`,
 	data: new SlashCommandBuilder()
 		.setName('8ball')

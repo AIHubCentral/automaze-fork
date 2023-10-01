@@ -4,7 +4,6 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     category: `Fun`,
-    scope: `global`,
     type: `slash`,   
     data: new SlashCommandBuilder()
                 .setName('doxx')
