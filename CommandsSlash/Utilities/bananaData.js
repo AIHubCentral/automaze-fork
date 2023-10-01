@@ -20,7 +20,7 @@ module.exports = {
     data: new SlashCommandBuilder()
                 .setName('banana_data')
                 .setDescription('(RESTRICTED) Get /topbanana stats as a JSON file'),
-    async execute(client, interaction) {
+    async execute(interaction) {
         // usable on dev server only
         const userId = interaction.user.id;
         const devServerGuildId = '1136971905354711193';

@@ -29,7 +29,8 @@ module.exports = {
                 .setDescription('Delete modlog channel'))
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
-    async execute(client, interaction) {
+    async execute(interaction) {
+        const client = interaction.client;
         const channels = require('../../JSON/channels.json');
         if(interaction.options.getSubcommand() == 'add') {
             createChannel(client, interaction, channels);

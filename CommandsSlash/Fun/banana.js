@@ -10,7 +10,8 @@ module.exports = {
                     option.setName('user').setDescription('User to banan')
                  )
     ,
-    async execute(client, interaction) {
+    async execute(interaction) {
+        const client = interaction.client;
         if (interaction.client.disallowedChannelIds.includes(interaction.channelId)) {
             await interaction.reply({ content: 'This command is not available here.', ephemeral: true});
             return;

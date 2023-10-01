@@ -19,7 +19,8 @@ module.exports = {
             .setDescription('hide message from others (true by default)'))
         .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
 
-    async execute(client, interaction) {
+    async execute(interaction) {
+        const client = interaction.client;
         if(interaction.options.getBoolean('compact')) {
             compactDisplay(client, interaction);
         } else {
@@ -28,8 +29,8 @@ module.exports = {
     },
 };
 
-async function compactDisplay(client, interaction) {
-    let allResults = client.modelSearchEngine.search(interaction.options.getString('name'), { fuzzy: 0.2 }).filter(result => result.downloadURL && result.downloadURL.length);
+async function compactDisplay(interaction) {
+    let allResults = interaction.client.modelSearchEngine.search(interaction.options.getString('name'), { fuzzy: 0.2 }).filter(result => result.downloadURL && result.downloadURL.length);
 
     allResults.sort((a, b) => b.score - a.score);
 

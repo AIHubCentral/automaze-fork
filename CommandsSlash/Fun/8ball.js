@@ -11,7 +11,7 @@ module.exports = {
 		.setName('8ball')
 		.setDescription('Answer questions of your life')
 		.addStringOption(option => option.setName('question').setDescription('Ask questions about your life').setRequired(true)),
-	async execute(client, interaction) {
+	async execute(interaction) {
 		if (interaction.client.disallowedChannelIds.includes(interaction.channelId)) {
             await interaction.reply({ content: 'This command is not available here.', ephemeral: true});
             return;

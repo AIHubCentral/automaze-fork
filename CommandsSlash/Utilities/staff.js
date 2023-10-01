@@ -6,7 +6,7 @@ module.exports = {
     data: new SlashCommandBuilder()
                 .setName('staff')
                 .setDescription('See staff activities'),
-    async execute(client, interaction) {
+    async execute(interaction) {
         await interaction.reply({content: 'test', ephemeral:true});
     }
 }

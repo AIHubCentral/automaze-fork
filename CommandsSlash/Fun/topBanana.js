@@ -7,7 +7,7 @@ module.exports = {
     data: new SlashCommandBuilder()
                 .setName('topbanana')
                 .setDescription('SEE HOW MUCH SOMEONE GOT BANAN!!!!11!111!11'),
-    async execute(client, interaction) {
+    async execute(interaction) {
         if (interaction.client.disallowedChannelIds.includes(interaction.channelId)) {
             await interaction.reply({ content: 'This command is not available here.', ephemeral: true});
             return;

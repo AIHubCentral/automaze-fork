@@ -14,7 +14,7 @@ module.exports = {
                         .setDescription('User to doxx')
                         .setRequired(true)
                 ),
-    async execute(client, interaction) {
+    async execute(interaction) {
 
         if (interaction.client.disallowedChannelIds.includes(interaction.channelId)) {
             await interaction.reply({ content: 'This command is not available here.', ephemeral: true});

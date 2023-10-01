@@ -17,7 +17,8 @@ module.exports = {
             .setRequired(true))
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageThreads),
 
-    async execute(client, interaction) {
+    async execute(interaction) {
+        const client = interaction.client;
         client.channels.fetch(interaction.options.getString('channel'))
             .then(channel => {
                 if(channel.type == ChannelType.GuildForum)
