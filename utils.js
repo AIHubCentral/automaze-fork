@@ -1,5 +1,6 @@
-// Libraries neccesaries
+// Libraries needed
 const fs = require('fs');
+const path = require('node:path');
 
 // Will give you all the files in a folder recursively
 function getAllFiles(currentPath){
@@ -30,3 +31,31 @@ function getRandomNumber(min, max) {
 }
 
 exports.getRandomNumber = getRandomNumber;
+
+function getCommands(basePath, subPath) {
+    /* get an array of commands converted to json ready to be sent to discord API */
+    const commands = [];
+
+    const foldersPath = path.join(basePath, subPath);
+    let commandFolders = fs.readdirSync(foldersPath);
+
+    for (const folder of commandFolders) {
+        const commandsPath = path.join(foldersPath, folder);
+        const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+        // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
+        for (const file of commandFiles) {
+            const filePath = path.join(commandsPath, file);
+            const command = require(filePath);
+            if ('data' in command && 'execute' in command) {
+                commands.push(command.data.toJSON());
+            }
+            else {
+                console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+            }
+        }
+    }
+
+    return commands;
+}
+
+exports.getCommands = getCommands;
