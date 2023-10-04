@@ -1,0 +1,34 @@
+{
+    "colab": {
+        "en": {
+            "title": "Google Colabs",
+            "description": [
+                "## RVC",
+                "### AI-Cover-Gen-No-UI\nhttps://colab.research.google.com/github/ardha27/AICoverGen-NoUI-Colab/blob/main/CoverGen_No_UI.ipynb",
+                "> Note: This colab is for **inference** only.",
+                "### RVC v2 Disconnected\nhttps://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS",
+                "> Note: This colab is for **training** only.",
+                "### RVC colabs translated to other languages",
+                "- PT-BR: `-colabs_br`",
+                "## Audio Separation/Isolation",
+                "### MDX Net Colab\nhttps://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb",
+                "### UVR arch colab 5.0.2/c1.04\nhttps://colab.research.google.com/drive/16Q44VBJiIrXOgTINztVDVeb0XKhLKHwl",
+                "### KaraFan colab\nhttps://colab.research.google.com/github/Captain-FLAM/KaraFan/blob/master/KaraFan.ipynb"
+            ]
+        },
+        "pt": {
+            "color": "Green",
+            "description": [
+                "## Colabs RVC traduzidos para PT-BR",
+                "### AI-Cover-Gen-No-UI_para_YouTube",
+                "- [Para inferência com **vídeo do YouTube**](https://colab.research.google.com/drive/1_-yutFoAeOAPIJ_Hpb6_sJsEAEKjZXpE#scrollTo=PNIn-NKDjYJ3)",
+                "### AI-Cover-Gen-No-UI_upar_seu_AUDIO",
+                "- [Para inferência upando **seu próprio áudio**](https://colab.research.google.com/drive/1W81Lb0c3NmoUnl69PRdYw8zQX1LRRuFU#scrollTo=nEIsMZLwJ5kD)",
+                "\n> **Nota**: Os dois colabs acima faz a separação da voz do instrumental, aplica a voz modelo e junta novamente com o instrumental",
+                "### RVC v2 Arrumado para Treino",
+                "- Acesse o colab para treino [neste link](https://colab.research.google.com/drive/1c9ZayL4JRNyiXJMCmcSeT1StugNy-VQ-?usp=sharing)",
+                "\n> 💡 **Dica**: Use o comando `-rvc_br` para guias em **Português**"
+            ]
+        }
+    }
+}

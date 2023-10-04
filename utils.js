@@ -1,6 +1,7 @@
 // Libraries needed
 const fs = require('fs');
 const path = require('node:path');
+const { EmbedBuilder } = require('discord.js');
 
 // Will give you all the files in a folder recursively
 function getAllFiles(currentPath){
@@ -59,3 +60,21 @@ function getCommands(basePath, subPath) {
 }
 
 exports.getCommands = getCommands;
+
+
+function createEmbed(data) {
+    /**
+     * Creates a discord embed from an object passed as `data` argument
+     */
+    const embed = new EmbedBuilder();
+    embed.setDescription(data.description.join('\n'));
+    embed.setColor(data.color ?? 'Yellow');  // defaults to Yellow
+
+    if (data.title) {
+        embed.setTitle(data.title);
+    }
+
+    return embed;
+}
+
+exports.createEmbed = createEmbed;
