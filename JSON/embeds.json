@@ -51,5 +51,93 @@
                 "\n> **Tip:** Use `-colab` command if you're looking for audio separation/isolation colabs."
             ]
         }
+    },
+    "rvc": {
+        "pt": {
+            "description": [
+                "## Guias RVC em PT-BR",
+                "### AI-Cover-Gen-No-UI",
+                "- Acesse o guia [neste link](https://docs.google.com/document/d/1BA_ln2159GbwTiJvTjCvqOAuYLq32A21PshW3RXhT6E/edit?usp=sharing).",
+                "### 🍏 Applio-RVC-Fork: Guia PT-BR",
+                "- Acesse o guia [neste link](https://docs.google.com/document/d/1PIMJ39xHp2kfbh4kUuvD2MZjVdeweezmwIm8Y8l6p8A/edit?usp=sharing).",
+                "\n> ⚠️ Aviso: O Kaggle está banindo contas que utilizam RVC na plataforma, use por sua conta e risco.",
+                "### Tutoriais em Vídeo",
+                "- [Como fazer AI COVER - Método NOVO](https://youtu.be/QTz18CSyYmE) (créditos **AI HUB BRASIL**)",
+                "- [COMO TREINAR UM MODELO DE VOZ PARA O RVC NO CELULAR](https://youtu.be/PoNoaI8DFP8?si=VccKwtkEKgAcaPNn) (créditos **Vector Lua**)",
+                "- [Como fazer Deep Fake (Maneira Fácil) - Android e PC](https://youtu.be/Z_k1YV_Tn40?si=Fu4hmEZOPOuGZ0On) (créditos **AI HUB BRASIL**)'",
+                "\n> 💡 **Dica**: Use o comando `-colabs_br` para links de colabs traduzidos em **Português**",
+                "### Servidor AI HUB BRASIL",
+                "> https://discord.gg/aihubbrasil"
+            ]
+        },
+        "nl": {
+            "title": "Handleiding",
+            "description": [
+                "## • Nederlandse Cover Handleiding",
+                "https://docs.google.com/document/d/1jNLqaC0BaWsL7w-T8OLolAiQQFVn05p5O8QH-dKFBK8/edit?usp=sharing"
+            ]
+        },
+        "it": {
+            "title": "Risorse",
+            "description": [
+                "## • Link utili a cura di Ilaria",
+                "https://rentry.org/link-utili"
+            ]
+        },
+        "jp": {
+            "title": "ガイドリンク",
+            "description": [
+                "## • 和訳版RVCガイド (KJAV 訳 SUSHI 校)",
+                "https://docs.google.com/document/d/1heKuaedmHNBTXvOnTNpwj-w2Djbk4kndXsZ2Vx_Zkxc/edit?usp=sharing",
+                "## • Mangio RVC Fork WebUI和訳版 (翻訳予定、インストール推奨)",
+                "https://drive.google.com/drive/folders/1IZ8dr2PFHYiEXqNwruFljAYpsYt-fgKI?usp=sharing"
+            ]
+        },
+        "kr": {
+            "title": "가이드 링크",
+            "description": [
+                "## • RVC 가이드 한국어 번역본 (KJAV 譯)",
+                "https://docs.google.com/document/d/1EeOBSJx7dm_amysCRPq9qRf2Q3RIZc9KUoUynQgauBo/edit?usp=sharing",
+                "## • Mangio RVC Fork WebUI 한국어 번역본 (KJAV 譯, 설치 권장)",
+                "https://drive.google.com/drive/folders/1-GamZ6opREYX0lMZLoWThJUFkS2o52X9?usp=sharing"
+            ]
+        },
+        "en": {
+            "title": "RVC Guides (how to make ai cover)",
+            "description": [
+                "## 🍏 Applio-RVC-Fork: Guide (EN/ES)\nhttps://docs.google.com/document/d/12YmIQFLFzth1YsZJMGrA0aeTN0Go8DNZVw8LFSf-Hug",
+                "\n> **Tip**: You can also watch this [video tutorial](https://youtu.be/x7aOq7gCY4s?si=PkAR0FK-BqGrQ_6u) made by **iroaK** if you need further help.",
+                "## RVC v2 Tutorial for Paperspace (By LollenApe)\nhttps://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing",
+                "## RVC Guides in Other Languages",
+                "- [Russian FAQ for RVC/Voice changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
+                "- [Italian Guides](https://rentry.org/link-utili) or `-it_g`",
+                "- RVC Guides in PT-BR (`-rvc_br`)"
+            ]
+        },
+        "es": {
+            "title": "Guías en español",
+            "description": [
+                "## 🍏 Tutorial de Applio en español\nhttps://www.youtube.com/watch?v=bOAM_9xyHFY",
+                "### Servidor IA Hispano\n> https://discord.gg/iahispano"
+            ]
+        },
+        "tr": {
+            "title": "Rehberler",
+            "description": [
+                "## • RVC V2 Türkçe Cover Rehberi",
+                "https://docs.google.com/document/d/1-DStwOFy5kvOVk-AOdPNoXQOjS8P23p_/edit",
+                "## • Türkçe EasyGui Colab (translated by AI Lab)",
+                "https://colab.research.google.com/drive/1Kp62OdcNtH0flPKoAQJiiOkuUH4ftWeI?usp=sharing",
+                "## Turkish discord server",
+                "> https://discord.gg/ailab"
+            ]
+        },
+        "vn": {
+            "title": "Hướng dẫn",
+            "description": [
+                "## • Hướng dẫn huấn luyện + tạo tập dữ liệu",
+                "https://docs.google.com/document/d/1YfmB9I9m1zZRZfZobsDFd0m9hNt7wFd86tSBkh-EqXw/edit"
+            ]
+        }
     }
 }

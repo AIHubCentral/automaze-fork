@@ -1,5 +1,3 @@
-const { EmbedBuilder } = require(`discord.js`);
-
 module.exports = {
     name: 'dutchguides',
     category: 'Tags',
@@ -14,13 +12,10 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async (client, message, args, prefix) => {
-        const embed = new EmbedBuilder()
-        .setTitle(`Handleiding`)
-        .setDescription(`## • Nederlandse Cover Handleiding\nhttps://docs.google.com/document/d/1jNLqaC0BaWsL7w-T8OLolAiQQFVn05p5O8QH-dKFBK8/edit?usp=sharing`)
-        .setColor(`Yellow`);
+        const embed = client.botUtils.createEmbed(client.botData.embeds.rvc.nl);
 
         if (message.mentions.members.first()) {
-            return void message.channel.send({content: `*Tag suggestie voor ${message.mentions.members.first()}*`, embeds: [embed]});
+            return message.channel.send({content: `*Tag suggestie voor ${message.mentions.members.first()}*`, embeds: [embed]});
         }
 
         message.channel.send({embeds: [embed]});

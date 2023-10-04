@@ -1,4 +1,3 @@
-const { EmbedBuilder } = require("discord.js");
 const utils = require('../../utils.js');
 
 module.exports = {
@@ -15,23 +14,14 @@ module.exports = {
      * @param {String} prefix 
      */
     run: (client, message, args, prefix) => {
-        const embedDescription = [];
-        embedDescription.push('## 🍏 Applio-RVC-Fork: Guide (EN/ES)\nhttps://docs.google.com/document/d/12YmIQFLFzth1YsZJMGrA0aeTN0Go8DNZVw8LFSf-Hug');
-        embedDescription.push('\n> **Tip**: You can also watch this [video tutorial](https://youtu.be/x7aOq7gCY4s?si=PkAR0FK-BqGrQ_6u) made by **iroaK** if you need further help.');
-        embedDescription.push('## RVC v2 Tutorial for Paperspace (By LollenApe)\nhttps://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing');
-        embedDescription.push('## RVC Guides in Other Languages');
-        embedDescription.push('- [Russian FAQ for RVC/Voice changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)');
-        embedDescription.push('- [Italian Guides](https://rentry.org/link-utili) or `-it_g`');
-        embedDescription.push('- RVC Guides in PT-BR (`-rvc_br`)');
+        const embed = client.botUtils.createEmbed(client.botData.embeds.rvc.en);
 
-        //embedDescription.push(`### • RVC v2 AI Cover Guide (by Kalomaze)\nhttps://docs.google.com/document/d/13_l1bd1Osgz7qlAZn-zhklCbHpVRk6bYOuAuB78qmsE/edit?usp=sharing`);
-        //embedDescription.push(`### • Training RVC v2 models guide (by Kalomaze)\nhttps://docs.google.com/document/d/13ebnzmeEBc6uzYCMt-QVFQk-whVrK4zw8k7_Lw3Bv_A/edit?usp=sharing`);
-        //embedDescription.push(`### • Installing Mangio RVC v2 Locally (OUTDATED)\nhttps://docs.google.com/document/d/1KKKE7hoyGXMw-Lg0JWx16R8xz3OfxADjwEYJTqzDO1k/edit`);
-
-        const embed = new EmbedBuilder()
-            .setTitle(`RVC Guides (how to make ai cover)`)
-            .setDescription(embedDescription.join('\n'))
-            .setColor(`Yellow`);
+        /*
+        // outdated
+        ### • RVC v2 AI Cover Guide (by Kalomaze)\nhttps://docs.google.com/document/d/13_l1bd1Osgz7qlAZn-zhklCbHpVRk6bYOuAuB78qmsE/edit?usp=sharing
+        ### • Training RVC v2 models guide (by Kalomaze)\nhttps://docs.google.com/document/d/13ebnzmeEBc6uzYCMt-QVFQk-whVrK4zw8k7_Lw3Bv_A/edit?usp=sharing
+        ### • Installing Mangio RVC v2 Locally (OUTDATED)\nhttps://docs.google.com/document/d/1KKKE7hoyGXMw-Lg0JWx16R8xz3OfxADjwEYJTqzDO1k/edit
+        */
 
         if (message.mentions.members.first()) {
             // easter egg - show 'how to make ai cover meme'

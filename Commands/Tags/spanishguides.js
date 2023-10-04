@@ -1,5 +1,3 @@
-const { EmbedBuilder } = require(`discord.js`);
-
 module.exports = {
     name: 'spanishguides',
     category: 'Tags',
@@ -14,14 +12,7 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async (client, message, args, prefix) => {
-        const embedDescription = [];
-        embedDescription.push('## • Tutorial de Applio en español\nhttps://www.youtube.com/watch?v=bOAM_9xyHFY');
-        embedDescription.push('### Servidor IA Hispano\nhttps://discord.gg/iahispano');
-
-        const embed = new EmbedBuilder()
-            .setTitle(`Guías en español.`)
-            .setDescription(embedDescription.join('\n'))
-            .setColor(`Yellow`);
+        const embed = client.botUtils.createEmbed(client.botData.embeds.rvc.es);
 
         if (message.mentions.members.first()) {
             return message.channel.send({content: `*Sugerencia para ${message.mentions.members.first()}*`, embeds: [embed]});
