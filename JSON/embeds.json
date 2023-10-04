@@ -139,5 +139,16 @@
                 "https://docs.google.com/document/d/1YfmB9I9m1zZRZfZobsDFd0m9hNt7wFd86tSBkh-EqXw/edit"
             ]
         }
+    },
+    "gpu": {
+        "en": {
+            "title": "Ran out of GPU?",
+            "image": "https://cdn.discordapp.com/attachments/1089301011149103276/1123048294873059418/image.png",
+            "description": [
+                "While training or inferring, if you encounter a dialog that tells you `Cannot connect to GPU backend`, your daily usage of GPU in Google Colab ended. You can either:",
+                "- Pay for more GPU",
+                "- Make an alt google acc"
+            ]
+        }
     }
 }

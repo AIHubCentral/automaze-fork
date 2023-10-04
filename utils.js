@@ -74,6 +74,10 @@ function createEmbed(data) {
         embed.setTitle(data.title);
     }
 
+    if (data.image) {
+        embed.setImage(data.image);
+    }
+
     return embed;
 }
 
