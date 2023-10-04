@@ -1,5 +1,3 @@
-const { EmbedBuilder } = require("discord.js")
-
 module.exports = {
     name: 'upload',
     category: 'Tags',
@@ -14,16 +12,10 @@ module.exports = {
      * @param {String} prefix 
      */
     run: (client, message, args, prefix) => {
-        const embedDescription = [];
-        embedDescription.push(`## • Posting models to AI Hub by FDG\nhttps://rentry.org/fdg_guide_new`);
-
-        const embed = new EmbedBuilder()
-            .setTitle(`huggingface.co upload Guides`)
-            .setDescription(embedDescription.join('\n'))
-            .setColor(`Yellow`);
+        const embed = client.botUtils.createEmbed(client.botData.embeds.upload.en);
 
         if (message.mentions.members.first()) {
-            return void message.channel.send({content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: [embed]});
+            return message.channel.send({content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: [embed]});
         }
 
         message.channel.send({embeds: [embed]});

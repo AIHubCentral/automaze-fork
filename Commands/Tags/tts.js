@@ -1,5 +1,3 @@
-const { EmbedBuilder } = require("discord.js")
-
 module.exports = {
     name: 'tts',
     category: 'Tags',
@@ -14,13 +12,10 @@ module.exports = {
      * @param {String} prefix 
      */
     run: (client, message, args, prefix) => {
-        const embed = new EmbedBuilder()
-        .setTitle(`TTS Guides`)
-        .setDescription(`## • Official guide\nhttps://rentry.co/RVC-TTS-Guide`)
-        .setColor(`Yellow`);
+        const embed = client.botUtils.createEmbed(client.botData.embeds.tts.en);
 
         if (message.mentions.members.first()) {
-            return void message.channel.send({content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: [embed]});
+            return message.channel.send({content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: [embed]});
         }
 
         message.channel.send({embeds: [embed]});

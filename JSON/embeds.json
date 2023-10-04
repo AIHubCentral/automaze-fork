@@ -150,5 +150,47 @@
                 "- Make an alt google acc"
             ]
         }
+    },
+    "realtime": {
+        "en": {
+            "title": "Realtime Voice Changer",
+            "description": [
+                "## 1. (Local) W-Okada Voice Changer\nThis has more options and is somewhat more convenient to use than Real-time RVC.\n**GUIDE**: https://rentry.co/VoiceChangerGuide",
+                "## 2. (Online) W-Okada - Colab Version\nA free, online version of W-Okada that allows you to run code on Google’s powerful GPUs.\n**GUIDE**: https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub",
+                "## 3. (Local) Real-time conversion of RVC\nIt's more accurate but requires a Nvidia RTX card.\n**GUIDE**: https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs/edit",
+                "## 4. Russian FAQ for RVC/Voice changer\nhttps://github.com/MaHivka/ultimate-voice-models-FAQ"
+            ]
+        }
+    },
+    "tracker": {
+        "en": {
+            "color": "Red",
+            "description": [
+                "## RVC Archive Tracker (outdated)",
+                "https://docs.google.com/spreadsheets/d/1tAUaQrEHYgRsm1Lvrnj14HFHDwJWl0Bd9x0QePewNco/edit#gid=0"
+            ]
+        }
+    },
+    "tts": {
+        "en": {
+            "title": "TTS Guides",
+            "description": [
+                "## • Official guide\nhttps://rentry.co/RVC-TTS-Guide"
+            ]
+        }
+    },
+    "upload": {
+        "en": {
+            "title": "huggingface.co upload Guides",
+            "description": [
+                "## • Posting models to AI Hub by FDG\nhttps://rentry.org/fdg_guide_new"
+            ]
+        },
+        "tr": {
+            "title": "huggingface.co Yükleme Kılavuzları",
+            "description": [
+                "## • FDG tarafından hazırlanan resmi kılavuz (Turkish translation by Enes)\nhttps://rentry.org/rvcturkceyukleme"
+            ]
+        }
     }
 }
