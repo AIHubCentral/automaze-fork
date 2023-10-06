@@ -1,0 +1,33 @@
+{
+    "Guild" : "1089076875999072296",
+    "Admin": {
+        "BanLog" : "1127798056734179408"
+    },
+    "Channel" : {
+        "BansAndTimeouts": "1139550772846145566",
+        "Verified" : "1125169728260931675",
+        "GetModelMakerRole": "1090766429785178142",
+        "MakingModels": "1089329140483764265"
+    },
+    "Forum" : {
+        "Suggestions" : "1127426867767562270",
+        "VoiceModel" : "1099149801054019604",
+        "RequestModel" : {
+            "ID" : "1139025361712201728",
+            "Tags" : {
+                "Free" : "",
+                "Paid" : ""
+            },
+            "ComissionAllow" : [ "ModelMaster", "ModelQC", "Helper", "Mod", "Admin" ]
+        },
+        "TaskSTAFF" : "1139248461070467243"
+    },
+    "Roles" : {
+        "Admin" : "1090743458320363711",
+        "Engineer": "1109578907545505843",
+        "Helper" : "1099570752560300102",
+        "Mod" : "1091189761001128018",
+        "ModelMaster" : "1094010318767804447",
+        "ModelQC" : "1116780975981072435"
+    }
+}
