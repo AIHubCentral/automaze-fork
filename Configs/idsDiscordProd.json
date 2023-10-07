@@ -12,8 +12,8 @@
         "RequestModel" : {
             "ID" : "1139025361712201728",
             "Tags" : {
-                "Free" : "",
-                "Paid" : ""
+                "Free" : "1159355294523068477",
+                "Paid" : "1159355396931211378"
             },
             "ComissionAllow" : [ "ModelMaster", "ModelQC", "Helper", "Mod", "Admin" ]
         },
