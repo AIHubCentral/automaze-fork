@@ -70,6 +70,13 @@ client.bananaData = {};
 
 client.botAdminIds = process.env.developerIds.split(',');
 
+client.botConfigs = {
+    commissions: {
+        sendMessages: true,
+        deleteMessages: true
+    }
+};
+
 // Utility functions and JSON data
 client.botData = {
     embeds: require('./JSON/embeds.json')

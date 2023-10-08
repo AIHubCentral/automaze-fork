@@ -6,6 +6,8 @@ module.exports = {
     once: false,
     async run(Client, Threader, newlyCreated){
         try{
+            // Quit if configuration doesn't allow bot to send messages
+            if(!Client.botConfigs.commissions.sendMessages) return;
 
             // Check is a Request Forum
             if(!newlyCreated) return;
@@ -39,10 +41,12 @@ module.exports = {
                 ]
             }));
 
-            embeds.push(Client.botUtils.createEmbed({
-                title: '⚠️ Warning to model makers',
-                description: ['> Make sure you have the **model master** role or your response might be deleted.']
-            }));
+            if (Client.botConfigs.commissions.deleteMessages) {
+                embeds.push(Client.botUtils.createEmbed({
+                    title: '⚠️ Warning to model makers',
+                    description: ['> Make sure you have the **model master** role or your response might be deleted.']
+                }));
+            }
 
             await Threader.send({ embeds: embeds });
 

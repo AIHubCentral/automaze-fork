@@ -3,6 +3,8 @@ module.exports = {
     once: false,
     async run(Client, Message){
         try{
+            // Quit if bot is configured to not delete messages
+            if(!Client.botConfigs.commissions.deleteMessages) return;
 
             // Check Message
             if(Message.author.bot) return;
