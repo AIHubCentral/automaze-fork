@@ -24,23 +24,27 @@ module.exports = {
             }
             MessageRoles = MessageRoles.slice(0, -2) + ")";
 
-            const embedData = {
+            // Create embeds
+            const embeds = [];
+
+            embeds.push(Client.botUtils.createEmbed({
+                color: 'Blurple',
                 description: [
-                    `Hello! <@${Threader.ownerId}>`,
-                    'I\'ve noticed that you\'ve created a commission.',
-                    '**Commissions are paid**, so people will contact you to offer their services.',
-                    'If you believe you\'ve made a mistake in tagging it as **Paid**, delete this post and create a new one with the **Free** tag.',
-                    '**I\'ll provide you with some recommendations regarding commissions:**',
+                    `Hello, <@${Threader.ownerId}>!`,
+                    '\nPeople will contact you to offer their services. However, if you created a **paid** request by mistake, just delete the post and create a new one with the tag **"free"**.',
+                    '\n**Here are some general recommendations regarding commissions:**',
                     '- Don\'t rush! You\'ll receive many requests, take your time to review the best offer. The first person who contacts you may not always be the best option.',
                     `- We recommend accepting commissions from people with these roles, as they are qualified for commissions and you can avoid scams. ${MessageRoles}`,
-                    '- If you encounter any issues with a member related to a commission (scam, failure to fulfill terms, etc.), I recommend reporting them to the administrative team to assess whether sanctions should be applied.',
-                    '- **Does the bot delete your messages?** You probably don\'t have the necessary roles to participate in commissions.'
+                    '- If you encounter any issues with a member related to a commission (scam, failure to fulfill terms, etc.), please report it to the administrative team to assess whether sanctions should be applied.',
                 ]
-            };
+            }));
 
-            // Create message Embed
-            let MessageEmbed = Client.botUtils.createEmbed(embedData);
-            await Threader.send({ embeds: [MessageEmbed] });
+            embeds.push(Client.botUtils.createEmbed({
+                title: '⚠️ Warning to model makers',
+                description: ['> Make sure you have the **model master** role or your response might be deleted.']
+            }));
+
+            await Threader.send({ embeds: embeds });
 
         } catch(e) {
         
