@@ -9,7 +9,7 @@ const Discord = require(`discord.js`);
 const { sequelize } = require('./database/models.js');
 
 // Exports
-const { getAllFiles, createEmbed } = require('./utils');
+const { getAllFiles, createEmbed, getRandomNumber } = require('./utils');
 
 // JSONs
 const DiscordIDs = {
@@ -68,13 +68,16 @@ client.prefix = new Enmap({name: 'prefix'});
 // banana data as an object instead of enmap
 client.bananaData = {};
 
+client.botAdminIds = process.env.developerIds.split(',');
+
 // Utility functions and JSON data
 client.botData = {
     embeds: require('./JSON/embeds.json')
 };
 
 client.botUtils = {
-    createEmbed: createEmbed
+    createEmbed,
+    getRandomNumber
 };
 
 // init database

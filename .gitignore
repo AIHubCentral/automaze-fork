@@ -3,6 +3,7 @@ data/
 #JSON/_models.json
 node_modules/
 database/db.sqlite
+Debug/
 .replit
 replit.nix
 result.json
