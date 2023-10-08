@@ -2,7 +2,7 @@ module.exports = {
     name: 'colab',
     category: 'Tags',
     description: 'Links to inference and training colabs made by kalo',
-    aliases: ['colabs'],
+    aliases: ['colabs', 'disconnected'],
     syntax: `colab [member]`,
     /**
      * 
@@ -12,12 +12,15 @@ module.exports = {
      * @param {String} prefix 
      */
     run: (client, message, args, prefix) => {
-        const embed = client.botUtils.createEmbed(client.botData.embeds.colab.en);
+        const embeds = [
+            client.botUtils.createEmbed(client.botData.embeds.colab.en.rvc),
+            client.botUtils.createEmbed(client.botData.embeds.colab.en.uvr)
+        ];
 
         if (message.mentions.members.first()) {
-            return message.channel.send({content: `*Colab suggestions for ${message.mentions.members.first()}*`, embeds: [embed]});
+            return message.channel.send({content: `*Colab suggestions for ${message.mentions.members.first()}*`, embeds: embeds});
         }
 
-        message.channel.send({embeds: [embed]});
+        message.channel.send({content:'## Google Colabs', embeds: embeds});
     }
 }

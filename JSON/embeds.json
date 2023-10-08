@@ -1,20 +1,24 @@
 {
     "colab": {
         "en": {
-            "title": "Google Colabs",
-            "description": [
-                "## RVC",
-                "### AI-Cover-Gen-No-UI\nhttps://colab.research.google.com/github/ardha27/AICoverGen-NoUI-Colab/blob/main/CoverGen_No_UI.ipynb",
-                "> Note: This colab is for **inference** only.",
-                "### RVC v2 Disconnected\nhttps://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS",
-                "> Note: This colab is for **training** only.",
-                "### RVC colabs translated to other languages",
-                "- PT-BR: `-colabs_br`",
-                "## Audio Separation/Isolation",
-                "### MDX Net Colab\nhttps://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb",
-                "### UVR arch colab 5.0.2/c1.04\nhttps://colab.research.google.com/drive/16Q44VBJiIrXOgTINztVDVeb0XKhLKHwl",
-                "### KaraFan colab\nhttps://colab.research.google.com/github/Captain-FLAM/KaraFan/blob/master/KaraFan.ipynb"
-            ]
+            "rvc": {
+                "description": [
+                    "## RVC",
+                    "- [AI-Cover-Gen-No-UI](https://colab.research.google.com/github/ardha27/AICoverGen-NoUI-Colab/blob/main/CoverGen_No_UI.ipynb) (**inference** only)",
+                    "- [RVC v2 Disconnected](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS) (**training** only)",
+                    "### 🌐 Translated colabs",
+                    "- PT-BR: `-colabs_br`"
+                ]
+            },
+            "uvr": {
+                "color": "Green",
+                "description": [
+                    "## Audio Separation/Isolation",
+                    "- [MDX Net Colab](https://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb)",
+                    "- [UVR arch colab 5.0.2/c1.04](https://colab.research.google.com/drive/16Q44VBJiIrXOgTINztVDVeb0XKhLKHwl)",
+                    "- [KaraFan colab](https://colab.research.google.com/github/Captain-FLAM/KaraFan/blob/master/KaraFan.ipynb)"
+                ]
+            }
         },
         "pt": {
             "color": "Green",
