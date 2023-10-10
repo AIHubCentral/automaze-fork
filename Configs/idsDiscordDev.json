@@ -20,7 +20,8 @@
             },
             "ComissionAllow" : [ "ModelMaster", "ModelQC", "Helper", "Mod", "Admin" ]
         },
-        "TaskSTAFF" : "1141020043258376214"
+        "TaskSTAFF" : "1141020043258376214",
+        "Guides": "1159822429137412177"
     },
     "Roles" : {
         "Admin" : "1136972978014396496",

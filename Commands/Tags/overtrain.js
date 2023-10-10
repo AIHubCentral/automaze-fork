@@ -14,18 +14,17 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async(client, message, args, prefix) => {
-        const targetChannelId = '1148048520566284410'; // Overtraining detector discord thread
-        const targetChannel = message.guild.channels.cache.get(targetChannelId) ?? 'Visit the **how-to-use** channel to find it.';
+        const targetChannelId = client.discordIDs.Forum.Guides;
+        const targetChannel = message.guild.channels.cache.get(targetChannelId) ?? '"❔┋guides" channel';
 
         const embedDescription = [];
         embedDescription.push('## All-In-One Guide on how to make a good model');
-        embedDescription.push('This guide explains how the **D** and **G** files works and much more: https://rentry.org/RVC_making-models\n\nCredits to <@917711764571951144>');
-        embedDescription.push(`## Automated Overtraining Detection (AOD)\n${targetChannel}`);
-        embedDescription.push('\n\nClick on the image below for a brief explanation on overtraining');
+        embedDescription.push('This guide explains how the **D** and **G** files works and much more: https://rentry.org/RVC_making-models\n\nCredits: **[LUSBERT](https://discordapp.com/users/917711764571951144)** <:lusbertmoment:1159804751924432906>');
+        embedDescription.push(`## Automated Overtraining Detection (AOD)\n> Will be available soon in ${targetChannel}\n\nCredits: **[grvscale](https://discordapp.com/users/590867867247837203)**`);
 
         const embed = new EmbedBuilder()
             .setTitle(`How do I know if my model is overtaining?`)
-            .setImage(`https://media.discordapp.net/attachments/1124354352124010536/1126132264569417728/image.png`)
+            //.setImage(`https://media.discordapp.net/attachments/1124354352124010536/1126132264569417728/image.png`)
             .setDescription(embedDescription.join('\n'))
             .setColor(`Yellow`);
 
