@@ -77,6 +77,7 @@ client.botConfigs = {
     },
     general: {
         reactions: true,
+        randomResponses: false
     }
 };
 

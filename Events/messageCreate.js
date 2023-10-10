@@ -1,67 +1,67 @@
-const { EmbedBuilder, RESTJSONErrorCodes } = require(`discord.js`);
-
-const range = i => [...Array(i).keys()];
-const arr = range(1000);
+const { EmbedBuilder } = require(`discord.js`);
 
 module.exports = {
     name: "messageCreate",
     once: false,
-    async run(Client, message, _) {
+    async run(client, message, _) {
         if (message.author.bot) return;
 
-        const prefix = Client.prefix.ensure(message.guild.id, '-');
-
+        // handle prefix commands first
+        const prefix = client.prefix.ensure(message.guild.id, '-');
+        
         if (message.content.startsWith(prefix)) {
             const args = message.content.slice(prefix.length).trim().split(/ +/);
-            
+
             // Use the command alias if there's any, if there's none use the real command name instead
             const commandName = args.shift().toLowerCase();
-            const command = Client.commands.get(commandName) || Client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+            const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
             if (command) {
-                command.run(Client, message, args, prefix);
+                command.run(client, message, args, prefix);
             }
         }
-        
-        // verified chat only
-        if (message.channel.id === Client.discordIDs.Channel.Verified) {
+        else {
             const messageLowercase = message.content.toLowerCase();
 
-            /* these always happens */
+            // triggered only if bot is mentioned
+            if (message.content.includes('<@' + client.user.id + '>')) {
+                const devServerGuildId = '1136971905354711193';
+                let embedDescription = `## Wassup I'm Automaze!`;
+                embedDescription += `\n- My prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)`;
 
-            // if qo is mentioned
-            if (messageLowercase == 'qo' || messageLowercase.startsWith('qo ') || messageLowercase.includes(' qo ') || messageLowercase.endsWith(' qo')) {
-                await message.react('🐀');
+                // only show how many guilds the bot is present if in the development server
+                if (message.guild.id == devServerGuildId) {
+                    embedDescription += `\n- Currently I'm present in ${client.guilds.cache.size} servers.`;
+                }
+
+                embedDescription += `\n- Interested in how I'm built? [I'm actually open source!](https://github.com/DeprecatedTable/automaze)`;
+                embedDescription += `\n- Feeling a tad bit generous? [Buy me a coffee!](https://ko-fi.com/fungusdesu)`;
+                await message.reply({ embeds: [new EmbedBuilder().setColor(`Aqua`).setDescription(embedDescription)] });
+                return;
             }
 
-            /* these have a chance of happening */
-            /*
-            const random = arr[Math.floor(Math.random() * arr.length)];
-            if (random === 69) {
-                if (!messageLowercase.includes('?') && messageLowercase.length > 5) {
-                    const responses = Client.botResponses.responses.verifiedChat;
-                    const selectedIndex = Math.floor(Math.random() * responses.length);
-                    const botResponse = responses[selectedIndex];
-                    await message.reply(botResponse);
+            // these are always triggered
+            if (client.botConfigs.general.reactions) {
+                if (messageLowercase.includes('lusbert') && messageLowercase.includes('moment')) {
+                    await message.react('<:lusbertmoment:1159804751924432906>');
                 }
             }
-            */
-        }
 
-        if (!message.content.startsWith(prefix) && message.content.includes('<@' + Client.user.id + '>')) {
-            const devServerGuildId = '1136971905354711193';
-            let embedDescription = `## Wassup I'm Automaze!`;
-            embedDescription += `\n- My prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)`;
+            // verified chat only
+            if (message.channel.id === client.discordIDs.Channel.Verified) {
 
-            // only show how many guilds the bot is present if in the development server
-            if (message.guild.id == devServerGuildId) {
-                embedDescription += `\n- Currently I'm present in ${Client.guilds.cache.size} servers.`;
+                if (client.botConfigs.general.randomResponses) {
+                    const random = client.botUtils.getRandomNumber(0, 1000);
+                    if (random === 69) {
+                        if (!messageLowercase.includes('?') && messageLowercase.length > 5) {
+                            const responses = client.botResponses.responses.verifiedChat;
+                            const selectedIndex = Math.floor(Math.random() * responses.length);
+                            const botResponse = responses[selectedIndex];
+                            await message.reply(botResponse);
+                        }
+                    }
+                }
             }
-
-            embedDescription += `\n- Interested in how I'm built? [I'm actually open source!](https://github.com/DeprecatedTable/automaze)`;
-            embedDescription += `\n- Feeling a tad bit generous? [Buy me a coffee!](https://ko-fi.com/fungusdesu)`;
-            message.reply({ embeds: [new EmbedBuilder().setColor(`Aqua`).setDescription(embedDescription)] });
         }
-
     }
 }
