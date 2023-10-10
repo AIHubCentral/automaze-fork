@@ -37,8 +37,8 @@ module.exports = {
             botRevenge = true;
         }
 
-        if (Date.now() - client.bananaCD.get(userId) < 300000) {
-            return await interaction.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${300000 - (Date.now() - interaction.client.bananaCD.get(userId))} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`)
+        if (Date.now() - client.cooldowns.banana.get(userId) < 300000) {
+            return await interaction.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${300000 - (Date.now() - interaction.client.cooldowns.banana.get(userId))} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`)
         }
 
         const bananEmbed = new EmbedBuilder()
@@ -49,7 +49,7 @@ module.exports = {
                                 .setFooter({ text: `BRO GOT BANAN'D ${interaction.client.banana.ensure(member.id, 0) + 1} TIMES XDDDDDD` });
 
         interaction.client.banana.inc(member.id);
-        interaction.client.bananaCD.set(userId, Date.now())
+        interaction.client.cooldowns.banana.set(userId, Date.now())
 
         if (botRevenge) {
             await interaction.reply(selectedResponse);

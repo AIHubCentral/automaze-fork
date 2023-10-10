@@ -46,11 +46,17 @@ client.forumSpammer = {}
 client.commands = new Discord.Collection();
 client.slashCommands = new Discord.Collection();
 client.contextMenuCommands = new Discord.Collection();
-client.snipes = new Discord.Collection();
-client.esnipes = new Discord.Collection();
-client.deprecationCD = new Discord.Collection();
 client.use = new Discord.Collection();
 client.doxx = new Discord.Collection();
+
+/*
+client.snipes = new Discord.Collection();
+client.esnipes = new Discord.Collection();
+*/
+
+client.cooldowns = {
+    banana: new Discord.Collection(),
+};
 
 // Enmap's creation
 client.items = new Enmap({name: 'items'});
@@ -61,7 +67,6 @@ client.levels = new Enmap({name: 'levels'});
 client.exp = new Enmap({name: 'exp'});
 client.epochs = new Enmap({name: 'epochs'});
 client.banana = new Enmap({name: 'banana'});
-client.bananaCD = new Enmap();
 client.scourCD = new Enmap();
 client.prefix = new Enmap({name: 'prefix'});
 
