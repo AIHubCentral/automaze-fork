@@ -74,6 +74,9 @@ client.botConfigs = {
     commissions: {
         sendMessages: true,
         deleteMessages: true
+    },
+    general: {
+        reactions: true,
     }
 };
 
