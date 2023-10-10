@@ -8,7 +8,7 @@ module.exports = {
 
         // handle prefix commands first
         const prefix = client.prefix.ensure(message.guild.id, '-');
-        
+
         if (message.content.startsWith(prefix)) {
             const args = message.content.slice(prefix.length).trim().split(/ +/);
 
@@ -26,17 +26,26 @@ module.exports = {
             // triggered only if bot is mentioned
             if (message.content.includes('<@' + client.user.id + '>')) {
                 const devServerGuildId = '1136971905354711193';
-                let embedDescription = `## Wassup I'm Automaze!`;
-                embedDescription += `\n- My prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)`;
+
+                const embedData = {
+                    color: client.botConfigs.colorTheme.primary,
+                    description: []
+                };
+
+                embedData.description.push('## Wassup I\'m Automaze!');
+                embedData.description.push(`\n- My prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)`);
 
                 // only show how many guilds the bot is present if in the development server
                 if (message.guild.id == devServerGuildId) {
-                    embedDescription += `\n- Currently I'm present in ${client.guilds.cache.size} servers.`;
+                    embedData.description.push(`- Currently I'm present in ${client.guilds.cache.size} servers.`);
                 }
 
-                embedDescription += `\n- Interested in how I'm built? [I'm actually open source!](https://github.com/DeprecatedTable/automaze)`;
-                embedDescription += `\n- Feeling a tad bit generous? [Buy me a coffee!](https://ko-fi.com/fungusdesu)`;
-                await message.reply({ embeds: [new EmbedBuilder().setColor(`Aqua`).setDescription(embedDescription)] });
+                embedData.description.push('- Interested in how I\'m built? [I\'m actually open source!](https://github.com/DeprecatedTable/automaze)');
+                embedData.description.push('- Feeling a tad bit generous? [Buy me a coffee!](https://ko-fi.com/fungusdesu)');
+
+                const embed = client.botUtils.createEmbed(embedData);
+                await message.reply({ embeds: [embed] });
+
                 return;
             }
 

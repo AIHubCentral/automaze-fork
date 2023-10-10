@@ -78,6 +78,10 @@ client.botConfigs = {
     general: {
         reactions: true,
         randomResponses: false
+    },
+    colorTheme: {
+        primary: '029afe',
+        secondary: '14effb'
     }
 };
 
