@@ -31,6 +31,7 @@ module.exports = {
             return void message.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${300000 - (Date.now() - client.cooldowns.banana.get(message.author.id))} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`)
         }
 
+        /*
         // get banana model from db
         const bananaModel = await client.sequelize.Item.findByPk(1);
 
@@ -50,6 +51,7 @@ module.exports = {
         await targetUserModel.addItem(bananaModel, {through:{quantity:1}});
 
         //  TODO: Finish the M:N association
+        */
 
         const bananEmbed = new EmbedBuilder()
             .setTitle(`${member.user.username} GOT BANANA LOL LOL LOL`)

@@ -6,7 +6,7 @@ const Enmap = require("enmap");
 const Discord = require(`discord.js`);
 
 // database instance
-const { sequelize } = require('./database/models.js');
+const { sequelize } = require('./database/dbObjects.js');
 
 // Exports
 const { getAllFiles, createEmbed, getRandomNumber } = require('./utils');
@@ -107,39 +107,6 @@ client.databaseInfo = {
 };
 
 client.sequelize = sequelize;
-
-(async () => {
-    try {
-        await client.sequelize.authenticate();
-        const message = 'Connection has been estabilished successfully.';
-
-        await client.sequelize.sync({ force: true });
-        console.log("All models were synchronized successfully.");
-
-        client.databaseInfo.active = true;
-        client.databaseInfo.message = message;
-        console.log(message);
-
-        // add game items to db
-        for (let key in itemsData) {
-            let currentItem = itemsData[key]
-            await client.sequelize.Item.create({
-                id: currentItem.id,
-                name: currentItem.name,
-                keyName: currentItem.keyName
-            });
-            //console.log('Added', currentItem.name);
-        }
-
-        // query
-        //const items = await client.sequelize.Item.findAll();
-        //console.log('All items:', JSON.stringify(items, null, 2));
-
-    } catch(error) {
-        client.databaseInfo.message = error.message;
-        console.error(error.message);
-    }
-})();
 
 // bot responses loaded on startup
 client.botResponses = require('./JSON/bot_responses.json');
