@@ -1,5 +1,3 @@
-const utils = require('../../utils.js');
-
 module.exports = {
     name: 'rvc',
     category: 'Tags',
@@ -14,24 +12,16 @@ module.exports = {
      * @param {String} prefix 
      */
     run: (client, message, args, prefix) => {
-        const embed = client.botUtils.createEmbed(client.botData.embeds.rvc.en);
-
-        /*
-        // outdated
-        ### • RVC v2 AI Cover Guide (by Kalomaze)\nhttps://docs.google.com/document/d/13_l1bd1Osgz7qlAZn-zhklCbHpVRk6bYOuAuB78qmsE/edit?usp=sharing
-        ### • Training RVC v2 models guide (by Kalomaze)\nhttps://docs.google.com/document/d/13ebnzmeEBc6uzYCMt-QVFQk-whVrK4zw8k7_Lw3Bv_A/edit?usp=sharing
-        ### • Installing Mangio RVC v2 Locally (OUTDATED)\nhttps://docs.google.com/document/d/1KKKE7hoyGXMw-Lg0JWx16R8xz3OfxADjwEYJTqzDO1k/edit
-        */
+        const embeds = [
+            client.botUtils.createEmbed(client.botData.embeds.rvc.en.docs),
+            client.botUtils.createEmbed(client.botData.embeds.rvc.en.guides),
+            client.botUtils.createEmbed(client.botData.embeds.rvc.en.translations),
+        ];
 
         if (message.mentions.members.first()) {
-            // easter egg - show 'how to make ai cover meme'
-            const randomNumber = utils.getRandomNumber(1, 100);
-            if (randomNumber === 50) {
-                embed.setImage('https://cdn.discordapp.com/attachments/1144111245415420017/1144111245709025390/7q6fht.jpg');
-            }
-            return message.channel.send({content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: [embed]});
+            return message.channel.send({content: `Hey, ${message.mentions.members.first()}!\n\n👇 Here are some useful resources to help you learn how to make ai covers`, embeds: embeds});
         }
 
-        message.channel.send({embeds: [embed]});
+        message.channel.send({content: "# RVC Guides (How to Make AI Cover)", embeds: embeds});
     }
 }

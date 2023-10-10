@@ -115,16 +115,32 @@
             ]
         },
         "en": {
-            "title": "RVC Guides (how to make ai cover)",
-            "description": [
-                "## 🍏 Applio-RVC-Fork: Guide (EN/ES)\nhttps://docs.google.com/document/d/12YmIQFLFzth1YsZJMGrA0aeTN0Go8DNZVw8LFSf-Hug",
-                "\n> **Tip**: You can also watch this [video tutorial](https://youtu.be/x7aOq7gCY4s?si=PkAR0FK-BqGrQ_6u) made by **iroaK** if you need further help.",
-                "## RVC v2 Tutorial for Paperspace (By LollenApe)\nhttps://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing",
-                "## RVC Guides in Other Languages",
-                "- [Russian FAQ for RVC/Voice changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
-                "- [Italian Guides](https://rentry.org/link-utili) or `-it_g`",
-                "- RVC Guides in PT-BR (`-rvc_br`)"
-            ]
+            "docs": {
+                "title": "Documentation",
+                "color": "029afe",
+                "description": [
+                    "## 🇺🇸 English Documentation\n> https://us.aihubfrance.fr/\n\nCredits: **AI HUB France**",
+                    "## 🇺🇸 English FAQ\n> https://us.aihubfrance.fr/faq\n\nCredits: **AI HUB France**"
+                ]
+            },
+            "guides": {
+                "title": "Guides",
+                "color": "14effb",
+                "description": [
+                    "## 🍏 Applio-RVC-Fork: Guide\nLink: [Google Docs](https://docs.google.com/document/d/12YmIQFLFzth1YsZJMGrA0aeTN0Go8DNZVw8LFSf-Hug)\n\nCredits: **IA Hispano**",
+                    "## How to install RVC on windows\nLink: [YouTube](https://youtu.be/x7aOq7gCY4s?si=PkAR0FK-BqGrQ_6u)\n\nCredits: **iroaK**",
+                    "## RVC v2 Tutorial for Paperspace\nLink: [Google Docs](https://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing)\n\nCredits: **LollenApe**"
+                ]
+            },
+            "translations": {
+                "title": "🌐 Translations",
+                "description": [
+                    "- 🇫🇷  [French Documentation](https://docs.aihubfrance.fr/guides-clone-de-voix/rvc-v2)",
+                    "- 🇮🇹  [Italian Guides](https://rentry.org/link-utili) or `-it_g`",
+                    "- 🇷🇺  [Russian FAQ for RVC/Voice changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
+                    "- 🇧🇷  RVC Guides in PT-BR (`-rvc_br`)"
+                ]
+            }
         },
         "es": {
             "title": "Guías en español",
