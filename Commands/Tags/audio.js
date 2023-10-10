@@ -12,12 +12,15 @@ module.exports = {
      * @param {String} prefix 
      */
     run: async(client, message, args, prefix) => {
-        const embed = client.botUtils.createEmbed(client.botData.embeds.audio.en);
+        const embeds = [
+            client.botUtils.createEmbed(client.botData.embeds.audio.en.guides),
+            client.botUtils.createEmbed(client.botData.embeds.audio.en.tools)
+        ]
 
         if (message.mentions.members.first()) {
-            return message.channel.send({content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: [embed]});
+            return message.channel.send({content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: embeds});
         }
 
-        message.channel.send({embeds: [embed]});
+        message.channel.send({embeds: embeds});
     }
 }
