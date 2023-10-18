@@ -12,6 +12,9 @@ module.exports = {
      * @param {String} prefix 
      */
     run: (client, message, args, prefix) => {
+
+        console.log(args);
+
         const embeds = [
             client.botUtils.createEmbed(client.botData.embeds.rvc.en.docs),
             client.botUtils.createEmbed(client.botData.embeds.rvc.en.guides),

@@ -136,7 +136,7 @@
                 "title": "🌐 Translations",
                 "description": [
                     "- 🇫🇷  [French Documentation](https://docs.aihubfrance.fr/guides-clone-de-voix/rvc-v2)",
-                    "- 🇮🇹  [Italian Guides](https://rentry.org/link-utili) or `-it_g`",
+                    "- 🇮🇹  [Italian Guides](https://rentry.org/link-utili)",
                     "- 🇷🇺  [Russian FAQ for RVC/Voice changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
                     "- 🇧🇷  RVC Guides in PT-BR (`-rvc_br`)"
                 ]
