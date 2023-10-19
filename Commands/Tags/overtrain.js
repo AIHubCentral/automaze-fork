@@ -19,7 +19,7 @@ module.exports = {
 
         const embedData = {
             title: 'How do I know if my model is overtaining?',
-            color: client.botConfigs.colorTheme.primary,
+            color: client.botConfigs.colors.theme.primary,
             description: [
                 '## All-In-One Guide on how to make a good model',
                 'This guide explains how the **D** and **G** files works and much more: https://rentry.org/RVC_making-models\n\nCredits: **[LUSBERT](https://discordapp.com/users/917711764571951144)** <:lusbertmoment:1159804751924432906>',

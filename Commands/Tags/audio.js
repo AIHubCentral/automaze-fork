@@ -13,8 +13,8 @@ module.exports = {
      */
     run: async(client, message, args, prefix) => {
         const embeds = [
-            client.botUtils.createEmbed(client.botData.embeds.audio.en.guides),
-            client.botUtils.createEmbed(client.botData.embeds.audio.en.tools)
+            client.botUtils.createEmbed(client.botData.embeds.audio.en.guides, client.botConfigs.colors.theme.primary),
+            client.botUtils.createEmbed(client.botData.embeds.audio.en.tools, client.botConfigs.colors.theme.secondary)
         ]
 
         if (message.mentions.members.first()) {

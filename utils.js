@@ -62,13 +62,18 @@ function getCommands(basePath, subPath) {
 exports.getCommands = getCommands;
 
 
-function createEmbed(data) {
+function createEmbed(data, color='') {
     /**
      * Creates a discord embed from an object passed as `data` argument
      */
     const embed = new EmbedBuilder();
     embed.setDescription(data.description.join('\n'));
-    embed.setColor(data.color ?? 'Yellow');  // defaults to Yellow
+
+    // if the color not provided as an argument, try to use from data
+    if (!color) {
+        color = data.color;
+    }
+    embed.setColor(color ?? 'Yellow');  // defaults to Yellow
 
     if (data.title) {
         embed.setTitle(data.title);

@@ -16,19 +16,19 @@ module.exports = {
     run: (client, message, args, prefix) => {
         const cmd = args[0];
         if (!cmd) {
-            return void message.reply(`specify a command you want to look up`)
+            return message.reply('Specify a command you want to look up.\n\n> Example: `-commandinfo` rvc');
         }
 
-        if (!client.commands.get(cmd) && !client.commands.find(c => c.aliases && c.aliases.includes(cmd) && c.aliases !== [])) {
-            return void message.reply(`that command doesnt exist`)
+        if (!client.commands.get(cmd) && !client.commands.find(c => c.aliases && c.aliases.includes(cmd))) {
+            return message.reply('That command doesn\'t exist.');
         }
 
-        const command = client.commands.get(cmd) || client.commands.find(c => c.aliases && c.aliases.includes(cmd) && c.aliases !== [])
+        const command = client.commands.get(cmd) || client.commands.find(c => c.aliases && c.aliases.includes(cmd));
 
-        const infoEmbed = new EmbedBuilder()
-        .setDescription(`# \`${prefix}${command.name}\`\n- **Category**: ${command.category}\n- **Aliases**: ${command.aliases.join(`, `)}\n- **Description**: ${command.description}\n- **Syntax**: \`${prefix}${command.syntax}\``)
-        .setColor(`Yellow`);
+        const embed = new EmbedBuilder()
+            .setDescription(`# \`${prefix}${command.name}\`\n- **Category**: ${command.category}\n- **Aliases**: ${command.aliases.join(`, `)}\n- **Description**: ${command.description}\n- **Syntax**: \`${prefix}${command.syntax}\``)
+            .setColor(client.botConfigs.colors.theme.primary);
 
-        message.reply({embeds: [infoEmbed]})
+        message.reply({embeds: [embed]})
     }
 }

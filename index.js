@@ -84,9 +84,11 @@ client.botConfigs = {
         reactions: true,
         randomResponses: false
     },
-    colorTheme: {
-        primary: '029afe',
-        secondary: '14effb'
+    colors: {
+        theme: { primary: '029afe', secondary: '14effb'},
+        country: {
+            brazil: ['#12A248', '#FEE112', '#123680'],
+        }
     }
 };
 

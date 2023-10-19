@@ -20,8 +20,8 @@ module.exports = {
         
         // defaults to english
         let embeds = [
-            client.botUtils.createEmbed(client.botData.embeds.rvc.en.docs),
-            client.botUtils.createEmbed(client.botData.embeds.rvc.en.guides),
+            client.botUtils.createEmbed(client.botData.embeds.rvc.en.docs, client.botConfigs.colors.theme.primary),
+            client.botUtils.createEmbed(client.botData.embeds.rvc.en.guides, client.botConfigs.colors.theme.secondary),
             client.botUtils.createEmbed(client.botData.embeds.rvc.en.translations),
         ];
 
@@ -29,10 +29,13 @@ module.exports = {
         if (filteredArgs.length > 0) {
             switch(filteredArgs[0]) {
                 case 'br':
-                    embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.pt)];
+                    embeds = [
+                        client.botUtils.createEmbed(client.botData.embeds.rvc.pt.guides, client.botConfigs.colors.country.brazil[0]),
+                        client.botUtils.createEmbed(client.botData.embeds.rvc.pt.videos, client.botConfigs.colors.country.brazil[1]),
+                    ];
                     messageTitle = 'Guias RVC (como fazer cover com IA)';
                     messageContent = 'Veja essas recomendações abaixo';
-                    messageBlooper = 'Eu sei fazer covers rsrs';
+                    messageBlooper = 'Eu sei fazer covers 🤣';
                     break;
                 case 'tr':
                     embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.tr)];

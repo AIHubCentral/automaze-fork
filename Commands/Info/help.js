@@ -1,5 +1,5 @@
 const { EmbedBuilder, StringSelectMenuBuilder, ActionRowBuilder } = require("discord.js");
-const help = require(`../../JSON/help.json`)
+const help = require(`../../JSON/help.json`);
 
 module.exports = {
     name: 'help',
@@ -18,12 +18,12 @@ module.exports = {
         const categories = [...new Set(client.commands.map(command => command.category))];
 
         const placeholderEmbed = new EmbedBuilder()
-        .setTitle(`Please choose a category`)
-        .setColor(`Yellow`);
+            .setTitle(`Please choose a category`)
+            .setColor(client.botConfigs.colors.theme.primary);
 
         const options = new StringSelectMenuBuilder()
-        .setCustomId(`dropdown`)
-        .setPlaceholder(`Nothing selected`);
+            .setCustomId(`dropdown`)
+            .setPlaceholder(`Nothing selected`);
 
         for (const category of categories) {
             options.addOptions(
@@ -46,7 +46,7 @@ module.exports = {
                 new EmbedBuilder()
                 .setTitle(`${i.values[0]} commands`)
                 .setDescription(client.commands.filter(command => command.category === i.values[0]).map(command => (command.aliases.length ? `**‣ \`${prefix}${command.syntax}\` || \`${command.aliases.join(`, `)}\`** - ${command.description}` : `**‣ \`${prefix}${command.syntax}\`** - ${command.description}`)).join(`\n`))
-                .setColor(`Green`)
+                .setColor(client.botConfigs.colors.theme.secondary)
                 .setFooter({text: `Parameters in <...> are required, whereas [...] is optional`})
             ]});
         });

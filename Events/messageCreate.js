@@ -26,7 +26,7 @@ module.exports = {
                 const devServerGuildId = '1136971905354711193';
 
                 const embedData = {
-                    color: client.botConfigs.colorTheme.primary,
+                    color: client.botConfigs.colors.theme.primary,
                     description: []
                 };
 

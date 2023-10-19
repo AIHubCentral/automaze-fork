@@ -1,5 +1,5 @@
-const { EmbedBuilder } = require("discord.js")
-const ms = require(`pretty-ms`)
+const { EmbedBuilder } = require("discord.js");
+const ms = require(`pretty-ms`);
 
 module.exports = {
     name: 'ping',
@@ -16,9 +16,9 @@ module.exports = {
      */
     run: (client, message, args, prefix) => {
         const pingEmbed = new EmbedBuilder()
-        .setTitle(`WHO PINGED GRRR!!!! <:joe_angry:1093358453780652052>`)
-        .setDescription(`- **Client's average ping**: ${client.ws.ping}ms\n- **Time passed since last ready**: ${ms(client.uptime, {verbose: true})}`)
-        .setColor(`Green`);
+            .setTitle(`<:aismug:1159365471368400948> WHO PINGED GRRR!!!!`)
+            .setDescription(`- **Client's average ping**: ${client.ws.ping}ms\n- **Time passed since last ready**: ${ms(client.uptime, {verbose: true})}`)
+            .setColor(client.botConfigs.colors.theme.primary);
 
         message.reply({embeds: [pingEmbed]})
     }

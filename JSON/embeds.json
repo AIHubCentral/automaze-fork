@@ -39,7 +39,6 @@
         "en": {
             "guides": {
                 "title": "Guides",
-                "color": "029afe",
                 "description": [
                     "###  📑 Perfecting Audio Isolation on Low-End Rigs: A Practical Guide (by Litsa The Dancer and Faze Masta)\n> https://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing",
                     "###  📑 Guide: Gathering and Isolating Audio (by SCRFilms)\n> https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv",
@@ -49,7 +48,6 @@
             },
             "tools": {
                 "title": "Tools",
-                "color": "14effb",
                 "description": [
                     "### Youtube Downloaders",
                     "- https://github.com/yt-dlp/yt-dlp",
@@ -66,21 +64,27 @@
     },
     "rvc": {
         "pt": {
-            "description": [
-                "## Guias RVC em PT-BR",
-                "### AI-Cover-Gen-No-UI",
-                "- Acesse o guia [neste link](https://docs.google.com/document/d/1BA_ln2159GbwTiJvTjCvqOAuYLq32A21PshW3RXhT6E/edit?usp=sharing).",
-                "### 🍏 Applio-RVC-Fork: Guia PT-BR",
-                "- Acesse o guia [neste link](https://docs.google.com/document/d/1PIMJ39xHp2kfbh4kUuvD2MZjVdeweezmwIm8Y8l6p8A/edit?usp=sharing).",
-                "\n> ⚠️ Aviso: O Kaggle está banindo contas que utilizam RVC na plataforma, use por sua conta e risco.",
-                "### Tutoriais em Vídeo",
-                "- [Como fazer AI COVER - Método NOVO](https://youtu.be/QTz18CSyYmE) (créditos **AI HUB BRASIL**)",
-                "- [COMO TREINAR UM MODELO DE VOZ PARA O RVC NO CELULAR](https://youtu.be/PoNoaI8DFP8?si=VccKwtkEKgAcaPNn) (créditos **Vector Lua**)",
-                "- [Como fazer Deep Fake (Maneira Fácil) - Android e PC](https://youtu.be/Z_k1YV_Tn40?si=Fu4hmEZOPOuGZ0On) (créditos **AI HUB BRASIL**)'",
-                "\n> 💡 **Dica**: Use o comando `-colabs_br` para links de colabs traduzidos em **Português**",
-                "### Servidor AI HUB BRASIL",
-                "> https://discord.gg/aihubbrasil"
-            ]
+            "guides": {
+                "description": [
+                    "## 🇧🇷 Guias RVC em PT-BR",
+                    "### AI-Cover-Gen-No-UI",
+                    "- Acesse o guia [neste link](https://docs.google.com/document/d/1BA_ln2159GbwTiJvTjCvqOAuYLq32A21PshW3RXhT6E/edit?usp=sharing).",
+                    "### 🍏 Applio-RVC-Fork: Guia PT-BR",
+                    "- Acesse o guia [neste link](https://docs.google.com/document/d/1PIMJ39xHp2kfbh4kUuvD2MZjVdeweezmwIm8Y8l6p8A/edit?usp=sharing).",
+                    "\n> ⚠️ Aviso: O Kaggle está banindo contas que utilizam RVC na plataforma, use por sua conta e risco."
+                ]
+            },
+            "videos": {
+                "description": [
+                    "## Tutoriais em Vídeo",
+                    "- [Como fazer AI COVER - Método NOVO](https://youtu.be/QTz18CSyYmE) (créditos **AI HUB BRASIL**)",
+                    "- [COMO TREINAR UM MODELO DE VOZ PARA O RVC NO CELULAR](https://youtu.be/PoNoaI8DFP8?si=VccKwtkEKgAcaPNn) (créditos **Vector Lua**)",
+                    "- [Como fazer Deep Fake (Maneira Fácil) - Android e PC](https://youtu.be/Z_k1YV_Tn40?si=Fu4hmEZOPOuGZ0On) (créditos **AI HUB BRASIL**)'",
+                    "\n> 💡 **Dica**: Use o comando `-colabs_br` para links de colabs traduzidos em **Português**",
+                    "### Servidor AI HUB BRASIL",
+                    "> https://discord.gg/aihubbrasil"
+                ]
+            }
         },
         "nl": {
             "description": [
@@ -141,6 +145,7 @@
             }
         },
         "es": {
+            "color": "Green",
             "description": [
                 "## 🍏 Tutorial de Applio en español\nhttps://www.youtube.com/watch?v=bOAM_9xyHFY",
                 "### Servidor IA Hispano\n> https://discord.gg/iahispano"
@@ -177,7 +182,7 @@
     },
     "realtime": {
         "en": {
-            "title": "Realtime Voice Changer",
+            "title": "🎙️ Realtime Voice Changer",
             "description": [
                 "## 1. (Local) W-Okada Voice Changer\nThis has more options and is somewhat more convenient to use than Real-time RVC.\n**GUIDE**: https://rentry.co/VoiceChangerGuide",
                 "## 2. (Online) W-Okada - Colab Version\nA free, online version of W-Okada that allows you to run code on Google’s powerful GPUs.\n**GUIDE**: https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub",
@@ -199,15 +204,19 @@
         "en": {
             "title": "TTS Guides",
             "description": [
-                "## • Official guide\nhttps://rentry.co/RVC-TTS-Guide"
+                "## 🗣️ Official guide\nhttps://rentry.co/RVC-TTS-Guide"
             ]
         }
     },
     "upload": {
         "title": "huggingface.co upload Guides",
         "description": [
-            "## 🇺🇸 English upload guide", "Link: https://rentry.org/fdg_guide_new", "Credits: **FDG**",
-            "## 🇹🇷 Turkish upload guide", "Link: https://rentry.org/rvcturkceyukleme", "Credits: **Enes**"
+            "## 🇺🇸 English upload guide",
+            "Link: https://rentry.org/fdg_guide_new",
+            "Credits: **FDG**",
+            "## 🇹🇷 Turkish upload guide",
+            "Link: https://rentry.org/rvcturkceyukleme",
+            "Credits: **Enes**"
         ]
     }
 }

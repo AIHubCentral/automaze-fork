@@ -12,7 +12,7 @@ module.exports = {
      * @param {String} prefix 
      */
     run: (client, message, args, prefix) => {
-        const embed = client.botUtils.createEmbed(client.botData.embeds.tts.en);
+        const embed = client.botUtils.createEmbed(client.botData.embeds.tts.en, client.botConfigs.colors.theme.primary);
 
         if (message.mentions.members.first()) {
             return message.channel.send({content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: [embed]});
