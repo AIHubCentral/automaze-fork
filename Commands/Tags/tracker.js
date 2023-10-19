@@ -2,7 +2,7 @@ module.exports = {
     name: 'tracker',
     category: 'Tags',
     description: 'RVC real time tracker in spreadsheet',
-    aliases: [],
+    aliases: ['ss', 'spreadsheet'],
     syntax: `tracker [member]`,
     /**
      * 
