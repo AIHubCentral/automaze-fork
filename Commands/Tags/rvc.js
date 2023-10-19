@@ -34,6 +34,30 @@ module.exports = {
                     messageContent = 'Veja essas recomendações abaixo';
                     messageBlooper = 'Eu sei fazer covers rsrs';
                     break;
+                case 'tr':
+                    embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.tr)];
+                    messageTitle = 'Turkish Guides';
+                    break;
+                case 'es':
+                    embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.es)];
+                    messageTitle = 'Guías en español';
+                    break;
+                case 'kr':
+                    embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.kr)];
+                    messageTitle = '가이드 링크';
+                    break;
+                case 'jp':
+                    embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.jp)];
+                    messageTitle = 'ガイドリンク';
+                    break;
+                case 'nl':
+                    embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.nl)];
+                    messageTitle = 'Handleiding';
+                    break;
+                case 'vn':
+                    embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.vn)];
+                    messageTitle = 'Hướng dẫn';
+                    break;
             }
         }
 

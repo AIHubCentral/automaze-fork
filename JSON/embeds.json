@@ -83,7 +83,6 @@
             ]
         },
         "nl": {
-            "title": "Handleiding",
             "description": [
                 "## • Nederlandse Cover Handleiding",
                 "https://docs.google.com/document/d/1jNLqaC0BaWsL7w-T8OLolAiQQFVn05p5O8QH-dKFBK8/edit?usp=sharing"
@@ -97,7 +96,6 @@
             ]
         },
         "jp": {
-            "title": "ガイドリンク",
             "description": [
                 "## • 和訳版RVCガイド (KJAV 訳 SUSHI 校)",
                 "https://docs.google.com/document/d/1heKuaedmHNBTXvOnTNpwj-w2Djbk4kndXsZ2Vx_Zkxc/edit?usp=sharing",
@@ -106,7 +104,6 @@
             ]
         },
         "kr": {
-            "title": "가이드 링크",
             "description": [
                 "## • RVC 가이드 한국어 번역본 (KJAV 譯)",
                 "https://docs.google.com/document/d/1EeOBSJx7dm_amysCRPq9qRf2Q3RIZc9KUoUynQgauBo/edit?usp=sharing",
@@ -138,12 +135,12 @@
                     "- 🇫🇷  [French Documentation](https://docs.aihubfrance.fr/guides-clone-de-voix/rvc-v2)",
                     "- 🇮🇹  [Italian Guides](https://rentry.org/link-utili)",
                     "- 🇷🇺  [Russian FAQ for RVC/Voice changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
-                    "- 🇧🇷  RVC Guides in PT-BR (`-rvc` `br`)"
+                    "- 🇪🇸  Español (`-rvc` `es`)",
+                    "- 🇧🇷  PT-BR (`-rvc` `br`)"
                 ]
             }
         },
         "es": {
-            "title": "Guías en español",
             "description": [
                 "## 🍏 Tutorial de Applio en español\nhttps://www.youtube.com/watch?v=bOAM_9xyHFY",
                 "### Servidor IA Hispano\n> https://discord.gg/iahispano"
@@ -161,7 +158,6 @@
             ]
         },
         "vn": {
-            "title": "Hướng dẫn",
             "description": [
                 "## • Hướng dẫn huấn luyện + tạo tập dữ liệu",
                 "https://docs.google.com/document/d/1YfmB9I9m1zZRZfZobsDFd0m9hNt7wFd86tSBkh-EqXw/edit"
