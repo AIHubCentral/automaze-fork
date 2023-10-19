@@ -204,17 +204,10 @@
         }
     },
     "upload": {
-        "en": {
-            "title": "huggingface.co upload Guides",
-            "description": [
-                "## • Posting models to AI Hub by FDG\nhttps://rentry.org/fdg_guide_new"
-            ]
-        },
-        "tr": {
-            "title": "huggingface.co Yükleme Kılavuzları",
-            "description": [
-                "## • FDG tarafından hazırlanan resmi kılavuz (Turkish translation by Enes)\nhttps://rentry.org/rvcturkceyukleme"
-            ]
-        }
+        "title": "huggingface.co upload Guides",
+        "description": [
+            "## 🇺🇸 English upload guide", "Link: https://rentry.org/fdg_guide_new", "Credits: **FDG**",
+            "## 🇹🇷 Turkish upload guide", "Link: https://rentry.org/rvcturkceyukleme", "Credits: **Enes**"
+        ]
     }
 }
