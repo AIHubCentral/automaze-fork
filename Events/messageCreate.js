@@ -52,6 +52,10 @@ module.exports = {
                 if (messageLowercase.includes('lusbert') && messageLowercase.includes('moment')) {
                     await message.react('<:lusbertmoment:1159804751924432906>');
                 }
+
+                if (messageLowercase.includes('litsa') && messageLowercase.includes('dancer')) {
+                    await message.react('🐺');
+                }
             }
 
             // verified chat only
