@@ -49,7 +49,7 @@ module.exports = {
 
             // these are always triggered
             if (client.botConfigs.general.reactions) {
-                if (!messageLowercase.includes(':') && messageLowercase.includes('lusbert') && messageLowercase.includes('moment')) {
+                if (messageLowercase.includes('lusbert ') && messageLowercase.includes('moment')) {
                     await message.react('<:lusbertmoment:1159804751924432906>');
                 }
 
