@@ -21,7 +21,7 @@ module.exports = {
             // Votation Embed
             const voteEmbed = new Discord.EmbedBuilder()
                 .setTitle(Forums[Threader.parentId])
-                .setColor(`Yellow`);
+                .setColor(Client.botConfigs.colors.theme.primary);
 
             // Check if exists the channel
             await delay(2000);

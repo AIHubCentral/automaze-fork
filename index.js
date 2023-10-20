@@ -85,7 +85,7 @@ client.botConfigs = {
         randomResponses: false
     },
     colors: {
-        theme: { primary: '029afe', secondary: '14effb'},
+        theme: { primary: '029afe', secondary: '14effb', tertiary: '08c8f7'},
         country: {
             brazil: ['#12A248', '#FEE112', '#123680'],
         }
