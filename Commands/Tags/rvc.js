@@ -2,7 +2,7 @@ module.exports = {
     name: 'rvc',
     category: 'Tags',
     description: 'Retrieval-based Voice Conversions guide links made by kalo',
-    aliases: ['paperspace', 'train', 'training', 'cover'],
+    aliases: ['paperspace', 'cover', 'guide', 'guides'],
     syntax: `rvc [member]`,
     /**
      * 

@@ -2,7 +2,7 @@ module.exports = {
     name: 'colab',
     category: 'Tags',
     description: 'Links to inference and training colabs made by kalo',
-    aliases: ['colabs', 'disconnected'],
+    aliases: ['colabs', 'disconnected', 'train', 'training'],
     syntax: `colab [member]`,
     /**
      * 
