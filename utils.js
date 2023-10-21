@@ -83,6 +83,10 @@ function createEmbed(data, color='') {
         embed.setImage(data.image);
     }
 
+    if (data.footer) {
+        embed.setFooter({ text: data.footer });
+    }
+
     return embed;
 }
 

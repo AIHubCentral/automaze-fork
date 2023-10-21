@@ -1,8 +1,10 @@
+const { EmbedBuilder } = require("discord.js");
+
 module.exports = {
     name: 'rvc',
     category: 'Tags',
-    description: 'Retrieval-based Voice Conversions guide links made by kalo',
-    aliases: ['paperspace', 'cover', 'guide', 'guides'],
+    description: 'Retrieval-based Voice Conversion Documentation (a.k.a How to Make AI Cover)',
+    aliases: ['cover', 'guide', 'guides', 'docs', 'doc', 'documentation'],
     syntax: `rvc [member]`,
     /**
      * 
@@ -19,10 +21,31 @@ module.exports = {
         let messageBlooper = 'bruh i know how to make ai cover';
         
         // defaults to english
+        /*
         let embeds = [
             client.botUtils.createEmbed(client.botData.embeds.rvc.en.docs, client.botConfigs.colors.theme.primary),
             client.botUtils.createEmbed(client.botData.embeds.rvc.en.guides, client.botConfigs.colors.theme.secondary),
             client.botUtils.createEmbed(client.botData.embeds.rvc.en.translations),
+        ];
+        */
+
+        let embeds = [
+            //client.botUtils.createEmbed(client.botData.embeds.rvc.en.alt.docs, client.botConfigs.colors.theme.primary),
+            new EmbedBuilder()
+                .setTitle('Documentation')
+                .addFields(
+                    {name: '🇺🇸 English (main)', value: 'https://docs.aihub.wtf/'},
+                    {name: '\u200B', value: '**Translation to other languages**'},
+                    {name: '🇧🇷 Brasil (PT-BR)', value: 'https://docs.aihub.wtf/v/brazil', inline: true},
+                    {name: '🇫🇷 France', value: 'https://docs.aihub.wtf/v/france', inline:true},
+                    {name: '\u0020', value: '\u0020'},
+                    {name: '🇩🇪 Germany', value: 'https://docs.aihub.wtf/v/germany', inline: true},
+                    {name: '🇮🇹 Italy', value: 'https://docs.aihub.wtf/v/italy', inline: true},
+                    {name: '\u0020', value: '\u0020'},
+                    {name: '🇯🇵 Japan', value: 'https://docs.aihub.wtf/v/japan', inline: true},
+                    {name: '🇵🇱 Poland', value: 'https://docs.aihub.wtf/v/poland', inline: true}
+                )
+                .setColor(client.botConfigs.colors.theme.tertiary)
         ];
 
         // get the first argument
@@ -48,10 +71,6 @@ module.exports = {
                 case 'kr':
                     embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.kr)];
                     messageTitle = '가이드 링크';
-                    break;
-                case 'jp':
-                    embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.jp)];
-                    messageTitle = 'ガイドリンク';
                     break;
                 case 'nl':
                     embeds = [client.botUtils.createEmbed(client.botData.embeds.rvc.nl)];
