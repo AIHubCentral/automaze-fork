@@ -49,12 +49,44 @@ module.exports = {
 
             // these are always triggered
             if (client.botConfigs.general.reactions) {
+                if (messageLowercase.includes('antasma')) {
+                    await message.react('🌟');
+                }
+
+                if (messageLowercase.includes('charlotte')) {
+                    await message.react('🎸');
+                }
+
+                if (messageLowercase.includes('kalomazing')) {
+                    await message.react('<:mrkrabs:1159761327632416818>');
+                }
+
+                if (messageLowercase.includes('zeero weeb')) {
+                    await message.react('<:lfg:1159355870119993496>');
+                }
+
+                if (messageLowercase.includes('maki ligon')) {
+                    await message.react('<:FL:1159653069743726664>');
+                }
+
                 if (messageLowercase.includes('lusbert ') && messageLowercase.includes('moment')) {
                     await message.react('<:lusbertmoment:1159804751924432906>');
                 }
 
                 if (messageLowercase.includes('litsa') && messageLowercase.includes('dancer')) {
-                    await message.react('🐺');
+                    await message.react('<:dog~1:1165681954524500078>');
+                }
+
+                if (messageLowercase.includes('cth') || messageLowercase.includes('yui')) {
+                    await message.react('💻');
+                }
+
+                if (messageLowercase.includes(' a win')) {
+                    await message.react('<:TextW:1159654826771230741>');
+                }
+
+                if (messageLowercase.includes(' a loose')) {
+                    await message.react('<:TextL:1159654780445130944>');
                 }
             }
 
