@@ -39,15 +39,17 @@ module.exports = {
         const reply = await message.reply({embeds: [placeholderEmbed], components: [dropdownActionRow]});
 
         const filter = i => i.customId === 'dropdown' && i.user.id === message.author.id;
-        const collector = reply.createMessageComponentCollector({filter, time: 60000});
+
+        // shows the help message for 5 minutes (300 seconds), multiply by 1000 to convert to milliseconds
+        const collector = reply.createMessageComponentCollector({filter, time: 300 * 1000});
 
         collector.on('collect', i => {
             i.update({embeds: [
                 new EmbedBuilder()
-                .setTitle(`${i.values[0]} commands`)
-                .setDescription(client.commands.filter(command => command.category === i.values[0]).map(command => (command.aliases.length ? `**‣ \`${prefix}${command.syntax}\` || \`${command.aliases.join(`, `)}\`** - ${command.description}` : `**‣ \`${prefix}${command.syntax}\`** - ${command.description}`)).join(`\n`))
-                .setColor(client.botConfigs.colors.theme.secondary)
-                .setFooter({text: `Parameters in <...> are required, whereas [...] is optional`})
+                    .setTitle(`${i.values[0]} commands`)
+                    .setDescription(client.commands.filter(command => command.category === i.values[0]).map(command => (command.aliases.length ? `**‣ \`${prefix}${command.syntax}\` || \`${command.aliases.join(`, `)}\`** - ${command.description}` : `**‣ \`${prefix}${command.syntax}\`** - ${command.description}`)).join(`\n`))
+                    .setColor(client.botConfigs.colors.theme.secondary)
+                    .setFooter({text: `Parameters in <...> are required, whereas [...] is optional`})
             ]});
         });
 
