@@ -74,7 +74,7 @@ module.exports = {
                 }
 
                 if (messageLowercase.includes('litsa') && messageLowercase.includes('dancer')) {
-                    await message.react('<:dog~1:1165681954524500078>');
+                    await message.react('<:dog:1165681954524500078>');
                 }
 
                 if (messageLowercase.includes('cth') || messageLowercase.includes('yui')) {
