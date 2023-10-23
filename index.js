@@ -5,9 +5,6 @@ const Env = require('dotenv').config();
 const Enmap = require("enmap");
 const Discord = require(`discord.js`);
 
-// database instance
-const { sequelize } = require('./database/dbObjects.js');
-
 // Exports
 const { getAllFiles, createEmbed, getRandomNumber } = require('./utils');
 
@@ -102,13 +99,8 @@ client.botUtils = {
     getRandomNumber
 };
 
-// init database
-client.databaseInfo = {
-    active: false,
-    message: 'Unable to connect to the database.'
-};
-
-client.sequelize = sequelize;
+// knex database
+client.knexInstance = require('./database/dbManager.js').createInstance('./database/db.sqlite');;
 
 // bot responses loaded on startup
 client.botResponses = require('./JSON/bot_responses.json');
