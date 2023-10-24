@@ -4,7 +4,7 @@ module.exports = {
     name: 'rvc',
     category: 'Tags',
     description: 'Retrieval-based Voice Conversion Documentation (a.k.a How to Make AI Cover)',
-    aliases: ['cover', 'guide', 'guides', 'docs', 'doc', 'documentation'],
+    aliases: ['guide', 'guides', 'docs', 'doc', 'documentation'],
     syntax: `rvc [member]`,
     /**
      * 
@@ -35,7 +35,7 @@ module.exports = {
                 .setTitle('Documentation')
                 .addFields(
                     {name: '🇺🇸 English (main)', value: 'https://docs.aihub.wtf/'},
-                    {name: '\u200B', value: '**Translation to other languages**'},
+                    {name: '\u200B', value: '**Translation by country**'},
                     {name: '🇧🇷 Brasil (PT-BR)', value: 'https://docs.aihub.wtf/v/brazil', inline: true},
                     {name: '🇫🇷 France', value: 'https://docs.aihub.wtf/v/france', inline:true},
                     {name: '\u0020', value: '\u0020'},
@@ -43,7 +43,10 @@ module.exports = {
                     {name: '🇮🇹 Italy', value: 'https://docs.aihub.wtf/v/italy', inline: true},
                     {name: '\u0020', value: '\u0020'},
                     {name: '🇯🇵 Japan', value: 'https://docs.aihub.wtf/v/japan', inline: true},
-                    {name: '🇵🇱 Poland', value: 'https://docs.aihub.wtf/v/poland', inline: true}
+                    {name: '🇰🇷 Korea', value: 'https://docs.aihub.wtf/v/korea', inline: true},
+                    {name: '\u0020', value: '\u0020'},
+                    {name: '🇵🇱 Poland', value: 'https://docs.aihub.wtf/v/poland', inline: true},
+                    {name: '🇷🇺 Russia', value: 'https://docs.aihub.wtf/v/russia', inline: true},
                 )
                 .setColor(client.botConfigs.colors.theme.tertiary)
         ];
