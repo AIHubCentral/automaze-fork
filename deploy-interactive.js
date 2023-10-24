@@ -22,7 +22,9 @@ rl.question('Token: ', (tokenInput) => {
 
             // proceed if the values above are not null
             if (token && clientId && guildId) {
-                const commands = utils.getCommands(__dirname, 'CommandsSlash');
+                const slashCommands = utils.getCommands(__dirname, 'CommandsSlash');
+                const contextCommands = utils.getCommands(__dirname, 'CommandsContext');
+                const commands = slashCommands.concat(contextCommands); // join arrays
 
                 // Construct and prepare an instance of the REST module
                 const rest = new REST().setToken(token);
@@ -30,7 +32,7 @@ rl.question('Token: ', (tokenInput) => {
                 // and deploy your commands!
                 (async () => {
                     try {
-                        console.log(`Started refreshing ${commands.length} application (/) commands.`);
+                        console.log(`Started refreshing ${slashCommands.length} application (/) commands and ${contextCommands.length} context command.`);
 
                         // The put method is used to fully refresh all commands in the guild with the current set
                         const data = await rest.put(
@@ -38,7 +40,7 @@ rl.question('Token: ', (tokenInput) => {
                             { body: commands },
                         );
 
-                        console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+                        console.log(`Successfully reloaded ${data.length} commands.`);
                     }
                     catch (error) {
                         console.error(error);

@@ -1,7 +1,7 @@
 const fs = require(`node:fs`);
 
 module.exports = client => {
-    const categoriesPath = `${process.cwd()}/CommandsSlash`
+    const categoriesPath = `${process.cwd()}/CommandsContext`
     const categoryFolders = fs.readdirSync(categoriesPath)
 
     for (const folder of categoryFolders) {
@@ -11,10 +11,10 @@ module.exports = client => {
             const filePath = `${categoriesPath}/${folder}/${file}`;
             const command = require(filePath);
 
-            if (`data` in command && `execute` in command && (command.type === 'slash')) {
-                client.slashCommands.set(command.data.name, command);
+            if (`data` in command && `execute` in command && (command.type === 'context-menu')) {
+                client.contextMenuCommands.set(command.data.name, command);
             } else {
-                console.log(`[WARNING] A slash command in ${filePath} is missing data or execute property, or is having incorrect type!`);
+                console.log(`[WARNING] A context command in ${filePath} is missing data or execute property, or is having incorrect type!`);
             }
         }
     }

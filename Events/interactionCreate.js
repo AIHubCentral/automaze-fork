@@ -36,5 +36,23 @@ module.exports = {
                 console.error(error);
             }
         }
+
+        // context menu commands
+        if (!interaction.isContextMenuCommand()) return;
+
+        if (interaction.isUserContextMenuCommand()) {
+            const command = interaction.client.contextMenuCommands.get(interaction.commandName);
+    
+            if (!command) {
+                console.error(`No context command matching ${interaction.commandName} was found.`);
+                return;
+            }
+    
+            try {
+                await command.execute(interaction);
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
 }
