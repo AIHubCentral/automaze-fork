@@ -100,7 +100,7 @@ client.botUtils = {
 };
 
 // knex database
-client.knexInstance = require('./database/dbManager.js').createInstance('./database/db.sqlite');;
+client.knexInstance = require('./database/dbManager.js').createInstance('./database/knex.sqlite');;
 
 // bot responses loaded on startup
 client.botResponses = require('./JSON/bot_responses.json');

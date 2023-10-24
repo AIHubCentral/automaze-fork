@@ -1,5 +1,5 @@
 const dbManager = require('./dbManager.js');
-const knex = dbManager.createInstance('./database/db.sqlite');
+const knex = dbManager.createInstance('./database/knex.sqlite');
 const items = require('../JSON/items.json');
 
 (async () => {
