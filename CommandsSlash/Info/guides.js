@@ -12,6 +12,11 @@ module.exports = {
                 .setRequired(true)
                 .addChoices(
                     { name: 'RVC', value: 'rvc' },
+                    { name: 'Audio', value: 'audio' },
+                    { name: 'Colab', value: 'colab' },
+                    { name: 'Paperspace', value: 'paperspace' },
+                    { name: 'Realtime', value: 'realtime' },
+                    { name: 'Upload', value: 'upload' },
                 )
         )
         .addStringOption(option =>
