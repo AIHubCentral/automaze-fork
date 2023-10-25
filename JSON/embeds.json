@@ -288,11 +288,14 @@
     "upload": {
         "title": "huggingface.co upload Guides",
         "description": [
-            "## 🇺🇸 English upload guide",
+            "## 🇺🇸 English guide",
             "Link: https://rentry.org/fdg_guide_new",
             "Credits: **FDG**",
-            "## 🇹🇷 Turkish upload guide",
-            "Link: https://rentry.org/rvcturkceyukleme",
+            "## 🇮🇳 Hindi guide",
+            "Link: https://rentry.org/AI_hub_guide_hi",
+            "Credits: **Enes**",
+            "## 🇹🇷 Turkish guide",
+            "Link: https://rentry.org/AI_hub_guide_tr",
             "Credits: **Enes**"
         ]
     },
