@@ -28,7 +28,7 @@ module.exports = {
         )
         .addUserOption(option =>
             option.setName('user')
-                .setDescription('(Optional) Send this guide to a user')
+                .setDescription('(Optional) Send this guide to an user')
         )
     ,
     async execute(interaction) {
