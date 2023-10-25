@@ -4,23 +4,29 @@ module.exports = {
     category: `Fun`,
     type: `slash`,
     data: new SlashCommandBuilder()
-                .setName('banana')
-                .setDescription('BANAN SOMEOME!!!!11!111!11')
-                .addUserOption(option =>
-                    option.setName('user').setDescription('User to banan')
-                 )
+        .setName('banana')
+        .setDescription('BANAN SOMEOME!!!!11!111!11')
+        .addUserOption(option =>
+            option.setName('user').setDescription('User to banan')
+        )
     ,
     async execute(interaction) {
         const client = interaction.client;
-        if (interaction.client.disallowedChannelIds.includes(interaction.channelId)) {
-            await interaction.reply({ content: 'This command is not available here.', ephemeral: true});
+
+        // check if user is on cooldown
+        if (Date.now() <= client.cooldowns.banana.get(interaction.user.id)) {
+            return interaction.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${client.cooldowns.banana.get(interaction.user.id) - Date.now()} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`)
+        }
+
+        if (client.disallowedChannelIds.includes(interaction.channelId)) {
+            await interaction.reply({ content: 'This command is not available here.', ephemeral: true });
             return;
         }
-        
+
         let member = interaction.options.getUser('user');
         const userId = interaction.user.id;
         let botRevenge = false; // if its true automaze banan the user instead
-        const botResponses = interaction.client.botResponses.responses.banana;
+        const botResponses = client.botResponses.responses.banana;
         let selectedResponse = null;
 
         if (!member) return interaction.reply(botResponses.targetNone);
@@ -37,23 +43,62 @@ module.exports = {
             botRevenge = true;
         }
 
-        if (Date.now() - client.cooldowns.banana.get(userId) < 300000) {
-            return await interaction.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${300000 - (Date.now() - interaction.client.cooldowns.banana.get(userId))} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`)
+        // check if user is in database
+        let dbResult = await client.knexInstance('user').where('id', `${member.id}`);
+
+        if (dbResult.length === 0) {
+            console.log('User not found in database');
+            await client.knexInstance('user').insert({
+                id: `${member.user.id}`,
+                username: member.user.username
+            });
+            console.log(`${member.user.username} added to database`);
         }
 
-        const bananEmbed = new EmbedBuilder()
-                                .setTitle(`${member.username} GOT BANANA LOL LOL LOL`)
-                                .setDescription(`HEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO\nHEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO\nHEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO`)
-                                .setImage(`https://media.tenor.com/29FOpiFsnn8AAAAC/banana-meme.gif`)
-                                .setColor(`Yellow`)
-                                .setFooter({ text: `BRO GOT BANAN'D ${interaction.client.banana.ensure(member.id, 0) + 1} TIMES XDDDDDD` });
+        // check if banana is in the user inventory
+        dbResult = await client.knexInstance('inventory').where({
+            'user_id': `${member.id}`,
+            'item_id': 1, // banana id
+        });
 
-        interaction.client.banana.inc(member.id);
-        interaction.client.cooldowns.banana.set(userId, Date.now())
+        if (dbResult.length === 0) {
+            // add banana to inventory
+            await client.knexInstance('inventory').insert({
+                'user_id': `${member.id}`,
+                'item_id': 1,
+                quantity: 1
+            });
+        } else {
+            // if already have banana, increment the value
+            await client.knexInstance('inventory').update({
+                quantity: dbResult[0].quantity + 1
+            }).where({
+                'user_id': `${member.id}`,
+                'item_id': 1,
+            });
+        }
+
+        // last query to check how much bananas
+        dbResult = await client.knexInstance('inventory').where({
+            'user_id': `${member.id}`,
+            'item_id': 1,
+        });
+
+        const bananEmbed = new EmbedBuilder()
+            .setTitle(`${member.username} GOT BANANA LOL LOL LOL`)
+            .setDescription(`HEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO\nHEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO\nHEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO`)
+            .setImage(`https://media.tenor.com/29FOpiFsnn8AAAAC/banana-meme.gif`)
+            .setColor(`Yellow`)
+            .setFooter({ text: `BRO GOT BANAN'D ${dbResult[0].quantity} TIMES XDDDDDD\n\nNote: You can now use /banana` });
+
+        client.banana.inc(member.id);
+
+        // cooldown expires in 1 minute
+        client.cooldowns.banana.set(interaction.user.id, Date.now() + (1 * 60 * 1000))
 
         if (botRevenge) {
             await interaction.reply(selectedResponse);
-            return interaction.followUp({ embeds: [bananEmbed]})
+            return interaction.followUp({ embeds: [bananEmbed] })
         }
 
         interaction.reply({ embeds: [bananEmbed] })

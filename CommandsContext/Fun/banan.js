@@ -10,6 +10,8 @@ module.exports = {
             .setType(ApplicationCommandType.User)
     ,
     async execute(interaction) {
+        await interaction.reply({ content: 'Will be available soon, stay tuned!', ephemeral: true });
+        /*
         const client = interaction.client;
         const targetUser = interaction.targetUser;
 
@@ -58,5 +60,6 @@ module.exports = {
         }
 
         interaction.reply({ embeds: [bananEmbed] })
+    */
     }
 }

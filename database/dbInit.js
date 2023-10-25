@@ -7,6 +7,7 @@ const items = require('../JSON/items.json');
 	await knex.schema.createTable('user', function(table) {
 		table.string('id', 19).primary();
 		table.string('username', 32).notNullable();
+		table.string('display_name');
 		table.integer('exp');
 		table.integer('credits');
 		table.boolean('banana_disabled');

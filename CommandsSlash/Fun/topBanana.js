@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { byValue, byNumber } = require('sort-es');
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     category: `Fun`,
@@ -9,42 +8,37 @@ module.exports = {
                 .setName('topbanana')
                 .setDescription('SEE HOW MUCH SOMEONE GOT BANAN!!!!11!111!11'),
     async execute(interaction) {
-        if (interaction.client.disallowedChannelIds.includes(interaction.channelId)) {
+        const client = interaction.client;
+
+        if (client.disallowedChannelIds.includes(interaction.channelId)) {
             await interaction.reply({ content: 'This command is not available here.', ephemeral: true});
             return;
         }
 
         await interaction.deferReply();
 
-        const bananEmbed = new EmbedBuilder()
-                                .setTitle(`THE FORTNITE BALLS LEADERBANAN`)
-                                .setColor(`Yellow`)
-                                .setTimestamp();
+        const embedData = {
+            title: 'THE FORTNITE BALLS LEADERBANAN',
+            color: 'Yellow',
+            timestamp: true,
+            description: []
+        };
 
-        // lb = leaderboard
-        const lbUnsorted = JSON.parse(interaction.client.banana.export()).keys;
+        // fetch inventory from database
+        const inventory = await client.knexInstance('inventory').orderBy('quantity', 'desc').limit(15);
 
-        if (lbUnsorted.length < 1) {
-            bananEmbed.setDescription('> The leaderboard is empty, `/banana` someone to show results here!');
-            await interaction.editReply({ embeds: [bananEmbed] });
-            return;
+        if (inventory.length === 0) {
+            embedData.description.push('> The leaderboard is empty, `/banana` someone to show results here!');
+            return await interaction.editReply({ embeds: [client.botUtils.createEmbed(embedData)] });
         }
-
-        // if lbUnsorted is not an empty array, sort it
-        const lbSorted = lbUnsorted.sort(byValue(i => i.value, byNumber({ desc: true }))).slice(0, 10);
-        
-        const embedDescription = [];
 
         let rankCounter = 1;
-        for (const entry of lbSorted) {
-            const entryVal = Object.values(entry);
-            const user = await interaction.client.users.fetch(entryVal[0]);
-            embedDescription.push(`${rankCounter}. ${user.username} — ${entryVal[1]}`);
+        for (const entry of inventory) {
+            let user = await client.knexInstance('user').where('id', entry['user_id']);
+            embedData.description.push(`${rankCounter}. ${user[0].username} — ${entry.quantity}`);
             rankCounter++;
         }
-
-        bananEmbed.setDescription(embedDescription.join('\n'));
         
-        await interaction.editReply({ embeds: [bananEmbed] })
+        await interaction.editReply({ embeds: [client.botUtils.createEmbed(embedData)] })
     }
 }

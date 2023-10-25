@@ -94,6 +94,10 @@ function createEmbed(data, color='') {
         embed.setFooter({ text: data.footer });
     }
 
+    if (data.timestamp) {
+        embed.setTimestamp();
+    }
+
     return embed;
 }
 

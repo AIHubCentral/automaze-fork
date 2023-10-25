@@ -1,17 +1,7 @@
 const { SlashCommandBuilder, AttachmentBuilder } = require("discord.js");
 const { byValue, byNumber } = require('sort-es');
-const fs = require('node:fs');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-const wait = require('node:timers/promises').setTimeout;
-
-function saveBananaData(filepath, data) {
-    /* Saves the /topbanana data as a json file and return whether the operation succeded or not */
-    fs.writeFileSync(filepath, JSON.stringify(data), (error) => {
-        console.log(error);
-        return false;
-    });
-    return true;
-}
+const delay = require('node:timers/promises').setTimeout;
 
 module.exports = {
     category: `Utilities`,
@@ -45,7 +35,7 @@ module.exports = {
         }
 
         await interaction.deferReply({ ephemeral: true });
-        await wait(1000);
+        await delay(1000);
 
         if (interaction.options.getSubcommand() === 'import') {
             const file = interaction.options.getAttachment('file');
@@ -64,6 +54,10 @@ module.exports = {
                                 quantity: record.bananaCount
                             };
                             await client.knexInstance('inventory').insert(dataToInsert);
+                            await client.knexInstance('user').insert({
+                                id: record.userId,
+                                username: record.username
+                            })
                         }
                         await interaction.editReply({ content: 'JSON data updated!' });
                     }
