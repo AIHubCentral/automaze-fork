@@ -4,6 +4,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     category: `Fun`,
+    cooldown: 60,
     type: `slash`,   
     data: new SlashCommandBuilder()
                 .setName('doxx')

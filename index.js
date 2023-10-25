@@ -53,6 +53,7 @@ client.esnipes = new Discord.Collection();
 
 client.cooldowns = {
     banana: new Discord.Collection(),
+    slashCommands: new Discord.Collection(),
 };
 
 // Enmap's creation

@@ -3,8 +3,8 @@ const wait = require('node:timers/promises').setTimeout;
 
 module.exports = {
     category: 'Utilities',
+    cooldown: 3600,
     type: 'slash',
-
     data: new SlashCommandBuilder()
         .setName('send_message')
         .setDescription('Sends a predefined message in the help channels'),
