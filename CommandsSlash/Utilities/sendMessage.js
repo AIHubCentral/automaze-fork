@@ -28,10 +28,8 @@ module.exports = {
 
             // send messages
             let embeds = [
-                client.botUtils.createEmbed(client.botData.embeds.rvc.en.docs, client.botConfigs.colors.theme.primary),
-                client.botUtils.createEmbed(client.botData.embeds.rvc.en.guides, client.botConfigs.colors.theme.secondary),
-                client.botUtils.createEmbed(client.botData.embeds.rvc.en.translations),
-            ];
+                client.botUtils.createEmbed(client.botData.embeds.rvc.main, client.botConfigs.colors.theme.tertiary)
+            ]
             await helpChannel.send({ content: '# RVC Guides (How to Make AI Cover)', embeds: embeds });
 
             await interaction.editReply({ content: `Message sent!\nGuild:${guild.id}\nChannel:${helpChannel.id}` });

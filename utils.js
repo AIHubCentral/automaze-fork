@@ -67,8 +67,7 @@ function createEmbed(data, color='') {
      * Creates a discord embed from an object passed as `data` argument
      */
     const embed = new EmbedBuilder();
-    embed.setDescription(data.description.join('\n'));
-
+    
     // if the color not provided as an argument, try to use from data
     if (!color) {
         color = data.color;
@@ -77,6 +76,14 @@ function createEmbed(data, color='') {
 
     if (data.title) {
         embed.setTitle(data.title);
+    }
+
+    if (data.description) {
+        embed.setDescription(data.description.join('\n'));
+    }
+
+    if (data.fields) {
+        embed.setFields(data.fields);
     }
 
     if (data.image) {
