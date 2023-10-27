@@ -56,7 +56,7 @@ module.exports = {
                             await client.knexInstance('inventory').insert(dataToInsert);
                             await client.knexInstance('user').insert({
                                 id: record.userId,
-                                username: record.username
+                                username: record.userName
                             })
                         }
                         await interaction.editReply({ content: 'JSON data updated!' });
@@ -74,6 +74,8 @@ module.exports = {
             }
 
         } else if (interaction.options.getSubcommand() === 'export') {
+            /*
+            // old enmap
             const lbUnsorted = JSON.parse(client.banana.export()).keys;
 
             // get the top 20 banan result
@@ -85,6 +87,23 @@ module.exports = {
                 const entryVal = Object.values(entry);
                 const user = await interaction.client.users.fetch(entryVal[0]);
                 jsonData.push({ userId: user.id, username: `${user.username}`, bananaCount: entryVal[1] });
+            }
+            */
+
+            const jsonData = [];
+            const inventory = await client.knexInstance('inventory').orderBy('quantity', 'desc').limit(15);
+
+            if (inventory.length === 0) {
+                return await interaction.editReply({ content: "The leaderboard is empty." });
+            }
+
+            for (const entry of inventory) {
+                let user = await client.knexInstance('user').where('id', entry['user_id']);
+                jsonData.push({
+                    userId: user[0].id,
+                    userName: user[0].username,
+                    bananaCount: entry.quantity
+                });
             }
 
             const data = JSON.stringify(jsonData);
