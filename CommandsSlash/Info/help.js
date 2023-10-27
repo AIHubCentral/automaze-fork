@@ -8,6 +8,6 @@ module.exports = {
         .setDescription('Displays info about Automaze commands.')
     ,
     async execute(interaction) {
-        await interaction.reply({ content: 'This command will be available soon, stay tuned!', ephemeral: true });
+        await interaction.reply({ content: interaction.client.botResponses.responses.help.join('\n'), ephemeral: true });
     }
 };
