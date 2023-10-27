@@ -1,5 +1,3 @@
-const { EmbedBuilder } = require("discord.js");
-
 module.exports = {
     name: 'banana',
     category: 'Fun',
@@ -17,13 +15,13 @@ module.exports = {
         const botResponses = client.botResponses.responses.banana;
         const member = message.mentions.members.first();
 
-        if (!member) {
-            return message.reply(botResponses.targetNone);
-        }
-
         // check if user is on cooldown
         if (Date.now() <= client.cooldowns.banana.get(message.author.id)) {
             return message.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${ client.cooldowns.banana.get(message.author.id) - Date.now()} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`)
+        }
+
+        if (!member) {
+            return message.reply(botResponses.targetNone);
         }
 
         if (member.user.bot) {
@@ -73,18 +71,21 @@ module.exports = {
             'item_id': 1,
         });
 
-        const bananEmbed = new EmbedBuilder()
-            .setTitle(`${member.user.username} GOT BANANA LOL LOL LOL`)
-            .setDescription(`HEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO\nHEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO\nHEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO`)
-            .setImage(`https://media.tenor.com/29FOpiFsnn8AAAAC/banana-meme.gif`)
-            .setColor(`Yellow`)
-            .setFooter({text: `BRO GOT BANAN'D ${dbResult[0].quantity} TIMES XDDDDDD\n\nNote: You can now use /banana`});
+        // copy embed data
+        const embedData = JSON.parse(JSON.stringify(client.botData.embeds.banana));
+        embedData.title = embedData.title.replace('$username', member.user.username);
+        embedData.description[0] = embedData.description[0].replaceAll('$member', member);
+        embedData.footer = embedData.footer.replace('$quantity', dbResult[0].quantity);
 
-        client.banana.inc(member.user.id);
+        if (dbResult[0].quantity > 1) {
+            embedData.footer = embedData.footer.replace('TIME', 'TIMES');
+        }
+
+        const embed = client.botUtils.createEmbed(embedData, "Yellow");
 
         // cooldown expires in 1 minute
         client.cooldowns.banana.set(message.author.id, Date.now() + (1 * 60 * 1000))
 
-        message.reply({embeds: [bananEmbed]})
+        message.reply({embeds: [embed]})
     }
 }

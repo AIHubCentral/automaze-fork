@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     category: `Fun`,
@@ -49,10 +49,10 @@ module.exports = {
         if (dbResult.length === 0) {
             console.log('User not found in database');
             await client.knexInstance('user').insert({
-                id: `${member.user.id}`,
-                username: member.user.username
+                id: `${member.id}`,
+                username: member.username
             });
-            console.log(`${member.user.username} added to database`);
+            console.log(`${member.username} added to database`);
         }
 
         // check if banana is in the user inventory
@@ -84,23 +84,26 @@ module.exports = {
             'item_id': 1,
         });
 
-        const bananEmbed = new EmbedBuilder()
-            .setTitle(`${member.username} GOT BANANA LOL LOL LOL`)
-            .setDescription(`HEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO\nHEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO\nHEY YOU ${member} YOU FUCKING GOT BANAN LMFAOOOOOOOOO`)
-            .setImage(`https://media.tenor.com/29FOpiFsnn8AAAAC/banana-meme.gif`)
-            .setColor(`Yellow`)
-            .setFooter({ text: `BRO GOT BANAN'D ${dbResult[0].quantity} TIMES XDDDDDD\n\nNote: You can now use /banana` });
+        // copy embed data
+        const embedData = JSON.parse(JSON.stringify(client.botData.embeds.banana));
+        embedData.title = embedData.title.replace('$username', member.username);
+        embedData.description[0] = embedData.description[0].replaceAll('$member', member);
+        embedData.footer = embedData.footer.replace('$quantity', dbResult[0].quantity);
 
-        client.banana.inc(member.id);
+        if (dbResult[0].quantity > 1) {
+            embedData.footer = embedData.footer.replace('TIME', 'TIMES');
+        }
+
+        const embed = client.botUtils.createEmbed(embedData, "Yellow");
 
         // cooldown expires in 1 minute
-        client.cooldowns.banana.set(interaction.user.id, Date.now() + (1 * 60 * 1000))
+        client.cooldowns.banana.set(interaction.user.id, Date.now() + (1 * 60 * 1000));
 
         if (botRevenge) {
             await interaction.reply(selectedResponse);
-            return interaction.followUp({ embeds: [bananEmbed] })
+            return interaction.followUp({ embeds: [embed] });
         }
 
-        interaction.reply({ embeds: [bananEmbed] })
+        interaction.reply({ embeds: [embed] });
     }
 }
