@@ -13,8 +13,8 @@ module.exports = {
      */
     run: (client, message, args, prefix) => {
         const embeds = [
-            client.botUtils.createEmbed(client.botData.embeds.colab.en.rvc),
-            client.botUtils.createEmbed(client.botData.embeds.colab.en.uvr)
+            client.botUtils.createEmbed(client.botData.embeds.colab.en.rvc, client.botConfigs.colors.theme.primary),
+            client.botUtils.createEmbed(client.botData.embeds.colab.en.uvr, client.botConfigs.colors.theme.secondary)
         ];
 
         if (message.mentions.members.first()) {

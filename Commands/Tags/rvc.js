@@ -21,7 +21,7 @@ module.exports = {
         let messageBlooper = 'bruh i know how to make ai cover';
         
         let embeds = [
-            client.botUtils.createEmbed(client.botData.embeds.rvc.main, client.botConfigs.colors.theme.tertiary)
+            client.botUtils.createEmbed(client.botData.embeds.rvc.main, client.botConfigs.colors.theme.primary)
         ]
 
         // get the first argument

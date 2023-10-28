@@ -55,7 +55,7 @@
             "Answers questions about your life with a probability of that being possible or not of happening in a funny way, don't take the answers seriously as they are randomly generated.",
             "### /banana",
             "Gives a banana to someone in a fun and playful way, it's not supposed to offend anyone. The user can check how much bananas they have by using the `-inventory` command.",
-            "\n> **Note**: It's also possible to use this command by right clicking (long press on mobile) on a user profile picture or name and then choose  **Apps > banan** .",
+            "\n> **Note**: It's also possible to use this command by right clicking (long press on mobile) on an user profile picture or name and then choose  **Apps > banan** .",
             "### /topbanana",
             "Shows the top 15 banan’d users. In other words, how much someone got `/banana` by other users.",
             "---",
@@ -64,7 +64,7 @@
             "Shows guides for RVC. You can use the following options with this command:",
             "- **(Required) category**: Choose a category such as RVC or Upload for instance.",
             "- **(Optional) language**: Which language should be used on the response, defaults to english if not available.",
-            "- **(Optional) user**: Recommend this guide to an user, note that this will ping the user.",
+            "- **(Optional) user**: Recommend the guide to an user, note that this will ping the user.",
             "### /help",
             "Shows this help for Automaze slash commands, however, if you're looking for help for the prefix commands, which are those that starts with the minus sign such as `-rvc` you can use `-help`."
         ]

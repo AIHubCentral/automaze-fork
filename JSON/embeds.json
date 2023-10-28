@@ -11,13 +11,13 @@
                 ]
             },
             "uvr": {
-                "color": "Green",
                 "description": [
                     "## Audio Separation/Isolation",
                     "- [MDX Net Colab](https://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb)",
                     "- [UVR arch colab 5.0.2/c1.04](https://colab.research.google.com/drive/16Q44VBJiIrXOgTINztVDVeb0XKhLKHwl)",
                     "- [KaraFan colab](https://colab.research.google.com/github/Captain-FLAM/KaraFan/blob/master/KaraFan.ipynb)"
-                ]
+                ],
+                "footer": "🎃 Spooky contest is active til 31st, check the announcement channel for further details."
             }
         },
         "pt": {
@@ -58,7 +58,8 @@
                     "- 🆕 https://github.com/Captain-FLAM/KaraFan",
                     "- https://goyo.app/ (Note that this plugin is for clean ups only, like removing background noise, reverb, ambience or sustained sounds)')",
                     "\n> **Tip:** Use `-colab` command if you're looking for audio separation/isolation colabs."
-                ]
+                ],
+                "footer": "🎃 Spooky contest is active til 31st, check the announcement channel for further details."
             }
         }
     },
@@ -238,7 +239,8 @@
                     "value": "https://docs.aihub.wtf/v/russia",
                     "inline": true
                 }
-            ]
+            ],
+            "footer": "🎃 Spooky contest is active til 31st, check the announcement channel for further details."
         }
     },
     "gpu": {
@@ -273,7 +275,8 @@
                 "> Link: [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
                 "## • Text to speech:\n[RVC-TTS-Guide](https://rentry.co/RVC-TTS-Guide)",
                 "\n> **Note:** If you need further help setting up/using the voice changers, you can ask for help in $channel or check the channel's pinned comments."
-            ]
+            ],
+            "footer": "🎃 Spooky contest is active til 31st, check the announcement channel for further details."
         }
     },
     "tracker": {
@@ -297,11 +300,13 @@
             "## 🇹🇷 Turkish guide",
             "Link: https://rentry.org/AI_hub_guide_tr",
             "Credits: **Enes**"
-        ]
+        ],
+        "footer": "🎃 Spooky contest is active til 31st, check the announcement channel for further details."
     },
     "paperspace": {
+        "title": "RVC v2 Tutorial for Paperspace",
         "description": [
-            "# RVC v2 Tutorial for Paperspace"
+            "💡 Click on the button below to open the guide."
         ],
         "footer": "Credits: LollenApe"
     },

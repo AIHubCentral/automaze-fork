@@ -16,7 +16,7 @@ module.exports = {
         const targetChannel = message.guild.channels.cache.get(targetChannelId) ?? '"help-w-okada" channel';
 
         const embedData = client.botData.embeds.realtime.en;
-        embedData.color = client.botConfigs.colors.theme.tertiary;
+        embedData.color = client.botConfigs.colors.theme.primary;
 
         // insert the link to the channel in $channel
         const lastDescriptionIndex = embedData.description.length - 1;

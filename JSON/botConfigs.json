@@ -9,7 +9,12 @@
     },
     "colors": {
         "theme": {
-            "primary": "08c8f7", 
+            "primary": "F4831B",
+            "secondary": "902EBB",
+            "tertiary": "63C328"
+        },
+        "theme_main": {
+            "primary": "08c8f7",
             "secondary": "14effb",
             "tertiary": "029afe"
         },
