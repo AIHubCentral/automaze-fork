@@ -9,9 +9,9 @@
     },
     "colors": {
         "theme": {
-            "primary": "029afe",
+            "primary": "08c8f7", 
             "secondary": "14effb",
-            "tertiary": "08c8f7"
+            "tertiary": "029afe"
         },
         "country": {
             "brazil": [
