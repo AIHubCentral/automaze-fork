@@ -73,22 +73,7 @@ client.bananaData = {};
 
 client.botAdminIds = process.env.developerIds.split(',');
 
-client.botConfigs = {
-    commissions: {
-        sendMessages: true,
-        deleteMessages: true
-    },
-    general: {
-        reactions: true,
-        randomResponses: false
-    },
-    colors: {
-        theme: { primary: '029afe', secondary: '14effb', tertiary: '08c8f7'},
-        country: {
-            brazil: ['#12A248', '#FEE112', '#123680'],
-        }
-    }
-};
+client.botConfigs = require('./JSON/botConfigs.json');
 
 // Utility functions and JSON data
 client.botData = {
