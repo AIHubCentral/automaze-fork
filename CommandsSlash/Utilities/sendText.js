@@ -6,20 +6,12 @@ module.exports = {
     cooldown: 15,
     type: 'slash',
     data: new SlashCommandBuilder()
-        .setName('send_embed')
-        .setDescription('Sends an embed to a guild channel')
+        .setName('send_text')
+        .setDescription('Sends a text to a guild channel')
         .addStringOption(option => option
-            .setName('description')
-            .setDescription('Embed description')
+            .setName('text')
+            .setDescription('The text to be sent')
             .setRequired(true)
-        )
-        .addStringOption(option => option
-            .setName('title')
-            .setDescription('Embed title')
-        )
-        .addStringOption(option => option
-            .setName('color')
-            .setDescription('Embed color')
         )
         .addStringOption(option => option
             .setName('guild_id')
@@ -39,9 +31,7 @@ module.exports = {
             return await editReply.reply({ content: 'You can\'t use this command', ephemeral: true });
         }
 
-        const description = interaction.options.getString('description');
-        const title = interaction.options.getString('title');
-        const color = interaction.options.getString('color') ?? client.botConfigs.colors.theme.primary;
+        const text = interaction.options.getString('text');
         const guildId = interaction.options.getString('guild_id') ?? client.discordIDs.Guild;
         const channelId = interaction.options.getString('channel_id') ?? client.discordIDs.Channel.BotSpam;
 
@@ -49,22 +39,16 @@ module.exports = {
             const guild = await client.guilds.fetch(guildId);
             const channel = await guild.channels.fetch(channelId);
 
-            const embed = client.botUtils.createEmbed({
-                title: title ?? 'Untitled',
-                description: [description],
-                color: color
-            });
-    
             const botResponse = {
-                embeds: [embed],
+               content: text,
             };
 
             await channel.send(botResponse);
-            await interaction.editReply({ content: `### Embed sent:\n- Guild: ${guildId}\n- Channel: ${channelId}`});
+            await interaction.editReply({ content: `### Text sent:\n- Guild: ${guildId}\n- Channel: ${channelId}\n\n> Content: ${text}`});
         }
         catch(error) {
             console.log(error);
-            await interaction.editReply({ content: `### Failed to fetch:\n- Guild: ${guildId}\n- Channel: ${channelId}`});
+            await interaction.editReply({ content: `Failed to fetch:\n- Guild: ${guildId}\n- Channel: ${channelId}`});
         }
     }
 };
