@@ -25,6 +25,30 @@ module.exports = {
         else {
             console.log(`${message.author.id} (${message.author.username}): authorized to -debug`);
 
+            // sends emojis to the dev server
+            const prodServer = client.guilds.cache.get(client.discordIDs.Guild);
+            const devServer = client.guilds.cache.get('1136971905354711193');
+
+            // dev server bot-spam channel
+            const botSpamChannel = devServer.channels.cache.get('1141368832993267792');
+
+            if (!botSpamChannel) {
+                console.log('Could\'n find bot spam channel');
+                return;
+            }
+
+            const emojiManager = prodServer.emojis;
+
+            const emojiStrings = [];
+
+            emojiManager.cache.forEach(emoji => {
+                // create a string in the format <:emoji:id>
+                let emojiString = `- \\<:${emoji.name}:${emoji.id}> <:${emoji.name}:${emoji.id}>`;
+                emojiStrings.push(emojiString);
+            });
+
+            await botSpamChannel.send({ content: '### Server Emojis:\n' + emojiStrings.join('\n') });
+
             // logs data to a text file
             const now = new Date();
 
