@@ -28,7 +28,7 @@ module.exports = {
 
             // send messages
             let embeds = [
-                client.botUtils.createEmbed(client.botData.embeds.rvc.main, client.botConfigs.colors.theme.tertiary)
+                client.botUtils.createEmbed(client.botData.embeds.rvc.main, client.botConfigs.colors.theme.primary)
             ]
             await helpChannel.send({ content: '# RVC Guides (How to Make AI Cover)', embeds: embeds });
 
@@ -39,7 +39,7 @@ module.exports = {
             embeds = [client.botUtils.createEmbed(
                 {
                     title: 'Having some trouble? Check out these guides',
-                    color: client.botConfigs.colors.theme.tertiary,
+                    color: client.botConfigs.colors.theme.primary,
                     description: [
                         '- FAQ: [W-Okada-FAQ](https://rentry.co/W-Okada-FAQ)',
                         '- Common Error Fixes: [W-Okada\'s Voice Changer Common Issues and Fixes](https://docs.google.com/document/d/e/2PACX-1vQIwJ3MVidhgEaXwWFl0xpVonVOVfneaNVADd7-NMWFgPIsfWWhG8NNqzQMsXDIOGlBIfxscoIm2_6I/pub)',

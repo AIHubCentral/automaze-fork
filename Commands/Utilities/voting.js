@@ -57,7 +57,7 @@ module.exports = {
         // create the embed, send it and add the reactions
         const votingEmbed = new EmbedBuilder()
             .setTitle(embedTitle)
-            .setColor(client.botConfigs.colors.theme.tertiary);
+            .setColor(client.botConfigs.colors.theme.primary);
 
         const botResponse = await message.channel.send({ embeds: [votingEmbed] });
 
