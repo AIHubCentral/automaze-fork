@@ -33,7 +33,7 @@ module.exports = {
                 const embeds = [];
 
                 embeds.push(client.botUtils.createEmbed({
-                    color: 'Blurple',
+                    color: client.botConfigs.colors.theme.primary,
                     description: [
                         `Hello, <@${Threader.ownerId}>!`,
                         '\nPeople will contact you to offer their services. However, if you created a **paid** request by mistake, just delete the post and create a new one with the tag **"free"**.',
@@ -51,6 +51,19 @@ module.exports = {
                     }));
                 }
 
+                embeds.push(client.botUtils.createEmbed({
+                    color: client.botConfigs.colors.theme.secondary,
+                    title: '🎃 Spooky Contest',
+                    description: [
+                        '### Prizes',
+                        '**1st Place:** Discord Nitro for a month',
+                        '**2nd Place:** $5 Steam Gift Card',
+                        '**3rd Place:** `@Spooky` Role',
+                        '\n> Check the announcement channel for further details'
+                    ],
+                    footer: 'Note: Event will be active till October 31st.'
+                }));
+
                 await Threader.send({ embeds: embeds });
             }
 
@@ -58,7 +71,7 @@ module.exports = {
             if (isFreeRequest && !isPaidRequest) {
                 const embeds = [
                     client.botUtils.createEmbed({
-                        color: client.botConfigs.colors.theme.tertiary,
+                        color: client.botConfigs.colors.theme.secondary,
                         description: [
                             '💡 **Tip**: You can try using the `/search` command from <@1150230843214794822> to check if someone already made this model.'
                         ]

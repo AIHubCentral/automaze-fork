@@ -17,7 +17,7 @@
                     "- [UVR arch colab 5.0.2/c1.04](https://colab.research.google.com/drive/16Q44VBJiIrXOgTINztVDVeb0XKhLKHwl)",
                     "- [KaraFan colab](https://colab.research.google.com/github/Captain-FLAM/KaraFan/blob/master/KaraFan.ipynb)"
                 ],
-                "footer": "🎃 Spooky contest is active til 31st, check the announcement channel for further details."
+                "footer": "🎃 Spooky contest is active till 31st, check the announcement channel for further details."
             }
         },
         "pt": {
@@ -59,7 +59,7 @@
                     "- https://goyo.app/ (Note that this plugin is for clean ups only, like removing background noise, reverb, ambience or sustained sounds)')",
                     "\n> **Tip:** Use `-colab` command if you're looking for audio separation/isolation colabs."
                 ],
-                "footer": "🎃 Spooky contest is active til 31st, check the announcement channel for further details."
+                "footer": "🎃 Spooky contest is active till 31st, check the announcement channel for further details."
             }
         }
     },
@@ -240,7 +240,7 @@
                     "inline": true
                 }
             ],
-            "footer": "🎃 Spooky contest is active til 31st, check the announcement channel for further details."
+            "footer": "🎃 Spooky contest is active till 31st, check the announcement channel for further details."
         }
     },
     "gpu": {
@@ -276,7 +276,7 @@
                 "## • Text to speech:\n[RVC-TTS-Guide](https://rentry.co/RVC-TTS-Guide)",
                 "\n> **Note:** If you need further help setting up/using the voice changers, you can ask for help in $channel or check the channel's pinned comments."
             ],
-            "footer": "🎃 Spooky contest is active til 31st, check the announcement channel for further details."
+            "footer": "🎃 Spooky contest is active till 31st, check the announcement channel for further details."
         }
     },
     "tracker": {
@@ -301,7 +301,7 @@
             "Link: https://rentry.org/AI_hub_guide_tr",
             "Credits: **Enes**"
         ],
-        "footer": "🎃 Spooky contest is active til 31st, check the announcement channel for further details."
+        "footer": "🎃 Spooky contest is active till 31st, check the announcement channel for further details."
     },
     "paperspace": {
         "title": "RVC v2 Tutorial for Paperspace",
