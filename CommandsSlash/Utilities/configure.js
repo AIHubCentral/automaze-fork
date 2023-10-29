@@ -1,8 +1,9 @@
-const { SlashCommandBuilder } = require('discord.js');
-const wait = require('node:timers/promises').setTimeout;
+const { SlashCommandBuilder, ActivityType } = require('discord.js');
+const delay = require('node:timers/promises').setTimeout;
 
 module.exports = {
     category: `Utilities`,
+    cooldown: 60,
     type: `slash`,
     data: new SlashCommandBuilder()
         .setName('configure')
@@ -42,6 +43,44 @@ module.exports = {
                     option
                         .setName('tertiary')
                         .setDescription('Tertiary color')
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('status')
+                .setDescription('Configure bot status')
+                .addStringOption(option =>
+                    option
+                        .setName('statuses')
+                        .setDescription('Choose a status')
+                        .setRequired(true)
+                        .addChoices(
+                            { name: 'Online', value: 'online' },
+                            { name: 'Idle', value: 'idle' },
+                            { name: 'Do Not Disturb', value: 'dnd' },
+                            { name: 'Invisible', value: 'invisible' }
+                        )
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('activity')
+                .setDescription('Configure bot activity')
+                .addStringOption(option =>
+                    option
+                        .setName('activity_type')
+                        .setDescription('Choose an activity')
+                        .setRequired(true)
+                        .addChoices(
+                            { name: 'Watching', value: 'watching' },
+                            { name: 'Listening', value: 'listening' },
+                            { name: 'Reset', value: 'reset'}
+                        )
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('activity_name')
+                        .setDescription('Choose a name for the activity')
                 )
         ),
     async execute(interaction) {
@@ -83,7 +122,40 @@ module.exports = {
                 botResponse = 'Colors updated:\n' + output.join('\n');
             }
 
-            await interaction.reply({ content: botResponse, ephemeral: true })
+            await interaction.reply({ content: botResponse, ephemeral: true });
+        }
+        else if (interaction.options.getSubcommand() === 'status') {
+            await interaction.deferReply({ ephemeral: true });
+            const selectedStatus = interaction.options.getString('statuses');
+            client.user.setStatus(selectedStatus);
+            await delay(5000);
+            await interaction.editReply({ content: `Status: ${selectedStatus}` });
+        }
+        else if (interaction.options.getSubcommand() === 'activity') {
+            await interaction.deferReply({ ephemeral: true });
+            let activityType = interaction.options.getString('activity_type');
+            const activityName = interaction.options.getString('activity_name');
+
+            if (activityType === 'reset') {
+                client.user.setPresence({});
+                await delay(3000);
+                await interaction.editReply({ content: `Activity reseted` })
+            } else {
+                switch (activityType) {
+                    case 'watching':
+                        activityType = ActivityType.Watching;
+                        break;
+                    case 'listening':
+                        activityType = ActivityType.Listening;
+                        break;
+                }
+                client.user.setActivity({
+                    name: activityName ?? 'AI HUB',
+                    type: activityType,
+                });
+                await delay(3000);
+                await interaction.editReply({ content: `Activity updated!` });
+            }
         }
     }
 }
