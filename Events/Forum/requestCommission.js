@@ -51,6 +51,7 @@ module.exports = {
                     }));
                 }
 
+                /*
                 embeds.push(client.botUtils.createEmbed({
                     color: client.botConfigs.colors.theme.secondary,
                     title: '🎃 Spooky Contest',
@@ -63,6 +64,7 @@ module.exports = {
                     ],
                     footer: 'Note: Event will be active till October 31st.'
                 }));
+                */
 
                 await Threader.send({ embeds: embeds });
             }

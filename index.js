@@ -21,6 +21,7 @@ const client = new Discord.Client({
     intents: [
         Discord.GatewayIntentBits.Guilds,
         Discord.GatewayIntentBits.GuildMessages,
+        Discord.GatewayIntentBits.GuildMessageReactions,
         Discord.GatewayIntentBits.MessageContent,
         Discord.GatewayIntentBits.GuildModeration,
         Discord.GatewayIntentBits.GuildMembers
@@ -54,6 +55,7 @@ client.esnipes = new Discord.Collection();
 client.cooldowns = {
     banana: new Discord.Collection(),
     slashCommands: new Discord.Collection(),
+    reactions: new Discord.Collection()
 };
 
 // Enmap's creation
