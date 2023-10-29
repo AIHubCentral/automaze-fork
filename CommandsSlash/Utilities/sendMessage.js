@@ -17,7 +17,7 @@ module.exports = {
             return await editReply.reply({ content: 'You can\'t use this command', ephemeral: true });
         }
 
-        const guild = await client.guilds.fetch(client.discordIDs.Guild);
+        const guild = client.guilds.cache.get(client.discordIDs.Guild);
 
         try {
             helpChannel = await guild.channels.fetch(client.discordIDs.Channel.HelpRVC);

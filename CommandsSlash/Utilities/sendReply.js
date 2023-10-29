@@ -6,8 +6,13 @@ module.exports = {
     cooldown: 15,
     type: 'slash',
     data: new SlashCommandBuilder()
-        .setName('send_text')
-        .setDescription('Sends a text to a guild channel')
+        .setName('send_reply')
+        .setDescription('Sends a reply to a message')
+        .addStringOption(option => option
+            .setName('message_id')
+            .setDescription('The ID of the message to reply')
+            .setRequired(true)
+        )
         .addStringOption(option => option
             .setName('text')
             .setDescription('The text to be sent')
@@ -32,18 +37,24 @@ module.exports = {
         }
 
         const text = interaction.options.getString('text');
+        const messageId = interaction.options.getString('message_id');
         const guildId = interaction.options.getString('guild_id') ?? client.discordIDs.Guild;
         const channelId = interaction.options.getString('channel_id') ?? client.discordIDs.Channel.BotSpam;
 
         try {
             const guild = client.guilds.cache.get(guildId);
-            const channel = await guild.channels.fetch(channelId);
+            const channel = guild.channels.cache.get(channelId);
+            const message = await channel.messages.fetch(messageId);
+
+            if (!message || !channel) {
+                return await interaction.editReply({ content: 'Failed to retrieve message or channel.' });
+            }
 
             const botResponse = {
                content: text,
             };
 
-            await channel.send(botResponse);
+            await message.reply(botResponse);
             await interaction.editReply({ content: `### Text sent:\n- Guild: ${guildId}\n- Channel: ${channelId}\n\n> Content: ${text}`});
         }
         catch(error) {

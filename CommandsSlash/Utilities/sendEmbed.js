@@ -46,7 +46,7 @@ module.exports = {
         const channelId = interaction.options.getString('channel_id') ?? client.discordIDs.Channel.BotSpam;
 
         try {
-            const guild = await client.guilds.fetch(guildId);
+            const guild = client.guilds.cache.get(guildId);
             const channel = await guild.channels.fetch(channelId);
 
             const embed = client.botUtils.createEmbed({
