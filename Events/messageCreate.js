@@ -1,3 +1,5 @@
+const delay = require('node:timers/promises').setTimeout;
+
 module.exports = {
     name: "messageCreate",
     once: false,
@@ -50,18 +52,17 @@ module.exports = {
             // these are always triggered
             if (client.botConfigs.general.reactions) {
                 if (client.cooldowns.reactions.has(message.author.id)) {
-                    const cooldownAmount = 1 * 60 * 1000;
-                    const expirationTime = client.cooldowns.reactions.get(message.author.id) + cooldownAmount;
-                    const now = new Date();
-                    // TODO: finish this later
-                    //console.log(now < expirationTime);
-                    /*
-                    console.log(expirationTime);
-                    
-                    if (now < expirationTime) {
-                        console.log(message.author.id, 'is on cooldown')
+                    const cooldownExpiration = client.cooldowns.reactions.get(message.author.id);
+                    const currentDate = new Date();
+
+                    if (currentDate.getTime() < cooldownExpiration.getTime()) {
+                        // user is on cooldown, don't add reactions
+                        return;
                     }
-                    */
+                    else {
+                        // cooldown expired
+                        client.cooldowns.reactions.delete(message.author.id);
+                    }
                 }
 
                 try {
@@ -101,6 +102,10 @@ module.exports = {
                         await message.react('🍄');
                     }
 
+                    if (messageLowercase.includes('gift')) {
+                        await message.react('🎁');
+                    }
+
                     if (messageLowercase.includes('checkmate')) {
                         await message.react('♟️');
                     }
@@ -109,8 +114,12 @@ module.exports = {
                         await message.react('🎤');
                     }
 
-                    if (messageLowercase.includes('yeezy') || messageLowercase.includes('yui')) {
+                    if (messageLowercase.includes('yeezy')) {
                         await message.react('🐐');
+                    }
+
+                    if (messageLowercase.includes('yui')) {
+                        await message.react('💜');
                     }
 
                     if (messageLowercase.includes(' a win')) {
@@ -121,9 +130,52 @@ module.exports = {
                         await message.react('<:TextL:1159654780445130944>');
                     }
 
+                    if (messageLowercase.includes('1ski')) {
+                        await message.react('<:1ski_smug:1165710304907366620>');
+                    }
+
+                    if (messageLowercase.includes('mrm0dz')) {
+                        await message.react('🇧🇷');
+                    }
+
+                    if (messageLowercase.includes('notfelt') || messageLowercase.includes('feltomaze')) {
+                        await message.react('🎧');
+                    }
+
+                    if (messageLowercase.includes('cyrus')) {
+                        await message.react('✨');
+                    }
+
+                    if (messageLowercase.includes('teas.hi')) {
+                        await message.react('🇦');
+                        await message.react('🇮');
+                    }
+
+                    if (messageLowercase.includes('gdr')) {
+                        await message.react('<:mario:1163884840295342161>');
+                    }
+
+                    if (messageLowercase === 'timbovill') {
+                        await message.react('🇹');
+                        await message.react('🇮');
+                        await message.react('🇲');
+                    }
+                    else if (messageLowercase.includes('timbovill')) {
+                        await message.react('<:AIHC_Ded:1163807516896002119>');
+                    }
+
+                    if (messageLowercase.includes('poop') && messageLowercase.includes('master')) {
+                        await message.react('<trolley:1159468147133395025>');
+                    }
+
                 }
                 catch (error) {
-                    console.log('Failed to react');
+                    // sends a log to the dev server
+                    if (client.botConfigs.general.sendLogs) {
+                        const devServerGuild = client.guilds.cache.get('1136971905354711193');
+                        const botDebugChannel = devServerGuild.channels.cache.get('1168048009213394954');
+                        await botDebugChannel.send(`Failed to add reaction:\n> [Go to message](https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`);
+                    }
                 }
 
             }

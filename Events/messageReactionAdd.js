@@ -1,23 +1,19 @@
-const { Collection } = require('discord.js');
-
 module.exports = {
     name: 'messageReactionAdd',
     once: false,
     async run (client, reaction, user){
-        // add reaction cooldowns on verified chat
-        if (reaction.message.channelId == client.discordIDs.Channel.Verified) {
+        // only add cooldown if the reaction was added by the bot
+        if (user.id !== client.user.id) return;
 
-            // triggered when the bot adds a reaction
-            if (user.bot && (user.id === client.user.id)) {
+        // don't add cooldown if the bot reacted to itself like the voting embed for instance
+        if (reaction.message.author.id === client.user.id) return;
 
-                // add user to cooldown
-                if (!client.cooldowns.reactions.has(reaction.message.author.id)) {
-                    const cooldownAmount = 1 * 60 * 1000;
-                    client.cooldowns.reactions.set(reaction.message.author.id, new Date());
-                    console.log(reaction.message.author.id, 'added to cooldown');
-                    //setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-                }
-            }
+        // add user to cooldown
+        if (!client.cooldowns.reactions.has(reaction.message.author.id)) {
+            const expirationDate = new Date();
+            expirationDate.setMinutes(expirationDate.getMinutes() + 1);
+            client.cooldowns.reactions.set(reaction.message.author.id, expirationDate);
+            console.log(reaction.message.author.id, 'added to cooldown, expires in', expirationDate);
         }
     }
 }

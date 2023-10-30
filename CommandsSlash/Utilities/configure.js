@@ -3,7 +3,7 @@ const delay = require('node:timers/promises').setTimeout;
 
 module.exports = {
     category: `Utilities`,
-    cooldown: 60,
+    cooldown: 30,
     type: `slash`,
     data: new SlashCommandBuilder()
         .setName('configure')
@@ -82,6 +82,21 @@ module.exports = {
                         .setName('activity_name')
                         .setDescription('Choose a name for the activity')
                 )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('general')
+                .setDescription('General bot configs')
+                .addBooleanOption(option =>
+                    option
+                        .setName('bot_reactions')
+                        .setDescription('Whether the bot should add reactions')
+                )
+                .addBooleanOption(option =>
+                    option
+                        .setName('send_logs')
+                        .setDescription('Whether the bot should send logs to development server')
+                )
         ),
     async execute(interaction) {
         const client = interaction.client;
@@ -156,6 +171,29 @@ module.exports = {
                 await delay(3000);
                 await interaction.editReply({ content: `Activity updated!` });
             }
+        }
+        else if (interaction.options.getSubcommand() === 'general') {
+            const botReactions = interaction.options.getBoolean('bot_reactions');
+            const sendLogs = interaction.options.getBoolean('send_logs');
+            const botResponse = { content: 'Nothing changed.', ephemeral: true };
+
+            if ((botReactions == null) && (sendLogs == null)) return await interaction.reply(botResponse);
+
+            botResponse.content = ['### General configs changed'];
+
+            if (botReactions != null) {
+                client.botConfigs.general.reactions = botReactions;
+                botResponse.content.push(`- Reactions: \`${botReactions}\``);
+            }
+
+            if (sendLogs != null) {
+                client.botConfigs.general.sendLogs = sendLogs;
+                botResponse.content.push(`- Send logs: \`${sendLogs}\``);
+            }
+
+            botResponse.content = botResponse.content.join('\n');
+
+            await interaction.reply(botResponse);
         }
     }
 }
