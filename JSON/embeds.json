@@ -18,6 +18,27 @@
                     "- [KaraFan colab](https://colab.research.google.com/github/Captain-FLAM/KaraFan/blob/master/KaraFan.ipynb)"
                 ],
                 "footer": "🎃 Spooky contest is active till 31st, check the announcement channel for further details."
+            },
+            "main": {
+                "content": {
+                    "title": "All working colabs / spaces ☁️",
+                    "description": [
+                        "- **AICoverGen-NoWebUI**, by Ardha [Google Colab](https://colab.research.google.com/github/ardha27/AICoverGen-NoUI-Colab/blob/main/CoverGen_No_UI.ipynb)",
+                        "- **RVC Disconnected**, Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
+                        "- **easyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)",
+                        "- **RVC-HF**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HF)",
+                        "- **AICoverGen**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
+                        "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)",
+                        "- **Advanced RVC Inference**, by neuclya [Huggingface Spaces](https://huggingface.co/spaces/neucliya/Advanced-RVC-custome)"
+                    ]
+                },
+                "message": {
+                    "title": "Need some help? 🤔",
+                    "description": [
+                        "You can find more info on $guides channel. If you can't find your answer, feel free to ask for help in $helpRVC. Credits to $fazemasta and $antasma for compiling these links."
+                    ],
+                    "footer": "More commands: -audio, -colab, -realtime, -rvc"
+                }
             }
         },
         "pt": {

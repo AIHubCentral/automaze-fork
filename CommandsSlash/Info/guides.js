@@ -13,7 +13,6 @@ module.exports = {
                 .addChoices(
                     { name: 'RVC', value: 'rvc' },
                     { name: 'Audio', value: 'audio' },
-                    { name: 'Colab', value: 'colab' },
                     { name: 'Paperspace', value: 'paperspace' },
                     { name: 'Realtime', value: 'realtime' },
                     { name: 'Upload', value: 'upload' },
@@ -47,14 +46,6 @@ module.exports = {
                 botResponse.embeds = [
                     client.botUtils.createEmbed(client.botData.embeds.audio.en.guides, client.botConfigs.colors.theme.primary),
                     client.botUtils.createEmbed(client.botData.embeds.audio.en.tools, client.botConfigs.colors.theme.secondary)
-                ];
-                botResponse.ephemeral = false;
-                break;
-            case 'colab':
-                botResponse.content = '## Google Colabs';
-                botResponse.embeds = [
-                    client.botUtils.createEmbed(client.botData.embeds.colab.en.rvc, client.botConfigs.colors.theme.primary),
-                    client.botUtils.createEmbed(client.botData.embeds.colab.en.uvr, client.botConfigs.colors.theme.secondary)
                 ];
                 botResponse.ephemeral = false;
                 break;

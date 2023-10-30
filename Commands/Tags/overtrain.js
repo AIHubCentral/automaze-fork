@@ -2,7 +2,7 @@ module.exports = {
     name: 'overtrain',
     category: 'Tags',
     description: 'How to tell whether your model is overtraining and what to do',
-    aliases: ['overtraining'],
+    aliases: ['overtraining', 'aod'],
     syntax: `overtrain [member]`,
     /**
      * 
