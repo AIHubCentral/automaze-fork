@@ -79,7 +79,8 @@ client.botConfigs = require('./JSON/botConfigs.json');
 
 // Utility functions and JSON data
 client.botData = {
-    embeds: require('./JSON/embeds.json')
+    embeds: require('./JSON/embeds.json'),
+    reactionKeywords: require('./JSON/reactionKeywords.json'),
 };
 
 client.botUtils = {
