@@ -31,6 +31,24 @@
     },
     {
         "keywords": [
+            " timbovill"
+        ],
+        "emojis": [
+            "<:AIHC_Ded:1163807516896002119>"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "timbovill "
+        ],
+        "emojis": [
+            "<:AIHC_Ded:1163807516896002119>"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
             "teas.hi"
         ],
         "emojis": [
@@ -41,7 +59,7 @@
     },
     {
         "keywords": [
-            "leo frixxi"
+            "leo frixi"
         ],
         "emojis": [
             "🐢"
@@ -206,6 +224,33 @@
     },
     {
         "keywords": [
+            "sushi"
+        ],
+        "emojis": [
+            "🍣"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "ryanz", "lollen"
+        ],
+        "emojis": [
+            "🇮🇹"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "scrfilms"
+        ],
+        "emojis": [
+            "❄️"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
             "yui"
         ],
         "emojis": [
@@ -224,7 +269,26 @@
     },
     {
         "keywords": [
-            "mj",
+            "mj"
+        ],
+        "emojis": [
+            "🎤"
+        ],
+        "exact": true
+    },
+    {
+        "keywords": [
+            "mj ",
+            "fazemasta"
+        ],
+        "emojis": [
+            "🎤"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            " mj",
             "fazemasta"
         ],
         "emojis": [

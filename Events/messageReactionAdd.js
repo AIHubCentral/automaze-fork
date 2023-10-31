@@ -11,7 +11,7 @@ module.exports = {
         // add user to cooldown
         if (!client.cooldowns.reactions.has(reaction.message.author.id)) {
             const expirationDate = new Date();
-            expirationDate.setMinutes(expirationDate.getMinutes() + 1);
+            expirationDate.setMinutes(expirationDate.getMinutes() + 15);
             client.cooldowns.reactions.set(reaction.message.author.id, expirationDate);
             console.log(reaction.message.author.id, 'added to cooldown, expires in', expirationDate);
         }
