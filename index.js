@@ -6,7 +6,7 @@ const Enmap = require("enmap");
 const Discord = require(`discord.js`);
 
 // Exports
-const { getAllFiles, createEmbed, getRandomNumber } = require('./utils');
+const { getAllFiles, createEmbed, createEmbeds, getAvailableColors, getRandomNumber } = require('./utils');
 
 // JSONs
 const DiscordIDs = {
@@ -85,6 +85,8 @@ client.botData = {
 
 client.botUtils = {
     createEmbed,
+    createEmbeds,
+    getAvailableColors,
     getRandomNumber
 };
 

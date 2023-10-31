@@ -40,7 +40,7 @@ rl.question('Token: ', (tokenInput) => {
                             { body: commands },
                         );
 
-                        console.log(`Successfully reloaded ${data.length} commands.`);
+                        console.log(`Successfully reloaded ${data.length} commands in ${guildId}.`);
                     }
                     catch (error) {
                         console.error(error);

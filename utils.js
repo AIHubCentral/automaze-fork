@@ -102,3 +102,25 @@ function createEmbed(data, color='') {
 }
 
 exports.createEmbed = createEmbed;
+
+
+function createEmbeds(contents, colors) {
+    /* create embeds from an array of objects and assign colors */
+    let colorIndex = 0;
+    let embeds = contents.map(item => {
+        if (colorIndex >= colors.length) {
+            colorIndex = 0;  // goes back to the start of the array after reaching the end
+        }
+        const selectedColor = item.color ?? colors[colorIndex++];
+        return createEmbed(item, selectedColor);
+    });
+    return embeds;
+}
+
+exports.createEmbeds = createEmbeds;
+
+function getAvailableColors(configs) {
+    return Object.values(configs.colors.theme);
+}
+
+exports.getAvailableColors = getAvailableColors;
