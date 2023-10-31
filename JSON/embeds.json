@@ -35,9 +35,9 @@
                 "message": {
                     "title": "Need some help? 🤔",
                     "description": [
-                        "You can find more info on $guides channel. If you can't find your answer, feel free to ask for help in $helpRVC. Credits to $fazemasta and $antasma for compiling these links."
+                        "You can find more info on the $guides channel. If you can't find your answer, feel free to ask for help in $helpRVC. Credits to $fazemasta and $antasma for compiling these links."
                     ],
-                    "footer": "More commands: -audio, -colab, -realtime, -rvc"
+                    "footer": "More commands: -audio, -local, -overtrain, -realtime, -rvc, -help"
                 }
             }
         },
@@ -54,6 +54,28 @@
                 "- Acesse o colab para treino [neste link](https://colab.research.google.com/drive/1c9ZayL4JRNyiXJMCmcSeT1StugNy-VQ-?usp=sharing)",
                 "\n> 💡 **Dica**: Use o comando `-rvc_br` para guias em **Português**"
             ]
+        }
+    },
+    "local": {
+        "en": {
+            "content": {
+                "title": "All Working Local Forks 🖥️",
+                "description": [
+                    "- **Applio-RVC-Fork**, by IA Hispano [GitHub](https://github.com/IAHispano/Applio-RVC-Fork/releases/tag/v2.0.0)",
+                    "- **Mangio-RVC-Fork**, by Mangio621 [Huggingface](https://huggingface.co/MangioRVC/Mangio-RVC-Huggingface/tree/main)",
+                    "- **RVC Studio**, by SayanoAI [Huggingface](https://huggingface.co/datasets/SayanoAI/RVC-Studio/tree/main)",
+                    "- **AICoverGen**, by SociallyIneptWeeb [GitHub](https://github.com/SociallyIneptWeeb/AICoverGen)",
+                    "- **Replay**, by Replay Team [Website](https://www.tryreplay.io/)",
+                    "- **Original RVC**, by the RVC-Project team [Huggingface](https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/RVC0813Nvidia.7z)"
+                ]
+            },
+            "message": {
+                "title": "Need some help? 🤔",
+                "description": [
+                    "You can find more info on the $guides channel. If you can't find your answer, feel free to ask for help in $helpRVC. Credits to $fazemasta and $antasma for compiling these links."
+                ],
+                "footer": "More commands: -audio, -colabs, -overtrain, -realtime, -rvc, -help"
+            }
         }
     },
     "audio": {
@@ -146,14 +168,6 @@
                     "## 🇺🇸 English FAQ\n> https://us.aihubfrance.fr/faq\n\nCredits: **AI HUB France**"
                 ]
             },
-            "guides": {
-                "title": "Guides",
-                "color": "14effb",
-                "description": [
-                    "## 🍏 Applio-RVC-Fork: Guide\nLink: [Google Docs](https://docs.google.com/document/d/12YmIQFLFzth1YsZJMGrA0aeTN0Go8DNZVw8LFSf-Hug)\n\nCredits: **IA Hispano**",
-                    "## How to install RVC on windows\nLink: [YouTube](https://youtu.be/x7aOq7gCY4s?si=PkAR0FK-BqGrQ_6u)\n\nCredits: **iroaK**"
-                ]
-            },
             "translations": {
                 "title": "🌐 Translations",
                 "description": [
@@ -172,13 +186,6 @@
                     ]
                 }
             }
-        },
-        "es": {
-            "color": "Green",
-            "description": [
-                "## 🍏 Tutorial de Applio en español\nhttps://www.youtube.com/watch?v=bOAM_9xyHFY",
-                "### Servidor IA Hispano\n> https://discord.gg/iahispano"
-            ]
         },
         "tr": {
             "title": "Rehberler",
@@ -338,5 +345,72 @@
         ],
         "image": "https://media.tenor.com/29FOpiFsnn8AAAAC/banana-meme.gif",
         "footer": "BRO GOT BANAN'D $quantity TIME XDDDDDD"
+    },
+    "guides": {
+        "rvc": {
+            "en": [
+                {
+                    "title": "Documentation",
+                    "description": [
+                        "### All-In-One English documentation",
+                        "https://docs.aihub.wtf/",
+                        "### English FAQ",
+                        "https://docs.aihub.wtf/faq"
+                    ],
+                    "footer": "Credits: AI HUB France"
+                },
+                {
+                    "title": "More guides",
+                    "description": [
+                        "### How to Make AI Covers using Ilaria RVC",
+                        "Link: [Google Docs](https://docs.google.com/document/d/186_a8d32iYxr1UAEm1LAFQvLu2w3huVIg-KTlTHshg8/edit?usp=sharing)",
+                        "### Create a model with RVC disconnected (colab)",
+                        "Link: [Google Docs](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk)"
+                    ],
+                    "footer": "Credits: Nick088, Angetyde and Kanav"
+                }
+            ],
+            "it": [
+                {
+                    "title": "🇮🇹 RVC Disconnected (Italian guide)",
+                    "description": [
+                        "Link: https://rentry.org/rvc-disconnected-ita"
+                    ],
+                    "footer": "Credits: Angetyde"
+                }
+            ]
+        },
+        "applio": {
+            "en": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Applio-RVC-Fork: Guide\nLink: [Google Docs](https://docs.google.com/document/d/12YmIQFLFzth1YsZJMGrA0aeTN0Go8DNZVw8LFSf-Hug)\n\nCredits: **IA Hispano**",
+                        "## How to install RVC on windows\nLink: [YouTube](https://youtu.be/x7aOq7gCY4s?si=PkAR0FK-BqGrQ_6u)\n\nCredits: **iroaK**"
+                    ]
+                }
+            ],
+            "es": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Tutorial de Applio en español\nhttps://www.youtube.com/watch?v=bOAM_9xyHFY",
+                        "### Servidor IA Hispano\n> https://discord.gg/iahispano"
+                    ]
+                }
+            ]
+        },
+        "uvr": {
+            "en": [
+                {
+                    "title": "Ultimate Vocal Remover",
+                    "description": [
+                        "This guide shows how to separate the vocals and the instrumental of songs using UVR locally",
+                        "Link: https://docs.google.com/document/d/1_T9d4pmNg0iS7yzbYdLc0AjDG03cNPACzC0tXT6COUg/edit?usp=sharing"
+                    ],
+                    "footer": "Credits: Nick088"
+                }
+            ]
+        }
     }
 }

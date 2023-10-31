@@ -10,14 +10,11 @@
     },
     "colors": {
         "theme": {
-            "primary": "F4831B",
-            "secondary": "902EBB",
-            "tertiary": "63C328"
-        },
-        "theme_main": {
-            "primary": "08c8f7",
-            "secondary": "14effb",
-            "tertiary": "029afe"
+            "primary": "07C7F7",
+            "secondary": "077CF7",
+            "tertiary": "0730F7",
+            "accent_1": "07F7D9",
+            "accent_2": "07F788"
         },
         "country": {
             "brazil": [
