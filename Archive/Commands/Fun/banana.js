@@ -1,3 +1,5 @@
+const { banan } = require('../../utils.js');
+
 module.exports = {
     name: 'banana',
     category: 'Fun',
