@@ -43,7 +43,8 @@ module.exports = {
         )
     ,
     async execute(interaction) {
-        const client = interaction.client;
+        const { client } = interaction;
+        const baseDir = process.cwd();
 
         if (interaction.options.getSubcommand() === 'command') {
             let commandName = interaction.options.getString('name');
@@ -55,7 +56,6 @@ module.exports = {
                 return interaction.reply(`There's no command with name \`${commandName}\`.`);
             }
 
-            const baseDir = process.cwd();
             const commandPath = path.join(baseDir, 'CommandsSlash', commandCategory, command.data.name + '.js');
 
             delete require.cache[require.resolve(commandPath)];
@@ -74,7 +74,10 @@ module.exports = {
             return await interaction.reply({ content: 'Not available yet', ephemeral: true });
         }
         else if (interaction.options.getSubcommand() === 'embeds') {
-            return await interaction.reply({ content: 'Not available yet', ephemeral: true });
+            const embedsJsonPath = path.join(baseDir, 'JSON', 'embeds.json');
+            delete require.cache[require.resolve(embedsJsonPath)];
+            client.botData.embeds = require(embedsJsonPath);
+            return await interaction.reply({ content: 'Embeds restored to default.', ephemeral: true });
         }
         else if (interaction.options.getSubcommand() === 'bot') {
             return await interaction.reply({ content: 'Not available yet', ephemeral: true });
