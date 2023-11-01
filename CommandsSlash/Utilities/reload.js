@@ -128,6 +128,8 @@ module.exports = {
                     await botDebugChannel.send(botResponse.content);
                 }
 
+                // close DB connection
+                await client.knexInstance.destroy();
                 await delay(2000);
 
                 pm2.restart('Automaze', (error, apps) => {
