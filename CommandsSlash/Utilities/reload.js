@@ -150,7 +150,7 @@ module.exports = {
             const botResponse = { content: 'Failed', ephemeral: true };
 
             exec('git pull origin main', async (error, stdout, stderr) => {
-                if (err) {
+                if (error) {
                     botResponse.content = err;
                     await interaction.editReply(botResponse);
                     return;
