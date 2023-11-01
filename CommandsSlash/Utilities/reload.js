@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ActivityType } = require('discord.js');
+const { SlashCommandBuilder, ActivityType, Collection } = require('discord.js');
 const path = require('node:path');
 const delay = require('node:timers/promises').setTimeout;
 
@@ -30,6 +30,11 @@ module.exports = {
             subcommand
                 .setName('cooldowns')
                 .setDescription('Reset cooldowns')
+                .addStringOption(option =>
+                    option
+                        .setName('user_id')
+                        .setDescription('Resets the cooldowns for a specific user')
+                )
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -71,7 +76,29 @@ module.exports = {
             }
         }
         else if (interaction.options.getSubcommand() === 'cooldowns') {
-            return await interaction.reply({ content: 'Not available yet', ephemeral: true });
+            const targetUserId =  interaction.options.getString('user_id');
+            const botResponse = { content: ['### Result'], ephemeral: true };
+            if (targetUserId) {
+                client.cooldowns.reactions.delete(targetUserId);
+                botResponse.content.push(`- Reaction cooldown reseted for ${targetUserId}`);
+
+                client.cooldowns.slashCommands.delete(targetUserId);
+                botResponse.content.push(`- Slash commands cooldown reseted for ${targetUserId}`);
+
+                client.cooldowns.banana.delete(targetUserId);
+                botResponse.content.push(`- Banan cooldown reseted for ${targetUserId}`);
+            } else {
+                client.cooldowns.reactions = new Collection();
+                botResponse.content.push('- Reseted reaction cooldowns for every user');
+
+                client.cooldowns.slashCommands = new Collection();
+                botResponse.content.push('- Reseted slash commands cooldowns for every user');
+
+                client.cooldowns.banan = new Collection();
+                botResponse.content.push('- Reseted banan cooldowns for every user');
+            }
+            botResponse.content = botResponse.content.join('\n');
+            return await interaction.reply(botResponse);
         }
         else if (interaction.options.getSubcommand() === 'embeds') {
             const embedsJsonPath = path.join(baseDir, 'JSON', 'embeds.json');

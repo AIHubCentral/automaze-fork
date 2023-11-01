@@ -70,9 +70,6 @@ client.banana = new Enmap({name: 'banana'});
 client.scourCD = new Enmap();
 client.prefix = new Enmap({name: 'prefix'});
 
-// banana data as an object instead of enmap
-client.bananaData = {};
-
 client.botAdminIds = process.env.developerIds.split(',');
 
 client.botConfigs = require('./JSON/botConfigs.json');
