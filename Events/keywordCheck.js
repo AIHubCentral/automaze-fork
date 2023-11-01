@@ -61,9 +61,8 @@ module.exports = {
                         //console.log('matched keywords', matchedKeywords);
 
                         for (const emoji of item.emojis) {
-                            //console.log(emoji);
                             await message.react(emoji);
-                            await delay(500);
+                            await delay(1500);
                             reactionCounter++;
                         }
                     }
