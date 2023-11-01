@@ -158,7 +158,6 @@ module.exports = {
 
                 console.log('stdout:', stdout);
                 console.log('sterr:', stderr);
-
                 botResponse.content = '✅ Bot updated!';
                 interaction.editReply(botResponse);
 
