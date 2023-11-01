@@ -28,11 +28,11 @@ module.exports = {
                 const devServerGuildId = '1136971905354711193';
 
                 const embedData = {
+                    title: 'Wassup I\'m Automaze!',
                     color: client.botConfigs.colors.theme.primary,
                     description: []
                 };
 
-                embedData.description.push('## Wassup I\'m Automaze!');
                 embedData.description.push(`\n- My prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)`);
 
                 // only show how many guilds the bot is present if in the development server
@@ -41,7 +41,8 @@ module.exports = {
                 }
 
                 embedData.description.push('- Interested in how I\'m built? [I\'m actually open source!](https://github.com/DeprecatedTable/automaze)');
-                embedData.description.push('- Feeling a tad bit generous? [Buy me a coffee!](https://ko-fi.com/fungusdesu)');
+                //embedData.description.push('- Feeling a tad bit generous? [Buy me a coffee!](https://ko-fi.com/fungusdesu)');
+                embedData.description.push('- Forgot a specific command? Try `/help` or `-help`');
 
                 const embed = client.botUtils.createEmbed(embedData);
                 await message.reply({ embeds: [embed] });
