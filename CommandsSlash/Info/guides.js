@@ -155,6 +155,12 @@ module.exports = {
                         });
                         botResponse.ephemeral = false;
                         break;
+                    case 'es':
+                        botResponse.content = '### Tutoriales de RVC en Español';
+                        const embedData = botData.embeds.guides.rvc.es;
+                        botResponse.embeds = botUtils.createEmbeds(embedData, botUtils.getAvailableColors(botConfigs));
+                        botResponse.ephemeral = false;
+                        break;
                     case 'it':
                         colorIndex = 0;
                         botResponse.embeds = botData.embeds.guides.rvc.it.map(item => {

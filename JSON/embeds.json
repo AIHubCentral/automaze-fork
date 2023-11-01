@@ -365,6 +365,17 @@
                     "footer": "Credits: Nick088, Angetyde and Kanav"
                 }
             ],
+            "es": [
+                {
+                    "description": [
+                        "### RVC v2 Disconnected",
+                        "Link: [Google Docs](https://docs.google.com/document/d/1fuf26lI1wkolC88heBBRcK0HDdH4q08bcX9-RPzL0Qs/edit?usp=sharing)",
+                        "### Instalación de Mangio RVC v2 localmente para macOS",
+                        "Link: [Google Docs](https://docs.google.com/document/d/1F7sJ6ZFS5CfQXEZ-I-v9k3TAFTSbCOkPdOyn841UbyI/edit?usp=sharing)"
+                    ],
+                    "footer": "Autor: anthonydiazjorges"
+                }
+            ],
             "it": [
                 {
                     "title": "🇮🇹 RVC Disconnected (Italian guide)",
@@ -389,10 +400,15 @@
                 {
                     "color": "Green",
                     "description": [
-                        "## 🍏 Tutorial de Applio en español\nhttps://www.youtube.com/watch?v=bOAM_9xyHFY",
+                        "## 🍏 Tutorial de Applio en español",
+                        "Link: [YouTube](https://www.youtube.com/watch?v=bOAM_9xyHFY)",
+                        "Autor: IA Hispano",
+                        "## 🍏 Tutorial Applio (M1)(Mac)(M2)",
+                        "Link: [Google Docs](https://docs.google.com/document/d/1nvLGbzJMISCCDg-AY4TdDbBVqK8u3sDh5qY5qHuY7cE/edit)",
+                        "Autor: anthonydiazjorges",
                         "### Servidor IA Hispano\n> https://discord.gg/iahispano"
                     ]
-                }
+                }      
             ]
         },
         "uvr": {
