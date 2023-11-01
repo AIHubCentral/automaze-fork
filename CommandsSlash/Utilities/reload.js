@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, ActivityType, Collection } = require('discord.js');
 const path = require('node:path');
 const delay = require('node:timers/promises').setTimeout;
+const pm2 = require('pm2');
 
 module.exports = {
     category: `Utilities`,
@@ -107,7 +108,33 @@ module.exports = {
             return await interaction.reply({ content: 'Embeds restored to default.', ephemeral: true });
         }
         else if (interaction.options.getSubcommand() === 'bot') {
-            return await interaction.reply({ content: 'Not available yet', ephemeral: true });
+            await interaction.deferReply();
+            const botResponse = { content: 'Failed', ephemeral: true };
+
+            pm2.connect(async function(err) {
+                if (err) {
+                    console.error(err);
+                    interaction.editReply(botResponse);
+                    process.exit(2);
+                }
+                botResponse.content = '🔃 Restarting bot...';
+                interaction.editReply(botResponse);
+
+                const { botConfigs } = client;
+                
+                if (client.botConfigs.general.sendLogs) {
+                    const devServerGuild = client.guilds.cache.get(botConfigs.devServerId);
+                    const botDebugChannel = devServerGuild.channels.cache.get(botConfigs.debugChannelId);
+                    await botDebugChannel.send(botResponse.content);
+                }
+
+                await delay(2000);
+
+                pm2.restart('Automaze', (error, apps) => {
+                    pm2.disconnect();
+                    if (error) { throw error }
+                });
+            });
         }
     }
 }

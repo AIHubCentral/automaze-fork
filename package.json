@@ -19,6 +19,7 @@
     "minisearch": "^6.1.0",
     "node-cache": "^5.1.2",
     "node-fetch": "^3.2.6",
+    "pm2": "^5.3.0",
     "pretty-ms": "^7.0.1",
     "random-words": "^2.0.0",
     "read-last-lines": "^1.8.0",
