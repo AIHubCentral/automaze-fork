@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, ActivityType, Collection } = require('discord.js');
+const { exec } = require('node:child_process');
 const path = require('node:path');
 const delay = require('node:timers/promises').setTimeout;
 const pm2 = require('pm2');
@@ -47,9 +48,19 @@ module.exports = {
                 .setName('bot')
                 .setDescription('Restart the bot')
         )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('repo')
+                .setDescription('Pulls the latest change from GitHub repo')
+        )
     ,
     async execute(interaction) {
         const { client } = interaction;
+        const { botConfigs } = client;
+
+        const devServerGuild = client.guilds.cache.get(botConfigs.devServerId);
+        const botDebugChannel = devServerGuild.channels.cache.get(botConfigs.debugChannelId);
+
         const baseDir = process.cwd();
 
         if (interaction.options.getSubcommand() === 'command') {
@@ -77,7 +88,7 @@ module.exports = {
             }
         }
         else if (interaction.options.getSubcommand() === 'cooldowns') {
-            const targetUserId =  interaction.options.getString('user_id');
+            const targetUserId = interaction.options.getString('user_id');
             const botResponse = { content: ['### Result'], ephemeral: true };
             if (targetUserId) {
                 client.cooldowns.reactions.delete(targetUserId);
@@ -111,7 +122,7 @@ module.exports = {
             await interaction.deferReply();
             const botResponse = { content: 'Failed', ephemeral: true };
 
-            pm2.connect(async function(err) {
+            pm2.connect(async function (err) {
                 if (err) {
                     console.error(err);
                     interaction.editReply(botResponse);
@@ -120,11 +131,7 @@ module.exports = {
                 botResponse.content = '🔃 Restarting bot...';
                 interaction.editReply(botResponse);
 
-                const { botConfigs } = client;
-                
                 if (client.botConfigs.general.sendLogs) {
-                    const devServerGuild = client.guilds.cache.get(botConfigs.devServerId);
-                    const botDebugChannel = devServerGuild.channels.cache.get(botConfigs.debugChannelId);
                     await botDebugChannel.send(botResponse.content);
                 }
 
@@ -136,6 +143,28 @@ module.exports = {
                     pm2.disconnect();
                     if (error) { throw error }
                 });
+            });
+        }
+        else if (interaction.options.getSubcommand() === 'repo') {
+            await interaction.deferReply();
+            const botResponse = { content: 'Failed', ephemeral: true };
+
+            exec('git pull origin main', async (error, stdout, stderr) => {
+                if (err) {
+                    botResponse.content = err;
+                    await interaction.editReply(botResponse);
+                    return;
+                }
+
+                console.log('stdout:', stdout);
+                console.log('sterr:', stderr);
+
+                botResponse.content = '✅ Bot updated!';
+                interaction.editReply(botResponse);
+
+                if (client.botConfigs.general.sendLogs) {
+                    await botDebugChannel.send(botResponse.content);
+                }
             });
         }
     }
