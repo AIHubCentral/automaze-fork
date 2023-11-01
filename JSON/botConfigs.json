@@ -25,5 +25,6 @@
         }
     },
     "devServerId": "1136971905354711193",
-    "debugChannelId": "1168048009213394954"
+    "debugChannelId": "1168048009213394954",
+    "messageOnStartup": false
 }

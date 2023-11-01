@@ -76,6 +76,10 @@ client.bananaData = {};
 client.botAdminIds = process.env.developerIds.split(',');
 
 client.botConfigs = require('./JSON/botConfigs.json');
+if (!devMode) {
+    // when in production environment, send a message on startup to the dev server
+    client.botConfigs.messageOnStartup = true;
+}
 
 // Utility functions and JSON data
 client.botData = {
