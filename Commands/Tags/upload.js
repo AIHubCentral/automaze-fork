@@ -17,7 +17,7 @@ module.exports = {
         const embed = client.botUtils.createEmbed(embedData, embedColor);
 
         if (message.mentions.members.first()) {
-            return message.channel.send({content: `*Suggestion for ${message.mentions.members.first()}*`, embeds: [embed]});
+            return message.channel.send({content: `Suggestion for ${message.mentions.members.first()}`, embeds: [embed]});
         }
 
         message.channel.send({embeds: [embed]});
