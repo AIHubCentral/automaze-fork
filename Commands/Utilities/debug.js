@@ -26,15 +26,20 @@ module.exports = {
             console.log(`${message.author.id} (${message.author.username}): authorized to -debug`);
 
             // sends emojis to the dev server
+            const { botConfigs } = client;
             const prodServer = client.guilds.cache.get(client.discordIDs.Guild);
-            const devServer = client.guilds.cache.get('1136971905354711193');
+            let devServer = client.guilds.cache.get(botConfigs.devServerId);
 
             // dev server bot-spam channel
-            const botSpamChannel = devServer.channels.cache.get('1141368832993267792');
+            let botSpamChannel = devServer.channels.cache.get(botConfigs.debugChannelId);
 
             if (!botSpamChannel) {
-                console.log('Could\'n find bot spam channel');
-                return;
+                botSpamChannel = await devServer.channels.fetch(botConfigs.debugChannelId);
+
+                if (!botSpamChannel) {
+                    console.log('Failed to fetch ', botConfigs.debugChannelId);
+                    return;
+                }
             }
 
             const emojiManager = prodServer.emojis;
@@ -43,7 +48,11 @@ module.exports = {
 
             emojiManager.cache.forEach(emoji => {
                 // create a string in the format <:emoji:id>
-                let emojiString = `- \\<:${emoji.name}:${emoji.id}> <:${emoji.name}:${emoji.id}>`;
+                let emojiString = `- \\<:${emoji.name}:${emoji.id}>`;
+                // show the emoji if it's not animated
+                if (!emoji.animated) {
+                    emojiString += ` <:${emoji.name}:${emoji.id}>`;
+                }
                 emojiStrings.push(emojiString);
             });
 
