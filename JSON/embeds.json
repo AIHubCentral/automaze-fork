@@ -109,6 +109,7 @@
             "guides": {
                 "description": [
                     "## 🇧🇷 Guias RVC em PT-BR",
+                    "- Brasil Documentation [link](https://docs.aihub.wtf/v/brazil/)",
                     "### AI-Cover-Gen-No-UI",
                     "- Acesse o guia [neste link](https://docs.google.com/document/d/1BA_ln2159GbwTiJvTjCvqOAuYLq32A21PshW3RXhT6E/edit?usp=sharing).",
                     "### 🍏 Applio-RVC-Fork: Guia PT-BR",
@@ -162,18 +163,18 @@
                 "title": "Documentation",
                 "color": "029afe",
                 "description": [
-                    "## 🇺🇸 English Documentation\n> https://docs.aihub.wtf/\n\nCredits: **AI HUB France**",
-                    "## 🇺🇸 English FAQ\n> https://docs.aihub.wtf/faq\n\nCredits: **AI HUB France**"
+                    "## 🇺🇸 English Documentation\n> https://docs.aihub.wtf/\n\nCredits: **AI HUB FRANCE**",
+                    "## 🇺🇸 English FAQ\n> https://docs.aihub.wtf/faq\n\nCredits: **AI HUB FRANCE**"
                 ]
             },
             "translations": {
                 "title": "🌐 Translations",
                 "description": [
                     "- 🇫🇷  [French Documentation](https://docs.aihubfrance.fr/guides-clone-de-voix/rvc-v2)",
-                    "- 🇮🇹  [Italian Guides](https://rentry.org/link-utili)",
+                    "- 🇮🇹  [Italian Documentation](https://docs.aihub.wtf/v/italy/)",
                     "- 🇷🇺  [Russian FAQ for RVC/Voice changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
                     "- 🇪🇸  Español (`-rvc` `es`)",
-                    "- 🇧🇷  PT-BR (`-rvc` `br`)"
+                    "- 🇧🇷  [Brasil Documentation](https://docs.aihub.wtf/v/brazil/)"
                 ]
             },
             "alt": {
@@ -298,7 +299,7 @@
                 "## • Russian guide for voice changing",
                 "Credits: **redoverflow**, **blackcat76it** and **tntmaxim**",
                 "> Link: [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
-                "## • Text to speech:\n[RVC-TTS-Guide](https://rentry.co/RVC-TTS-Guide)",
+                "## • Text to speech:\n[RVC-TTS-Guide](https://docs.aihub.wtf/other-guides/text-to-speech)",
                 "\n> **Note:** If you need further help setting up/using the voice changers, you can ask for help in $channel or check the channel's pinned comments."
             ]
         }
@@ -352,13 +353,13 @@
                         "### English FAQ",
                         "https://docs.aihub.wtf/faq"
                     ],
-                    "footer": "Credits: AI HUB France"
+                    "footer": "Credits: AI HUB FRANCE"
                 },
                 {
                     "title": "More guides",
                     "description": [
                         "### How to Make AI Covers using Ilaria RVC",
-                        "Link: [Google Docs](https://docs.google.com/document/d/186_a8d32iYxr1UAEm1LAFQvLu2w3huVIg-KTlTHshg8/edit?usp=sharing)",
+                        "Link: [Documentation](https://docs.aihub.wtf/vocal-cloning-guide/hugging-face/ilaria-rvc)",
                         "### Create a model with RVC disconnected (colab)",
                         "Link: [Google Docs](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk)"
                     ],
@@ -378,9 +379,9 @@
             ],
             "it": [
                 {
-                    "title": "🇮🇹 RVC Disconnected (Italian guide)",
+                    "title": "🇮🇹 RVC Disconnected (Italian Documentation)",
                     "description": [
-                        "Link: https://rentry.org/rvc-disconnected-ita"
+                        "Link: https://docs.aihub.wtf/v/italy/guida-per-la-creazione-di-un-modello/model-training-rvc-v2-disconnected"
                     ],
                     "footer": "Credits: Angetyde"
                 }
@@ -425,7 +426,7 @@
                     "title": "Ultimate Vocal Remover",
                     "description": [
                         "This guide shows how to separate the vocals and the instrumental of songs using UVR locally",
-                        "Link: https://docs.google.com/document/d/1_T9d4pmNg0iS7yzbYdLc0AjDG03cNPACzC0tXT6COUg/edit?usp=sharing"
+                        "Link: https://docs.aihub.wtf/vocal-cloning-guide/vocal-and-music-separation/uvr"
                     ],
                     "footer": "Credits: Nick088"
                 }
