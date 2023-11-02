@@ -10,5 +10,7 @@ JSON/channels.json
 # database files
 *.sqlite
 
-#JSON/_models.json
+# configs
+.npm
+.pm2
 node_modules/
