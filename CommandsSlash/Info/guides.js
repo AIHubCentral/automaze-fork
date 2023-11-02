@@ -1,4 +1,8 @@
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const {
+    StringSelectMenuBuilder, StringSelectMenuOptionBuilder,
+    ActionRowBuilder, ButtonBuilder, ButtonStyle,
+    SlashCommandBuilder
+} = require('discord.js');
 
 module.exports = {
     category: 'Info',
@@ -94,6 +98,7 @@ module.exports = {
                 botResponse.components = [actionRow];
                 break;
             case 'realtime':
+                // TODO: continue this
                 selectedGuide = botData.embeds.guides.realtime[language];
                 if (!selectedGuide) {
                     botResponse.ephemeral = true;
@@ -110,6 +115,24 @@ module.exports = {
                 const lastDescriptionIndex = embedData.description.length - 1;
                 const lastDescriptionText = embedData.description[lastDescriptionIndex]
                 embedData.description[lastDescriptionIndex] = lastDescriptionText.replace('$channel', targetChannel);
+
+                const selectMenu = new StringSelectMenuBuilder()
+                    .setCustomId('realtime_guides')
+                    .setPlaceholder('Select a guide')
+                    .addOptions(
+                        new StringSelectMenuOptionBuilder()
+                            .setLabel('Local realtime guides')
+                            .setDescription('If you have a decent GPU these can be a good option')
+                            .setValue('realtime_local'),
+                        new StringSelectMenuOptionBuilder()
+                            .setLabel('Online realtime guides')
+                            .setDescription('If you don\'t have a decent GPU these can be a good option')
+                            .setValue('realtime_online')
+                    );
+                const realtimeActionRow = new ActionRowBuilder().addComponents(selectMenu);
+                botResponse.content = '### Realtime guides'
+                botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
+                botResponse.components = [realtimeActionRow];
 
                 botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
                 break;
@@ -132,7 +155,7 @@ module.exports = {
                 botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
                 break;
             default:
-                selectedGuide = botData.embeds.guides.rvc[language]; 
+                selectedGuide = botData.embeds.guides.rvc[language];
                 if (!selectedGuide) {
                     botResponse.ephemeral = true;
                     botResponse.content = 'This guide is not available in the selected language yet.';
