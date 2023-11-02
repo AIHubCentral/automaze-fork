@@ -1,0 +1,89 @@
+0 verbose cli /usr/local/bin/node /usr/local/bin/npm
+1 info using npm@10.2.2
+2 info using node@v20.9.0
+3 timing npm:load:whichnode Completed in 2ms
+4 timing config:load:defaults Completed in 4ms
+5 timing config:load:file:/usr/local/lib/node_modules/npm/npmrc Completed in 2ms
+6 timing config:load:builtin Completed in 3ms
+7 timing config:load:cli Completed in 48ms
+8 timing config:load:env Completed in 2ms
+9 timing config:load:file:/home/container/node_modules/node/.npmrc Completed in 0ms
+10 timing config:load:project Completed in 10ms
+11 timing config:load:file:/home/container/.npmrc Completed in 0ms
+12 timing config:load:user Completed in 1ms
+13 timing config:load:file:/usr/local/etc/npmrc Completed in 4ms
+14 timing config:load:global Completed in 4ms
+15 timing config:load:setEnvs Completed in 2ms
+16 timing config:load Completed in 75ms
+17 timing npm:load:configload Completed in 76ms
+18 timing config:load:flatten Completed in 59ms
+19 timing npm:load:mkdirpcache Completed in 0ms
+20 timing npm:load:mkdirplogs Completed in 0ms
+21 verbose title npm install node-linux-x64@16.20.1
+22 verbose argv "install" "--no-save" "node-linux-x64@16.20.1"
+23 timing npm:load:setTitle Completed in 1ms
+24 timing npm:load:display Completed in 1ms
+25 verbose logfile logs-max:10 dir:/home/container/.npm/_logs/2023-11-02T20_46_41_761Z-
+26 verbose logfile /home/container/.npm/_logs/2023-11-02T20_46_41_761Z-debug-0.log
+27 timing npm:load:logFile Completed in 13ms
+28 timing npm:load:timers Completed in 0ms
+29 timing npm:load:configScope Completed in 0ms
+30 timing npm:load Completed in 179ms
+31 timing arborist:ctor Completed in 1ms
+32 silly logfile done cleaning log files
+33 timing arborist:ctor Completed in 1ms
+34 timing idealTree:init Completed in 26ms
+35 timing idealTree:userRequests Completed in 4ms
+36 silly idealTree buildDeps
+37 silly fetch manifest node-bin-setup@^1.0.0
+38 http fetch GET 200 https://registry.npmjs.org/node-bin-setup 211ms (cache miss)
+39 silly fetch manifest node-linux-x64@16.20.1
+40 http fetch GET 200 https://registry.npmjs.org/node-linux-x64 780ms (cache miss)
+41 silly placeDep ROOT node-bin-setup@1.1.3 OK for: node@16.20.1 want: ^1.0.0
+42 silly placeDep ROOT node-linux-x64@16.20.1 OK for: node@16.20.1 want: 16.20.1
+43 timing idealTree:#root Completed in 1015ms
+44 timing idealTree:node_modules/node-bin-setup Completed in 0ms
+45 timing idealTree:node_modules/node-linux-x64 Completed in 0ms
+46 timing idealTree:buildDeps Completed in 1016ms
+47 timing idealTree:fixDepFlags Completed in 1ms
+48 timing idealTree Completed in 1049ms
+49 timing reify:loadTrees Completed in 1051ms
+50 timing reify:diffTrees Completed in 2ms
+51 silly reify moves {}
+52 timing reify:retireShallow Completed in 2ms
+53 timing reify:createSparse Completed in 1ms
+54 timing reify:loadBundles Completed in 0ms
+55 silly audit bulk request { 'node-bin-setup': [ '1.1.3' ], 'node-linux-x64': [ '16.20.1' ] }
+56 silly tarball no local data for node-linux-x64@https://registry.npmjs.org/node-linux-x64/-/node-linux-x64-16.20.1.tgz. Extracting by manifest.
+57 timing reifyNode:node_modules/node-bin-setup Completed in 41ms
+58 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 293ms
+59 timing auditReport:getReport Completed in 295ms
+60 silly audit report {}
+61 timing auditReport:init Completed in 0ms
+62 timing reify:audit Completed in 298ms
+63 verbose stack Error: aborted
+63 verbose stack     at connResetException (node:internal/errors:721:14)
+63 verbose stack     at TLSSocket.socketCloseListener (node:_http_client:455:19)
+63 verbose stack     at TLSSocket.emit (node:events:526:35)
+63 verbose stack     at node:net:337:12
+63 verbose stack     at TCP.done (node:_tls_wrap:657:7)
+64 verbose cwd /home/container/node_modules/node
+65 verbose Linux 5.10.0-26-cloud-amd64
+66 verbose node v20.9.0
+67 verbose npm  v10.2.2
+68 error code ECONNRESET
+69 error network aborted
+70 error network This is a problem related to network connectivity.
+70 error network In most cases you are behind a proxy or have bad network settings.
+70 error network
+70 error network If you are behind a proxy, please make sure that the
+70 error network 'proxy' config is set properly.  See: 'npm help config'
+71 verbose exit 1
+72 timing npm Completed in 2303ms
+73 verbose unfinished npm timer command:install 1698958002485
+74 verbose unfinished npm timer reify 1698958002491
+75 verbose unfinished npm timer reify:unpack 1698958003569
+76 verbose unfinished npm timer reifyNode:node_modules/node-linux-x64 1698958003569
+77 verbose unfinished npm timer reify:rollback:createSparse 1698958004054
+78 verbose code 1
+79 error A complete log of this run can be found in: /home/container/.npm/_logs/2023-11-02T20_46_41_761Z-debug-0.log
