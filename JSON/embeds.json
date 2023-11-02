@@ -417,7 +417,7 @@
                         "Autor: anthonydiazjorges",
                         "### Servidor IA Hispano\n> https://discord.gg/iahispano"
                     ]
-                }      
+                }
             ]
         },
         "uvr": {
@@ -429,6 +429,88 @@
                         "Link: https://docs.aihub.wtf/vocal-cloning-guide/vocal-and-music-separation/uvr"
                     ],
                     "footer": "Credits: Nick088"
+                }
+            ]
+        },
+        "audio": {
+            "en": [
+                {
+                    "title": "Guides",
+                    "description": [
+                        "###  📑 Perfecting Audio Isolation on Low-End Rigs: A Practical Guide (by Litsa The Dancer and Faze Masta)\n> https://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing",
+                        "###  📑 Guide: Gathering and Isolating Audio (by SCRFilms)\n> https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv",
+                        "###  📑 How to make a good model All-In-One guide by LUSBERT <:lusbertmoment:1159804751924432906>\n> https://rentry.org/RVC_making-models",
+                        "###  ▶️ Vocal mixing tutorial by Roomie\n> https://www.youtube.com/watch?v=rSxLF3kkBw0"
+                    ]
+                },
+                {
+                    "title": "Tools",
+                    "description": [
+                        "### Youtube Downloaders",
+                        "- https://github.com/yt-dlp/yt-dlp",
+                        "- https://github.com/dsymbol/yt-dlp-gui",
+                        "### Audio Separation/Isolation",
+                        "- https://ultimatevocalremover.com/",
+                        "- https://mvsep.com/",
+                        "- 🆕 https://github.com/Captain-FLAM/KaraFan",
+                        "- https://goyo.app/ (Note that this plugin is for clean ups only, like removing background noise, reverb, ambience or sustained sounds)')",
+                        "\n> **Tip:** Use `-colab` command if you're looking for audio separation/isolation colabs."
+                    ]
+                }
+            ]
+        },
+        "upload": {
+            "en": [
+                {
+                    "title": "huggingface.co upload Guides",
+                    "description": [
+                        "## 🇺🇸 English guide",
+                        "Link: https://rentry.org/fdg_guide_new",
+                        "Credits: **FDG**",
+                        "## 🇮🇳 Hindi guide",
+                        "Link: https://rentry.org/AI_hub_guide_hi",
+                        "Credits: **Enes**",
+                        "## 🇹🇷 Turkish guide",
+                        "Link: https://rentry.org/AI_hub_guide_tr",
+                        "Credits: **Enes**"
+                    ]
+                }
+            ]
+        },
+        "paperspace": {
+            "en": [
+                {
+                    "title": "RVC v2 Tutorial for Paperspace",
+                    "description": [
+                        "💡 Click on the button below to open the guide."
+                    ],
+                    "footer": "Credits: LollenApe"
+                }
+            ]
+        },
+        "realtime": {
+            "en": [
+                {
+                    "title": "🎙️ Realtime Voice Changer",
+                    "description": [
+                        "## • (Local) W-Okada Voice Changer",
+                        "This one has more options and is somewhat more convenient to use than Real-time RVC.",
+                        "Credits: **ravencutie21**",
+                        "> Link: [Guide for W-Okada's RealTimeVoiceChangerClient](https://rentry.co/VoiceChangerGuide)",
+                        "## • (Online) W-Okada - Colab Version",
+                        "A free, online version of W-Okada that allows you to run code on Google’s powerful GPUs.",
+                        "Credits: **Antasma245**",
+                        "> Link: [How to use W-Okada's Voice Changer](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)",
+                        "## • (Local) Real-time conversion of RVC",
+                        "More accurate than W-Okada's, but requires a Nvidia RTX card.",
+                        "Credits: **teas.hi**",
+                        "> Link: [How to use realtime conversion with RVC](https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs/edit)",
+                        "## • Russian guide for voice changing",
+                        "Credits: **redoverflow**, **blackcat76it** and **tntmaxim**",
+                        "> Link: [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
+                        "## • Text to speech:\n[RVC-TTS-Guide](https://rentry.co/RVC-TTS-Guide)",
+                        "\n> **Note:** If you need further help setting up/using the voice changers, you can ask for help in $channel or check the channel's pinned comments."
+                    ]
                 }
             ]
         }

@@ -48,51 +48,41 @@ module.exports = {
 
         const { client } = interaction;
         const { botData, botConfigs, botUtils } = client;
-        const { theme } = botConfigs.colors;
-        const availableColors = [
-            theme.primary,
-            theme.secondary,
-            theme.tertiary,
-            theme.accent_1,
-            theme.accent_2
-        ];
-        let colorIndex = 0;
+        const availableColors = botUtils.getAvailableColors(botConfigs);
 
         // default response
-        let botResponse = { content: '', ephemeral: true };
+        let botResponse = { content: '', ephemeral: false };
+
+        let selectedGuide;
 
         switch (category) {
             case 'applio':
-                switch (language) {
-                    case 'es':
-                        colorIndex = 0;
-                        botResponse.embeds = botData.embeds.guides.applio.es.map(item => {
-                            const selectedColor = item.color ?? availableColors[colorIndex++];
-                            return botUtils.createEmbed(item, selectedColor);
-                        });
-                        botResponse.ephemeral = false;
-                        break;
-                    case 'en':
-                        colorIndex = 0;
-                        botResponse.embeds = botData.embeds.guides.applio.en.map(item => {
-                            const selectedColor = item.color ?? availableColors[colorIndex++];
-                            return botUtils.createEmbed(item, selectedColor);
-                        });
-                        botResponse.ephemeral = false;
-                        break;
-                    default:
-                        botResponse.content = 'This guide is not available in the selected language yet.';
+                selectedGuide = botData.embeds.guides.applio[language];
+                if (!selectedGuide) {
+                    botResponse.ephemeral = true;
+                    botResponse.content = 'This guide is not available in the selected language yet.';
+                    return await interaction.reply(botResponse);
                 }
+                botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
                 break;
             case 'audio':
-                botResponse.content = '';
-                botResponse.embeds = [
-                    client.botUtils.createEmbed(client.botData.embeds.audio.en.guides, client.botConfigs.colors.theme.primary),
-                    client.botUtils.createEmbed(client.botData.embeds.audio.en.tools, client.botConfigs.colors.theme.secondary)
-                ];
-                botResponse.ephemeral = false;
+                selectedGuide = botData.embeds.guides.audio[language];
+                if (!selectedGuide) {
+                    botResponse.ephemeral = true;
+                    botResponse.content = 'This guide is not available in the selected language yet.';
+                    return await interaction.reply(botResponse);
+                }
+                botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
                 break;
             case 'paperspace':
+                selectedGuide = botData.embeds.guides.paperspace[language];
+                if (!selectedGuide) {
+                    botResponse.ephemeral = true;
+                    botResponse.content = 'This guide is not available in the selected language yet.';
+                    return await interaction.reply(botResponse);
+                }
+                botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
+
                 const button = new ButtonBuilder()
                     .setLabel('Google Docs')
                     .setURL('https://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing')
@@ -101,77 +91,54 @@ module.exports = {
                 const actionRow = new ActionRowBuilder()
                     .addComponents(button);
 
-                botResponse.content = '';
-                botResponse.embeds = [
-                    client.botUtils.createEmbed(client.botData.embeds.paperspace, client.botConfigs.colors.theme.primary)
-                ];
-                botResponse.ephemeral = false;
                 botResponse.components = [actionRow];
                 break;
             case 'realtime':
+                selectedGuide = botData.embeds.guides.realtime[language];
+                if (!selectedGuide) {
+                    botResponse.ephemeral = true;
+                    botResponse.content = 'This guide is not available in the selected language yet.';
+                    return await interaction.reply(botResponse);
+                }
+
                 const targetChannelId = client.discordIDs.Channel.HelpWOkada;
                 const targetChannel = interaction.guild.channels.cache.get(targetChannelId) ?? '"help-w-okada" channel';
 
-                const embedData = client.botData.embeds.realtime.en;
-                embedData.color = client.botConfigs.colors.theme.primary;
+                const embedData = selectedGuide[0];
 
                 // insert the link to the channel in $channel
                 const lastDescriptionIndex = embedData.description.length - 1;
                 const lastDescriptionText = embedData.description[lastDescriptionIndex]
                 embedData.description[lastDescriptionIndex] = lastDescriptionText.replace('$channel', targetChannel);
 
-                // create bot response
-                botResponse.content = '';
-                botResponse.embeds = [client.botUtils.createEmbed(embedData)];
-                botResponse.ephemeral = false;
+                botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
                 break;
             case 'upload':
-                botResponse.content = '';
-                botResponse.embeds = [client.botUtils.createEmbed(client.botData.embeds.upload, client.botConfigs.colors.theme.primary)];
-                botResponse.ephemeral = false;
+                selectedGuide = botData.embeds.guides.upload[language];
+                if (!selectedGuide) {
+                    botResponse.ephemeral = true;
+                    botResponse.content = 'This guide is not available in the selected language yet.';
+                    return await interaction.reply(botResponse);
+                }
+                botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
                 break;
             case 'uvr':
-                switch (language) {
-                    case 'en':
-                        colorIndex = 0;
-                        botResponse.embeds = botData.embeds.guides.uvr.en.map(item => {
-                            const selectedColor = item.color ?? availableColors[colorIndex++];
-                            return botUtils.createEmbed(item, selectedColor);
-                        });
-                        botResponse.ephemeral = false;
-                        break;
-                    default:
-                        botResponse.content = 'This guide is not available in the selected language yet.';
+                selectedGuide = botData.embeds.guides.uvr[language];
+                if (!selectedGuide) {
+                    botResponse.ephemeral = true;
+                    botResponse.content = 'This guide is not available in the selected language yet.';
+                    return await interaction.reply(botResponse);
                 }
+                botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
                 break;
             default:
-                switch (language) {
-                    case 'en':
-                        botResponse.content = '### RVC Guides (How to Make AI Cover)';
-                        colorIndex = 0;
-                        botResponse.embeds = botData.embeds.guides.rvc.en.map(item => {
-                            const selectedColor = availableColors[colorIndex++];
-                            return botUtils.createEmbed(item, selectedColor);
-                        });
-                        botResponse.ephemeral = false;
-                        break;
-                    case 'es':
-                        botResponse.content = '### Tutoriales de RVC en Español';
-                        const embedData = botData.embeds.guides.rvc.es;
-                        botResponse.embeds = botUtils.createEmbeds(embedData, botUtils.getAvailableColors(botConfigs));
-                        botResponse.ephemeral = false;
-                        break;
-                    case 'it':
-                        colorIndex = 0;
-                        botResponse.embeds = botData.embeds.guides.rvc.it.map(item => {
-                            const selectedColor = availableColors[colorIndex++];
-                            return botUtils.createEmbed(item, selectedColor);
-                        });
-                        botResponse.ephemeral = false;
-                        break;
-                    default:
-                        botResponse.content = 'This guide is not available in the selected language yet.';
+                selectedGuide = botData.embeds.guides.rvc[language]; 
+                if (!selectedGuide) {
+                    botResponse.ephemeral = true;
+                    botResponse.content = 'This guide is not available in the selected language yet.';
+                    return await interaction.reply(botResponse);
                 }
+                botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
         }
 
         if (targetUser && (targetUser.id !== interaction.user.id)) {
