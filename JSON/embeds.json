@@ -173,7 +173,7 @@
                     "- 🇫🇷  [French Documentation](https://docs.aihubfrance.fr/guides-clone-de-voix/rvc-v2)",
                     "- 🇮🇹  [Italian Documentation](https://docs.aihub.wtf/v/italy/)",
                     "- 🇷🇺  [Russian FAQ for RVC/Voice changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
-                    "- 🇪🇸  Español (`-rvc` `es`)",
+                    "- 🇪🇸  [Spain Documentation](https://docs.aihub.wtf/v/spain/)",
                     "- 🇧🇷  [Brasil Documentation](https://docs.aihub.wtf/v/brazil/)"
                 ]
             },
@@ -220,8 +220,8 @@
                     "inline": true
                 },
                 {
-                    "name": "🇫🇷 France",
-                    "value": "https://docs.aihub.wtf/v/france",
+                    "name": "🇪🇸 Spain",
+                    "value": "https://docs.aihub.wtf/v/spain/",
                     "inline": true
                 },
                 {
@@ -229,13 +229,13 @@
                     "value": "\u0020"
                 },
                 {
-                    "name": "🇩🇪 Germany",
-                    "value": "https://docs.aihub.wtf/v/germany",
+                    "name": "🇫🇷 France",
+                    "value": "https://docs.aihub.wtf/v/france",
                     "inline": true
                 },
                 {
-                    "name": "🇮🇹 Italy",
-                    "value": "https://docs.aihub.wtf/v/italy",
+                    "name": "🇩🇪 Germany",
+                    "value": "https://docs.aihub.wtf/v/germany",
                     "inline": true
                 },
                 {
@@ -264,6 +264,15 @@
                 {
                     "name": "🇷🇺 Russia",
                     "value": "https://docs.aihub.wtf/v/russia",
+                    "inline": true
+                },
+                {
+                    "name": "\u0020",
+                    "value": "\u0020"
+                },
+                {
+                    "name": "🇮🇹 Italy",
+                    "value": "https://docs.aihub.wtf/v/italy",
                     "inline": true
                 }
             ]
@@ -469,8 +478,8 @@
                         "Link: [YouTube](https://www.youtube.com/watch?v=bOAM_9xyHFY)",
                         "Autor: IA Hispano",
                         "## 🍏 Tutorial Applio (M1)(Mac)(M2)",
-                        "Link: [Google Docs](https://docs.google.com/document/d/1nvLGbzJMISCCDg-AY4TdDbBVqK8u3sDh5qY5qHuY7cE/edit)",
-                        "Autor: anthonydiazjorges",
+                        "Link: [Documentación](https://docs.aihub.wtf/v/spain/guia-de-clonacion-de-voz/applio)",
+                        "Autor: AI HUB FRANCE",
                         "### Servidor IA Hispano\n> https://discord.gg/iahispano"
                     ]
                 }
