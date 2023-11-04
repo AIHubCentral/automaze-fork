@@ -592,6 +592,22 @@
                         "## • Text to speech:\n[RVC-TTS-Guide](https://rentry.co/RVC-TTS-Guide)",
                         "\n> **Note:** If you need further help setting up/using the voice changers, you can ask for help in $channel or check the channel's pinned comments."
                     ]
+                },
+                {
+                    "title": "How to make text to speech with Ilaria TTS",
+                    "description": [
+                        "Link: https://docs.google.com/document/d/168uFdelqp6Mwx68VIRywWxqi4LHTmziG0jUZ8-1de2g/edit?usp=sharing"
+                    ],
+                    "footer": "Credits: Nick088"
+                }
+            ],
+            "it": [
+                {
+                    "title": "Ilaria TTS",
+                    "description": [
+                        "Link: [Google Docs](https://docs.google.com/document/d/1BCHyPQUxNkvf6JrdUVnYFYy0L1JtUxE1c6KUFK5mQEk/edit?usp=sharing)"
+                    ],
+                    "footer": "Credits: Nick088"
                 }
             ]
         }
