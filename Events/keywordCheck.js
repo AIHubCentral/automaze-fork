@@ -36,10 +36,14 @@ module.exports = {
             for (const item of client.botData.reactionKeywords) {
                 if (reactionCounter >= 20) break;
 
+                /*
                 let foundKeyword = false;
 
                 let keywordCount = item.keywords.length;
                 let matchedKeywords = 0;
+                */
+
+                let regex;
 
                 for (const keyword of item.keywords) {
                     // text is exact the keyword
@@ -48,10 +52,13 @@ module.exports = {
                     }
                     else {
                         // otherwise check if text includes the keyword
-                        foundKeyword = messageLowercase.includes(keyword);
+                        //foundKeyword = messageLowercase.includes(keyword);
+                        regex = new RegExp(`(?<!:)\\b${keyword}\\b`);
+                        foundKeyword = regex.test(messageLowercase);
                     }
 
                     if (foundKeyword) {
+                        /*
                         matchedKeywords++;
 
                         // only needs to match one keyword
@@ -59,6 +66,7 @@ module.exports = {
 
                         //console.log('found', item);
                         //console.log('matched keywords', matchedKeywords);
+                        */
 
                         for (const emoji of item.emojis) {
                             await message.react(emoji);
@@ -71,6 +79,7 @@ module.exports = {
             }
         } catch (error) {
             console.log('Failed to add reaction');
+            console.error(error);
             // sends a log to the dev server
             if (client.botConfigs.general.sendLogs) {
                 const { botConfigs } = client;

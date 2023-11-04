@@ -19,19 +19,48 @@
     },
     {
         "keywords": [
+            "poopbert"
+        ],
+        "emojis": [
+            "<:pooperror:1159654086845673545>"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "fdg"
+        ],
+        "emojis": [
+            "🇫", "🇩", "🇬"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "bertdit", "bandit", "mido"
+        ],
+        "emojis": [
+            "<:mido:1170068051014713484>"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
             "timbovill"
         ],
         "emojis": [
             "🇹",
             "🇮",
             "🇲",
+            "🇧",
+            "🇴",
             "<:AIHC_Ded:1163807516896002119>"
         ],
         "exact": true
     },
     {
         "keywords": [
-            " timbovill"
+            "timbovill"
         ],
         "emojis": [
             "<:AIHC_Ded:1163807516896002119>"
@@ -40,10 +69,10 @@
     },
     {
         "keywords": [
-            "timbovill "
+            "tetski"
         ],
         "emojis": [
-            "<:AIHC_Ded:1163807516896002119>"
+            "🥖"
         ],
         "exact": false
     },
@@ -63,6 +92,15 @@
         ],
         "emojis": [
             "🐢"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "clip"
+        ],
+        "emojis": [
+            "📎"
         ],
         "exact": false
     },
@@ -166,7 +204,7 @@
     },
     {
         "keywords": [
-            "cth"
+            "cthulhu"
         ],
         "emojis": [
             "🐙"
@@ -201,6 +239,15 @@
         ],
         "emojis": [
             "🎁"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "pin", "pinned"
+        ],
+        "emojis": [
+            "📌"
         ],
         "exact": false
     },
@@ -278,26 +325,7 @@
     },
     {
         "keywords": [
-            "mj"
-        ],
-        "emojis": [
-            "🎤"
-        ],
-        "exact": true
-    },
-    {
-        "keywords": [
-            "mj ",
-            "fazemasta"
-        ],
-        "emojis": [
-            "🎤"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            " mj",
+            "mj",
             "fazemasta"
         ],
         "emojis": [
