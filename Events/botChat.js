@@ -13,7 +13,11 @@ module.exports = {
         const prefix = client.prefix.ensure(message.guild.id, '-');
         if (message.content.startsWith(prefix)) return;
 
-        const messageLowercase = message.content.toLowerCase();
+        let messageLowercase = message.content.toLowerCase();
+
+        if (messageLowercase.endsWith('?')) {
+            messageLowercase.replace('?', '');
+        }
 
         const { botResponses, botUtils } = client;
 
@@ -28,6 +32,10 @@ module.exports = {
                 }
                 else {
                     selectedAnswer = botUtils.getRandomFromArray(msg.answers.negative);
+                }
+
+                if (selectedAnswer.includes('$user')) {
+                    selectedAnswer = selectedAnswer.replace('$user', message.author);
                 }
 
                 await message.reply(selectedAnswer);

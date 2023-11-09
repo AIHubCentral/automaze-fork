@@ -110,7 +110,7 @@
         "en": [
             {
                 "prompts": [
-                    "how are you automaze"
+                    "how are you automaze?"
                 ],
                 "answers": {
                     "positive": [
@@ -133,6 +133,32 @@
                     ],
                     "negative": [
                         "hello"
+                    ]
+                }
+            },
+            {
+                "prompts": [
+                    "ciao automaze", "salve automaze", "ehi automaze"
+                ],
+                "answers": {
+                    "positive": [
+                        "Ciao", "Salve!", "ehi", "guarda chi c'è!"
+                    ],
+                    "negative": [
+                        "ciao $user", "Salve $user!", "Ehi, $user!"
+                    ]
+                }
+            },
+            {
+                "prompts": [
+                    "come stai automaze"
+                ],
+                "answers": {
+                    "positive": [
+                        "bene"
+                    ],
+                    "negative": [
+                        "male"
                     ]
                 }
             }
