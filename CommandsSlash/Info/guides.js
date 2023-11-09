@@ -1,7 +1,8 @@
 const {
     StringSelectMenuBuilder, StringSelectMenuOptionBuilder,
     ActionRowBuilder, ButtonBuilder, ButtonStyle,
-    SlashCommandBuilder
+    SlashCommandBuilder,
+    ComponentType
 } = require('discord.js');
 
 module.exports = {
@@ -98,43 +99,39 @@ module.exports = {
                 botResponse.components = [actionRow];
                 break;
             case 'realtime':
-                // TODO: continue this
-                selectedGuide = botData.embeds.guides.realtime[language];
-                if (!selectedGuide) {
-                    botResponse.ephemeral = true;
-                    botResponse.content = 'This guide is not available in the selected language yet.';
-                    return await interaction.reply(botResponse);
+                switch (language) {
+                    case 'ru':
+                        botResponse.content = '';
+                        botResponse.embeds = botUtils.createEmbeds(botData.embeds.guides.realtime[language], availableColors);
+                        break;
+                    case 'en':
+                        const realtimeSelectOptions = botData.embeds.guides.realtime[language]['menuOptions'];
+                        selectedGuide = botData.embeds.guides.realtime[language]['local']['embeds'];
+
+                        var realtimeGuidesSelectMenu = new StringSelectMenuBuilder()
+                            .setCustomId('realtime_guides')
+                            .setPlaceholder('Select a guide')
+                            .addOptions(
+                                realtimeSelectOptions.map(menuOption =>
+                                    new StringSelectMenuOptionBuilder()
+                                        .setLabel(menuOption.label)
+                                        .setDescription(menuOption.description)
+                                        .setValue(menuOption.value)
+                                        .setEmoji(menuOption.emoji)
+                                ));
+
+                        const realtimeActionRow = new ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
+
+                        botResponse.content = selectedGuide.content;
+                        botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
+                        botResponse.components = [realtimeActionRow];
+                        break;
+                    default:
+                        botResponse.ephemeral = true;
+                        botResponse.content = 'This guide is not available in the selected language yet.';
+                        return await interaction.reply(botResponse);
                 }
 
-                const targetChannelId = client.discordIDs.Channel.HelpWOkada;
-                const targetChannel = interaction.guild.channels.cache.get(targetChannelId) ?? '"help-w-okada" channel';
-
-                const embedData = selectedGuide[0];
-
-                // insert the link to the channel in $channel
-                const lastDescriptionIndex = embedData.description.length - 1;
-                const lastDescriptionText = embedData.description[lastDescriptionIndex]
-                embedData.description[lastDescriptionIndex] = lastDescriptionText.replace('$channel', targetChannel);
-
-                const selectMenu = new StringSelectMenuBuilder()
-                    .setCustomId('realtime_guides')
-                    .setPlaceholder('Select a guide')
-                    .addOptions(
-                        new StringSelectMenuOptionBuilder()
-                            .setLabel('Local realtime guides')
-                            .setDescription('If you have a decent GPU these can be a good option')
-                            .setValue('realtime_local'),
-                        new StringSelectMenuOptionBuilder()
-                            .setLabel('Online realtime guides')
-                            .setDescription('If you don\'t have a decent GPU these can be a good option')
-                            .setValue('realtime_online')
-                    );
-                const realtimeActionRow = new ActionRowBuilder().addComponents(selectMenu);
-                botResponse.content = '### Realtime guides'
-                botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
-                botResponse.components = [realtimeActionRow];
-
-                botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
                 break;
             case 'upload':
                 selectedGuide = botData.embeds.guides.upload[language];
@@ -181,6 +178,56 @@ module.exports = {
             return await interaction.reply(botResponse);
         }
 
-        await interaction.reply(botResponse);
+        const botReply = await interaction.reply(botResponse);
+
+        // listen to select menu events if applicable
+        if (category === 'realtime' && language == 'en') {
+            const selectMenuDisplayMinutes = 5;  // allow interaction with the select menu for 5 minutes
+
+            const collector = botReply.createMessageComponentCollector({
+                componentType: ComponentType.StringSelect,
+                time: selectMenuDisplayMinutes * 60 * 1000
+            });
+
+            collector.on('collect', (i) => {
+                let allowedToInteract = i.user.id === interaction.user.id;
+
+                if (targetUser) {
+                    allowedToInteract = i.user.id === interaction.user.id || i.user.id === targetUser.id;
+                }
+
+                if (allowedToInteract) {
+                    const selectMenuResult = i.values[0];
+
+                    const realtimeGuides = botData.embeds.guides.realtime.en;
+                    let guide;
+
+                    if (selectMenuResult === 'realtime_local') {
+                        guide = realtimeGuides.local
+                    }
+                    else if (selectMenuResult === 'realtime_online') {
+                        guide = realtimeGuides.online
+                    }
+                    else if (selectMenuResult === 'realtime_faq') {
+                        guide = realtimeGuides.faq
+
+                    }
+
+                    botResponse.content = guide.content;
+                    botResponse.embeds = botUtils.createEmbeds(guide.embeds, availableColors);
+
+                    i.update(botResponse);
+                } else {
+                    i.reply({ content: 'You didn\'t start this interaction, use `/guides realtime` if you wish to choose an option.', ephemeral: true });
+                }
+            });
+
+            collector.on('end', (i) => {
+                botResponse.content = '> This interaction has expired, use the command `/guides realtime` if you wish to see it again.';
+                botResponse.embeds = [];
+                botResponse.components = [];
+                botReply.edit(botResponse);
+            });
+        }
     }
 };
