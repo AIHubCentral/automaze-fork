@@ -104,7 +104,11 @@
             "- **(Optional) user**: Recommend the guide to an user, note that this will ping the user.",
             "### /help",
             "Shows this help for Automaze slash commands, however, if you're looking for help for the prefix commands, which are those that starts with the minus sign such as `-rvc` you can use `-help`."
-        ]
+        ],
+        "coinflip": {
+            "en": ["Heads", "Tails"],
+            "it": ["Testa", "Croce"]
+        }
     },
     "botChat": {
         "en": [
@@ -129,7 +133,9 @@
                 ],
                 "answers": {
                     "positive": [
-                        "hey", "hi", "sup"
+                        "hey",
+                        "hi",
+                        "sup"
                     ],
                     "negative": [
                         "hello"
@@ -138,14 +144,21 @@
             },
             {
                 "prompts": [
-                    "ciao automaze", "salve automaze", "ehi automaze"
+                    "ciao automaze",
+                    "salve automaze",
+                    "ehi automaze"
                 ],
                 "answers": {
                     "positive": [
-                        "Ciao", "Salve!", "ehi", "guarda chi c'è!"
+                        "Ciao",
+                        "Salve!",
+                        "ehi",
+                        "guarda chi c'è!"
                     ],
                     "negative": [
-                        "ciao $user", "Salve $user!", "Ehi, $user!"
+                        "ciao $user",
+                        "Salve $user!",
+                        "Ehi, $user!"
                     ]
                 }
             },
