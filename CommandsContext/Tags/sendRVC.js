@@ -9,13 +9,25 @@ module.exports = {
     ,
     async execute(interaction) {
         const { client, targetUser } = interaction;
+        const { discordIDs } = interaction.client;
+
         if (targetUser.bot) return await interaction.reply({ content: 'That user is a bot.', ephemeral: true });
 
         const { botData, botUtils, botConfigs } = client;
+        const availableColors = botUtils.getAvailableColors(botConfigs);
 
-        let embedData = botData.embeds.rvc.main;
-        embeds = botUtils.createEmbeds([embedData], botUtils.getAvailableColors(botConfigs));
-        let messageContent = 'Here are some useful resources to help you learn how to make ai covers';
-        interaction.reply({ content: `Hey, ${targetUser}!\n\n👇 ${messageContent}`, embeds: embeds });
+        let botResponse = {};
+
+        switch (interaction.channelId) {
+            case discordIDs.Channel.Italiano:
+                botResponse.content = `Ciao ${targetUser}, ecco alcune risorse utili consigliate per te`;
+                botResponse.embeds = botUtils.createEmbeds(botData.embeds.guides.rvc.it, availableColors);
+                break;
+            default:
+                botResponse.content = `Hello, ${targetUser}! Here are some recommended resources for you to learn.`;
+                botResponse.embeds = botUtils.createEmbeds(botData.embeds.guides.rvc.en, availableColors);
+        }
+
+        interaction.reply(botResponse);
     }
 }
