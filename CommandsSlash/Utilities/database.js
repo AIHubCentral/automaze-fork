@@ -24,6 +24,17 @@ module.exports = {
             subcommand
                 .setName('export')
                 .setDescription('Downloads the bot data as a JSON file')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('delete')
+                .setDescription('Deletes a user from the database')
+                .addStringOption(option =>
+                    option
+                        .setName('user_id')
+                        .setDescription('The discord user ID')
+                        .setRequired(true)
+                )
         ),
     async execute(interaction) {
         // usable on dev server only
@@ -110,6 +121,40 @@ module.exports = {
             const buffer = Buffer.from(data, 'utf-8');
             const attachment = new AttachmentBuilder(buffer, { name: 'database.json' });
             await interaction.editReply({ files: [attachment] });
+        }
+        else if (interaction.options.getSubcommand() === 'delete') {
+            const userId = interaction.options.getString('user_id');
+            const botResponse = {};
+
+            const User = await client.knexInstance('user').where('id', userId).first();
+
+            if (!User) {
+                botResponse.content = `User with ID ${userId} not found.`;
+                return interaction.editReply(botResponse);
+            }
+
+            botResponse.embeds = client.botUtils.createEmbeds([
+                {
+                    title: 'User deleted from database',
+                    description: [
+                        `ID: ${User.id}`,
+                        `Username: ${User.username}`,
+                        `Display Name: ${User.display_name}`,
+                    ]
+                }], ['Red']
+            );
+
+            // delete user
+            await client.knexInstance('user').where('id', userId).del();
+
+            // delete user inventory if not empty
+            const UserInventory = await client.knexInstance('inventory').where('user_id', userId).first();
+
+            if (UserInventory) {
+                await client.knexInstance('inventory').where('user_id', userId).del();
+            }
+
+            await interaction.editReply(botResponse);
         }
     }
 }
