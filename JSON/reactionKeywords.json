@@ -10,6 +10,15 @@
     },
     {
         "keywords": [
+            "test"
+        ],
+        "emojis": [
+            "🧪"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
             "poopmaster"
         ],
         "emojis": [
@@ -127,55 +136,10 @@
     },
     {
         "keywords": [
-            "php", "postgres"
-        ],
-        "emojis": [
-            "🐘"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "llama"
-        ],
-        "emojis": [
-            "🦙"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
             "lazy"
         ],
         "emojis": [
             "🦥"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "java"
-        ],
-        "emojis": [
-            "☕"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "python"
-        ],
-        "emojis": [
-            "🐍"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "huggingface"
-        ],
-        "emojis": [
-            "🤗"
         ],
         "exact": false
     },
@@ -203,15 +167,6 @@
         ],
         "emojis": [
             "🛌", "💤"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "friends"
-        ],
-        "emojis": [
-            "👉", "👈"
         ],
         "exact": false
     },
@@ -369,15 +324,6 @@
         ],
         "emojis": [
             "🍄"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "gift"
-        ],
-        "emojis": [
-            "🎁"
         ],
         "exact": false
     },

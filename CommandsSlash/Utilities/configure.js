@@ -97,6 +97,23 @@ module.exports = {
                         .setName('send_logs')
                         .setDescription('Whether the bot should send logs to development server')
                 )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('cooldown_immune')
+                .setDescription('Makes a user immune to cooldowns')
+                .addStringOption(option =>
+                    option
+                        .setName('user_id')
+                        .setDescription('The target user')
+                        .setRequired(true)
+                )
+                .addBooleanOption(option =>
+                    option
+                        .setName('immune')
+                        .setDescription('Whether this user is immune to cooldowns')
+                        .setRequired(true)
+                )
         ),
     async execute(interaction) {
         const client = interaction.client;
@@ -194,6 +211,22 @@ module.exports = {
             botResponse.content = botResponse.content.join('\n');
 
             await interaction.reply(botResponse);
+        }
+        else if (interaction.options.getSubcommand() === 'cooldown_immune') {
+            const userId = interaction.options.getString('user_id');
+            const cooldownImmunity = interaction.options.getBoolean('immune');
+            
+            if (cooldownImmunity) {
+                client.botData.cooldownImmuneUsers.set(userId, cooldownImmunity);
+                client.cooldowns.reactions.delete(userId);
+                client.cooldowns.banana.delete(userId);
+                client.cooldowns.slashCommands.delete(userId);
+            }
+            else {
+                client.botData.cooldownImmuneUsers.delete(userId);
+            }
+
+            await interaction.reply({ content: `User: ${userId}\nCooldown immunity: ${cooldownImmunity}`, ephemeral: true });
         }
     }
 }

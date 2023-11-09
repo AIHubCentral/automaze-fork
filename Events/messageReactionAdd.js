@@ -8,6 +8,9 @@ module.exports = {
         // don't add cooldown if the bot reacted to itself like the voting embed for instance
         if (reaction.message.author.id === client.user.id) return;
 
+        // cooldown immune users
+        if (client.botData.cooldownImmuneUsers.has(reaction.message.author.id)) return;
+
         // add user to cooldown
         if (!client.cooldowns.reactions.has(reaction.message.author.id)) {
             const expirationDate = new Date();
