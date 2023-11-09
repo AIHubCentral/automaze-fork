@@ -108,7 +108,18 @@
         "coinflip": {
             "en": ["Heads", "Tails"],
             "it": ["Testa", "Croce"]
-        }
+        },
+        "svc": [
+            "bruh you should use RVC",
+            "yeah I still use so vits svc",
+            "Did you mean `-rvc`?",
+            "So-Vits-SVC",
+            "Nah, use RVC instead",
+            "RVC better",
+            "RVC way better bruh",
+            "I'd recommend RVC",
+            "Repeat with me: R, V, C"
+        ]
     },
     "botChat": {
         "en": [
