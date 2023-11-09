@@ -50,6 +50,7 @@ module.exports = {
         const category = interaction.options.getString('category');
         const language = interaction.options.getString('language') ?? 'en';
         const targetUser = interaction.options.getUser('user');
+        const mainUser = interaction.user;
 
         const { client } = interaction;
         const { botData, botConfigs, botUtils } = client;
@@ -174,15 +175,14 @@ module.exports = {
                 ];
                 return await interaction.reply(bloopers[client.botUtils.getRandomNumber(0, bloopers.length)]);
             }
-            botResponse.content += `\n👇 Suggestions for ${targetUser}!`;
-            return await interaction.reply(botResponse);
+            botResponse.content = `\n👇 Suggestions for ${targetUser}!`;
         }
 
         const botReply = await interaction.reply(botResponse);
 
         // listen to select menu events if applicable
         if (category === 'realtime' && language == 'en') {
-            const selectMenuDisplayMinutes = 5;  // allow interaction with the select menu for 5 minutes
+            let selectMenuDisplayMinutes = targetUser ? 30 : 5;
 
             const collector = botReply.createMessageComponentCollector({
                 componentType: ComponentType.StringSelect,
@@ -190,10 +190,10 @@ module.exports = {
             });
 
             collector.on('collect', (i) => {
-                let allowedToInteract = i.user.id === interaction.user.id;
+                let allowedToInteract = i.user.id === mainUser.id;
 
                 if (targetUser) {
-                    allowedToInteract = i.user.id === interaction.user.id || i.user.id === targetUser.id;
+                    allowedToInteract = i.user.id === mainUser.id || i.user.id === targetUser.id;
                 }
 
                 if (allowedToInteract) {
@@ -213,7 +213,12 @@ module.exports = {
 
                     }
 
-                    botResponse.content = guide.content;
+                    if (targetUser) {
+                        botResponse.content = guide.content + `\nSuggestions for ${targetUser}`;
+                    } else {
+                        botResponse.content = guide.content;
+                    }
+
                     botResponse.embeds = botUtils.createEmbeds(guide.embeds, availableColors);
 
                     i.update(botResponse);

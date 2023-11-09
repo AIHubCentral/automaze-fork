@@ -45,13 +45,16 @@ module.exports = {
             components: [realtimeActionRow]
         };
 
-        if (message.mentions.members.first()) {
+        let selectMenuDisplayMinutes = 5;  // allow interaction with the select menu for 5 minutes
+        let targetUser = message.mentions.members.first();
+        let mainUser = message.author;
+
+        if (targetUser) {
             botResponse.content = `*Tag suggestion for ${message.mentions.members.first()}*`;
+            selectMenuDisplayMinutes = 30;  // menu available for 30 minutes if it was sent to someone
         }
 
         const botReply = await message.reply(botResponse);
-
-        const selectMenuDisplayMinutes = 5;  // allow interaction with the select menu for 5 minutes
 
         const collector = botReply.createMessageComponentCollector({
             componentType: ComponentType.StringSelect,
@@ -59,10 +62,10 @@ module.exports = {
         });
 
         collector.on('collect', (i) => {
-            let allowedToInteract = i.user.id === message.author.id;
+            let allowedToInteract = i.user.id === mainUser.id;
 
-            if (message.mentions.members.first()) {
-                allowedToInteract = i.user.id === message.author.id || i.user.id === message.mentions.members.first().id;
+            if (targetUser) {
+                allowedToInteract = i.user.id === mainUser.id || i.user.id === targetUser.id;
             }
 
             if (allowedToInteract) {
@@ -82,7 +85,12 @@ module.exports = {
 
                 }
 
-                botResponse.content = guide.content;
+                if (targetUser) {
+                    botResponse.content = guide.content + `\nSuggestions for ${targetUser}`;
+                } else {
+                    botResponse.content = guide.content;
+                }
+
                 botResponse.embeds = botUtils.createEmbeds(guide.embeds, availableColors);
 
                 i.update(botResponse);
