@@ -13,6 +13,15 @@
             "poopmaster"
         ],
         "emojis": [
+            "<trolley:1159468147133395025>", "<:pooperror:1159654086845673545>"
+        ],
+        "exact": true
+    },
+    {
+        "keywords": [
+            "poopmaster"
+        ],
+        "emojis": [
             "<trolley:1159468147133395025>"
         ],
         "exact": false
@@ -46,21 +55,16 @@
     },
     {
         "keywords": [
-            "timbovill"
+            "kakao", "ange", "angetyde"
         ],
         "emojis": [
-            "🇹",
-            "🇮",
-            "🇲",
-            "🇧",
-            "🇴",
-            "<:AIHC_Ded:1163807516896002119>"
+            "❤️"
         ],
-        "exact": true
+        "exact": false
     },
     {
         "keywords": [
-            "timbovill"
+            "timbo", "timbovill"
         ],
         "emojis": [
             "<:AIHC_Ded:1163807516896002119>"
@@ -69,10 +73,136 @@
     },
     {
         "keywords": [
-            "tetski"
+            "teto"
         ],
         "emojis": [
             "🥖"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "applio"
+        ],
+        "emojis": [
+            "🍏"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "wth", "wtf", "wut"
+        ],
+        "emojis": [
+            "<:gru:1159574235509968976>"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "sed", "sad", "crying"
+        ],
+        "emojis": [
+            "<:pepecry:1159573014678098020>"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "scared", "scary"
+        ],
+        "emojis": [
+            "<:nails:1159569314848972891>"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "pray", "praying"
+        ],
+        "emojis": [
+            "<:matsuripray:1159685390156967936>"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "php", "postgres"
+        ],
+        "emojis": [
+            "🐘"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "llama"
+        ],
+        "emojis": [
+            "🦙"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "lazy"
+        ],
+        "emojis": [
+            "🦥"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "java"
+        ],
+        "emojis": [
+            "☕"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "python"
+        ],
+        "emojis": [
+            "🐍"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "huggingface"
+        ],
+        "emojis": [
+            "🤗"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "alien"
+        ],
+        "emojis": [
+            "👽"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "bedtime"
+        ],
+        "emojis": [
+            "🛌", "💤"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "friends?"
+        ],
+        "emojis": [
+            "👉", "👈"
         ],
         "exact": false
     },
@@ -141,7 +271,7 @@
     },
     {
         "keywords": [
-            "antasma"
+            "antasma", "qwizibo"
         ],
         "emojis": [
             "🌟"
@@ -153,7 +283,7 @@
             "raytracer"
         ],
         "emojis": [
-            "🤖"
+            "⚡"
         ],
         "exact": false
     },
