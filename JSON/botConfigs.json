@@ -5,7 +5,7 @@
     },
     "general": {
         "reactions": true,
-        "randomResponses": false,
+        "chat": true,
         "sendLogs": false
     },
     "colors": {

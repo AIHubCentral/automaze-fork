@@ -33,6 +33,16 @@ function getRandomNumber(min, max) {
 
 exports.getRandomNumber = getRandomNumber;
 
+function getRandomFromArray(arr) {
+    /* gets a random value from an array */
+    if (arr.length === 0) return null;
+    if (arr.length === 1) return arr[0];
+    const randomIndex = getRandomNumber(0, arr.length - 1);
+    return arr[randomIndex];
+}
+
+exports.getRandomFromArray = getRandomFromArray;
+
 function getCommands(basePath, subPath) {
     /* get an array of commands converted to json ready to be sent to discord API */
     const commands = [];

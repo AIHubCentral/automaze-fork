@@ -15,9 +15,32 @@
             "targetNone": "dumbass who you watn to banan?/?/????"
         },
         "8ball": {
-            "affirmative": ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes."],
-            "negative": ["Don't count on it.", "My reply is no.", "My sources say no.", "Outlook not so good.", "Very doubtful."],
-            "nonCommital": ["Reply hazy, try again.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again."]
+            "affirmative": [
+                "It is certain.",
+                "It is decidedly so.",
+                "Without a doubt.",
+                "Yes definitely.",
+                "You may rely on it.",
+                "As I see it, yes.",
+                "Most likely.",
+                "Outlook good.",
+                "Yes.",
+                "Signs point to yes."
+            ],
+            "negative": [
+                "Don't count on it.",
+                "My reply is no.",
+                "My sources say no.",
+                "Outlook not so good.",
+                "Very doubtful."
+            ],
+            "nonCommital": [
+                "Reply hazy, try again.",
+                "Ask again later.",
+                "Better not tell you now.",
+                "Cannot predict now.",
+                "Concentrate and ask again."
+            ]
         },
         "snipe": [
             "👀 nice try...",
@@ -26,17 +49,31 @@
             "Snipers...Get down!!! 🤣🤣🤣",
             "only if you tell me how to make ai cover",
             "wohoaa epic faill 🤣🤣🤣🤣",
-            "fail", "EPIC FAIL BRUHHH 😂😂😂😂",
+            "fail",
+            "EPIC FAIL BRUHHH 😂😂😂😂",
             "what??? this command was removed 🤪",
             "BOOMERRR!!! 🤣🤣🤣🤣",
             "👏👏👏👏 CAUGHT YOU SNIPERRR!!!!",
-            "💩💩💩💩💩", "🧐", "🤭", "😱", "👻", "👀",
+            "💩💩💩💩💩",
+            "🧐",
+            "🤭",
+            "😱",
+            "👻",
+            "👀",
             "https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713"
         ],
         "verifiedChat": [
-            "who asked lmaoooooo", "lmao", "lol", "frfr", "bruh",
-            "ok but my rank is higher than yours", "if you say so",
-            "🤔", "🤨", "😲", "🤯",
+            "who asked lmaoooooo",
+            "lmao",
+            "lol",
+            "frfr",
+            "bruh",
+            "ok but my rank is higher than yours",
+            "if you say so",
+            "🤔",
+            "🤨",
+            "😲",
+            "🤯",
             "https://tenor.com/view/shocked-shock-shocking-omg-omg-meme-gif-26225226",
             "https://tenor.com/view/jonah-hill-annoyed-gif-9220106536573580777",
             "https://tenor.com/view/nick-young-question-mark-huh-what-confused-gif-4995479",
@@ -67,6 +104,38 @@
             "- **(Optional) user**: Recommend the guide to an user, note that this will ping the user.",
             "### /help",
             "Shows this help for Automaze slash commands, however, if you're looking for help for the prefix commands, which are those that starts with the minus sign such as `-rvc` you can use `-help`."
+        ]
+    },
+    "botChat": {
+        "en": [
+            {
+                "prompts": [
+                    "how are you automaze"
+                ],
+                "answers": {
+                    "positive": [
+                        "good",
+                        "fine"
+                    ],
+                    "negative": [
+                        "bad",
+                        "not so good"
+                    ]
+                }
+            },
+            {
+                "prompts": [
+                    "hi automaze"
+                ],
+                "answers": {
+                    "positive": [
+                        "hey", "hi", "sup"
+                    ],
+                    "negative": [
+                        "hello"
+                    ]
+                }
+            }
         ]
     }
 }

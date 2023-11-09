@@ -6,7 +6,7 @@ const Enmap = require("enmap");
 const Discord = require(`discord.js`);
 
 // Exports
-const { getAllFiles, createEmbed, createEmbeds, getAvailableColors, getRandomNumber } = require('./utils');
+const { getAllFiles, createEmbed, createEmbeds, getAvailableColors, getRandomNumber, getRandomFromArray } = require('./utils');
 
 // JSONs
 const DiscordIDs = {
@@ -88,7 +88,8 @@ client.botUtils = {
     createEmbed,
     createEmbeds,
     getAvailableColors,
-    getRandomNumber
+    getRandomNumber,
+    getRandomFromArray
 };
 
 // knex database
