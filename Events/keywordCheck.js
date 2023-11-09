@@ -1,13 +1,18 @@
+const { ChannelType } = require('discord.js');
 const delay = require('node:timers/promises').setTimeout;
 
 module.exports = {
     name: "messageCreate",
     once: false,
     async run(client, message, _) {
-        if (message.author.bot) return;
-
         // only proceed if reactions is enabled in configs
         if (!client.botConfigs.general.reactions) return;
+
+        // don't react to itself
+        if (message.author.bot) return;
+
+        // don't react to threads
+        if (message.channel.type === ChannelType.PublicThread) return;
 
         // skip prefix commands
         const prefix = client.prefix.ensure(message.guild.id, '-');
