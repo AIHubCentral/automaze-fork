@@ -87,32 +87,14 @@
         "emojis": [
             "🍏"
         ],
-        "exact": false
+        "exact": true
     },
     {
         "keywords": [
-            "wth", "wtf", "wut"
-        ],
-        "emojis": [
-            "<:gru:1159574235509968976>"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "sed", "sad", "crying"
+            "sed", "crying"
         ],
         "emojis": [
             "<:pepecry:1159573014678098020>"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "scared", "scary"
-        ],
-        "emojis": [
-            "<:nails:1159569314848972891>"
         ],
         "exact": false
     },
@@ -127,7 +109,7 @@
     },
     {
         "keywords": [
-            "lazy"
+            "i'm lazy"
         ],
         "emojis": [
             "🦥"
@@ -163,16 +145,6 @@
     },
     {
         "keywords": [
-            "teas.hi"
-        ],
-        "emojis": [
-            "🇦",
-            "🇮"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
             "leo frixi"
         ],
         "emojis": [
@@ -186,32 +158,6 @@
         ],
         "emojis": [
             "📎"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "blaise"
-        ],
-        "emojis": [
-            "🇧",
-            "🇱",
-            "🇦",
-            "🇮",
-            "🇸",
-            "🇪"
-        ],
-        "exact": true
-    },
-    {
-        "keywords": [
-            "wolfmk"
-        ],
-        "emojis": [
-            "🇼",
-            "🇴",
-            "🇱",
-            "🇫"
         ],
         "exact": false
     },
@@ -244,15 +190,6 @@
     },
     {
         "keywords": [
-            "fishybusyness"
-        ],
-        "emojis": [
-            "🐟"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
             "charlotte"
         ],
         "emojis": [
@@ -271,15 +208,6 @@
     },
     {
         "keywords": [
-            "zeero weeb"
-        ],
-        "emojis": [
-            "<:lfg:1159355870119993496>"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
             "maki ligon"
         ],
         "emojis": [
@@ -293,28 +221,6 @@
         ],
         "emojis": [
             "🐙"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "iroak"
-        ],
-        "emojis": [
-            "🇰",
-            "🇦",
-            "🇴",
-            "🇷",
-            "🇮"
-        ],
-        "exact": true
-    },
-    {
-        "keywords": [
-            "fungus"
-        ],
-        "emojis": [
-            "🍄"
         ],
         "exact": false
     },
@@ -421,15 +327,6 @@
     },
     {
         "keywords": [
-            "cyrus"
-        ],
-        "emojis": [
-            "✨"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
             "gdr"
         ],
         "emojis": [
@@ -447,27 +344,6 @@
             "🇪",
             "🇱",
             "🇹"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "inductivegrub"
-        ],
-        "emojis": [
-            "🇬",
-            "🇷",
-            "🇺",
-            "🇧"
-        ],
-        "exact": true
-    },
-    {
-        "keywords": [
-            "l34f"
-        ],
-        "emojis": [
-            "🍃"
         ],
         "exact": false
     },

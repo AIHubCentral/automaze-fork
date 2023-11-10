@@ -33,6 +33,9 @@ module.exports = {
             }
         }
 
+        // don't add reaction if there are attachments
+        if (message.attachments.size > 0) return;
+
         const messageLowercase = message.content.toLowerCase();
 
         // don't react if keyword is in an url
