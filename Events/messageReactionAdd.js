@@ -1,3 +1,11 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const { saveJSON } = require('../utils.js');
+
+function logEmojiToFile(data) {
+    return saveJSON('reactions', data);
+}
+
 module.exports = {
     name: 'messageReactionAdd',
     once: false,
@@ -17,6 +25,16 @@ module.exports = {
             expirationDate.setMinutes(expirationDate.getMinutes() + 5);
             client.cooldowns.reactions.set(reaction.message.author.id, expirationDate);
             console.log(reaction.message.author.id, 'added to cooldown, expires in', expirationDate);
+
+            // log the emoji to a file
+            const logData = {
+                messageId: reaction.message.id,
+                channelId: reaction.message.channelId,
+                guildId: reaction.message.guildId,
+                author: reaction.message.author.username,
+                reaction: reaction.emoji
+            };
+            if (logEmojiToFile(logData)) console.log('Emoji log saved!');
         }
     }
 }

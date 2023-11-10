@@ -231,3 +231,26 @@ async function banan(interaction, targetUser) {
 }
 
 exports.banan = banan;
+
+
+function saveJSON(filename, data) {
+    let success = false;
+    const dateString = new Date().toISOString().slice(0, 10);
+    const filepath = path.join(process.cwd(), 'Debug', `${filename}-${dateString}.json`);
+    try {
+        let content = [];
+        if (fs.existsSync(filepath)) {
+            content = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
+        }
+        content.push(data);
+        fs.writeFileSync(filepath, JSON.stringify(content, null, 4));
+        success = true;
+    }
+    catch (error) {
+        console.log(`Failed to save ${filepath}`);
+        console.error(error);
+    }
+    return success;
+}
+
+exports.saveJSON = saveJSON;
