@@ -82,7 +82,8 @@ if (!devMode) {
 client.botData = {
     embeds: require('./JSON/embeds.json'),
     reactionKeywords: require('./JSON/reactionKeywords.json'),
-    cooldownImmuneUsers: new Discord.Collection()
+    cooldownImmuneUsers: new Discord.Collection(),
+    voiceModelsCounter: 0
 };
 
 client.botUtils = {

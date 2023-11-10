@@ -1,18 +1,22 @@
 const { Events } = require('discord.js');
+/*
 const fs = require(`fs`);
 const Extractor = require('../../Misc/extractor.js')
 const modelsFile = require('../../JSON/_models.json')
 const rll = require('read-last-lines');
+*/
 
 module.exports = {
     name: Events.ThreadCreate,
     run(client, thread, newlyCreated) {
-        const { models } = require('../../JSON/channels.json');
-        if(newlyCreated && (models.id == thread.parentId))
-            updateModels(thread)
+        //const { models } = require('../../JSON/channels.json');
+        const { discordIDs } = client;
+        if (thread.parentId !== discordIDs.Forum.VoiceModel) return;
+        client.botData.voiceModelsCounter++;
     },
 }
 
+/*
 async function updateModels(thread) {
     let result;
     let starterMessage = await thread.fetchStarterMessage().catch(err => {
@@ -47,3 +51,4 @@ async function updateModels(thread) {
         });
     }); 
 }
+*/
