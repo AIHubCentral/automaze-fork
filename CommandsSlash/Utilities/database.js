@@ -35,6 +35,32 @@ module.exports = {
                         .setDescription('The discord user ID')
                         .setRequired(true)
                 )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('update')
+                .setDescription('Updates a user in the database')
+                .addStringOption(option =>
+                    option
+                        .setName('userid')
+                        .setDescription('The discord user ID')
+                        .setRequired(true)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('display_name')
+                        .setDescription('New user display name')
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('username')
+                        .setDescription('New username')
+                )
+                .addIntegerOption(option =>
+                    option
+                        .setName('bananas')
+                        .setDescription('Banana count')
+                )
         ),
     async execute(interaction) {
         // usable on dev server only
@@ -152,6 +178,63 @@ module.exports = {
 
             if (UserInventory) {
                 await client.knexInstance('inventory').where('user_id', userId).del();
+            }
+
+            await interaction.editReply(botResponse);
+        }
+        else if (interaction.options.getSubcommand() === 'update') {
+            const userId = interaction.options.getString('userid');
+            const displayName = interaction.options.getString('display_name');
+            const userName = interaction.options.getString('username');
+            const bananas = interaction.options.getInteger('bananas');
+
+            const User = await client.knexInstance('user').where('id', userId).first();
+
+            const botResponse = {};
+
+            if (!User) {
+                botResponse.content = `User with ID ${userId} not found.`;
+            }
+            else {
+                const Inventory = await client.knexInstance('inventory').where('user_id', userId).first();
+
+                if (!Inventory) {
+                    botResponse.content = `${User.username} inventory is empty.`;
+                } else {
+                    const userUpdatedData = {};
+                    const inventoryUpdatedData = {};
+                    botResponse.content = [`ID: ${userId}`];
+
+                    if (displayName) {
+                        userUpdatedData.display_name = displayName;
+                        botResponse.content.push(`display name: ${displayName}`);
+                    }
+
+                    if (userName) {
+                        userUpdatedData.username = userName;
+                        botResponse.content.push(`username: ${userName}`);
+                    }
+
+                    if (Object.values(userUpdatedData).length) {
+                        await client.knexInstance('user')
+                            .update(userUpdatedData)
+                            .where('id', userId);
+                    }
+
+
+                    if (bananas) {
+                        inventoryUpdatedData.quantity = bananas;
+                        botResponse.content.push(`bananas: ${bananas}`);
+                    }
+
+                    if (Object.values(inventoryUpdatedData).length) {
+                        await client.knexInstance('inventory')
+                            .update(inventoryUpdatedData)
+                            .where('user_id', userId);
+                    }
+
+                    botResponse.content = botResponse.content.join('\n');
+                }
             }
 
             await interaction.editReply(botResponse);
