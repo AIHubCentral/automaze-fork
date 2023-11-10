@@ -35,6 +35,9 @@ module.exports = {
 
         const messageLowercase = message.content.toLowerCase();
 
+        // don't react if keyword is in an url
+        if (messageLowercase.includes('http')) return;
+
         try {
             // max of 20 reactions
             let reactionCounter = 0;
