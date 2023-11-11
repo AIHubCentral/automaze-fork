@@ -128,7 +128,7 @@ module.exports = {
 
                 await channel.sendTyping();
                 await delay(text.length * typingDuration);
-                await message.reply(text);
+                await message.reply({ content:text, allowedMentions: { repliedUser: true } });
                 return interaction.editReply(botResponse);
             }
             else if (selectedOption == 'embed') {
