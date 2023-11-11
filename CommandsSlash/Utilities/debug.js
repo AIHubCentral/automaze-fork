@@ -10,6 +10,17 @@ module.exports = {
         .setDescription('Bot debug')
         .addStringOption(option =>
             option
+                .setName('options')
+                .setDescription('Choose an option')
+                .setRequired(true)
+                .addChoices(
+                    { name: 'emojis', value: 'emojis' },
+                    { name: 'stickers', value: 'stickers' },
+                    { name: 'channelInfo', value: 'channel_info' },
+                )
+        )
+        .addStringOption(option =>
+            option
                 .setName('channel_id')
                 .setDescription('Channel ID')
         )
@@ -33,19 +44,20 @@ module.exports = {
 
         const { botData, botUtils } = client;
 
-        const channelId = interaction.options.getString('channel_id');
+        const selectedOption = interaction.options.getString('options');
+
         const guildId = interaction.options.getString('guild_id') ?? client.discordIDs.Guild;
+        let guild = client.guilds.cache.get(guildId);
 
-        if (guildId) {
-            var guild = client.guilds.cache.get(guildId);
+        if (!guild) {
+            console.log('Guild not found in cache...Fetching');
+            guild = await client.guilds.fetch(guildId);
+        }
 
-            if (!guild) {
-                guild = await client.guilds.fetch(guildId);
-            }
+        botResponse.content.push('**Guild:**');
+        botResponse.content.push(`Name: ${guild.name}`);
 
-            botResponse.content.push('**Guild:**');
-            botResponse.content.push(`Name: ${guild.name}`)
-
+        if (selectedOption === 'emojis') {
             const emojiManager = guild.emojis;
 
             botResponse.content.push('\n**Guild Emojis**:');
@@ -59,7 +71,8 @@ module.exports = {
                 }
                 botResponse.content.push(emojiString);
             });
-
+        }
+        else if (selectedOption === 'stickers') {
             const stickerManager = guild.stickers;
 
             botResponse.content.push('\n**Guild Stickers**:');
@@ -67,9 +80,10 @@ module.exports = {
             stickerManager.cache.forEach(sticker => {
                 botResponse.content.push(`- ${sticker.id} - ${sticker.name}`);
             });
-        }
 
-        if (channelId && guildId) {
+        }
+        else if (selectedOption === 'channel_info') {
+            const channelId = interaction.options.getString('channel_id');
             let channel = guild.channels.cache.get(channelId);
 
             if (!channel) {
@@ -102,8 +116,6 @@ module.exports = {
                 }
             }
         }
-
-        botResponse.content.push(`\nNew models since bot is online: ${botData.voiceModelsCounter}`);
 
         botResponse.content = botResponse.content.join('\n');
 
