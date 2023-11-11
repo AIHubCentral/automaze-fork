@@ -21,7 +21,6 @@ module.exports = {
 
         // user can close posts in these channels
         const allowedChannels = [
-            discordIDs.Forum.Suggestions,
             discordIDs.Forum.VoiceModel,
             discordIDs.Forum.TaskSTAFF,
             discordIDs.Forum.RequestModel.ID,
