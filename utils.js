@@ -209,7 +209,7 @@ async function banan(interaction, targetUser) {
 
     // copy embed data
     const embedData = JSON.parse(JSON.stringify(client.botData.embeds.banana));
-    embedData.title = embedData.title.replace('$username', member.username);
+    embedData.title = embedData.title.replace('$username', member.displayName);
     embedData.description[0] = embedData.description[0].replaceAll('$member', member);
     embedData.footer = embedData.footer.replace('$quantity', dbResult[0].quantity);
 
