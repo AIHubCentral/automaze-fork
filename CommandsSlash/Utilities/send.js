@@ -1,9 +1,13 @@
 const {
-    SlashCommandBuilder,
-    ModalBuilder,
     ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    ComponentType,
+    ModalBuilder,
+    SlashCommandBuilder,
     TextInputBuilder,
     TextInputStyle
+
 } = require('discord.js');
 
 const delay = require('node:timers/promises').setTimeout;
@@ -50,7 +54,7 @@ module.exports = {
         )
     ,
     async execute(interaction) {
-        //await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ ephemeral: true });
 
         const client = interaction.client;
 
@@ -66,7 +70,7 @@ module.exports = {
 
         const selectedOption = interaction.options.getString('options');
 
-        const botResponse = { ephemeral: true };
+        const botResponse = {};
 
         try {
             const guild = client.guilds.cache.get(guildId);
@@ -83,52 +87,72 @@ module.exports = {
             // 300 ms per letter
             const typingDuration = 300;
 
-            switch (selectedOption) {
-                case 'text':
-                    if (!text) {
-                        botResponse.content = 'Empty text...Skipped';
-                        return interaction.reply(botResponse);
-                    };
+            if (selectedOption === 'text') {
+                if (!text) {
+                    botResponse.content = 'Empty text...Skipped';
+                    return interaction.editReply(botResponse);
+                };
 
-                    botResponse.content = [
-                        '### Text sent:',
-                        `> Guild: ${guildId} (${guild.name})`,
-                        `> Channel: ${channelId} (${channel.name})`,
-                        `> Text: ${text}`
-                    ].join('\n');
+                botResponse.content = [
+                    '### Text sent:',
+                    `> Guild: ${guildId} (${guild.name})`,
+                    `> Channel: ${channelId} (${channel.name})`,
+                    `> Text: ${text}`
+                ].join('\n');
 
-                    await channel.sendTyping();
-                    await delay(text.length * typingDuration);
-                    await channel.send(text);
-                    await interaction.reply(botResponse);
-                    break;
-                case 'reply':
-                    if (!text || !messageId) {
-                        botResponse.content = 'Empty text or message id...Skipped';
-                        return interaction.reply(botResponse);
-                    }
+                await channel.sendTyping();
+                await delay(text.length * typingDuration);
+                await channel.send(text);
+                return interaction.editReply(botResponse);
+            }
+            else if (selectedOption === 'reply') {
+                if (!text || !messageId) {
+                    botResponse.content = 'Empty text or message id...Skipped';
+                    return interaction.editReply(botResponse);
+                }
 
-                    message = await channel.messages.cache.get(messageId);
+                message = await channel.messages.cache.get(messageId);
 
-                    if (!message) {
-                        console.log('Message not found in cache. Fetching...');
-                        message = await channel.messages.fetch(messageId);
-                    }
+                if (!message) {
+                    console.log('Message not found in cache. Fetching...');
+                    message = await channel.messages.fetch(messageId);
+                }
 
-                    botResponse.content = [
-                        '### Reply sent:',
-                        `> Guild: ${guildId} (${guild.name})`,
-                        `> Channel: ${channelId} (${channel.name})`,
-                        `> Message ID: ${messageId}`,
-                        `> Text: ${text}`
-                    ].join('\n');
+                botResponse.content = [
+                    '### Reply sent:',
+                    `> Guild: ${guildId} (${guild.name})`,
+                    `> Channel: ${channelId} (${channel.name})`,
+                    `> Message ID: ${messageId}`,
+                    `> Text: ${text}`
+                ].join('\n');
 
-                    await channel.sendTyping();
-                    await delay(text.length * typingDuration);
-                    await message.reply(text);
-                    await interaction.reply(botResponse);
-                    break;
-                case 'embed':
+                await channel.sendTyping();
+                await delay(text.length * typingDuration);
+                await message.reply(text);
+                return interaction.editReply(botResponse);
+            }
+            else if (selectedOption == 'embed') {
+                // button to show modal
+                const openModalButton = new ButtonBuilder()
+                    .setCustomId('open_modal')
+                    .setLabel('Open Modal')
+                    .setStyle(ButtonStyle.Primary);
+
+                const buttonActionRow = new ActionRowBuilder().addComponents(openModalButton);
+
+                await interaction.editReply({ content: 'Click on the button below to send an embed' });
+
+                const botReply = await interaction.followUp({ components: [buttonActionRow] });
+
+                const buttonFilter = i => i.user.id === interaction.user.id;
+
+                const collector = botReply.createMessageComponentCollector({
+                    componentType: ComponentType.Button,
+                    filter: buttonFilter,
+                    time: 15_000
+                });
+
+                collector.on('collect', async (i) => {
                     let modal = new ModalBuilder()
                         .setCustomId('embed_modal')
                         .setTitle('Send an embed to a guild channel');
@@ -162,9 +186,9 @@ module.exports = {
                         new ActionRowBuilder().addComponents(embedDescription),
                     ]);
 
-                    await interaction.showModal(modal);
+                    await i.showModal(modal);
 
-                    const filter = i => i.customId === 'embed_modal';
+                    const filter = i => i.customId === 'embed_modal' && i.user.id === interaction.user.id;
 
                     interaction.awaitModalSubmit({ filter: filter, time: 30_000 })
                         .then(modalInteraction => {
@@ -182,24 +206,34 @@ module.exports = {
                             );
 
                             channel.send(botResponse).then(() => {
-                                botResponse.content = 'Embed sent';
+                                botResponse.content = 'Embed sent!';
+                                botResponse.ephemeral = true;
                                 botResponse.embeds = [];
                                 modalInteraction.reply(botResponse);
                             })
                         });
-                    break;
-                case 'emoji':
-                    if (!iconId || !messageId) {
-                        botResponse.content = 'Emoji or message ID not provided';
-                        return interaction.reply(botResponse);
-                    }
-                    
-                    message = await channel.messages.cache.get(messageId);
+                });
 
-                    if (!message) {
-                        console.log('Message not found in cache. Fetching...');
-                        message = await channel.messages.fetch(messageId);
-                    }
+
+                collector.on('end', async (i) => {
+                    openModalButton.setDisabled(true);
+                    await botReply.edit({ components: [buttonActionRow] });
+                });
+            }
+            else if (selectedOption === 'emoji' || selectedOption === 'sticker') {
+                if (!iconId || !messageId) {
+                    botResponse.content = 'Emoji, sticker or message ID not provided';
+                    return interaction.editReply(botResponse);
+                }
+
+                message = await channel.messages.cache.get(messageId);
+
+                if (!message) {
+                    console.log('Message not found in cache. Fetching...');
+                    message = await channel.messages.fetch(messageId);
+                }
+
+                if (selectedOption === 'emoji') {
                     await message.react(iconId);
 
                     botResponse.content = [
@@ -210,20 +244,16 @@ module.exports = {
                         `> Emoji: ${iconId}`
                     ].join('\n');
 
-                    await interaction.reply(botResponse);
-                    break;
-                case 'sticker':
-                    if (!iconId) {
-                        botResponse.content = 'Sticker ID not provided';
-                        return interaction.reply(botResponse);
-                    }
+                    return interaction.editReply(botResponse);
+                }
+                else if (selectedOption === 'sticker') {
                     let sticker = guild.stickers.cache.get(iconId);
 
                     if (!sticker) {
                         console.log('Sticker not found in cache...Fetching');
                         sticker = await guild.stickers.fetch(iconId);
                     }
-                    await channel.send({ stickers:[sticker] });
+                    await channel.send({ stickers: [sticker] });
                     botResponse.content = [
                         '**Sticker Sent**:',
                         `Guild: ${guildId}`,
@@ -232,8 +262,8 @@ module.exports = {
                         `> ID: ${sticker.id}`,
                         `> Name: ${sticker.name}`
                     ].join('\n');
-                    await interaction.reply(botResponse);
-                    break;
+                    return interaction.editReply(botResponse);
+                }
             }
         }
         catch (error) {
@@ -242,7 +272,7 @@ module.exports = {
             botResponse.content += '\`\`\`yaml\n';
             botResponse.content += error;
             botResponse.content += '\`\`\`';
-            await interaction.reply(botResponse);
+            await interaction.editReply(botResponse);
         }
     }
 };
