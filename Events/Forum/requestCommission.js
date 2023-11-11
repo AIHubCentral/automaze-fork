@@ -36,8 +36,14 @@ module.exports = {
                     color: client.botConfigs.colors.theme.primary,
                     description: [
                         `Hello, <@${Threader.ownerId}>!`,
-                        '\nPeople will contact you to offer their services. However, if you created a **paid** request by mistake, just delete the post and create a new one with the tag **"free"**.',
-                        '\n**Here are some general recommendations regarding commissions:**',
+                        '\nPeople will contact you to offer their services. However, if you created a **paid** request by mistake or if someone already finished your request, use the `-close` command to archive this post.',
+                    ]
+                }));
+
+                embeds.push(client.botUtils.createEmbed({
+                    color: client.botConfigs.colors.theme.secondary,
+                    description: [
+                        '\n**Some general recommendations regarding commissions:**',
                         '- Don\'t rush! You\'ll receive many requests, take your time to review the best offer. The first person who contacts you may not always be the best option.',
                         `- We recommend accepting commissions from people with these roles, as they are qualified for commissions and you can avoid scams. ${MessageRoles}`,
                         '- If you encounter any issues with a member related to a commission (scam, failure to fulfill terms, etc.), please report it to the administrative team to assess whether sanctions should be applied.',
@@ -51,21 +57,6 @@ module.exports = {
                     }));
                 }
 
-                /*
-                embeds.push(client.botUtils.createEmbed({
-                    color: client.botConfigs.colors.theme.secondary,
-                    title: '🎃 Spooky Contest',
-                    description: [
-                        '### Prizes',
-                        '**1st Place:** Discord Nitro for a month',
-                        '**2nd Place:** $5 Steam Gift Card',
-                        '**3rd Place:** `@Spooky` Role',
-                        '\n> Check the announcement channel for further details'
-                    ],
-                    footer: 'Note: Event will be active till October 31st.'
-                }));
-                */
-
                 await Threader.send({ embeds: embeds });
             }
 
@@ -73,9 +64,9 @@ module.exports = {
             if (isFreeRequest && !isPaidRequest) {
                 const embeds = [
                     client.botUtils.createEmbed({
-                        color: client.botConfigs.colors.theme.secondary,
+                        color: client.botConfigs.colors.theme.accent_1,
                         description: [
-                            '💡 **Tip**: You can try using the `/search` command from <@1150230843214794822> to check if someone already made this model.'
+                            '💡 **Tip**: You can try using the `/search` command from <@1144714449563955302> or <@1150230843214794822> to check if someone already made this model.'
                         ]
                     })
                 ];

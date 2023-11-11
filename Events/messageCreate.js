@@ -49,6 +49,13 @@ module.exports = {
 
                 return;
             }
+
+            // triggered on comission channel
+            if (message.channel.parentId == client.discordIDs.Forum.RequestModel.ID) {
+                if (message.channel.ownerId === message.author.id && messageLowercase.includes('taken')) {
+                    await message.reply('**Tip**: You can use the `-close` command to lock this post.');
+                }
+            }
         }
     }
 }
