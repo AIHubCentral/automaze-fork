@@ -1,7 +1,7 @@
 {
     "Guild" : "1159260121998827560",
     "Channel" : {
-        "BansAndTimeouts": "1159322568587759726",
+        "Moderation": "1159552886116733009",
         "Verified" : "1159265300915687534",
         "GetModelMakerRole": "1159514067187277865",
         "MakingModels": "1159290038115389571",
