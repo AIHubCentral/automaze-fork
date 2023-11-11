@@ -4,7 +4,7 @@ module.exports = {
     name: 'close',
     category: 'Utilities',
     description: 'Allows user to close their forum thread.',
-    aliases: [],
+    aliases: ['lock'],
     syntax: 'close',
     /**
      * 
@@ -16,11 +16,23 @@ module.exports = {
     run: async (client, message, args, prefix) => {
         const channel = message.channel;
         if (!channel.isThread()) return;
+
+        const { botConfigs, botUtils, discordIDs } = client;
+
+        // user can close posts in these channels
+        const allowedChannels = [
+            discordIDs.Forum.Suggestions,
+            discordIDs.Forum.VoiceModel,
+            discordIDs.Forum.TaskSTAFF,
+            discordIDs.Forum.RequestModel.ID,
+        ];
+
+        if (!allowedChannels.includes(message.channel.parentId)) return;
+
         if (channel.locked) {
             return message.reply('This channel have already been locked.');
         }
-
-        const { botConfigs, botUtils, discordIDs } = client;
+        
         const availableColors = botUtils.getAvailableColors(botConfigs);
         const botResponse = {};
         const embedData = {
