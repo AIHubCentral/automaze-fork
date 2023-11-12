@@ -35,7 +35,8 @@ module.exports = {
         let rankCounter = 1;
         for (const entry of inventory) {
             let user = await client.knexInstance('user').where('id', entry['user_id']);
-            embedData.description.push(`${rankCounter}. ${user[0].username} — ${entry.quantity}`);
+            //embedData.description.push(`${rankCounter}. ${user[0].username} — ${entry.quantity}`);
+            embedData.description.push(`${rankCounter}. [${user[0].display_name ?? user[0].username}](https://discordapp.com/users/${user[0].id})`);
             rankCounter++;
         }
         

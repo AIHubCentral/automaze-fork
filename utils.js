@@ -168,14 +168,27 @@ async function banan(interaction, targetUser, guildMember) {
 
     // check if user is in database
     let dbResult = await client.knexInstance('user').where('id', `${member.id}`);
+    let userData;
 
     if (dbResult.length === 0) {
         console.log('User not found in database');
-        await client.knexInstance('user').insert({
+        userData = {
             id: `${member.id}`,
-            username: member.username
-        });
+            username: member.username,
+        }
+
+        if (guildMember.nickname) {
+            userData.displayName = guildMember.nickname;
+        }
+
+        await client.knexInstance('user').insert(userData);
         console.log(`${member.username} added to database`);
+    }
+    else {
+        if (guildMember.nickname !== dbResult[0].displayName) {
+            await client.knexInstance('user').update({display_name: guildMember.nickname ?? member.displayName}).where({id: member.id});
+            console.log(`Added ${guildMember.nickname ?? member.displayName} display name for ${member.username}`);
+        }
     }
 
     // check if banana is in the user inventory
