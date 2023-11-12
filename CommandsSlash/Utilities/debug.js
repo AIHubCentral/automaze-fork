@@ -17,6 +17,7 @@ module.exports = {
                     { name: 'emojis', value: 'emojis' },
                     { name: 'stickers', value: 'stickers' },
                     { name: 'channelInfo', value: 'channel_info' },
+                    { name: 'voiceModels', value: 'voice_models' },
                 )
         )
         .addStringOption(option =>

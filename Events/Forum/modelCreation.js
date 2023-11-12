@@ -1,4 +1,6 @@
 const { Events } = require('discord.js');
+const { saveJSON } = require('../../utils.js');
+
 /*
 const fs = require(`fs`);
 const Extractor = require('../../Misc/extractor.js')
@@ -12,7 +14,13 @@ module.exports = {
         //const { models } = require('../../JSON/channels.json');
         const { discordIDs } = client;
         if (thread.parentId !== discordIDs.Forum.VoiceModel) return;
-        //client.botData.voiceModelsTracker.set();
+        saveJSON('model', {
+            name: thread.name,
+            ownerId: thread.ownerId,
+            createdAt: new Date(thread._createdTimestamp).toISOString(),
+            appliedTags: thread.appliedTags,
+            link: `https://discordapp.com/channels/${thread.guild.id}/${thread.parentId}/${thread.id}`
+        });
     },
 }
 

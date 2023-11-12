@@ -83,7 +83,6 @@ client.botData = {
     embeds: require('./JSON/embeds.json'),
     reactionKeywords: require('./JSON/reactionKeywords.json'),
     cooldownImmuneUsers: new Discord.Collection(),
-    voiceModelTracker: new Discord.Collection(),
 };
 
 client.botUtils = {
