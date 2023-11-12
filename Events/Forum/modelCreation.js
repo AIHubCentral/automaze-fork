@@ -12,7 +12,7 @@ module.exports = {
         //const { models } = require('../../JSON/channels.json');
         const { discordIDs } = client;
         if (thread.parentId !== discordIDs.Forum.VoiceModel) return;
-        client.botData.voiceModelsCounter++;
+        //client.botData.voiceModelsTracker.set();
     },
 }
 
