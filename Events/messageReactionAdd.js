@@ -28,11 +28,12 @@ module.exports = {
 
             // log the emoji to a file
             const logData = {
-                messageId: reaction.message.id,
-                channelId: reaction.message.channelId,
-                guildId: reaction.message.guildId,
-                author: reaction.message.author.username,
-                reaction: reaction.emoji
+                author: {
+                    displayName: reaction.message.author.displayName,
+                    userName: reaction.message.author.username,
+                },
+                reaction: reaction.emoji,
+                link: `https://discordapp.com/channels/${reaction.message.guildId}/${reaction.message.channelId}/${reaction.message.id}`
             };
             if (logEmojiToFile(logData)) console.log('Emoji log saved!');
         }
