@@ -23,6 +23,14 @@ module.exports = {
         }
 
         const targetUser = interaction.options.getUser('user');
+
+        let guildMember = interaction.guild.members.cache.get(targetUser.id);
+
+        if (!guildMember) {
+            console.log('Guild member not found in cache...Fetching');
+            guildMember = interaction.guild.members.fetch(targetUser.id);
+        }
+
         const bot = interaction.client.user;
         const oldAutomazeId = interaction.client.botResponses.userIds.oldAutomazeId;
 
@@ -54,7 +62,7 @@ module.exports = {
                 doxxData.title = '❌ Failed to retrieve information!';
                 break;
             default:
-                doxxData.title = `✅ We found you **${targetUser.username}**!`;
+                doxxData.title = `✅ We found you **${guildMember.nickname ?? targetUser.username}**!`;
                 doxxData.IP = ip;
                 doxxData.IPv6 = ipv6;
                 doxxData.MAC = mac;
