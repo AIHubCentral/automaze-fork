@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, AttachmentBuilder, ChannelType } = require("discord.js");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const delay = require('node:timers/promises').setTimeout;
+const fs = require('node:fs');
 
 module.exports = {
     category: `Utilities`,
@@ -60,28 +61,35 @@ module.exports = {
 
         if (selectedOption === 'emojis') {
             const emojiManager = guild.emojis;
+            const emojiData = [];
 
             botResponse.content.push('\n**Guild Emojis**:');
 
             emojiManager.cache.forEach(emoji => {
-                // create a string in the format <:emoji:id>
-                let emojiString = `- \\<:${emoji.name}:${emoji.id}>`;
-                // show the emoji if it's not animated
-                if (!emoji.animated) {
-                    emojiString += ` <:${emoji.name}:${emoji.id}>`;
-                }
-                botResponse.content.push(emojiString);
+                emojiData.push(emoji);
             });
+
+            const buffer = Buffer.from(JSON.stringify(emojiData, null, 4), 'utf-8');
+            const attachment = new AttachmentBuilder(buffer, { name: 'emojis.json' });
+
+            botResponse.content = ['Getting emojis...'];
+            botResponse.files = [attachment];
         }
         else if (selectedOption === 'stickers') {
             const stickerManager = guild.stickers;
+            const stickerData = [];
 
             botResponse.content.push('\n**Guild Stickers**:');
 
             stickerManager.cache.forEach(sticker => {
-                botResponse.content.push(`- ${sticker.id} - ${sticker.name}`);
+                stickerData.push(sticker);
             });
 
+            const buffer = Buffer.from(JSON.stringify(stickerData, null, 4), 'utf-8');
+            const attachment = new AttachmentBuilder(buffer, { name: 'stickers.json' });
+
+            botResponse.content = ['Getting stickers...'];
+            botResponse.files = [attachment];
         }
         else if (selectedOption === 'channel_info') {
             const channelId = interaction.options.getString('channel_id');
