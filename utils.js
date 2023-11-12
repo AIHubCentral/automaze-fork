@@ -135,7 +135,7 @@ function getAvailableColors(configs) {
 
 exports.getAvailableColors = getAvailableColors;
 
-async function banan(interaction, targetUser) {
+async function banan(interaction, targetUser, guildMember) {
     const { client, user } = interaction;
 
     // check if user is on cooldown
@@ -209,7 +209,7 @@ async function banan(interaction, targetUser) {
 
     // copy embed data
     const embedData = JSON.parse(JSON.stringify(client.botData.embeds.banana));
-    embedData.title = embedData.title.replace('$username', member.displayName);
+    embedData.title = embedData.title.replace('$username', guildMember.nickname ?? member.displayName ?? member.username);
     embedData.description[0] = embedData.description[0].replaceAll('$member', member);
     embedData.footer = embedData.footer.replace('$quantity', dbResult[0].quantity);
 

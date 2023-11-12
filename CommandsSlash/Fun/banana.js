@@ -13,6 +13,12 @@ module.exports = {
     ,
     async execute(interaction) {
         const targetUser = interaction.options.getUser('user');
-        banan(interaction, targetUser);
+        let guildMember = interaction.guild.members.cache.get(targetUser.id);
+
+        if (!guildMember) {
+            console.log('Guild member not found in cache...Fetching');
+            guildMember = interaction.guild.members.fetch(targetUser.id);
+        }
+        banan(interaction, targetUser, guildMember);
     }
 }
