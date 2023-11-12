@@ -578,15 +578,7 @@
                             "title": "",
                             "fields": [
                                 {
-                                    "name": "(Local) Real-time conversion of RVC",
-                                    "value": "> **Description**: More accurate than W-Okada's, but requires a Nvidia RTX card.\n> **Link**: [Google Docs](https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs/edit)\n> **Credits**: teas.hi"
-                                },
-                                {
-                                    "name": "\u0020",
-                                    "value": "\u0020"
-                                },
-                                {
-                                    "name": "(Local) W-Okada Voice Changer",
+                                    "name": "Guide for W-Okada's RealTimeVoiceChangerClient",
                                     "value": "> **Description**: This one has more options and is somewhat more convenient to use than Real-time RVC.\n> **Link**: [Rentry](https://rentry.co/VoiceChangerGuide)\n> **Credits**: ravencutie21"
                                 },
                                 {
@@ -594,9 +586,14 @@
                                     "value": "\u0020"
                                 },
                                 {
+                                    "name": "How to use real time conversion with RVC (voice changer)",
+                                    "value": "> **Description**: More accurate than W-Okada's, but requires a decent GPU.\n> **Link**: [Google Docs](https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs/edit)\n> **Credits**: teas.hi"
+                                },
+                                {
                                     "name": "\u0020",
                                     "value": "\u0020"
                                 },
+                                
                                 {
                                     "name": "RVC TTS",
                                     "value": "> **Description**: Text to speech with RVC\n> **Link**: [Rentry](https://rentry.co/RVC-TTS-Guide)"
