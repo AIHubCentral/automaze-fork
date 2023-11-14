@@ -6,7 +6,11 @@ const Enmap = require('enmap');
 const Discord = require('discord.js');
 
 // Exports
-const { getAllFiles, createEmbed, createEmbeds, getAvailableColors, getRandomNumber, getRandomFromArray } = require('./utils');
+const {
+	getAllFiles, createEmbed, createEmbeds,
+	getAvailableColors, getRandomNumber, getRandomFromArray,
+	Scheduler,
+} = require('./utils');
 
 // JSONs
 const DiscordIDs = {
@@ -93,6 +97,9 @@ client.botUtils = {
 
 // knex database
 client.knexInstance = require('./database/dbManager.js').createInstance('./database/knex.sqlite');
+
+// cron job
+client.scheduler = new Scheduler(client);
 
 // bot responses loaded on startup
 client.botResponses = require('./JSON/bot_responses.json');

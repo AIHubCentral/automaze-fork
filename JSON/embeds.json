@@ -593,7 +593,6 @@
                                     "name": "\u0020",
                                     "value": "\u0020"
                                 },
-                                
                                 {
                                     "name": "RVC TTS",
                                     "value": "> **Description**: Text to speech with RVC\n> **Link**: [Rentry](https://rentry.co/RVC-TTS-Guide)"
@@ -657,14 +656,28 @@
                     "footer": "Credits: Nick088"
                 }
             ],
-            "ru": [{
-                "title": "❔ Russian FAQ for voice changer",
-                "description": [
-                    "Часто задаваемые вопросы по преобразователю голоса на русском языке",
-                    "Link: [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
-                ],
-                "footer": "Credits: blackcat76it, elektroeban, redoverflow and tntmaxim"
-            }]
+            "ru": [
+                {
+                    "title": "❔ Russian FAQ for voice changer",
+                    "description": [
+                        "Часто задаваемые вопросы по преобразователю голоса на русском языке",
+                        "Link: [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
+                    ],
+                    "footer": "Credits: blackcat76it, elektroeban, redoverflow and tntmaxim"
+                }
+            ]
         }
+    },
+    "help": {
+        "WOkada": [
+            {
+                "title": "Having some trouble? Check out these guides",
+                "description": [
+                    "- FAQ: [W-Okada-FAQ](https://rentry.co/W-Okada-FAQ)",
+                    "- Common Error Fixes: [W-Okada's Voice Changer Common Issues and Fixes](https://docs.google.com/document/d/e/2PACX-1vQIwJ3MVidhgEaXwWFl0xpVonVOVfneaNVADd7-NMWFgPIsfWWhG8NNqzQMsXDIOGlBIfxscoIm2_6I/pub)",
+                    "- Sushi's guides: [The Sushi Bar](https://linktr.ee/sushi2022)"
+                ]
+            }
+        ]
     }
 }

@@ -28,8 +28,8 @@ module.exports = {
 
             // send messages
             let embeds = [
-                client.botUtils.createEmbed(client.botData.embeds.rvc.main, client.botConfigs.colors.theme.primary)
-            ]
+                client.botUtils.createEmbed(client.botData.embeds.rvc.main, client.botConfigs.colors.theme.primary),
+            ];
             await helpChannel.send({ content: '# RVC Guides (How to Make AI Cover)', embeds: embeds });
 
             await interaction.editReply({ content: `Message sent!\nGuild:${guild.id}\nChannel:${helpChannel.id}` });
@@ -44,8 +44,8 @@ module.exports = {
                         '- FAQ: [W-Okada-FAQ](https://rentry.co/W-Okada-FAQ)',
                         '- Common Error Fixes: [W-Okada\'s Voice Changer Common Issues and Fixes](https://docs.google.com/document/d/e/2PACX-1vQIwJ3MVidhgEaXwWFl0xpVonVOVfneaNVADd7-NMWFgPIsfWWhG8NNqzQMsXDIOGlBIfxscoIm2_6I/pub)',
                         '- Sushi\'s guides: [The Sushi Bar](https://linktr.ee/sushi2022)',
-                    ]
-                }
+                    ],
+                },
             )];
 
             await helpOkadaChannel.send({ embeds: embeds });
@@ -55,5 +55,5 @@ module.exports = {
             await interaction.editReply({ content: 'Errored', ephemeral: true });
             return;
         }
-    }
+    },
 };

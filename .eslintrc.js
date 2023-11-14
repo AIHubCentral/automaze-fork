@@ -20,6 +20,7 @@ module.exports = {
 		'keyword-spacing': 'error',
 		'max-nested-callbacks': ['error', { 'max': 4 }],
 		'max-statements-per-line': ['error', { 'max': 2 }],
+		'max-len': ['warn', 110],
 		'no-console': 'off',
 		'no-empty-function': 'error',
 		'no-floating-decimal': 'error',
