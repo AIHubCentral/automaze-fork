@@ -10,10 +10,34 @@
     },
     {
         "keywords": [
+            "testing"
+        ],
+        "responses": [
+            "test",
+            "alright",
+            "ok ok",
+            "gotcha"
+        ],
+        "kind": "text",
+        "frequency": "rare",
+        "exact": true
+    },
+    {
+        "keywords": [
+            "kalomazing real hard"
+        ],
+        "kind": "sticker",
+        "stickerId": "1159359026556059669",
+        "frequency": "sometimes",
+        "exact": false
+    },
+    {
+        "keywords": [
             "poopmaster"
         ],
         "emojis": [
-            "<trolley:1159468147133395025>", "<:pooperror:1159654086845673545>"
+            "<trolley:1159468147133395025>",
+            "<:pooperror:1159654086845673545>"
         ],
         "exact": true
     },
@@ -40,13 +64,17 @@
             "fdg"
         ],
         "emojis": [
-            "🇫", "🇩", "🇬"
+            "🇫",
+            "🇩",
+            "🇬"
         ],
         "exact": false
     },
     {
         "keywords": [
-            "bertdit", "bandit", "mido"
+            "bertdit",
+            "bandit",
+            "mido"
         ],
         "emojis": [
             "<:mido:1170068051014713484>"
@@ -55,7 +83,9 @@
     },
     {
         "keywords": [
-            "kakao", "ange", "angetyde"
+            "kakao",
+            "ange",
+            "angetyde"
         ],
         "emojis": [
             "❤️"
@@ -64,7 +94,8 @@
     },
     {
         "keywords": [
-            "timbo", "timbovill"
+            "timbo",
+            "timbovill"
         ],
         "emojis": [
             "<:AIHC_Ded:1163807516896002119>"
@@ -91,7 +122,8 @@
     },
     {
         "keywords": [
-            "sed", "crying"
+            "sed",
+            "crying"
         ],
         "emojis": [
             "<:pepecry:1159573014678098020>"
@@ -100,7 +132,8 @@
     },
     {
         "keywords": [
-            "pray", "praying"
+            "pray",
+            "praying"
         ],
         "emojis": [
             "<:matsuripray:1159685390156967936>"
@@ -139,7 +172,8 @@
             "bedtime"
         ],
         "emojis": [
-            "🛌", "💤"
+            "🛌",
+            "💤"
         ],
         "exact": false
     },
@@ -172,7 +206,8 @@
     },
     {
         "keywords": [
-            "antasma", "qwizibo"
+            "antasma",
+            "qwizibo"
         ],
         "emojis": [
             "🌟"
@@ -226,7 +261,8 @@
     },
     {
         "keywords": [
-            "pin", "pinned"
+            "pin",
+            "pinned"
         ],
         "emojis": [
             "📌"
@@ -262,7 +298,8 @@
     },
     {
         "keywords": [
-            "ryanz", "lollen"
+            "ryanz",
+            "lollen"
         ],
         "emojis": [
             "🇮🇹"
