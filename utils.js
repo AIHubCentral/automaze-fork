@@ -333,12 +333,14 @@ class Scheduler {
 		await helpChannel.send(botResponse);
 		await wait(60_000);
 
-		// notify dev server
-		botResponse.embeds = [];
-		botResponse.content = `📚 Guides sent to ${helpChannel} and ${helpOkadaChannel}.`;
-		const devServerGuild = this.client.guilds.cache.get(botConfigs.devServerId);
-		const debugChannel = await getChannelById(botConfigs.debugChannelId, devServerGuild);
-		await debugChannel.send(botResponse);
+		if (botConfigs.general.sendLogs) {
+			// notify dev server
+			botResponse.embeds = [];
+			botResponse.content = `📚 Guides sent to ${helpChannel} and ${helpOkadaChannel}.`;
+			const devServerGuild = this.client.guilds.cache.get(botConfigs.devServerId);
+			const debugChannel = await getChannelById(botConfigs.debugChannelId, devServerGuild);
+			await debugChannel.send(botResponse);
+		}
 	}
 }
 
