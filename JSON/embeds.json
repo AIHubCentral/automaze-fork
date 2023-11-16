@@ -394,6 +394,20 @@
                     ],
                     "footer": "Credits: Angetyde"
                 }
+            ],
+            "pt": [
+                {
+                    "title": "Documentação",
+                    "description": [
+                        "### 📚 AI HUB Docs",
+                        "https://docs.aihub.wtf/v/brazil",
+                        "### ❔ Perguntas Frequentes",
+                        "https://docs.aihub.wtf/v/brazil/faq",
+                        "### 🔗 Servidor AI HUB Brasil",
+                        "https://discord.gg/aihubbrasil"
+                    ],
+                    "footer": "Créditos: AI HUB France, MrM0dz"
+                }
             ]
         },
         "applio": {
