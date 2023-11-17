@@ -1,3 +1,5 @@
+const { EmbedBuilder } = require('discord.js');
+const path = require('node:path');
 const delay = require('node:timers/promises').setTimeout;
 
 module.exports = {
@@ -14,8 +16,9 @@ module.exports = {
 	 * @param {String} prefix
 	 */
 	run: async (client, message) => {
-		const { botResponses, botUtils } = client;
+		const { botConfigs, botResponses, botUtils } = client;
 		const botResponse = {};
+		/*
 		const selectedMessage = botUtils.getRandomFromArray(botResponses.responses.svc);
 		botResponse.content = selectedMessage;
 		await message.channel.sendTyping();
@@ -32,6 +35,9 @@ module.exports = {
 			botResponse.content = `${message.mentions.members.first()} ${selectedMessage}`;
 			return message.channel.send(botResponse);
 		}
+		*/
+		const imagePath = path.join(process.cwd(), 'assets', 'i_still_use_svc.gif');
+		botResponse.embeds = [new EmbedBuilder().setImage(imagePath).setColor('Danger')];
 		message.channel.send(botResponse);
 	},
 };
