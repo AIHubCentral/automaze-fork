@@ -77,33 +77,6 @@
             }
         }
     },
-    "audio": {
-        "en": {
-            "guides": {
-                "title": "Guides",
-                "description": [
-                    "###  📑 Perfecting Audio Isolation on Low-End Rigs: A Practical Guide (by Litsa The Dancer and Faze Masta)\n> https://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing",
-                    "###  📑 Guide: Gathering and Isolating Audio (by SCRFilms)\n> https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv",
-                    "###  📑 How to make a good model All-In-One guide by LUSBERT <:lusbertmoment:1159804751924432906>\n> https://rentry.org/RVC_making-models",
-                    "###  ▶️ Vocal mixing tutorial by Roomie\n> https://www.youtube.com/watch?v=rSxLF3kkBw0"
-                ]
-            },
-            "tools": {
-                "title": "Tools",
-                "description": [
-                    "### Youtube Downloaders",
-                    "- https://github.com/yt-dlp/yt-dlp",
-                    "- https://github.com/dsymbol/yt-dlp-gui",
-                    "### Audio Separation/Isolation",
-                    "- https://ultimatevocalremover.com/",
-                    "- https://mvsep.com/",
-                    "- 🆕 https://github.com/Captain-FLAM/KaraFan",
-                    "- https://goyo.app/ (Note that this plugin is for clean ups only, like removing background noise, reverb, ambience or sustained sounds)')",
-                    "\n> **Tip:** Use `-colab` command if you're looking for audio separation/isolation colabs."
-                ]
-            }
-        }
-    },
     "rvc": {
         "pt": {
             "guides": {
@@ -359,6 +332,28 @@
             }
         ]
     },
+    "karafan": {
+        "embeds": [
+            {
+                "title": "KaraFan",
+                "color": "8b1d90",
+                "description": [
+                    "🥇 Awarded to **1st** place by the community as the Best software in the World, for having the less vocal residues in Music track!"
+                ],
+                "image": "https://raw.githubusercontent.com/Captain-FLAM/KaraFan/master/images/KaraFan_Banner.jpg"
+            }
+        ],
+        "buttons": [
+            {
+                "label": "GitHub",
+                "url": "https://github.com/Captain-FLAM/KaraFan"
+            },
+            {
+                "label": "Google Colab",
+                "url": "https://colab.research.google.com/github/Captain-FLAM/KaraFan/blob/master/KaraFan.ipynb"
+            }
+        ]
+    },
     "paperspace": {
         "title": "RVC v2 Tutorial for Paperspace",
         "description": [
@@ -568,11 +563,9 @@
                         "- https://github.com/yt-dlp/yt-dlp",
                         "- https://github.com/dsymbol/yt-dlp-gui",
                         "### Audio Separation/Isolation",
-                        "- https://ultimatevocalremover.com/",
                         "- https://mvsep.com/",
-                        "- 🆕 https://github.com/Captain-FLAM/KaraFan",
                         "- https://goyo.app/ (Note that this plugin is for clean ups only, like removing background noise, reverb, ambience or sustained sounds)')",
-                        "\n> **Tip:** Use `-colab` command if you're looking for audio separation/isolation colabs."
+                        "\n> **More commands:** `-colab`, `-uvr`, `-karafan`"
                     ]
                 }
             ]

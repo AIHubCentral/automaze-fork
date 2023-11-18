@@ -1,26 +1,24 @@
 module.exports = {
-    name: 'audio',
-    category: 'Tags',
-    description: 'Guides on how to isolate audio for making datasets',
-    aliases: ['dataset', 'uvr'],
-    syntax: `audio [member]`,
-    /**
-     * 
-     * @param {Client} client 
-     * @param {Message} message 
-     * @param {string[]} args 
-     * @param {String} prefix 
-     */
-    run: async(client, message, args, prefix) => {
-        const embeds = [
-            client.botUtils.createEmbed(client.botData.embeds.audio.en.guides, client.botConfigs.colors.theme.primary),
-            client.botUtils.createEmbed(client.botData.embeds.audio.en.tools, client.botConfigs.colors.theme.secondary)
-        ]
+	name: 'audio',
+	category: 'Tags',
+	description: 'Guides on how to isolate audio for making datasets',
+	aliases: ['dataset'],
+	syntax: 'audio [member]',
+	run: async (client, message) => {
+		const { botData, botConfigs, botUtils } = client;
+		const mentionedUser = message.mentions.members.first();
 
-        if (message.mentions.members.first()) {
-            return message.channel.send({content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: embeds});
-        }
+		const botResponse = {};
+		botResponse.embeds = botUtils.createEmbeds(
+			botData.embeds.guides.audio.en,
+			botUtils.getAvailableColors(botConfigs),
+		);
 
-        message.channel.send({embeds: embeds});
-    }
-}
+		if (mentionedUser) {
+			botResponse.content = `*Suggestion for ${mentionedUser}*`;
+			return message.channel.send(botResponse);
+		}
+
+		message.channel.send(botResponse);
+	},
+};
