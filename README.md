@@ -74,6 +74,6 @@ node deploy-commands.js
 ***
 # Thank you for coming to my TED talk
 
-![I still use SVC]('./assets/i_still_use_svc.gif')
+![I still use SVC](assets/i_still_use_svc.gif)
 
 <img src="./assets/i_still_use_svc.gif">
