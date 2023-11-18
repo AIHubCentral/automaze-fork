@@ -16,12 +16,10 @@ module.exports = {
 	 * @param {String} prefix
 	 */
 	run: async (client, message) => {
-		const { botConfigs, botResponses, botUtils } = client;
+		const { botResponses, botUtils } = client;
 		const botResponse = {};
 		const randomNumber = botUtils.getRandomNumber(0, 1);
 		const mentionedUser = message.mentions.members.first();
-
-		console.log(randomNumber);
 
 		if (randomNumber !== 0) {
 			const gifUrl = 'https://tenor.com/view/crowd-avoiding-man-gif-25257570';
