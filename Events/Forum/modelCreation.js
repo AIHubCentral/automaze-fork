@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const { saveJSON } = require('../../utils.js');
+//const { saveJSON } = require('../../utils.js');
 
 /*
 const fs = require(`fs`);
@@ -9,8 +9,11 @@ const rll = require('read-last-lines');
 */
 
 module.exports = {
-    name: Events.ThreadCreate,
+    name: Events.Ready,
+    once: true,
     run(client, thread, newlyCreated) {
+        return;
+        /*
         //const { models } = require('../../JSON/channels.json');
         const { discordIDs } = client;
         if (thread.parentId !== discordIDs.Forum.VoiceModel) return;
@@ -20,7 +23,7 @@ module.exports = {
             createdAt: new Date(thread._createdTimestamp).toISOString(),
             appliedTags: thread.appliedTags,
             link: `https://discordapp.com/channels/${thread.guild.id}/${thread.parentId}/${thread.id}`
-        });
+        });*/
     },
 }
 
