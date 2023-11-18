@@ -18,7 +18,7 @@ module.exports = {
 	run: async (client, message) => {
 		const { botResponses, botUtils } = client;
 		const botResponse = {};
-		const randomNumber = botUtils.getRandomNumber(0, 1);
+		const randomNumber = botUtils.getRandomNumber(0, 1000);
 		const mentionedUser = message.mentions.members.first();
 
 		if (randomNumber !== 0) {
