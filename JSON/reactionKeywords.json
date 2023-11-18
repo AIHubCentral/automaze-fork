@@ -61,13 +61,11 @@
     },
     {
         "keywords": [
-            "fdg"
+            "fdg moment"
         ],
-        "emojis": [
-            "🇫",
-            "🇩",
-            "🇬"
-        ],
+        "kind": "sticker",
+        "stickerId": "1159356210508742777",
+        "frequency": "sometimes",
         "exact": false
     },
     {
@@ -77,7 +75,7 @@
             "mido"
         ],
         "emojis": [
-            "<:mido:1170068051014713484>"
+            "<:mido:1175171694877487155>"
         ],
         "exact": false
     },
@@ -108,6 +106,16 @@
         ],
         "emojis": [
             "🧋"
+        ],
+        "exact": false
+    },
+    {
+        "keywords": [
+            "simpl",
+            "simplcup"
+        ],
+        "emojis": [
+            "🐸"
         ],
         "exact": false
     },
@@ -183,15 +191,6 @@
         "emojis": [
             "🛌",
             "💤"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "leo frixi"
-        ],
-        "emojis": [
-            "🐢"
         ],
         "exact": false
     },
