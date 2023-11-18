@@ -336,6 +336,29 @@
             "Credits: **Enes**"
         ]
     },
+    "uvr": {
+        "embeds": [
+            {
+                "title": "Ultimate Vocal Remover",
+                "description": [
+                    "One of the best free and open source vocal and instrumental isolation tool."
+                ],
+                "color": "05998c",
+                "image": "https://img1.wsimg.com/isteam/ip/27b42b0b-4e5c-4246-8229-db96bd3bf24e/UVR_v5.6.png/:/",
+                "footer": "Tip: Use /guides UVR to learn how to use it."
+            }
+        ],
+        "buttons": [
+            {
+                "label": "Website",
+                "url": "https://ultimatevocalremover.com/"
+            },
+            {
+                "label": "GitHub",
+                "url": "https://github.com/Anjok07/ultimatevocalremovergui"
+            }
+        ]
+    },
     "paperspace": {
         "title": "RVC v2 Tutorial for Paperspace",
         "description": [
