@@ -106,12 +106,17 @@
             "Shows this help for Automaze slash commands, however, if you're looking for help for the prefix commands, which are those that starts with the minus sign such as `-rvc` you can use `-help`."
         ],
         "coinflip": {
-            "en": ["Heads", "Tails"],
-            "it": ["Testa", "Croce"]
+            "en": [
+                "Heads",
+                "Tails"
+            ],
+            "it": [
+                "Testa",
+                "Croce"
+            ]
         },
         "svc": [
             "bruh you should use RVC",
-            "yeah I still use so vits svc",
             "Did you mean `-rvc`?",
             "So-Vits-SVC",
             "Nah, use RVC instead",

@@ -18,26 +18,38 @@ module.exports = {
 	run: async (client, message) => {
 		const { botConfigs, botResponses, botUtils } = client;
 		const botResponse = {};
-		/*
+		const randomNumber = botUtils.getRandomNumber(0, 1);
+		const mentionedUser = message.mentions.members.first();
+
+		console.log(randomNumber);
+
+		if (randomNumber !== 0) {
+			const gifUrl = 'https://tenor.com/view/crowd-avoiding-man-gif-25257570';
+			botResponse.content = '# Yeah I still use so-vits-SVC\n' + gifUrl;
+			return message.reply(botResponse);
+		}
+
 		const selectedMessage = botUtils.getRandomFromArray(botResponses.responses.svc);
 		botResponse.content = selectedMessage;
-		await message.channel.sendTyping();
-		await delay(selectedMessage.length * 350);
-		if (message.mentions.members.first()) {
-			botResponse.allowedMentions = { repliedUser: true };
+
+		if (mentionedUser) {
+			botResponse.content = `${mentionedUser} ${selectedMessage}`;
+
 			// if mentioned a bot send 'how to make ai cover sticker'
-			console.log(message.mentions.members.first());
-			if (message.mentions.members.first().user.bot) {
+			if (mentionedUser.user.bot) {
+				botResponse.allowedMentions = { repliedUser: true };
 				botResponse.content = '';
 				botResponse.stickers = ['1159360069557813268'];
 				return message.reply(botResponse);
 			}
-			botResponse.content = `${message.mentions.members.first()} ${selectedMessage}`;
+
+			await message.channel.sendTyping();
+			await delay(selectedMessage.length * 350);
 			return message.channel.send(botResponse);
 		}
-		*/
-		const imagePath = path.join(process.cwd(), 'assets', 'i_still_use_svc.gif');
-		botResponse.embeds = [new EmbedBuilder().setImage(imagePath).setColor('Danger')];
-		message.channel.send(botResponse);
+
+		await message.channel.sendTyping();
+		await delay(selectedMessage.length * 350);
+		return message.reply(botResponse);
 	},
 };
