@@ -101,6 +101,10 @@ function createEmbed(data, color = '') {
 		embed.setImage(data.image);
 	}
 
+	if (data.thumbnail) {
+		embed.setThumbnail(data.thumbnail);
+	}
+
 	if (data.footer) {
 		embed.setFooter({ text: data.footer });
 	}
@@ -399,6 +403,8 @@ class TagResponseSender {
 		this.guides = null;
 		this.targetUser = null;
 		this.languageChannelResponses = new Collection();
+		this.isReply = false;
+		this.mentionMessage = 'Suggestion for $user';
 	}
 
 	setChannel(channel) {
@@ -418,7 +424,18 @@ class TagResponseSender {
 	}
 
 	setTargetUser(user) {
-		this.targetUser = user;
+		if (user) {
+			this.targetUser = user;
+		}
+	}
+
+	setTargetMessage(message) {
+		this.message = message;
+	}
+
+	setIsReply(isReply) {
+		// if true sends the message as reply, otherwise send it to the channel
+		this.isReply = isReply;
 	}
 
 	async send() {
@@ -432,7 +449,14 @@ class TagResponseSender {
 		}
 
 		if (this.targetUser) {
-			const mentionMessage = this.responseData.mentionMessage.replace('$user', this.targetUser);
+			let mentionMessage = this.mentionMessage;
+
+			if (this.responseData.mentionMessage) {
+				// use the message from json if available
+				mentionMessage = this.responseData.mentionMessage;
+			}
+
+			mentionMessage = mentionMessage.replace('$user', this.targetUser);
 			this.response.setText(this.response.text + '\n' + mentionMessage);
 		}
 
@@ -444,7 +468,12 @@ class TagResponseSender {
 			this.response.addButtons(this.responseData.buttons);
 		}
 
-		await this.channel.send(this.response.build());
+		if (this.isReply) {
+			await this.message.reply(this.response.build());
+		}
+		else {
+			await this.channel.send(this.response.build());
+		}
 	}
 }
 

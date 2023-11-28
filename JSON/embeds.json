@@ -340,6 +340,24 @@
             }
         ]
     },
+    "egirl": {
+        "embeds": [
+            {
+                "title": "Searching for the perfect RVC e-girl voice model?",
+                "color": "9966ff",
+                "thumbnail": "https://i.ibb.co/Qbq8wr6/artworks-000664758991-c7chqi-t500x500-1.jpg",
+                "description": [
+                    "Look no further – we've got you covered! Our RVC e-girl voicemodel is in high demand, and we've streamlined the process to make it effortlessly accessible for you."
+                ]
+            }
+        ],
+        "buttons": [
+            {
+                "label": "Download",
+                "url": "https://rentry.org/egirlmodel"
+            }
+        ]
+    },
     "paperspace": {
         "title": "RVC v2 Tutorial for Paperspace",
         "description": [
