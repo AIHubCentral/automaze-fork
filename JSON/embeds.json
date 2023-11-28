@@ -358,13 +358,6 @@
             }
         ]
     },
-    "paperspace": {
-        "title": "RVC v2 Tutorial for Paperspace",
-        "description": [
-            "💡 Click on the button below to open the guide."
-        ],
-        "footer": "Credits: LollenApe"
-    },
     "banana": {
         "title": "$username GOT BANANA LOL LOL LOL",
         "description": [
@@ -603,15 +596,23 @@
             }
         },
         "paperspace": {
-            "en": [
-                {
-                    "title": "RVC v2 Tutorial for Paperspace",
-                    "description": [
-                        "💡 Click on the button below to open the guide."
-                    ],
-                    "footer": "Credits: LollenApe"
-                }
-            ]
+            "en": {
+                "embeds": [
+                    {
+                        "title": "RVC v2 Tutorial for Paperspace",
+                        "description": [
+                            "💡 Click on the button below to open the guide."
+                        ],
+                        "footer": "Credits: LollenApe"
+                    }
+                ],
+                "buttons": [
+                    {
+                        "label": "Google Docs",
+                        "url": "https://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing"
+                    }
+                ]
+            }
         },
         "realtime": {
             "en": {

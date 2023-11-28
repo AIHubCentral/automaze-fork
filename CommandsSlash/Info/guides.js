@@ -1,11 +1,12 @@
 /* eslint-disable indent */
 const {
-	StringSelectMenuBuilder, StringSelectMenuOptionBuilder,
-	ActionRowBuilder, ButtonBuilder, ButtonStyle,
 	SlashCommandBuilder,
+	StringSelectMenuBuilder,
+	StringSelectMenuOptionBuilder,
+	ActionRowBuilder,
 	ComponentType,
 } = require('discord.js');
-const { TagResponseSender } = require('../../utils');
+const { TagResponseSender, BotResponseBuilder } = require('../../utils');
 
 module.exports = {
 	category: 'Info',
@@ -57,134 +58,50 @@ module.exports = {
 		const { botData, botConfigs, botUtils } = client;
 		const availableColors = botUtils.getAvailableColors(botConfigs);
 
-		// default response
-		const botResponse = { content: '', ephemeral: false };
-
 		let selectedGuide;
+		let botResponse = new BotResponseBuilder();
+		botResponse.setEphemeral(true);
+		botResponse.setText('This guide is not available in the selected language yet.');
 
-		switch (category) {
-			case 'applio':
-				selectedGuide = botData.embeds.guides.applio[language];
-				if (!selectedGuide) {
-					botResponse.ephemeral = true;
-					botResponse.content = 'This guide is not available in the selected language yet.';
-					return await interaction.reply(botResponse);
-				}
-				botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
-				break;
-			case 'audio':
-				selectedGuide = botData.embeds.guides.audio[language];
-				if (!selectedGuide) {
-					botResponse.ephemeral = true;
-					botResponse.content = 'This guide is not available in the selected language yet.';
-					return await interaction.reply(botResponse);
-				}
-				botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
-				break;
-			case 'paperspace':
-				selectedGuide = botData.embeds.guides.paperspace[language];
-				if (!selectedGuide) {
-					botResponse.ephemeral = true;
-					botResponse.content = 'This guide is not available in the selected language yet.';
-					return await interaction.reply(botResponse);
-				}
-				botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
+		const sender = new TagResponseSender();
+		sender.setChannel(interaction.channel);
+		sender.setConfigs(botConfigs);
+		sender.setResponse(botResponse);
+		sender.setTargetMessage(interaction);
+		sender.setTargetUser(targetUser);
+		sender.setIsReply(true);
 
-				const button = new ButtonBuilder()
-					.setLabel('Google Docs')
-					.setURL('https://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing')
-					.setStyle(ButtonStyle.Link);
+		if (category === 'realtime') {
+			selectedGuide = botData.embeds.guides.realtime[language];
+			if (!selectedGuide) return interaction.reply(botResponse.build());
+			botResponse.setEphemeral(false);
 
-				const actionRow = new ActionRowBuilder()
-					.addComponents(button);
+			const realtimeSelectOptions = selectedGuide['menuOptions'].map(menuOption =>
+				new StringSelectMenuOptionBuilder()
+					.setLabel(menuOption.label)
+					.setDescription(menuOption.description)
+					.setValue(menuOption.value)
+					.setEmoji(menuOption.emoji),
+			);
 
-				botResponse.components = [actionRow];
-				break;
-			case 'realtime':
-				switch (language) {
-					case 'ru':
-						botResponse.content = '';
-						botResponse.embeds = botUtils.createEmbeds(botData.embeds.guides.realtime[language], availableColors);
-						break;
-					case 'en':
-						const realtimeSelectOptions = botData.embeds.guides.realtime[language]['menuOptions'];
-						selectedGuide = botData.embeds.guides.realtime[language]['local']['embeds'];
+			const realtimeGuidesSelectMenu = new StringSelectMenuBuilder()
+				.setCustomId('realtime_guides')
+				.setPlaceholder('Select a guide')
+				.addOptions(realtimeSelectOptions);
 
-						var realtimeGuidesSelectMenu = new StringSelectMenuBuilder()
-							.setCustomId('realtime_guides')
-							.setPlaceholder('Select a guide')
-							.addOptions(
-								realtimeSelectOptions.map(menuOption =>
-									new StringSelectMenuOptionBuilder()
-										.setLabel(menuOption.label)
-										.setDescription(menuOption.description)
-										.setValue(menuOption.value)
-										.setEmoji(menuOption.emoji),
-								));
+			const realtimeActionRow = new ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
 
-						const realtimeActionRow = new ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
-
-						botResponse.content = selectedGuide.content;
-						botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
-						botResponse.components = [realtimeActionRow];
-						break;
-					default:
-						botResponse.ephemeral = true;
-						botResponse.content = 'This guide is not available in the selected language yet.';
-						return await interaction.reply(botResponse);
-				}
-
-				break;
-			case 'upload':
-				// selectedGuide = botData.embeds.guides.upload[language];
-				selectedGuide = null;
-				if (!selectedGuide) {
-					botResponse.ephemeral = true;
-					botResponse.content = 'This guide is not available in the selected language yet.';
-					return await interaction.reply(botResponse);
-				}
-				botResponse.embeds = botUtils.createEmbeds(selectedGuide.embeds, availableColors);
-				break;
-			case 'uvr':
-				selectedGuide = botData.embeds.guides.uvr[language];
-				if (!selectedGuide) {
-					botResponse.ephemeral = true;
-					botResponse.content = 'This guide is not available in the selected language yet.';
-					return await interaction.reply(botResponse);
-				}
-				botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
-				break;
-			default:
-				selectedGuide = botData.embeds.guides.rvc[language];
-				if (!selectedGuide) {
-					botResponse.ephemeral = true;
-					botResponse.content = 'This guide is not available in the selected language yet.';
-					return await interaction.reply(botResponse);
-				}
-				botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
-		}
-
-		if (targetUser && (targetUser.id !== interaction.user.id)) {
-			// if try to send the guide to the bot...
-			if (targetUser.id === client.user.id) {
-				const bloopers = [
-					'bruh i know how to make ai cover',
-					'thanks i\'ll check',
-					'alright, thanks!',
-					'thanks for the guide suggestion',
-					'yeah imma read it, thanks!',
-					'okay, thanks for the suggestion!',
-				];
-				return await interaction.reply(bloopers[client.botUtils.getRandomNumber(0, bloopers.length)]);
+			botResponse.setText(selectedGuide.local.content);
+			if (targetUser) {
+				botResponse.setText(botResponse.text + '\n' + `Suggestion for ${targetUser}`);
 			}
-			botResponse.content = `\n👇 Suggestions for ${targetUser}!`;
-		}
+			botResponse.addEmbeds(selectedGuide.local.embeds, botConfigs);
 
-		const botReply = await interaction.reply(botResponse);
+			botResponse = botResponse.build();
+			botResponse.components = [realtimeActionRow];
 
-		// listen to select menu events if applicable
-		if (category === 'realtime' && language == 'en') {
-			const selectMenuDisplayMinutes = targetUser ? 30 : 5;
+			const botReply = await interaction.reply(botResponse);
+			const selectMenuDisplayMinutes = 30;
 
 			const collector = botReply.createMessageComponentCollector({
 				componentType: ComponentType.StringSelect,
@@ -215,13 +132,7 @@ module.exports = {
 
 					}
 
-					if (targetUser) {
-						botResponse.content = guide.content + `\nSuggestions for ${targetUser}`;
-					}
-					else {
-						botResponse.content = guide.content;
-					}
-
+					botResponse.content = guide.content;
 					botResponse.embeds = botUtils.createEmbeds(guide.embeds, availableColors);
 
 					i.update(botResponse);
@@ -237,6 +148,56 @@ module.exports = {
 				botResponse.components = [];
 				botReply.edit(botResponse);
 			});
+		}
+		else {
+			if (category === 'applio') {
+				selectedGuide = botData.embeds.guides.applio[language];
+				if (!selectedGuide) return interaction.reply(botResponse.build());
+				botResponse.setText('');
+				botResponse.setEphemeral(false);
+				botResponse.addEmbeds(selectedGuide, botConfigs);
+			}
+			else if (category === 'audio') {
+				selectedGuide = botData.embeds.guides.audio[language];
+				if (!selectedGuide) return interaction.reply(botResponse.build());
+				botResponse.setText('');
+				botResponse.setEphemeral(false);
+				botResponse.addEmbeds(selectedGuide, botConfigs);
+			}
+			else if (category === 'paperspace') {
+				selectedGuide = botData.embeds.guides.paperspace[language];
+				if (!selectedGuide) return interaction.reply(botResponse.build());
+				botResponse.setText('');
+				botResponse.setEphemeral(false);
+				botResponse.addEmbeds(selectedGuide.embeds, botConfigs);
+				botResponse.addButtons(selectedGuide.buttons);
+			}
+			else if (category === 'upload') {
+				selectedGuide = botData.embeds.guides.upload[language];
+				if (!selectedGuide) return interaction.reply(botResponse.build());
+				botResponse.setText('');
+				botResponse.setEphemeral(false);
+				botResponse.addEmbeds(selectedGuide.embeds, botConfigs);
+				if (selectedGuide.buttons) {
+					botResponse.addButtons(selectedGuide.buttons);
+				}
+			}
+			else if (category === 'uvr') {
+				selectedGuide = botData.embeds.guides.uvr[language];
+				if (!selectedGuide) return interaction.reply(botResponse.build());
+				botResponse.setText('');
+				botResponse.setEphemeral(false);
+				botResponse.addEmbeds(selectedGuide, botConfigs);
+			}
+			else if (category === 'rvc') {
+				selectedGuide = botData.embeds.guides.rvc[language];
+				if (!selectedGuide) return interaction.reply(botResponse.build());
+				botResponse.setText('');
+				botResponse.setEphemeral(false);
+				botResponse.addEmbeds(selectedGuide, botConfigs);
+			}
+
+			await sender.send();
 		}
 	},
 };

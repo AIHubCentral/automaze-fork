@@ -364,6 +364,10 @@ class BotResponseBuilder {
 		this.text = text;
 	}
 
+	setEphemeral(isEphemeral) {
+		this.ephemeral = isEphemeral;
+	}
+
 	addEmbeds(embedsData, configs) {
 		// color theme to use on the embeds
 		const availableColors = getAvailableColors(configs);
@@ -415,6 +419,10 @@ class TagResponseSender {
 		this.responseData = responseData;
 	}
 
+	setResponse(response) {
+		this.response = response;
+	}
+
 	setConfigs(configs) {
 		this.configs = configs;
 	}
@@ -451,21 +459,25 @@ class TagResponseSender {
 		if (this.targetUser) {
 			let mentionMessage = this.mentionMessage;
 
-			if (this.responseData.mentionMessage) {
-				// use the message from json if available
-				mentionMessage = this.responseData.mentionMessage;
+			if (this.responseData) {
+				if (this.responseData.mentionMessage) {
+					// use the message from json if available
+					mentionMessage = this.responseData.mentionMessage;
+				}
 			}
 
 			mentionMessage = mentionMessage.replace('$user', this.targetUser);
 			this.response.setText(this.response.text + '\n' + mentionMessage);
 		}
 
-		if (this.responseData.embeds) {
-			this.response.addEmbeds(this.responseData.embeds, this.configs);
-		}
+		if (this.responseData) {
+			if (this.responseData.embeds) {
+				this.response.addEmbeds(this.responseData.embeds, this.configs);
+			}
 
-		if (this.responseData.buttons) {
-			this.response.addButtons(this.responseData.buttons);
+			if (this.responseData.buttons) {
+				this.response.addButtons(this.responseData.buttons);
+			}
 		}
 
 		if (this.isReply) {
