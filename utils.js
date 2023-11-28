@@ -1,7 +1,7 @@
 // Libraries needed
 const fs = require('fs');
 const path = require('node:path');
-const { EmbedBuilder } = require('discord.js');
+const { Collection, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 // Will give you all the files in a folder recursively
 function getAllFiles(currentPath) {
@@ -345,3 +345,107 @@ class Scheduler {
 }
 
 exports.Scheduler = Scheduler;
+
+class BotResponseBuilder {
+	/* utility class for creating bot responses */
+
+	constructor() {
+		this.text = '';
+		this.ephemeral = false;
+		this.embeds = [];
+		this.components = [];
+	}
+
+	setText(text) {
+		this.text = text;
+	}
+
+	addEmbeds(embedsData, configs) {
+		// color theme to use on the embeds
+		const availableColors = getAvailableColors(configs);
+		this.embeds = createEmbeds(embedsData, availableColors);
+	}
+
+	addButtons(buttonsData) {
+		const buttons = buttonsData.map(btnData => {
+			return new ButtonBuilder().setLabel(btnData.label).setURL(btnData.url).setStyle(ButtonStyle.Link);
+		});
+		const actionRow = new ActionRowBuilder().addComponents(buttons);
+		this.components.push(actionRow);
+	}
+
+	build() {
+		const response = { content: this.text, ephemeral: this.ephemeral };
+		if (this.embeds.length) {
+			response.embeds = this.embeds;
+		}
+		if (this.components.length) {
+			response.components = this.components;
+		}
+		return response;
+	}
+}
+
+exports.BotResponseBuilder = BotResponseBuilder;
+
+class TagResponseSender {
+	/* utility class for sending tags responses like -rvc */
+
+	constructor() {
+		this.channel = null;
+		this.response = new BotResponseBuilder();
+		this.responseData = null;
+		this.configs = null;
+		this.guides = null;
+		this.targetUser = null;
+		this.languageChannelResponses = new Collection();
+	}
+
+	setChannel(channel) {
+		this.channel = channel;
+	}
+
+	setDefaultResponse(responseData) {
+		this.responseData = responseData;
+	}
+
+	setConfigs(configs) {
+		this.configs = configs;
+	}
+
+	setGuides(guides) {
+		this.guides = guides;
+	}
+
+	setTargetUser(user) {
+		this.targetUser = user;
+	}
+
+	async send() {
+		if (!this.channel) throw new Error('Discord channel not specified.');
+		if (!this.response) throw new Error('Attempted to send an empty response.');
+		if (!this.configs) throw new Error('Missing bot configs.');
+
+		// check if channel is a language channel
+		if (this.languageChannelResponses.has(this.channel.id)) {
+			this.responseData = this.languageChannelResponses.get(this.channel.id);
+		}
+
+		if (this.targetUser) {
+			const mentionMessage = this.responseData.mentionMessage.replace('$user', this.targetUser);
+			this.response.setText(this.response.text + '\n' + mentionMessage);
+		}
+
+		if (this.responseData.embeds) {
+			this.response.addEmbeds(this.responseData.embeds, this.configs);
+		}
+
+		if (this.responseData.buttons) {
+			this.response.addButtons(this.responseData.buttons);
+		}
+
+		await this.channel.send(this.response.build());
+	}
+}
+
+exports.TagResponseSender = TagResponseSender;

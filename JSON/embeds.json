@@ -295,20 +295,6 @@
             ]
         }
     },
-    "upload": {
-        "title": "huggingface.co upload Guides",
-        "description": [
-            "## 🇺🇸 English guide",
-            "Link: https://rentry.org/fdg_guide_new",
-            "Credits: **FDG**",
-            "## 🇮🇳 Hindi guide",
-            "Link: https://rentry.org/AI_hub_guide_hi",
-            "Credits: **Enes**",
-            "## 🇹🇷 Turkish guide",
-            "Link: https://rentry.org/AI_hub_guide_tr",
-            "Credits: **Enes**"
-        ]
-    },
     "uvr": {
         "embeds": [
             {
@@ -571,22 +557,46 @@
             ]
         },
         "upload": {
-            "en": [
-                {
-                    "title": "huggingface.co upload Guides",
-                    "description": [
-                        "## 🇺🇸 English guide",
-                        "Link: https://rentry.org/fdg_guide_new",
-                        "Credits: **FDG**",
-                        "## 🇮🇳 Hindi guide",
-                        "Link: https://rentry.org/AI_hub_guide_hi",
-                        "Credits: **Enes**",
-                        "## 🇹🇷 Turkish guide",
-                        "Link: https://rentry.org/AI_hub_guide_tr",
-                        "Credits: **Enes**"
-                    ]
-                }
-            ]
+            "en": {
+                "mentionMessage": "Suggestions for $user",
+                "embeds": [
+                    {
+                        "title": "huggingface.co upload Guides",
+                        "description": [
+                            "## English guide",
+                            "Link: https://rentry.org/fdg_guide_new",
+                            "Credits: **FDG**",
+                            "## Spanish Guide",
+                            "Link: https://rentry.org/AI_Hub_guide_esp",
+                            "Credits: **Julia (ailen2091)**",
+                            "## Hindi guide",
+                            "Link: https://rentry.org/AI_hub_guide_hi",
+                            "Credits: **Enes**",
+                            "## Turkish guide",
+                            "Link: https://rentry.org/AI_hub_guide_tr",
+                            "Credits: **Enes**"
+                        ]
+                    }
+                ]
+            },
+            "es": {
+                "mentionMessage": "Sugerencia para $user",
+                "embeds": [
+                    {
+                        "title": "Guía de cómo publicar modelos a AI Hub",
+                        "description": [
+                            "Hecho por FDG (Traducido por Julia)"
+                        ],
+                        "footer": "Credits: 👽 Julia (ailen2091)"
+                    }
+                ],
+                "buttons": [
+                    {
+                        "label": "Acceso (Rentry)",
+                        "url": "https://rentry.org/AI_Hub_guide_esp"
+                    }
+                ]
+            }
         },
         "paperspace": {
             "en": [

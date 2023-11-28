@@ -5,6 +5,7 @@ const {
 	SlashCommandBuilder,
 	ComponentType,
 } = require('discord.js');
+const { TagResponseSender } = require('../../utils');
 
 module.exports = {
 	category: 'Info',
@@ -135,13 +136,14 @@ module.exports = {
 
 				break;
 			case 'upload':
-				selectedGuide = botData.embeds.guides.upload[language];
+				// selectedGuide = botData.embeds.guides.upload[language];
+				selectedGuide = null;
 				if (!selectedGuide) {
 					botResponse.ephemeral = true;
 					botResponse.content = 'This guide is not available in the selected language yet.';
 					return await interaction.reply(botResponse);
 				}
-				botResponse.embeds = botUtils.createEmbeds(selectedGuide, availableColors);
+				botResponse.embeds = botUtils.createEmbeds(selectedGuide.embeds, availableColors);
 				break;
 			case 'uvr':
 				selectedGuide = botData.embeds.guides.uvr[language];
