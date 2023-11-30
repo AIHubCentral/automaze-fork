@@ -24,6 +24,23 @@
     },
     {
         "keywords": [
+            "there are no girls in ai hub"
+        ],
+        "responses": [
+            "👆",
+            "real",
+            "i know",
+            "yeah",
+            "accurate",
+            "ikr",
+            "i knew it"
+        ],
+        "kind": "text",
+        "frequency": "often",
+        "exact": false
+    },
+    {
+        "keywords": [
             "kalomazing real hard"
         ],
         "kind": "sticker",
@@ -66,6 +83,33 @@
         "kind": "sticker",
         "stickerId": "1159356210508742777",
         "frequency": "sometimes",
+        "exact": false
+    },
+    {
+        "keywords": [
+            "rip ai hub"
+        ],
+        "kind": "sticker",
+        "stickerId": "1159357610319958078",
+        "frequency": "often",
+        "exact": true
+    },
+    {
+        "keywords": [
+            "too silly"
+        ],
+        "kind": "sticker",
+        "stickerId": "1159361231094825010",
+        "frequency": "often",
+        "exact": false
+    },
+    {
+        "keywords": [
+            "ai hub drama"
+        ],
+        "kind": "sticker",
+        "stickerId": "1159316726069071933",
+        "frequency": "often",
         "exact": false
     },
     {

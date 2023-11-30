@@ -60,8 +60,11 @@ module.exports = {
 					if (item.frequency === 'rare') {
 						randomNumber = client.botUtils.getRandomNumber(0, 100);
 					}
-					else {
+					else if (item.frequency === 'sometimes') {
 						randomNumber = client.botUtils.getRandomNumber(0, 10);
+					}
+					else if (item.frequency === 'often') {
+						randomNumber = client.botUtils.getRandomNumber(0, 2);
 					}
 
 					shouldProceed = randomNumber === 0;
