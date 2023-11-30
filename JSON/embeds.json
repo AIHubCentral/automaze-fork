@@ -415,90 +415,117 @@
             ]
         },
         "applio": {
-            "en": [
-                {
-                    "color": "Green",
-                    "description": [
-                        "## 🍏 Applio-RVC-Fork: Guide\nLink: [Google Docs](https://docs.google.com/document/d/12YmIQFLFzth1YsZJMGrA0aeTN0Go8DNZVw8LFSf-Hug)\n\nCredits: **IA Hispano**",
-                        "## How to install RVC on windows\nLink: [YouTube](https://youtu.be/x7aOq7gCY4s?si=PkAR0FK-BqGrQ_6u)\n\nCredits: **iroaK**"
-                    ]
-                }
-            ],
-            "fr": [
-                {
-                    "color": "Green",
-                    "description": [
-                        "## 🍏 Comment installer et utiliser Applio\nLien: [Documentation](https://docs.aihubfrance.fr/guides-clone-de-voix/applio)\n\nCredits: **AI HUB FRANCE**"
-                    ]
-                }
-            ],
-            "de": [
-                {
-                    "color": "Green",
-                    "description": [
-                        "## 🍏 Wie Sie Applio installieren und nutzen\nLien: [Dokumentation](https://docs.aihub.wtf/v/germany/anleitung-zur-stimmerzeugung/applio)\n\nCredits: **AI HUB FRANCE**"
-                    ]
-                }
-            ],
-            "it": [
-                {
-                    "color": "Green",
-                    "description": [
-                        "## 🍏 Come installare e utilizzare Applio\nLien: [Documentazione](https://docs.aihub.wtf/v/italy/guida-alla-clonazione-vocale/applio)\n\nCredits: **AI HUB FRANCE**"
-                    ]
-                }
-            ],
-            "jp": [
-                {
-                    "color": "Green",
-                    "description": [
-                        "## 🍏 Applioのインストールと使用方法\nLien: [ドキュメンテーション](https://docs.aihub.wtf/v/japan/nokurngaido/applio)\n\nCredits: **AI HUB FRANCE**"
-                    ]
-                }
-            ],
-            "kr": [
-                {
-                    "color": "Green",
-                    "description": [
-                        "## 🍏 Applio 설치 및 사용 방법\nLien: [문서](https://docs.aihub.wtf/v/japan/nokurngaido/applio)\n\nCredits: **AI HUB FRANCE**"
-                    ]
-                }
-            ],
-            "pl": [
-                {
-                    "color": "Green",
-                    "description": [
-                        "## 🍏 Jak zainstalować i używać Applio\nLien: [Dokumentacja](https://docs.aihub.wtf/v/poland/przewodnik-po-klonowaniu-glosu/applio)\n\nCredits: **AI HUB FRANCE**"
-                    ]
-                }
-            ],
-            "pt": [
-                {
-                    "color": "Green",
-                    "description": [
-                        "## 🍏 Como instalar e usar o Applio\nLien: [Documentação](https://docs.aihub.wtf/v/brazil/guia-de-clonagem-vocal/applio)\n\nCredits: **AI HUB FRANCE**"
-                    ]
-                }
-            ],
-            "ru": [
-                {
-                    "color": "Green",
-                    "description": [
-                        "## 🍏 Как установить и использовать Applio\nLien: [Документация](https://docs.aihub.wtf/v/russia/rukovodstvo-po-klonirovaniyu-golosa/applio)\n\nCredits: **AI HUB FRANCE**"
-                    ]
-                }
-            ],
-            "es": [
-                {
-                    "color": "Green",
-                    "description": [
-                        "## 🍏 Tutorial de Applio en español",
-                        "Link: [YouTube](https://www.youtube.com/watch?v=bOAM_9xyHFY)",
-                        "Autor: IA Hispano",
-                        "### Servidor IA Hispano\n> https://discord.gg/iahispano"
-                    ]
-                }
-            ]
+            "en": {
+                "embeds": [
+                    {
+                        "color": "Green",
+                        "title": "🍏 Applio-RVC-Fork",
+                        "description": [
+                            "Enhanced RVC Variant: Optimized Performance Through Modifications, Built upon Mangio-RVC-Fork."
+                        ],
+                        "image": "https://docs.applio.org/assets/applio.png"
+                    }
+                ],
+                "buttons": [
+                    {
+                        "label": "Learn Applio",
+                        "url": "https://docs.applio.org/"
+                    }
+                ]
+            },
+            "fr": {
+                "embeds": [
+                    {
+                        "color": "Green",
+                        "description": [
+                            "## 🍏 Comment installer et utiliser Applio\nLien: [Documentation](https://docs.aihubfrance.fr/guides-clone-de-voix/applio)\n\nCredits: **AI HUB FRANCE**"
+                        ]
+                    }
+                ]
+            },
+            "de": {
+                "embeds": [
+                    {
+                        "color": "Green",
+                        "description": [
+                            "## 🍏 Wie Sie Applio installieren und nutzen\nLien: [Dokumentation](https://docs.aihub.wtf/v/germany/anleitung-zur-stimmerzeugung/applio)\n\nCredits: **AI HUB FRANCE**"
+                        ]
+                    }
+                ]
+            },
+            "it": {
+                "embeds": [
+                    {
+                        "color": "Green",
+                        "description": [
+                            "## 🍏 Come installare e utilizzare Applio\nLien: [Documentazione](https://docs.aihub.wtf/v/italy/guida-alla-clonazione-vocale/applio)\n\nCredits: **AI HUB FRANCE**"
+                        ]
+                    }
+                ]
+            },
+            "jp": {
+                "embeds": [
+                    {
+                        "color": "Green",
+                        "description": [
+                            "## 🍏 Applioのインストールと使用方法\nLien: [ドキュメンテーション](https://docs.aihub.wtf/v/japan/nokurngaido/applio)\n\nCredits: **AI HUB FRANCE**"
+                        ]
+                    }
+                ]
+            },
+            "kr": {
+                "embeds": [
+                    {
+                        "color": "Green",
+                        "description": [
+                            "## 🍏 Applio 설치 및 사용 방법\nLien: [문서](https://docs.aihub.wtf/v/japan/nokurngaido/applio)\n\nCredits: **AI HUB FRANCE**"
+                        ]
+                    }
+                ]
+            },
+            "pl": {
+                "embeds": [
+                    {
+                        "color": "Green",
+                        "description": [
+                            "## 🍏 Jak zainstalować i używać Applio\nLien: [Dokumentacja](https://docs.aihub.wtf/v/poland/przewodnik-po-klonowaniu-glosu/applio)\n\nCredits: **AI HUB FRANCE**"
+                        ]
+                    }
+                ]
+            },
+            "pt": {
+                "embeds": [
+                    {
+                        "color": "Green",
+                        "description": [
+                            "## 🍏 Como instalar e usar o Applio\nLien: [Documentação](https://docs.aihub.wtf/v/brazil/guia-de-clonagem-vocal/applio)\n\nCredits: **AI HUB FRANCE**"
+                        ]
+                    }
+                ]
+            },
+            "ru": {
+                "embeds": [
+                    {
+                        "color": "Green",
+                        "description": [
+                            "## 🍏 Как установить и использовать Applio\nLien: [Документация](https://docs.aihub.wtf/v/russia/rukovodstvo-po-klonirovaniyu-golosa/applio)\n\nCredits: **AI HUB FRANCE**"
+                        ]
+                    }
+                ]
+            },
+            "es": {
+                "embeds": [
+                    {
+                        "color": "Green",
+                        "description": [
+                            "## 🍏 Tutorial de Applio en español",
+                            "Link: [YouTube](https://www.youtube.com/watch?v=bOAM_9xyHFY)",
+                            "Autor: IA Hispano",
+                            "### Servidor IA Hispano\n> https://discord.gg/iahispano"
+                        ]
+                    }
+                ]
+            }
         },
         "uvr": {
             "en": [

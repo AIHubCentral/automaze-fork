@@ -153,48 +153,37 @@ module.exports = {
 			if (category === 'applio') {
 				selectedGuide = botData.embeds.guides.applio[language];
 				if (!selectedGuide) return interaction.reply(botResponse.build());
-				botResponse.setText('');
-				botResponse.setEphemeral(false);
-				botResponse.addEmbeds(selectedGuide, botConfigs);
 			}
 			else if (category === 'audio') {
 				selectedGuide = botData.embeds.guides.audio[language];
 				if (!selectedGuide) return interaction.reply(botResponse.build());
-				botResponse.setText('');
-				botResponse.setEphemeral(false);
-				botResponse.addEmbeds(selectedGuide, botConfigs);
 			}
 			else if (category === 'paperspace') {
 				selectedGuide = botData.embeds.guides.paperspace[language];
 				if (!selectedGuide) return interaction.reply(botResponse.build());
-				botResponse.setText('');
-				botResponse.setEphemeral(false);
-				botResponse.addEmbeds(selectedGuide.embeds, botConfigs);
-				botResponse.addButtons(selectedGuide.buttons);
 			}
 			else if (category === 'upload') {
 				selectedGuide = botData.embeds.guides.upload[language];
 				if (!selectedGuide) return interaction.reply(botResponse.build());
-				botResponse.setText('');
-				botResponse.setEphemeral(false);
-				botResponse.addEmbeds(selectedGuide.embeds, botConfigs);
-				if (selectedGuide.buttons) {
-					botResponse.addButtons(selectedGuide.buttons);
-				}
 			}
 			else if (category === 'uvr') {
 				selectedGuide = botData.embeds.guides.uvr[language];
 				if (!selectedGuide) return interaction.reply(botResponse.build());
-				botResponse.setText('');
-				botResponse.setEphemeral(false);
-				botResponse.addEmbeds(selectedGuide, botConfigs);
 			}
 			else if (category === 'rvc') {
 				selectedGuide = botData.embeds.guides.rvc[language];
 				if (!selectedGuide) return interaction.reply(botResponse.build());
-				botResponse.setText('');
-				botResponse.setEphemeral(false);
-				botResponse.addEmbeds(selectedGuide, botConfigs);
+			}
+
+			botResponse.setText('');
+			botResponse.setEphemeral(false);
+
+			if (selectedGuide.embeds) {
+				botResponse.addEmbeds(selectedGuide.embeds, botConfigs);
+			}
+
+			if (selectedGuide.buttons) {
+				botResponse.addButtons(selectedGuide.buttons);
 			}
 
 			await sender.send();
