@@ -376,22 +376,26 @@
                 {
                     "title": "Documentation",
                     "description": [
-                        "### All-In-One English documentation",
-                        "https://docs.aihub.wtf/",
-                        "### English FAQ",
-                        "https://docs.aihub.wtf/faq"
+                        "### 📚 All-In-One English documentation",
+                        "**https://docs.aihub.wtf/**",
+                        "### ❔ English FAQ",
+                        "**https://docs.aihub.wtf/faq**"
                     ],
                     "footer": "Credits: AI HUB FRANCE"
                 },
                 {
-                    "title": "More guides",
+                    "title": "✨ More guides",
                     "description": [
+                        "### Full AI Voice Model Training Guide (Local)",
+                        "Link: **[YouTube](https://youtu.be/Hx2IHzt5tAc?si=c_WpdbAVLF0pNeur)**",
+                        "Credits: **Christopher Villanueva**",
                         "### How to Make AI Covers using Ilaria RVC",
-                        "Link: [Documentation](https://docs.aihub.wtf/vocal-cloning-guide/hugging-face/ilaria-rvc)",
+                        "Link: **[Documentation](https://docs.aihub.wtf/vocal-cloning-guide/hugging-face/ilaria-rvc)**",
+                        "Credits: **Nick088, Kanav**",
                         "### Create a model with RVC disconnected (colab)",
-                        "Link: [Google Docs](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk)"
-                    ],
-                    "footer": "Credits: Nick088, Angetyde and Kanav"
+                        "Link: **[Google Docs](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk)**",
+                        "Credits: **Angetyde**"
+                    ]
                 }
             ],
             "it": {
