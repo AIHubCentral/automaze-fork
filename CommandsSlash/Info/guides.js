@@ -181,6 +181,9 @@ module.exports = {
 			if (selectedGuide.embeds) {
 				botResponse.addEmbeds(selectedGuide.embeds, botConfigs);
 			}
+			else {
+				botResponse.addEmbeds(selectedGuide, botConfigs);
+			}
 
 			if (selectedGuide.buttons) {
 				botResponse.addButtons(selectedGuide.buttons);
