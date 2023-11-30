@@ -419,6 +419,23 @@
                         "footer": "Créditos: AI HUB France, MrM0dz"
                     }
                 ]
+            },
+            "es": {
+                "mentionMessage": "Sugerencia para $user",
+                "embeds": [
+                    {
+                        "title": "Documentación",
+                        "description": [
+                            "### 📚 AI HUB Docs",
+                            "https://docs.aihub.wtf/v/spain",
+                            "### ❔ Perguntas Frecuentes",
+                            "https://docs.aihub.wtf/v/spain/faq",
+                            "### 🔗 Servidor IA Hispano",
+                            "https://discord.gg/iahispano"
+                        ],
+                        "footer": "Créditos: IA Hispano"
+                    }
+                ]
             }
         },
         "applio": {
