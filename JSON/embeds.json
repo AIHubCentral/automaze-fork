@@ -394,15 +394,22 @@
                     "footer": "Credits: Nick088, Angetyde and Kanav"
                 }
             ],
-            "it": [
-                {
-                    "title": "🇮🇹 RVC Disconnected (Italian Documentation)",
-                    "description": [
-                        "Link: https://docs.aihub.wtf/v/italy/guida-per-la-creazione-di-un-modello/model-training-rvc-v2-disconnected"
-                    ],
-                    "footer": "Credits: Angetyde"
-                }
-            ],
+            "it": {
+                "mentionMessage": "Suggerimento per $user",
+                "embeds": [
+                    {
+                        "title": "Documentazione",
+                        "description": [
+                            "### 📚 AI HUB Docs",
+                            "https://docs.aihub.wtf/v/italy",
+                            "### ❔ Domande frequenti",
+                            "https://docs.aihub.wtf/v/italy/faq",
+                            "### 🔗 Unisciti al nostro discord",
+                            "https://discord.com/invite/BZteU35xX6"
+                        ]
+                    }
+                ]
+            },
             "pt": {
                 "mentionMessage": "Sugestão para $user",
                 "embeds": [
@@ -434,6 +441,23 @@
                             "https://discord.gg/iahispano"
                         ],
                         "footer": "Créditos: IA Hispano"
+                    }
+                ]
+            },
+            "fr": {
+                "mentionMessage": "Suggestions pour $user",
+                "embeds": [
+                    {
+                        "title": "Documentation",
+                        "description": [
+                            "### 📚 AI HUB Docs",
+                            "https://docs.aihub.wtf/v/france",
+                            "### ❔ FAQ",
+                            "https://docs.aihub.wtf/v/france/faq",
+                            "### 🔗 Discord",
+                            "https://discord.gg/aihubfr"
+                        ],
+                        "footer": "Credits: AI HUB France"
                     }
                 ]
             }

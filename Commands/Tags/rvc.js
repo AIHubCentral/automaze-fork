@@ -30,6 +30,8 @@ module.exports = {
 
 		sender.languageChannelResponses.set(discordIDs.Channel.Portuguese, botData.embeds.guides.rvc.pt);
 		sender.languageChannelResponses.set(discordIDs.Channel.Spanish, botData.embeds.guides.rvc.es);
+		sender.languageChannelResponses.set(discordIDs.Channel.Italiano, botData.embeds.guides.rvc.it);
+		sender.languageChannelResponses.set(discordIDs.Channel.French, botData.embeds.guides.rvc.fr);
 
 		await sender.send();
 	},
