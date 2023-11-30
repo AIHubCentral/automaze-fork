@@ -177,76 +177,80 @@
             ]
         },
         "main": {
-            "title": "Documentation",
-            "fields": [
+            "embeds": [
                 {
-                    "name": "🇺🇸 English (main)",
-                    "value": "https://docs.aihub.wtf/"
-                },
-                {
-                    "name": "\u200B",
-                    "value": "**Translation by country**"
-                },
-                {
-                    "name": "🇧🇷 Brasil (PT-BR)",
-                    "value": "https://docs.aihub.wtf/v/brazil",
-                    "inline": true
-                },
-                {
-                    "name": "🇪🇸 Spain",
-                    "value": "https://docs.aihub.wtf/v/spain/",
-                    "inline": true
-                },
-                {
-                    "name": "\u0020",
-                    "value": "\u0020"
-                },
-                {
-                    "name": "🇫🇷 France",
-                    "value": "https://docs.aihub.wtf/v/france",
-                    "inline": true
-                },
-                {
-                    "name": "🇩🇪 Germany",
-                    "value": "https://docs.aihub.wtf/v/germany",
-                    "inline": true
-                },
-                {
-                    "name": "\u0020",
-                    "value": "\u0020"
-                },
-                {
-                    "name": "🇯🇵 Japan",
-                    "value": "https://docs.aihub.wtf/v/japan",
-                    "inline": true
-                },
-                {
-                    "name": "🇰🇷 Korea",
-                    "value": "https://docs.aihub.wtf/v/korea",
-                    "inline": true
-                },
-                {
-                    "name": "\u0020",
-                    "value": "\u0020"
-                },
-                {
-                    "name": "🇵🇱 Poland",
-                    "value": "https://docs.aihub.wtf/v/poland",
-                    "inline": true
-                },
-                {
-                    "name": "🇷🇺 Russia",
-                    "value": "https://docs.aihub.wtf/v/russia",
-                    "inline": true
-                },
-                {
-                    "name": "\u0020",
-                    "value": "\u0020"
-                },
-                {
-                    "name": "🇮🇹 Italy",
-                    "value": "https://docs.aihub.wtf/v/italy",
-                    "inline": true
+                    "title": "Documentation",
+                    "fields": [
+                        {
+                            "name": "🇺🇸 English (main)",
+                            "value": "https://docs.aihub.wtf/"
+                        },
+                        {
+                            "name": "\u200B",
+                            "value": "**Translation by country**"
+                        },
+                        {
+                            "name": "🇧🇷 Brasil (PT-BR)",
+                            "value": "https://docs.aihub.wtf/v/brazil",
+                            "inline": true
+                        },
+                        {
+                            "name": "🇪🇸 Spain",
+                            "value": "https://docs.aihub.wtf/v/spain/",
+                            "inline": true
+                        },
+                        {
+                            "name": "\u0020",
+                            "value": "\u0020"
+                        },
+                        {
+                            "name": "🇫🇷 France",
+                            "value": "https://docs.aihub.wtf/v/france",
+                            "inline": true
+                        },
+                        {
+                            "name": "🇩🇪 Germany",
+                            "value": "https://docs.aihub.wtf/v/germany",
+                            "inline": true
+                        },
+                        {
+                            "name": "\u0020",
+                            "value": "\u0020"
+                        },
+                        {
+                            "name": "🇯🇵 Japan",
+                            "value": "https://docs.aihub.wtf/v/japan",
+                            "inline": true
+                        },
+                        {
+                            "name": "🇰🇷 Korea",
+                            "value": "https://docs.aihub.wtf/v/korea",
+                            "inline": true
+                        },
+                        {
+                            "name": "\u0020",
+                            "value": "\u0020"
+                        },
+                        {
+                            "name": "🇵🇱 Poland",
+                            "value": "https://docs.aihub.wtf/v/poland",
+                            "inline": true
+                        },
+                        {
+                            "name": "🇷🇺 Russia",
+                            "value": "https://docs.aihub.wtf/v/russia",
+                            "inline": true
+                        },
+                        {
+                            "name": "\u0020",
+                            "value": "\u0020"
+                        },
+                        {
+                            "name": "🇮🇹 Italy",
+                            "value": "https://docs.aihub.wtf/v/italy",
+                            "inline": true
+                        }
+                    ]
                 }
             ]
         }
@@ -399,20 +403,23 @@
                     "footer": "Credits: Angetyde"
                 }
             ],
-            "pt": [
-                {
-                    "title": "Documentação",
-                    "description": [
-                        "### 📚 AI HUB Docs",
-                        "https://docs.aihub.wtf/v/brazil",
-                        "### ❔ Perguntas Frequentes",
-                        "https://docs.aihub.wtf/v/brazil/faq",
-                        "### 🔗 Servidor AI HUB Brasil",
-                        "https://discord.gg/aihubbrasil"
-                    ],
-                    "footer": "Créditos: AI HUB France, MrM0dz"
-                }
-            ]
+            "pt": {
+                "mentionMessage": "Sugestão para $user",
+                "embeds": [
+                    {
+                        "title": "Documentação",
+                        "description": [
+                            "### 📚 AI HUB Docs",
+                            "https://docs.aihub.wtf/v/brazil",
+                            "### ❔ Perguntas Frequentes",
+                            "https://docs.aihub.wtf/v/brazil/faq",
+                            "### 🔗 Servidor AI HUB Brasil",
+                            "https://discord.gg/aihubbrasil"
+                        ],
+                        "footer": "Créditos: AI HUB France, MrM0dz"
+                    }
+                ]
+            }
         },
         "applio": {
             "en": {
