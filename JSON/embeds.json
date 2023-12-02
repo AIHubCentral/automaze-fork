@@ -1,45 +1,28 @@
 {
     "colab": {
-        "en": {
-            "rvc": {
+        "en": [
+            {
+                "title": "All working colabs / spaces ☁️",
                 "description": [
-                    "## RVC",
-                    "- [AI-Cover-Gen-No-UI](https://colab.research.google.com/github/ardha27/AICoverGen-NoUI-Colab/blob/main/CoverGen_No_UI.ipynb) (**inference** only)",
-                    "- [RVC v2 Disconnected](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS) (**training** only)",
-                    "### 🌐 Translated colabs",
-                    "- PT-BR: `-colabs_br`"
+                    "- **AICoverGen-NoWebUI**, by Ardha [Google Colab](https://colab.research.google.com/github/ardha27/AICoverGen-NoUI-Colab/blob/main/CoverGen_No_UI.ipynb)",
+                    "- **RVC Disconnected**, Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
+                    "- **easyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)",
+                    "- **Ilaria RVC**, by thestingerx [Hugginface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
+                    "- **RVC-HF**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HF)",
+                    "- **AICoverGen**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
+                    "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)",
+                    "- **Advanced RVC Inference**, by neuclya [Huggingface Spaces](https://huggingface.co/spaces/neucliya/Advanced-RVC-custome)",
+                    "\n> Credits to [Faze Masta](https://discordapp.com/users/622856015444049937) and [Antasma](https://discordapp.com/users/1037338320960761998) for compiling these links."
                 ]
             },
-            "uvr": {
+            {
+                "title": "Need some help? 🤔",
                 "description": [
-                    "## Audio Separation/Isolation",
-                    "- [MDX Net Colab](https://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb)",
-                    "- [UVR arch colab 5.0.2/c1.04](https://colab.research.google.com/drive/16Q44VBJiIrXOgTINztVDVeb0XKhLKHwl)",
-                    "- [KaraFan colab](https://colab.research.google.com/github/Captain-FLAM/KaraFan/blob/master/KaraFan.ipynb)"
-                ]
-            },
-            "main": {
-                "content": {
-                    "title": "All working colabs / spaces ☁️",
-                    "description": [
-                        "- **AICoverGen-NoWebUI**, by Ardha [Google Colab](https://colab.research.google.com/github/ardha27/AICoverGen-NoUI-Colab/blob/main/CoverGen_No_UI.ipynb)",
-                        "- **RVC Disconnected**, Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
-                        "- **easyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)",
-                        "- **RVC-HF**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HF)",
-                        "- **AICoverGen**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
-                        "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)",
-                        "- **Advanced RVC Inference**, by neuclya [Huggingface Spaces](https://huggingface.co/spaces/neucliya/Advanced-RVC-custome)"
-                    ]
-                },
-                "message": {
-                    "title": "Need some help? 🤔",
-                    "description": [
-                        "You can find more info on the $guides channel. If you can't find your answer, feel free to ask for help in $helpRVC. Credits to $fazemasta and $antasma for compiling these links."
-                    ],
-                    "footer": "More commands: -audio, -local, -overtrain, -realtime, -rvc, -help"
-                }
+                    "You can find more info on the $guides channel. If you can't find your answer, feel free to ask for help in $helpRVC."
+                ],
+                "footer": "More commands: -audio, -local, -overtrain, -realtime, -rvc, -help"
             }
-        },
+        ],
         "pt": {
             "color": "Green",
             "description": [

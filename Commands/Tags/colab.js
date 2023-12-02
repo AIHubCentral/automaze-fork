@@ -1,41 +1,50 @@
+const { BotResponseBuilder, TagResponseSender, getChannelById } = require('../../utils');
+
 module.exports = {
-    name: 'colab',
-    category: 'Tags',
-    description: 'Links to all working colabs/spaces',
-    aliases: ['colabs', 'disconnected', 'train', 'training', 'spaces', 'hf', 'hugginface'],
-    syntax: `colab [member]`,
-    /**
-     * 
-     * @param {Client} client 
-     * @param {Message} message 
-     * @param {string[]} args 
-     * @param {String} prefix 
-     */
-    run: (client, message, args, prefix) => {
-        const { createEmbed } = client.botUtils;
-        const { theme } = client.botConfigs.colors;
+	name: 'colab',
+	category: 'Tags',
+	description: 'Links to all working colabs/spaces',
+	aliases: ['colabs', 'disconnected', 'train', 'training', 'spaces', 'hf', 'hugginface'],
+	syntax: 'colab [member]',
+	run: async (client, message) => {
+		const { botData, botConfigs, discordIDs } = client;
 
-        const embeds = [
-            createEmbed(client.botData.embeds.colab.en.main.content, theme.primary),
-        ];
+		let guidesChannel = '"❔┋guides"';
+		let helpChannel = '"help-rvc"';
 
-        const guidesChannel = message.guild.channels.cache.get(client.discordIDs.Forum.Guides) ?? '"❔┋guides"';
-        const helpChannel = message.guild.channels.cache.get(client.discordIDs.Channel.HelpRVC) ?? '"help-rvc"';
+		try {
+			guidesChannel = await getChannelById(discordIDs.Forum.Guides, message.guild);
+			helpChannel = await getChannelById(discordIDs.Channel.HelpRVC, message.guild);
+		}
+		catch (error) {
+			console.log('Failed to retrieve channels.');
+		}
 
-        const moreEmbedData = client.botData.embeds.colab.en.main.message;
+		const embeds = [...botData.embeds.colab.en];
 
-        moreEmbedData.description[0] = moreEmbedData.description[0]
-            .replace('$antasma', '[Antasma](https://discordapp.com/users/1037338320960761998)')
-            .replace('$fazemasta', '[Faze Masta](https://discordapp.com/users/622856015444049937)')
-            .replace('$guides', guidesChannel)
-            .replace('$helpRVC', helpChannel);
+		// remove the embed that links to help channel if the command was used on that channel
+		if (message.channelId == discordIDs.Channel.HelpRVC) {
+			embeds.pop();
+		}
+		else {
+			// otherwise replace the channel placeholders with the actual links to them
+			const lastEmbedIndex = embeds.length - 1;
+			embeds[lastEmbedIndex]['description'][0] = embeds[lastEmbedIndex]['description'][0]
+				.replace('$guides', guidesChannel)
+				.replace('$helpRVC', helpChannel);
+		}
 
-        embeds.push(createEmbed(moreEmbedData, theme.secondary));
+		const botResponse = new BotResponseBuilder();
+		botResponse.addEmbeds(embeds, botConfigs);
 
-        if (message.mentions.members.first()) {
-            return message.channel.send({content: `Suggestions for ${message.mentions.members.first()}`, embeds: embeds});
-        }
+		const sender = new TagResponseSender();
+		sender.setChannel(message.channel);
+		sender.setConfigs(botConfigs);
+		sender.setResponse(botResponse);
+		sender.setTargetMessage(message);
+		sender.setTargetUser(message.mentions.members.first());
+		sender.setIsReply(true);
 
-        message.channel.send({ embeds: embeds });
-    }
-}
+		await sender.send();
+	},
+};
