@@ -4,7 +4,7 @@
             {
                 "title": "All working colabs / spaces ☁️",
                 "description": [
-                    "- **AICoverGen-WebUI**, modded by **Hina** [Google Colab](https://colab.research.google.com/github/hinabl/AICoverGen-Colab/blob/main/Hina_Mod_AICoverGen_colab.ipynb)",
+                    "- **AICoverGen-WebUI**, *modded by Hina* [Google Colab](https://colab.research.google.com/github/hinabl/AICoverGen-Colab/blob/main/Hina_Mod_AICoverGen_colab.ipynb)",
                     "- **AICoverGen-NoWebUI**, by Ardha [Google Colab](https://colab.research.google.com/github/ardha27/AICoverGen-NoUI-Colab/blob/main/CoverGen_No_UI.ipynb)",
                     "- **RVC Disconnected**, Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
                     "- **easyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)",
@@ -378,7 +378,10 @@
                         "Credits: **Nick088, Kanav**",
                         "### Create a model with RVC disconnected (colab)",
                         "Link: **[Google Docs](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk)**",
-                        "Credits: **Angetyde**"
+                        "Credits: **Angetyde**",
+                        "### How to make an AI cover using Hugging Face 🤗",
+                        "Link: **[Rentry](https://rentry.org/HFguide_en)**",
+                        "Credits: 👽 **Julia** *(ailen2091)*"
                     ]
                 }
             ],
@@ -429,6 +432,19 @@
                             "https://discord.gg/iahispano"
                         ],
                         "footer": "Créditos: IA Hispano"
+                    },
+                    {
+                        "title": "Cómo hacer un cover con IA en Hugging Face 🤗",
+                        "description": [
+                            "> **Notas**: Funciona en celulares. Es ideal si no tienes una computadora potente para correr RVC de manera local, ya que este software no utiliza los recursos del dispositivo en sí para funcionar. Solo asegúrate de tener una conexión estable a Internet."
+                        ],
+                        "footer": "Créditos: 👽 Julia (ailen2091)"
+                    }
+                ],
+                "buttons": [
+                    {
+                        "label": "Acceso (Rentry)",
+                        "url": "https://rentry.org/HF_guia_es"
                     }
                 ]
             },
