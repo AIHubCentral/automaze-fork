@@ -4,6 +4,7 @@
             {
                 "title": "All working colabs / spaces ☁️",
                 "description": [
+                    "- **AICoverGen-WebUI**, modded by **Hina** [Google Colab](https://colab.research.google.com/github/hinabl/AICoverGen-Colab/blob/main/Hina_Mod_AICoverGen_colab.ipynb)",
                     "- **AICoverGen-NoWebUI**, by Ardha [Google Colab](https://colab.research.google.com/github/ardha27/AICoverGen-NoUI-Colab/blob/main/CoverGen_No_UI.ipynb)",
                     "- **RVC Disconnected**, Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
                     "- **easyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)",
