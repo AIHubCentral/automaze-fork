@@ -38,7 +38,6 @@ module.exports = {
 		botResponse.addEmbeds(embeds, botConfigs);
 
 		const sender = new TagResponseSender();
-		sender.setChannel(message.channel);
 		sender.setConfigs(botConfigs);
 		sender.setResponse(botResponse);
 		sender.setTargetMessage(message);
