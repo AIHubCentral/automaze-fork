@@ -1,5 +1,14 @@
 /* eslint-disable indent */
-const { SlashCommandBuilder, ActivityType } = require('discord.js');
+const { SlashCommandBuilder,
+	ActivityType,
+	StringSelectMenuBuilder,
+	StringSelectMenuOptionBuilder,
+	ActionRowBuilder,
+	ComponentType,
+} = require('discord.js');
+
+const { getThemes } = require('../../utils.js');
+
 const delay = require('node:timers/promises').setTimeout;
 
 module.exports = {
@@ -28,23 +37,8 @@ module.exports = {
 		)
 		.addSubcommand(subcommand =>
 			subcommand
-				.setName('colors')
-				.setDescription('Configure color theme')
-				.addStringOption(option =>
-					option
-						.setName('primary')
-						.setDescription('Primary color'),
-				)
-				.addStringOption(option =>
-					option
-						.setName('secondary')
-						.setDescription('Secondary color'),
-				)
-				.addStringOption(option =>
-					option
-						.setName('tertiary')
-						.setDescription('Tertiary color'),
-				),
+				.setName('theme')
+				.setDescription('Configure color theme'),
 		)
 		.addSubcommand(subcommand =>
 			subcommand
@@ -139,34 +133,49 @@ module.exports = {
 
 			await interaction.reply({ content: `Bot configured:\n- sendMessages: **${sendMessages}**\n- deleteMessages: **${deleteMessages}**`, ephemeral: true });
 		}
-		else if (interaction.options.getSubcommand() === 'colors') {
-			const primaryColor = interaction.options.getString('primary');
-			const secondaryColor = interaction.options.getString('secondary');
-			const tertiaryColor = interaction.options.getString('tertiary');
+		else if (interaction.options.getSubcommand() === 'theme') {
+			const themeOptions = [
+				{
+					label: 'Default',
+					description: 'Default theme',
+					value: 'defaultTheme',
+					emoji: '📁',
+				},
+				{
+					label: 'Christmas',
+					description: 'Christmas theme',
+					value: 'xmasTheme',
+					emoji: '🎄',
+				},
+			];
 
-			const output = [];
-			let botResponse = 'No color was updated.';
+			const selectMenu = new StringSelectMenuBuilder()
+				.setCustomId(interaction.id)
+				.setPlaceholder('Select the desired theme')
+				.addOptions(themeOptions.map((theme) =>
+					new StringSelectMenuOptionBuilder()
+						.setLabel(theme.label)
+						.setDescription(theme.description)
+						.setValue(theme.value)
+						.setEmoji(theme.emoji),
+				));
 
-			if (primaryColor) {
-				client.botConfigs.colors.theme.primary = primaryColor;
-				output.push(`- Primary color: ${primaryColor}`);
-			}
+			const actionRow = new ActionRowBuilder().addComponents(selectMenu);
 
-			if (secondaryColor) {
-				client.botConfigs.colors.theme.secondary = secondaryColor;
-				output.push(`- Secondary color: ${secondaryColor}`);
-			}
+			const botReply = await interaction.reply({ components: [actionRow] });
 
-			if (tertiaryColor) {
-				client.botConfigs.colors.theme.tertiary = tertiaryColor;
-				output.push(`- Tertiary color: ${tertiaryColor}`);
-			}
+			const collector = botReply.createMessageComponentCollector({
+				ComponentType: ComponentType.StringSelect,
+				filter: (i) => i.user.id === interaction.user.id && i.customId === interaction.id,
+				time: 60_000,
+			});
 
-			if (output.length > 0) {
-				botResponse = 'Colors updated:\n' + output.join('\n');
-			}
-
-			await interaction.reply({ content: botResponse, ephemeral: true });
+			collector.on('collect', (i) => {
+				const themeName = i.values[0];
+				const themes = getThemes();
+				client.botConfigs.colors.theme = themes[themeName];
+				i.reply(`Theme changed to **${themeName}**.`);
+			});
 		}
 		else if (interaction.options.getSubcommand() === 'status') {
 			await interaction.deferReply({ ephemeral: true });
