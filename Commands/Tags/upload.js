@@ -1,4 +1,4 @@
-const { TagResponseSender } = require('../../utils');
+const { LanguageResponseSender } = require('../../utils');
 
 module.exports = {
 	name: 'upload',
@@ -8,15 +8,10 @@ module.exports = {
 	syntax: 'upload [member]',
 	run: async (client, message) => {
 		const { botData, botConfigs, discordIDs } = client;
-
-		const sender = new TagResponseSender();
-		sender.setConfigs(botConfigs);
-		sender.setDefaultResponse(botData.embeds.guides.upload.en);
+		const sender = new LanguageResponseSender(botConfigs, discordIDs.Channel);
 		sender.setTargetMessage(message);
+		sender.setContent(botData.embeds.guides.upload);
 		sender.setTargetUser(message.mentions.members.first());
-
-		sender.languageChannelResponses.set(discordIDs.Channel.Spanish, botData.embeds.guides.upload.es);
-
 		await sender.send();
 	},
 };

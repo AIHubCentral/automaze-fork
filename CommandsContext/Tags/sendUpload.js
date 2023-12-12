@@ -1,5 +1,5 @@
 const { ApplicationCommandType, ContextMenuCommandBuilder } = require('discord.js');
-const { BotResponseBuilder } = require('../../utils');
+const { LanguageResponseSender } = require('../../utils');
 
 module.exports = {
 	category: 'Tags',
@@ -12,12 +12,12 @@ module.exports = {
 
 		if (targetUser.bot) return await interaction.reply({ content: 'That user is a bot.', ephemeral: true });
 
-		const { botData, botConfigs } = client;
-		const embeds = botData.embeds.guides.upload.en.embeds;
+		const { botData, botConfigs, discordIDs } = client;
 
-		const botResponse = new BotResponseBuilder();
-		botResponse.setText(`Suggestion for ${targetUser}`);
-		botResponse.addEmbeds(embeds, botConfigs);
-		await interaction.reply(botResponse.build());
+		const sender = new LanguageResponseSender(botConfigs, discordIDs.Channel);
+		sender.setTargetMessage(interaction);
+		sender.setContent(botData.embeds.guides.upload);
+		sender.setTargetUser(targetUser);
+		await sender.send();
 	},
 };

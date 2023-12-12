@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 // Libraries needed
 const fs = require('fs');
 const path = require('node:path');
@@ -412,6 +413,94 @@ class BotResponseBuilder {
 }
 
 exports.BotResponseBuilder = BotResponseBuilder;
+
+class ResponseSender {
+	/* generic class to send the bot response */
+	constructor() {
+		this.targetMessage = null;
+		this.response = new BotResponseBuilder();
+		this.isReply = true;
+	}
+
+	setTargetMessage(message) {
+		this.targetMessage = message;
+	}
+
+	setTargetUser(user) {
+		if (!user) return;
+		this.response.setText(`Suggestion for ${user}`);
+	}
+
+	buildResponse() {
+		if (!this.response) throw new Error('Empty bot response.');
+		this.response = this.response.build();
+	}
+
+	async send() {
+		this.buildResponse();
+		if (this.isReply) {
+			await this.targetMessage.reply(this.response);
+		}
+		else {
+			await this.targetMessage.channel.send(this.response);
+		}
+	}
+}
+
+class LanguageResponseSender extends ResponseSender {
+	/* sends different responses using a language based on the channel if available */
+	constructor(configs, channels) {
+		super();
+		this.selectedContent = null;
+		this.configs = configs;
+		this.channels = channels;
+		this.languageChannelResponses = new Collection();
+	}
+
+	setTargetUser(user) {
+		if (!user) return;
+		let mentionMessage = 'Suggestion for $user';
+		if (this.selectedContent.mentionMessage) {
+			mentionMessage = this.selectedContent.mentionMessage;
+		}
+		this.response.setText(mentionMessage.replace('$user', user));
+	}
+
+	setContent(content) {
+		switch (this.targetMessage.channelId) {
+			case this.channels.Italiano:
+				this.selectedContent = content.it;
+				break;
+			case this.channels.Spanish:
+				this.selectedContent = content.es;
+				break;
+			case this.channels.French:
+				this.selectedContent = content.fr;
+				break;
+			case this.channels.Portuguese:
+				this.selectedContent = content.pt;
+				break;
+		}
+
+		// defaults to english if not available
+		if (!this.selectedContent) {
+			this.selectedContent = content.en;
+		}
+
+		if (this.selectedContent.embeds) {
+			this.response.addEmbeds(this.selectedContent.embeds, this.configs);
+		}
+		else {
+			this.response.addEmbeds(this.selectedContent, this.configs);
+		}
+
+		if (this.selectedContent.buttons) {
+			this.response.addButtons(this.selectedContent.buttons);
+		}
+	}
+}
+
+exports.LanguageResponseSender = LanguageResponseSender;
 
 class TagResponseSender {
 	/* utility class for sending tags responses like -rvc */
