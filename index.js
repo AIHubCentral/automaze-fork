@@ -15,8 +15,8 @@ const {
 
 // JSONs
 const DiscordIDs = {
-	prod: './Configs/idsDiscordProd.json',
-	dev: './Configs/idsDiscordDev.json',
+	prod: './JSON/configs/idsDiscordProd.json',
+	dev: './JSON/configs/idsDiscordDev.json',
 };
 
 // Discord Client initialization
