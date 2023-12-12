@@ -456,53 +456,60 @@ class TagResponseSender {
 
 	setTargetMessage(message) {
 		this.message = message;
+		this.isReply = true;
 	}
 
-	setIsReply(isReply) {
-		// if true sends the message as reply, otherwise send it to the channel
-		this.isReply = isReply;
+	checkChannelType() {
+		/* checks if channel is a language channel */
+		const channel = this.channel ?? this.message.channel;
+		if (!channel) throw new Error('Missing channel.');
+		if (this.languageChannelResponses.has(channel.id)) {
+			this.responseData = this.languageChannelResponses.get(channel.id);
+		}
 	}
 
-	async send() {
-		if (!this.channel) throw new Error('Discord channel not specified.');
-		if (!this.response) throw new Error('Attempted to send an empty response.');
-		if (!this.configs) throw new Error('Missing bot configs.');
-
-		// check if channel is a language channel
-		if (this.languageChannelResponses.has(this.channel.id)) {
-			this.responseData = this.languageChannelResponses.get(this.channel.id);
-		}
-
-		if (this.targetUser) {
-			let mentionMessage = this.mentionMessage;
-
-			if (this.responseData) {
-				if (this.responseData.mentionMessage) {
-					// use the message from json if available
-					mentionMessage = this.responseData.mentionMessage;
-				}
-			}
-
-			mentionMessage = mentionMessage.replace('$user', this.targetUser);
-			this.response.setText(this.response.text + '\n' + mentionMessage);
-		}
+	setMentionMessage() {
+		if (!this.targetUser) return;
+		let mentionMessage = this.mentionMessage;
 
 		if (this.responseData) {
-			if (this.responseData.embeds) {
-				this.response.addEmbeds(this.responseData.embeds, this.configs);
-			}
-
-			if (this.responseData.buttons) {
-				this.response.addButtons(this.responseData.buttons);
+			if (this.responseData.mentionMessage) {
+				// use the mention message from JSON if available
+				mentionMessage = this.responseData.mentionMessage;
 			}
 		}
 
+		mentionMessage = mentionMessage.replace('$user', this.targetUser);
+		this.response.setText(this.response.text + '\n' + mentionMessage);
+	}
+
+	addEmbedsAndButtons() {
+		if (!this.responseData) return;
+
+		if (this.responseData.embeds) {
+			this.response.addEmbeds(this.responseData.embeds, this.configs);
+		}
+
+		if (this.responseData.buttons) {
+			this.response.addButtons(this.responseData.buttons);
+		}
+	}
+
+	async sendResponse() {
 		if (this.isReply) {
 			await this.message.reply(this.response.build());
 		}
 		else {
 			await this.channel.send(this.response.build());
 		}
+	}
+
+	async send() {
+		if (!this.configs) throw new Error('Missing bot configs.');
+		this.checkChannelType();
+		this.setMentionMessage();
+		this.addEmbedsAndButtons();
+		this.sendResponse();
 	}
 }
 

@@ -1,3 +1,5 @@
+const { BotResponseBuilder, TagResponseSender } = require('../../utils');
+
 module.exports = {
 	name: 'audio',
 	category: 'Tags',
@@ -5,20 +7,16 @@ module.exports = {
 	aliases: ['dataset'],
 	syntax: 'audio [member]',
 	run: async (client, message) => {
-		const { botData, botConfigs, botUtils } = client;
-		const mentionedUser = message.mentions.members.first();
+		const { botData, botConfigs } = client;
 
-		const botResponse = {};
-		botResponse.embeds = botUtils.createEmbeds(
-			botData.embeds.guides.audio.en,
-			botUtils.getAvailableColors(botConfigs),
-		);
+		const botResponse = new BotResponseBuilder();
+		botResponse.addEmbeds(botData.embeds.guides.audio.en, botConfigs);
 
-		if (mentionedUser) {
-			botResponse.content = `*Suggestion for ${mentionedUser}*`;
-			return message.channel.send(botResponse);
-		}
-
-		message.channel.send(botResponse);
+		const sender = new TagResponseSender();
+		sender.setConfigs(botConfigs);
+		sender.setResponse(botResponse);
+		sender.setTargetMessage(message);
+		sender.setTargetUser(message.mentions.members.first());
+		await sender.send();
 	},
 };

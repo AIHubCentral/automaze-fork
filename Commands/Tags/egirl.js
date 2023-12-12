@@ -14,13 +14,10 @@ module.exports = {
 		botResponse.addButtons(botData.embeds.egirl.buttons);
 
 		const sender = new TagResponseSender();
-		sender.setChannel(message.channel);
 		sender.setConfigs(botConfigs);
-		sender.setDefaultResponse(botData.embeds.egirl);
+		sender.setResponse(botResponse);
 		sender.setTargetMessage(message);
 		sender.setTargetUser(message.mentions.members.first());
-		sender.setIsReply(true);
-
 		await sender.send();
 	},
 };

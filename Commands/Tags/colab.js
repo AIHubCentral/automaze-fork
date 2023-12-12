@@ -43,7 +43,6 @@ module.exports = {
 		sender.setResponse(botResponse);
 		sender.setTargetMessage(message);
 		sender.setTargetUser(message.mentions.members.first());
-		sender.setIsReply(true);
 
 		await sender.send();
 	},
