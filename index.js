@@ -10,6 +10,7 @@ const {
 	getAllFiles, createEmbed, createEmbeds,
 	getAvailableColors, getRandomNumber, getRandomFromArray,
 	Scheduler,
+	getThemes,
 } = require('./utils');
 
 // JSONs
@@ -94,6 +95,11 @@ client.botUtils = {
 	getRandomNumber,
 	getRandomFromArray,
 };
+
+// load themes on startup
+const themes = getThemes();
+const selectedTheme = process.env.theme ?? 'defaultTheme';
+client.botConfigs.colors.theme = themes[selectedTheme];
 
 // knex database
 client.knexInstance = require('./database/dbManager.js').createInstance('./database/knex.sqlite');

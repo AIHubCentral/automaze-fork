@@ -19,6 +19,23 @@ function getAllFiles(currentPath) {
 }
 exports.getAllFiles = getAllFiles;
 
+
+function getThemes() {
+	const themes = {};
+	const themesDirectory = path.join(process.cwd(), 'JSON', 'themes');
+	const themeFiles = getAllFiles(themesDirectory).filter(file => path.extname(file) === '.json');
+	themeFiles.forEach(filePath => {
+		const themeData = fs.readFileSync(filePath).toString();
+		// remove .json extension from file name
+		const themeName = path.parse(filePath).name;
+		themes[themeName] = JSON.parse(themeData);
+	});
+	return themes;
+}
+
+exports.getThemes = getThemes;
+
+
 // Create delay async in the script
 async function delay(ms) {
 	return new Promise(resolve => {
@@ -106,7 +123,7 @@ function createEmbed(data, color = '') {
 	}
 
 	if (data.footer) {
-		embed.setFooter({ text: data.footer });
+		embed.setFooter({ text: '🎄 ' + data.footer });
 	}
 
 	if (data.timestamp) {

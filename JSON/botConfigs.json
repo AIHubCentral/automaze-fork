@@ -9,13 +9,7 @@
         "sendLogs": false
     },
     "colors": {
-        "theme": {
-            "primary": "07C7F7",
-            "secondary": "077CF7",
-            "tertiary": "0730F7",
-            "accent_1": "07F7D9",
-            "accent_2": "07F788"
-        },
+        "theme": {},
         "country": {
             "brazil": [
                 "#12A248",
