@@ -600,7 +600,7 @@
         "audio": {
             "en": [
                 {
-                    "title": "Guides",
+                    "title": "📚 Audio Guides",
                     "description": [
                         "- **Perfecting Audio Isolation on Low-End Rigs: A Practical Guide**, by Litsa The Dancer and Faze Masta [Google Docs](https://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing)",
                         "- **Gathering and Isolating Audio**, by SCRFilms [Google Docs](https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv)",
@@ -609,7 +609,7 @@
                     ]
                 },
                 {
-                    "title": "Tools",
+                    "title": "🛠️ Tools",
                     "description": [
                         "### Youtube Downloaders",
                         "- https://github.com/yt-dlp/yt-dlp",
@@ -787,6 +787,7 @@
             {
                 "title": "Having some trouble? Check out these guides",
                 "description": [
+                    "- Raven's Guide for W-Okada's Voice Changer: [Link (Rentry)](https://rentry.co/VoiceChangerGuide)",
                     "- FAQ: [W-Okada-FAQ](https://rentry.co/W-Okada-FAQ)",
                     "- Common Error Fixes: [W-Okada's Voice Changer Common Issues and Fixes](https://docs.google.com/document/d/e/2PACX-1vQIwJ3MVidhgEaXwWFl0xpVonVOVfneaNVADd7-NMWFgPIsfWWhG8NNqzQMsXDIOGlBIfxscoIm2_6I/pub)",
                     "- Sushi's guides: [The Sushi Bar](https://linktr.ee/sushi2022)"

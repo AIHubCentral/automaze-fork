@@ -313,7 +313,8 @@ class Scheduler {
 	constructor(client) {
 		this.client = client;
 		this.isRunning = false;
-		this.task = cron.schedule('0 */6 * * *', () => {
+		this.cronExpression = '0 */6 * * *';
+		this.task = cron.schedule(this.cronExpression, () => {
 			// runs every 6 hours
 			this.executeTask();
 		}, { scheduled: false });
@@ -337,22 +338,29 @@ class Scheduler {
 	}
 
 	async sendGuides() {
-		const { discordIDs, botUtils, botConfigs, botData } = this.client;
+		const { discordIDs, botConfigs, botData } = this.client;
 		const availableColors = getAvailableColors(botConfigs);
 		const guild = this.client.guilds.cache.get(discordIDs.Guild);
 		const botResponse = {};
 
 		// send guides to help-okada
-		botResponse.embeds = botUtils.createEmbeds(botData.embeds.help.WOkada, availableColors);
+		botResponse.embeds = createEmbeds(botData.embeds.help.WOkada, availableColors);
 		const helpOkadaChannel = await getChannelById(discordIDs.Channel.HelpWOkada, guild);
 		await helpOkadaChannel.send(botResponse);
-		await wait(180_000);
+		await wait(120_000);
 
 		// send guides to help channel
 		botResponse.content = '# RVC Guides (How to Make AI Cover)';
-		botResponse.embeds = botUtils.createEmbeds([botData.embeds.rvc.main], availableColors);
+		botResponse.embeds = createEmbeds(botData.embeds.rvc.main.embeds, availableColors);
 		const helpChannel = await getChannelById(discordIDs.Channel.HelpRVC, guild);
 		await helpChannel.send(botResponse);
+		await wait(120_000);
+
+		// send guides to making datasets
+		botResponse.content = '';
+		botResponse.embeds = createEmbeds(botData.embeds.guides.audio.en, availableColors);
+		const datasetsChannel = await getChannelById(discordIDs.Channel.MakingDatasets, guild);
+		await datasetsChannel.send(botResponse);
 		await wait(60_000);
 
 		if (botConfigs.general.sendLogs) {
