@@ -1,4 +1,4 @@
-const { BotResponseBuilder, TagResponseSender, getChannelById } = require('../../utils');
+const { LanguageResponseSender } = require('../../utils');
 
 module.exports = {
 	name: 'colab',
@@ -8,41 +8,10 @@ module.exports = {
 	syntax: 'colab [member]',
 	run: async (client, message) => {
 		const { botData, botConfigs, discordIDs } = client;
-
-		let guidesChannel = '"❔┋guides"';
-		let helpChannel = '"help-rvc"';
-
-		try {
-			guidesChannel = await getChannelById(discordIDs.Forum.Guides, message.guild);
-			helpChannel = await getChannelById(discordIDs.Channel.HelpRVC, message.guild);
-		}
-		catch (error) {
-			console.log('Failed to retrieve channels.');
-		}
-
-		const embeds = [...botData.embeds.colab.en];
-
-		// remove the embed that links to help channel if the command was used on that channel
-		if (message.channelId == discordIDs.Channel.HelpRVC) {
-			embeds.pop();
-		}
-		else {
-			// otherwise replace the channel placeholders with the actual links to them
-			const lastEmbedIndex = embeds.length - 1;
-			embeds[lastEmbedIndex]['description'][0] = embeds[lastEmbedIndex]['description'][0]
-				.replace('$guides', guidesChannel)
-				.replace('$helpRVC', helpChannel);
-		}
-
-		const botResponse = new BotResponseBuilder();
-		botResponse.addEmbeds(embeds, botConfigs);
-
-		const sender = new TagResponseSender();
-		sender.setConfigs(botConfigs);
-		sender.setResponse(botResponse);
+		const sender = new LanguageResponseSender(botConfigs, discordIDs.Channel);
 		sender.setTargetMessage(message);
+		sender.setContent(botData.embeds.colab);
 		sender.setTargetUser(message.mentions.members.first());
-
 		await sender.send();
 	},
 };

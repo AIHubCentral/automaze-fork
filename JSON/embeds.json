@@ -1,41 +1,29 @@
 {
     "colab": {
-        "en": [
-            {
-                "title": "All working colabs / spaces ☁️",
-                "description": [
-                    "- **AICoverGen-WebUI**, *modded by Hina* [Google Colab](https://colab.research.google.com/github/hinabl/AICoverGen-Colab/blob/main/Hina_Mod_AICoverGen_colab.ipynb)",
-                    "- **AICoverGen-NoWebUI**, by Ardha [Google Colab](https://colab.research.google.com/github/ardha27/AICoverGen-NoUI-Colab/blob/main/CoverGen_No_UI.ipynb)",
-                    "- **RVC Disconnected**, Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
-                    "- **easyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)",
-                    "- **Ilaria RVC**, by thestingerx [Hugginface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
-                    "- **RVC-HF**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HF)",
-                    "- **AICoverGen**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
-                    "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)",
-                    "- **Advanced RVC Inference**, by neuclya [Huggingface Spaces](https://huggingface.co/spaces/neucliya/Advanced-RVC-custome)",
-                    "\n> Credits to [Faze Masta](https://discordapp.com/users/622856015444049937) and [Antasma](https://discordapp.com/users/1037338320960761998) for compiling these links."
-                ]
-            },
-            {
-                "title": "Need some help? 🤔",
-                "description": [
-                    "You can find more info on the $guides channel. If you can't find your answer, feel free to ask for help in $helpRVC."
-                ],
-                "footer": "More commands: -audio, -local, -overtrain, -realtime, -rvc, -help"
-            }
-        ],
-        "pt": {
-            "color": "Green",
-            "description": [
-                "## Colabs RVC traduzidos para PT-BR",
-                "### AI-Cover-Gen-No-UI_para_YouTube",
-                "- [Para inferência com **vídeo do YouTube**](https://colab.research.google.com/drive/1_-yutFoAeOAPIJ_Hpb6_sJsEAEKjZXpE#scrollTo=PNIn-NKDjYJ3)",
-                "### AI-Cover-Gen-No-UI_upar_seu_AUDIO",
-                "- [Para inferência upando **seu próprio áudio**](https://colab.research.google.com/drive/1W81Lb0c3NmoUnl69PRdYw8zQX1LRRuFU#scrollTo=nEIsMZLwJ5kD)",
-                "\n> **Nota**: Os dois colabs acima faz a separação da voz do instrumental, aplica a voz modelo e junta novamente com o instrumental",
-                "### RVC v2 Arrumado para Treino",
-                "- Acesse o colab para treino [neste link](https://colab.research.google.com/drive/1c9ZayL4JRNyiXJMCmcSeT1StugNy-VQ-?usp=sharing)",
-                "\n> 💡 **Dica**: Use o comando `-rvc_br` para guias em **Português**"
+        "en": {
+            "mentionMessage": "Suggestions for $user",
+            "embeds": [
+                {
+                    "title": "☁️ Google Colabs",
+                    "description": [
+                        "- **AICoverGen-WebUI**, *modded by Hina* [Google Colab](https://colab.research.google.com/github/hinabl/AICoverGen-Colab/blob/main/Hina_Mod_AICoverGen_colab.ipynb)",
+                        "- **AICoverGen-NoWebUI [English]**, by Ardha, *fixed by Eddy, Hina and Gdr* [Google Colab](https://colab.research.google.com/drive/1u1brjK8IZt647UsbZuGYfW29oFM2I4tk?usp=sharing)",
+                        "- **AICoverGen-NoWebUI [Spanish]**, *credits to Eddy, Hina and Gdr for translating and fixing* [Google Colab](https://colab.research.google.com/drive/1qezaBvCn4eSG1U2L4a64tEHTynbIu8eN?usp=sharing)",
+                        "- **RVC Disconnected**, by Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
+                        "- **easyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)"
+                    ]
+                },
+                {
+                    "title": "🤗 Hugginface Spaces",
+                    "description": [
+                        "- **Ilaria RVC**, by thestingerx [Hugginface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
+                        "- **RVC-HF**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HF)",
+                        "- **AICoverGen**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
+                        "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)",
+                        "- **Advanced RVC Inference**, by neuclya [Huggingface Spaces](https://huggingface.co/spaces/neucliya/Advanced-RVC-custome)"
+                    ],
+                    "footer": "More commands: -audio, -local, -overtrain, -realtime, -rvc, -help"
+                }
             ]
         }
     },
@@ -374,6 +362,9 @@
                         "### Full AI Voice Model Training Guide (Local)",
                         "Link: **[YouTube](https://youtu.be/Hx2IHzt5tAc?si=c_WpdbAVLF0pNeur)**",
                         "Credits: **Christopher Villanueva**",
+                        "### AICoverGen Colab Guide",
+                        "Link: **[Google Docs](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub)**",
+                        "Credits: **Eddy (Spanish Helper)**",
                         "### How to Make AI Covers using Ilaria RVC",
                         "Link: **[Documentation](https://docs.aihub.wtf/vocal-cloning-guide/hugging-face/ilaria-rvc)**",
                         "Credits: **Nick088, Kanav**",
@@ -435,17 +426,15 @@
                         "footer": "Créditos: IA Hispano"
                     },
                     {
-                        "title": "Cómo hacer un cover con IA en Hugging Face 🤗",
+                        "title": "✨ Otras Guías",
                         "description": [
-                            "> **Notas**: Funciona en celulares. Es ideal si no tienes una computadora potente para correr RVC de manera local, ya que este software no utiliza los recursos del dispositivo en sí para funcionar. Solo asegúrate de tener una conexión estable a Internet."
-                        ],
-                        "footer": "Créditos: 👽 Julia (ailen2091)"
-                    }
-                ],
-                "buttons": [
-                    {
-                        "label": "Acceso (Rentry)",
-                        "url": "https://rentry.org/HF_guia_es"
+                            "### \u2022 **Guía de Uso del Colab AICoverGen**",
+                            "Link: **[Google Docs](https://docs.google.com/document/d/e/2PACX-1vSM9bLJPzN-Du8HDpkaLvgkf7X7rPymkYzddiPZ6HzPNBFaFbkwF8aN_SolxC-ZdUNJb77fz_whquqr/pub)**",
+                            "Créditos: **Eddy (Spanish Helper)**",
+                            "### \u2022 **Cómo hacer un cover con IA en Hugging Face** 🤗",
+                            "Link: **[Rentry](https://rentry.org/HF_guia_es)**",
+                            "Créditos: **Julia (ailen2091)**"
+                        ]
                     }
                 ]
             },
