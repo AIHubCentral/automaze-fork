@@ -402,7 +402,7 @@
                 ]
             },
             "pt": {
-                "mentionMessage": "Sugestão para $user",
+                "mentionMessage": "Sugestões para $user",
                 "embeds": [
                     {
                         "title": "Documentação",
