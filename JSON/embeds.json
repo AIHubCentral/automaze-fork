@@ -602,10 +602,10 @@
                 {
                     "title": "Guides",
                     "description": [
-                        "###  📑 Perfecting Audio Isolation on Low-End Rigs: A Practical Guide (by Litsa The Dancer and Faze Masta)\n> https://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing",
-                        "###  📑 Guide: Gathering and Isolating Audio (by SCRFilms)\n> https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv",
-                        "###  📑 How to make a good model All-In-One guide by LUSBERT <:lusbertmoment:1159804751924432906>\n> https://rentry.org/RVC_making-models",
-                        "###  ▶️ Vocal mixing tutorial by Roomie\n> https://www.youtube.com/watch?v=rSxLF3kkBw0"
+                        "- **Perfecting Audio Isolation on Low-End Rigs: A Practical Guide**, by Litsa The Dancer and Faze Masta [Google Docs](https://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing)",
+                        "- **Gathering and Isolating Audio**, by SCRFilms [Google Docs](https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv)",
+                        "- **How to make a good model All-In-One guide**, by LUSBERT <:lusbertmoment:1159804751924432906> [Rentry](https://rentry.org/RVC_making-models)",
+                        "- **Vocal Mixing Tutorial**, by Roomie [YouTube](https://www.youtube.com/watch?v=rSxLF3kkBw0)"
                     ]
                 },
                 {
@@ -616,9 +616,9 @@
                         "- https://github.com/dsymbol/yt-dlp-gui",
                         "### Audio Separation/Isolation",
                         "- https://mvsep.com/",
-                        "- https://multimedia.easeus.com/vocal-remover/",
-                        "\n> **More commands:** `-colab`, `-uvr`, `-karafan`"
-                    ]
+                        "- https://multimedia.easeus.com/vocal-remover/"
+                    ],
+                    "footer": "More commands: -colab, -uvr, -karafan, -overtrain, -help"
                 }
             ]
         },
