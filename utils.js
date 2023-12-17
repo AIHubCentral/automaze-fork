@@ -354,14 +354,16 @@ class Scheduler {
 		botResponse.embeds = createEmbeds(botData.embeds.rvc.main.embeds, availableColors);
 		const helpChannel = await getChannelById(discordIDs.Channel.HelpRVC, guild);
 		await helpChannel.send(botResponse);
-		await wait(120_000);
+		await wait(60_000);
 
+		/*
 		// send guides to making datasets
 		botResponse.content = '';
 		botResponse.embeds = createEmbeds(botData.embeds.guides.audio.en, availableColors);
 		const datasetsChannel = await getChannelById(discordIDs.Channel.MakingDatasets, guild);
 		await datasetsChannel.send(botResponse);
 		await wait(60_000);
+		*/
 
 		if (botConfigs.general.sendLogs) {
 			// notify dev server
