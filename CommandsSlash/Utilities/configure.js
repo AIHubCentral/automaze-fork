@@ -120,6 +120,17 @@ module.exports = {
 						.setDescription('If the bot should send automated messages')
 						.setRequired(true),
 				),
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('model_tracking')
+				.setDescription('Saves new models to a JSON file')
+				.addBooleanOption(option =>
+					option
+						.setName('save_models')
+						.setDescription('If the bot should save the new voice models')
+						.setRequired(true),
+				),
 		),
 	async execute(interaction) {
 		const client = interaction.client;
@@ -268,6 +279,11 @@ module.exports = {
 			}
 
 			await interaction.reply(botResponse);
+		}
+		else if (interaction.options.getSubcommand() === 'model_tracking') {
+			const shouldSave = interaction.options.getBoolean('save_models');
+			client.botConfigs.trackModels = shouldSave;
+			await interaction.reply({ content: `Model tracking: ${shouldSave}`, ephemeral: true });
 		}
 	},
 };

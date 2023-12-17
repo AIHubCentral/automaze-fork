@@ -8,6 +8,7 @@
         "chat": true,
         "sendLogs": false
     },
+    "trackModels": false,
     "colors": {
         "theme": {},
         "country": {
