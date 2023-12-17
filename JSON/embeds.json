@@ -365,14 +365,11 @@
                         "### AICoverGen Colab Guide",
                         "Link: **[Google Docs](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub)**",
                         "Credits: **Eddy (Spanish Helper)**",
-                        "### How to Make AI Covers using Ilaria RVC",
-                        "Link: **[Documentation](https://docs.aihub.wtf/vocal-cloning-guide/hugging-face/ilaria-rvc)**",
-                        "Credits: **Nick088, Kanav**",
                         "### Create a model with RVC disconnected (colab)",
                         "Link: **[Google Docs](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk)**",
                         "Credits: **Angetyde**",
-                        "### How to make an AI cover using Hugging Face 🤗",
-                        "Link: **[Rentry](https://rentry.org/HFguide_en)**",
+                        "### How To Make an AI Cover With Ilaria RVC",
+                        "Link: **[Rentry](https://rentry.org/ilarvc_inf_guide)**",
                         "Credits: 👽 **Julia** *(ailen2091)*"
                     ]
                 }
@@ -431,8 +428,8 @@
                             "### \u2022 **Guía de Uso del Colab AICoverGen**",
                             "Link: **[Google Docs](https://docs.google.com/document/d/e/2PACX-1vSM9bLJPzN-Du8HDpkaLvgkf7X7rPymkYzddiPZ6HzPNBFaFbkwF8aN_SolxC-ZdUNJb77fz_whquqr/pub)**",
                             "Créditos: **Eddy (Spanish Helper)**",
-                            "### \u2022 **Cómo hacer un cover con IA en Hugging Face** 🤗",
-                            "Link: **[Rentry](https://rentry.org/HF_guia_es)**",
+                            "### \u2022 **Cómo Hacer un Cover de IA Usando Ilaria RVC**",
+                            "Link: **[Rentry](https://rentry.org/ilarvc_inf_guide_es)**",
                             "Créditos: **Julia (ailen2091)**"
                         ]
                     }
