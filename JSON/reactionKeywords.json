@@ -50,6 +50,69 @@
     },
     {
         "keywords": [
+            "ai hub shit gets dangerous"
+        ],
+        "kind": "sticker",
+        "stickerId": "1159316516144160778",
+        "frequency": "often",
+        "exact": false
+    },
+    {
+        "keywords": [
+            "how to make ai cover"
+        ],
+        "kind": "sticker",
+        "stickerId": "1159360069557813268",
+        "frequency": "often",
+        "exact": false
+    },
+    {
+        "keywords": [
+            "staff are watching"
+        ],
+        "kind": "sticker",
+        "stickerId": "1159361182436700210",
+        "frequency": "sometimes",
+        "exact": false
+    },
+    {
+        "keywords": [
+            "copyright"
+        ],
+        "kind": "sticker",
+        "stickerId": "1159555177171406990",
+        "frequency": "rare",
+        "exact": false
+    },
+    {
+        "keywords": [
+            "touch grass"
+        ],
+        "kind": "sticker",
+        "stickerId": "1159813881846317107",
+        "frequency": "sometimes",
+        "exact": false
+    },
+    {
+        "keywords": [
+            "flex"
+        ],
+        "kind": "sticker",
+        "stickerId": "1161436100372484217",
+        "frequency": "rare",
+        "exact": false
+    },
+    {
+        "keywords": [
+            "kalomazing"
+        ],
+        "kind": "sticker",
+        "stickerId": "1159359026556059669",
+        "frequency": "sometimes",
+        "exact": false
+    },
+    {
+        "keywords": [
             "poopmaster"
         ],
         "emojis": [
@@ -212,8 +275,8 @@
     },
     {
         "keywords": [
-            "alien",
-            "ailen"
+            "ailen",
+            "julia"
         ],
         "emojis": [
             "👽"
@@ -431,37 +494,6 @@
         ],
         "emojis": [
             "<:mario:1163884840295342161>"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            "notfelt",
-            "feltomaze"
-        ],
-        "emojis": [
-            "🇫",
-            "🇪",
-            "🇱",
-            "🇹"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            " a win"
-        ],
-        "emojis": [
-            "<:TextW:1159654826771230741>"
-        ],
-        "exact": false
-    },
-    {
-        "keywords": [
-            " a loose"
-        ],
-        "emojis": [
-            "<:TextL:1159654780445130944>"
         ],
         "exact": false
     }
