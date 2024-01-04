@@ -124,7 +124,7 @@ function createEmbed(data, color = '') {
 	}
 
 	if (data.footer) {
-		embed.setFooter({ text: '🎄 ' + data.footer });
+		embed.setFooter({ text: data.footer });
 	}
 
 	if (data.timestamp) {
