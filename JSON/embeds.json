@@ -17,10 +17,10 @@
                     "title": "🤗 Hugginface Spaces",
                     "description": [
                         "- **Ilaria RVC**, by thestingerx [Hugginface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
-                        "- **RVC-HF**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HF)",
-                        "- **AICoverGen**, by r3gf [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
-                        "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)",
-                        "- **Advanced RVC Inference**, by neuclya [Huggingface Spaces](https://huggingface.co/spaces/neucliya/Advanced-RVC-custome)"
+                        "- **RVC-HFv2**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HFv2)",
+                        "- **AICoverGen**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
+                        "- **Advanced RVC Inference**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/Advanced-RVC-Inference)",
+                        "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)"
                     ],
                     "footer": "More commands: -audio, -local, -overtrain, -realtime, -rvc, -help"
                 }
