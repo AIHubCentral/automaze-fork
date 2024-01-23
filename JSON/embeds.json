@@ -20,7 +20,8 @@
                         "- **RVC-HFv2**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HFv2)",
                         "- **AICoverGen**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
                         "- **Advanced RVC Inference**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/Advanced-RVC-Inference)",
-                        "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)"
+                        "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)",
+                        "- **GPT-SoVITS _(demo)_**, by litagin [Huggingface Spaces](https://huggingface.co/spaces/litagin/gpt_sovits_demo)"
                     ],
                     "footer": "More commands: -audio, -local, -overtrain, -realtime, -rvc, -help"
                 }
@@ -37,7 +38,8 @@
                     "- **RVC Studio**, by SayanoAI [Huggingface](https://huggingface.co/datasets/SayanoAI/RVC-Studio/tree/main)",
                     "- **AICoverGen**, by SociallyIneptWeeb [GitHub](https://github.com/SociallyIneptWeeb/AICoverGen)",
                     "- **Replay**, by Replay Team [Website](https://www.tryreplay.io/)",
-                    "- **Original RVC**, by the RVC-Project team [GitHub](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/releases)"
+                    "- **Original RVC**, by the RVC-Project team [GitHub](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/releases)",
+                    "- **GPT-SoVITS**, by RVC-Boss [GitHub](https://github.com/RVC-Boss/GPT-SoVITS)"
                 ]
             },
             "message": {
