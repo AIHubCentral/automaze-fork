@@ -46,7 +46,6 @@ module.exports = {
 			const allowedRoles = [
 				discordIDs.Roles.Admin,
 				discordIDs.Roles.Mod,
-				discordIDs.Roles.Helper,
 			];
 			const userRoles = message.member.roles.cache;
 			for (const roleId of allowedRoles) {
