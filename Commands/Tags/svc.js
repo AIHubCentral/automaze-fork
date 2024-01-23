@@ -22,8 +22,7 @@ module.exports = {
 		const mentionedUser = message.mentions.members.first();
 
 		if (randomNumber !== 0) {
-			const gifUrl = 'https://tenor.com/view/crowd-avoiding-man-gif-25257570';
-			botResponse.content = '# Yeah I still use so-vits-SVC\n' + gifUrl;
+			botResponse.content = 'https://cdn.discordapp.com/attachments/1159822429137412177/1194008385113301003/svc.gif?ex=65c13ef6&is=65aec9f6&hm=ce1f57bc316793f641c80f9b359ba9db7d1312af6918b1aed9c8468c74035bac&';
 			return message.reply(botResponse);
 		}
 
