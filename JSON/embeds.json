@@ -6,9 +6,11 @@
                 {
                     "title": "☁️ Google Colabs",
                     "description": [
+                        "- **Applio**, by IA Hispano [Google Colab](https://colab.research.google.com/github/iahispano/applio/blob/master/assets/Applio.ipynb)",
                         "- **AICoverGen-WebUI**, *modded by Hina* [Google Colab](https://colab.research.google.com/github/hinabl/AICoverGen-Colab/blob/main/Hina_Mod_AICoverGen_colab.ipynb)",
                         "- **AICoverGen-NoWebUI [English]**, by Ardha, *fixed by Eddy, Hina and Gdr* [Google Colab](https://colab.research.google.com/drive/1u1brjK8IZt647UsbZuGYfW29oFM2I4tk?usp=sharing)",
                         "- **AICoverGen-NoWebUI [Spanish]**, *credits to Eddy, Hina and Gdr for translating and fixing* [Google Colab](https://colab.research.google.com/drive/1qezaBvCn4eSG1U2L4a64tEHTynbIu8eN?usp=sharing)",
+                        "- **Ilaria RVC**, by thestingerx [Google Colab](https://colab.research.google.com/drive/16LkwvFZeudTpUOsE_6bMjOq2qkxFo8Hr?usp=sharing)",
                         "- **RVC Disconnected**, by Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
                         "- **easyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)"
                     ]
@@ -16,6 +18,7 @@
                 {
                     "title": "🤗 Hugginface Spaces",
                     "description": [
+                        "- **Applio**, by IA Hispano [Huggingface Spaces](https://huggingface.co/spaces/IAHispano/Applio)",
                         "- **Ilaria RVC**, by thestingerx [Hugginface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
                         "- **RVC-HFv2**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HFv2)",
                         "- **AICoverGen**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
@@ -31,7 +34,7 @@
     "local": {
         "en": {
             "content": {
-                "title": "All Working Local Forks 🖥️",
+                "title": "🖥️ Local stuff",
                 "description": [
                     "- **🍏 Applio**, by IA Hispano [GitHub](https://github.com/IAHispano/Applio)",
                     "- **Mangio-RVC-Fork**, by Mangio621 [Huggingface](https://huggingface.co/MangioRVC/Mangio-RVC-Huggingface/tree/main)",
