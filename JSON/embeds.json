@@ -617,12 +617,10 @@
                 {
                     "title": "🛠️ Tools",
                     "description": [
-                        "### Youtube Downloaders",
-                        "- https://github.com/yt-dlp/yt-dlp",
-                        "- https://github.com/dsymbol/yt-dlp-gui",
                         "### Audio Separation/Isolation",
                         "- https://mvsep.com/",
-                        "- https://multimedia.easeus.com/vocal-remover/"
+                        "- https://multimedia.easeus.com/vocal-remover/",
+                        "- [MDX-NET Colab](https://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb)"
                     ],
                     "footer": "More commands: -colab, -uvr, -karafan, -overtrain, -help"
                 }
