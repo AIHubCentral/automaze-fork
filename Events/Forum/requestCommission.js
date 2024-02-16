@@ -48,7 +48,7 @@ module.exports = {
 					color: client.botConfigs.colors.theme.secondary,
 					description: [
 						'\n**Some general recommendations regarding commissions:**',
-						'- Don\'t rush! You\'ll receive many requests, take your time to review the best offer. The first person who contacts you may not always be the best option.',
+						'- Don\'t rush! You\'ll receive many requests, so take your time to review the best offer. The first person who contacts you may not always be the best option.',
 						`- We recommend exclusively accepting commission from people holding the <@&${modelMasterRole}> role, regardless of any role above it when accepting commissions to ensure a secure and qualified working relationship.`,
 						'- If you encounter any issues with a member related to a commission (scam, failure to fulfill terms, etc.), please report it to the administrative team to assess whether sanctions should be applied.',
 					],
@@ -57,7 +57,7 @@ module.exports = {
 				if (client.botConfigs.commissions.deleteMessages) {
 					embeds.push(client.botUtils.createEmbed({
 						title: '⚠️ Warning to model makers',
-						description: ['> Make sure you have the **model master** role or your response might be deleted.'],
+						description: ['> Make sure you have the **model master** role, or your response might be deleted.'],
 					}));
 				}
 
@@ -70,7 +70,7 @@ module.exports = {
 					client.botUtils.createEmbed({
 						color: client.botConfigs.colors.theme.accent_1,
 						description: [
-							'💡 **Tip**: You can try using the `/search` command from <@1144714449563955302> or <@1150230843214794822> to check if someone already made this model.',
+							'💡 **Tip**: You can try using the `/search` command from <@1144714449563955302> or <@1150230843214794822> or the `/find` command from <@1156937396517081169> or <@1138318590760718416> to check if someone already made this model. Alternatively you can check the <#1175430844685484042> channel or use https://weights.gg/',
 						],
 					}),
 				];
