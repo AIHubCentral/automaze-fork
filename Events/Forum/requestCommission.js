@@ -70,8 +70,8 @@ module.exports = {
 					client.botUtils.createEmbed({
 						color: client.botConfigs.colors.theme.accent_1,
 						description: [
-							'💡 **Tip**: You can try using the `/search` command from <@1144714449563955302> or <@1150230843214794822> or the `/find` command from <@1156937396517081169> or <@1138318590760718416> to check if someone already made this model. Alternatively, you can check the <#1175430844685484042> channel or use https://weights.gg/, ' + 
-							'but keep in mind that weights receive the models after us, so if something new comes out, you'll find it on our server first.',
+							'💡 **Tip**: You can try using the `/search` command from <@1144714449563955302> or <@1150230843214794822> or the `/find` command from <@1156937396517081169> or <@1138318590760718416> to check if someone already made this model. Alternatively, you can check the <#1175430844685484042> channel or use https://weights.gg/, ' +
+							'but keep in mind that weights receive the models after us, so if something new comes out, you\'ll find it on our server first.',
 						],
 					}),
 				];
