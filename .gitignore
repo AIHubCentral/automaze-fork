@@ -1,11 +1,11 @@
 .env
 data/
 
+Commands/Dev/
 Debug/
 .replit
 replit.nix
 result.json
-JSON/channels.json
 
 # database files
 *.sqlite
