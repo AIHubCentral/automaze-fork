@@ -1,5 +1,21 @@
 const { getChannelById } = require('../../utils.js');
 
+async function addTagToThread(thread, tagId) {
+	try {
+		const appliedTags = thread.appliedTags;
+
+		// don't add the tag if it's laready there
+		if (appliedTags.includes(tagId)) return;
+
+		appliedTags.push(tagId);
+		await thread.setAppliedTags(appliedTags);
+		console.log(`Tag ${tagId} added to ${thread.name}`);
+	}
+	catch (error) {
+		console.error(`Failed to add tag: ${error}`);
+	}
+}
+
 module.exports = {
 	name: 'close',
 	category: 'Utilities',
@@ -73,6 +89,9 @@ module.exports = {
 
 			await channel.setAutoArchiveDuration(60);
 			await channel.setLocked(true);
+
+			// add the 'Done' tag if it's not there
+			await addTagToThread(channel, discordIDs.Forum.RequestModel.Tags.Done);
 
 			const logChannel = await getChannelById(discordIDs.Channel.Moderation, message.guild);
 			const threadLink = `https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`;
