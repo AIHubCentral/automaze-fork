@@ -725,9 +725,9 @@
                             "title": "(Online) W-Okada - Colab Version",
                             "description": [
                                 "A free, online version of W-Okada that allows you to run code on Google's powerful GPUs.",
-                                "> Link: [How to use W-Okada's Voice Changer](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)"
+                                "\n🔗 [How to use W-Okada's Voice Changer](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)\n"
                             ],
-                            "footer": "Credits: Antasma245"
+                            "footer": "ⓘ Please note that this doesn't work on mobile because there's no VAC (Voice Audio Cable) for it"
                         }
                     ]
                 },
@@ -737,7 +737,7 @@
                         {
                             "title": "Russian FAQ for voice changer",
                             "description": [
-                                "> Link: [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
+                                "\n🔗 [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
                             ],
                             "footer": "Credits: blackcat76it, elektroeban, redoverflow and tntmaxim"
                         }
@@ -745,13 +745,13 @@
                 },
                 "menuOptions": [
                     {
-                        "label": "Local realtime guides",
+                        "label": "Local options",
                         "description": "If you have a decent GPU these can be a good option",
                         "value": "realtime_local",
                         "emoji": "💻"
                     },
                     {
-                        "label": "Online realtime guides",
+                        "label": "Online options",
                         "description": "If you DON'T have a decent GPU these can be a good option",
                         "value": "realtime_online",
                         "emoji": "☁️"
