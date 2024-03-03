@@ -23,8 +23,7 @@
                         "- **RVC-HFv2**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HFv2)",
                         "- **AICoverGen**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
                         "- **Advanced RVC Inference**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/Advanced-RVC-Inference)",
-                        "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)",
-                        "- **GPT-SoVITS _(demo)_**, by litagin [Huggingface Spaces](https://huggingface.co/spaces/litagin/gpt_sovits_demo)"
+                        "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)"
                     ],
                     "footer": "More commands: -audio, -local, -overtrain, -realtime, -rvc, -help"
                 }
