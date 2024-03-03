@@ -20,6 +20,11 @@ module.exports = {
 		const prefix = client.prefix.ensure(message.guild.id, '-');
 		if (message.content.startsWith(prefix)) return;
 
+		// e_boorgir reaction ignores cooldown
+		if (message.content.includes(':e_boorgir:')) {
+			return await message.react('<:e_boorgir:1159654275069255750>');
+		}
+
 		// check if user is on cooldown
 		if (client.cooldowns.reactions.has(message.author.id)) {
 			const cooldownExpiration = client.cooldowns.reactions.get(message.author.id);
