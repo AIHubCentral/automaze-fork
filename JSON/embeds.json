@@ -322,6 +322,17 @@
             }
         ]
     },
+    "hfstatus": {
+        "embeds": [
+            {
+                "title": "🤗 Hugginface Status",
+                "color": "Yellow",
+                "description": [
+                    "https://status.huggingface.co/"
+                ]
+            }
+        ]
+    },
     "egirl": {
         "embeds": [
             {

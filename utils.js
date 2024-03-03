@@ -457,6 +457,8 @@ class ResponseSender {
 	}
 }
 
+exports.ResponseSender = ResponseSender;
+
 class LanguageResponseSender extends ResponseSender {
 	/* sends different responses using a language based on the channel if available */
 	constructor(configs, channels) {
