@@ -301,13 +301,13 @@
     "karafan": {
         "embeds": [
             {
-                "title": "KaraFan",
+                "title": "KaraFan (Improved Version)",
                 "color": "8b1d90",
                 "description": [
                     "🥇 Awarded to **1st** place by the community as the Best software in the World, for having the less vocal residues in Music track!"
                 ],
                 "image": "https://raw.githubusercontent.com/Captain-FLAM/KaraFan/master/images/KaraFan_Banner.jpg",
-                "footer": "Credits to Eddy, Leo_Frixi and Gdr for fixing CUDA problems on the google colab notebook!"
+                "footer": "Note: Improved by AI HUB Staff members. Eddy and Leo_Frixi."
             }
         ],
         "buttons": [
@@ -317,7 +317,7 @@
             },
             {
                 "label": "Google Colab",
-                "url": "https://colab.research.google.com/drive/1f3y3-Z9GOGqEHeY8M--2g3z-vOzWiKdn?usp=sharing"
+                "url": "https://colab.research.google.com/github/Eddycrack864/KaraFan/blob/master/KaraFan_Improved_Version.ipynb"
             }
         ]
     },
