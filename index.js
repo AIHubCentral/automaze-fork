@@ -61,6 +61,8 @@ client.cooldowns = {
 	reactions: new Discord.Collection(),
 };
 
+const botConfigs = require('./JSON/botConfigs.json');
+
 // Enmap's creation
 /*
 client.items = new Enmap({ name: 'items' });
@@ -76,11 +78,12 @@ client.scourCD = new Enmap();
 client.prefix = new Enmap({ name: 'prefix' });
 */
 
-client.prefix = '-';
+// set the command prefix based on the environment
+client.prefix = devMode ? botConfigs.prefix.dev : botConfigs.prefix.prod;
 
 client.botAdminIds = process.env.developerIds.split(',');
 
-client.botConfigs = require('./JSON/botConfigs.json');
+client.botConfigs = botConfigs;
 if (!devMode) {
 	// when in production environment, send a message on startup to the dev server
 	client.botConfigs.messageOnStartup = true;

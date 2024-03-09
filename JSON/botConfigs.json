@@ -21,5 +21,9 @@
     },
     "devServerId": "1136971905354711193",
     "debugChannelId": "1168048009213394954",
-    "messageOnStartup": false
+    "messageOnStartup": false,
+    "prefix": {
+        "dev": "?",
+        "prod": "-"
+    }
 }
