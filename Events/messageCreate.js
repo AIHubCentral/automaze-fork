@@ -5,7 +5,7 @@ module.exports = {
 		if (message.author.bot) return;
 
 		// handle prefix commands first
-		const prefix = client.prefix.ensure(message.guild.id, '-');
+		const prefix = client.prefix;
 
 		if (message.content.startsWith(prefix)) {
 			const args = message.content.slice(prefix.length).trim().split(/ +/);

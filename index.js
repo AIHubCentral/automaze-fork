@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 // Libraries
-const Enmap = require('enmap');
+// const Enmap = require('enmap');
 const Discord = require('discord.js');
 
 // Exports
@@ -62,6 +62,7 @@ client.cooldowns = {
 };
 
 // Enmap's creation
+/*
 client.items = new Enmap({ name: 'items' });
 client.currencies = new Enmap({ name: 'currencies' });
 client.equipments = new Enmap({ name: 'equipments' });
@@ -71,7 +72,11 @@ client.exp = new Enmap({ name: 'exp' });
 client.epochs = new Enmap({ name: 'epochs' });
 client.banana = new Enmap({ name: 'banana' });
 client.scourCD = new Enmap();
+
 client.prefix = new Enmap({ name: 'prefix' });
+*/
+
+client.prefix = '-';
 
 client.botAdminIds = process.env.developerIds.split(',');
 

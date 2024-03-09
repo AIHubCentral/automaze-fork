@@ -17,7 +17,7 @@ module.exports = {
 		if (message.channel.type === ChannelType.PublicThread) return;
 
 		// skip prefix commands
-		const prefix = client.prefix.ensure(message.guild.id, '-');
+		const prefix = client.prefix;
 		if (message.content.startsWith(prefix)) return;
 
 		// e_boorgir reaction ignores cooldown
