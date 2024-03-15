@@ -1,4 +1,5 @@
 const { Collection } = require('discord.js');
+const logger = require('../logger');
 
 module.exports = {
     name: "interactionCreate",
@@ -11,6 +12,8 @@ module.exports = {
                 console.error(`No command matching ${interaction.commandName} was found.`);
                 return;
             }
+
+            logger.info(`Executing command /${command.data.name}`);
 
             // handle cooldowns if command exists
             const { cooldowns } = client;

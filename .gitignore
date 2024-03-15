@@ -3,6 +3,7 @@ data/
 
 Commands/Dev/
 Debug/
+logs/
 .replit
 replit.nix
 result.json
