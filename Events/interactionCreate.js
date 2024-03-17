@@ -12,7 +12,7 @@ module.exports = {
                 return;
             }
 
-            client.logger.info(`Executing command /${command.data.name} - guild:${interaction.guild.id};channel:${interaction.channel.id}`);
+            client.logger.info(`Executing command (${command.data.name}) - guild:${interaction.guild.id};channel:${interaction.channel.id};type:slash`);
 
             // handle cooldowns if command exists
             const { cooldowns } = client;
@@ -75,6 +75,8 @@ module.exports = {
                 client.logger.error(`No context command matching ${interaction.commandName} was found.`);
                 return;
             }
+
+            client.logger.info(`Executing command (${command.data.name}) - guild:${interaction.guild.id};channel:${interaction.channel.id};type:context`);
 
             try {
                 await command.execute(interaction);
