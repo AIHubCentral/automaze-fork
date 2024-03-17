@@ -1,18 +1,18 @@
 const { Collection } = require('discord.js');
 
 module.exports = {
-    name: "interactionCreate",
+    name: 'interactionCreate',
     once: false,
-    async run (client, interaction){
+    async run(client, interaction) {
         if (interaction.isChatInputCommand()) {
             const command = interaction.client.slashCommands.get(interaction.commandName);
-            
+
             if (!command) {
                 console.error(`No command matching ${interaction.commandName} was found.`);
                 return;
             }
 
-            client.logger.info(`Executing command /${command.data.name}`);
+            client.logger.info(`Executing command /${command.data.name} - guild:${interaction.guild.id};channel:${interaction.channel.id}`);
 
             // handle cooldowns if command exists
             const { cooldowns } = client;
@@ -23,8 +23,8 @@ module.exports = {
 
             const now = Date.now();
             const timestamps = cooldowns.slashCommands.get(command.data.name);
-            const defaultCooldownDuration = 3;  // duration in seconds
-            const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000;  // convert to milliseconds
+            const defaultCooldownDuration = 3; // duration in seconds
+            const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000; // convert to milliseconds
 
             if (timestamps.has(interaction.user.id)) {
                 const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
@@ -37,30 +37,33 @@ module.exports = {
 
             timestamps.set(interaction.user.id, now);
             setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
-        
+
             try {
                 await command.execute(interaction);
-            } catch (error) {
+            }
+            catch (error) {
                 console.error(error);
                 if (interaction.replied || interaction.deferred) {
                     await interaction.followUp({ content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``, ephemeral: true });
-                } else {
+                }
+                else {
                     await interaction.reply({ content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``, ephemeral: true });
                 }
             }
         }
-    
+
         if (interaction.isAutocomplete()) {
             const command = interaction.client.slashCommands.get(interaction.commandName);
-    
+
             if (!command) {
                 console.error(`No command matching ${interaction.commandName} was found.`);
                 return;
             }
-    
+
             try {
                 await command.autocomplete(client, interaction);
-            } catch (error) {
+            }
+            catch (error) {
                 console.error(error);
             }
         }
@@ -70,17 +73,18 @@ module.exports = {
 
         if (interaction.isUserContextMenuCommand()) {
             const command = interaction.client.contextMenuCommands.get(interaction.commandName);
-    
+
             if (!command) {
                 console.error(`No context command matching ${interaction.commandName} was found.`);
                 return;
             }
-    
+
             try {
                 await command.execute(interaction);
-            } catch (error) {
+            }
+            catch (error) {
                 console.error(error);
             }
         }
-    }
-}
+    },
+};
