@@ -4,6 +4,7 @@ require('dotenv').config();
 // Libraries
 // const Enmap = require('enmap');
 const Discord = require('discord.js');
+const logger = require('./logger');
 
 // Exports
 const {
@@ -33,6 +34,9 @@ const client = new Discord.Client({
 		parse: ['users'],
 	},
 });
+
+// winston logger
+client.logger = logger;
 
 // set dev=true in .env to use the development guild ids
 const devMode = process.env.dev;

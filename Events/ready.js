@@ -1,17 +1,15 @@
-const logger = require('../logger');
-
 module.exports = {
 	name: 'ready',
 	once: true,
 	async run(client) {
-		logger.info(`Ready! Logged in as ${client.user.tag}`);
-		logger.info(`Node version: ${process.version}`);
+		client.logger.info(`Ready! Logged in as ${client.user.tag}`);
+		client.logger.info(`Node version: ${process.version}`);
 
 		const guilds = client.guilds.cache;
-		logger.info(`Bot is currently in ${guilds.size} guild(s):`);
+		client.logger.info(`Bot is currently in ${guilds.size} guild(s):`);
 
 		guilds.forEach((guild) => {
-			logger.info(`${guild.id}: ${guild.name}`);
+			client.logger.info(`${guild.id}: ${guild.name}`);
 		});
 
 		const { botConfigs } = client;
@@ -24,7 +22,7 @@ module.exports = {
 				botDebugChannel = await devServerGuild.channels.fetch(botConfigs.debugChannelId);
 
 				if (!botDebugChannel) {
-					logger.error(`Failed to fetch ${botConfigs.debugChannelId}`);
+					client.logger.error(`Failed to fetch ${botConfigs.debugChannelId}`);
 					return;
 				}
 			}
