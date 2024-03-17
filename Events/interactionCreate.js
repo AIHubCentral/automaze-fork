@@ -53,8 +53,7 @@ module.exports = {
                 }
             }
         }
-
-        if (interaction.isAutocomplete()) {
+        else if (interaction.isAutocomplete()) {
             const command = interaction.client.slashCommands.get(interaction.commandName);
 
             if (!command) {
@@ -69,11 +68,7 @@ module.exports = {
                 client.logger.error(error);
             }
         }
-
-        // context menu commands
-        if (!interaction.isContextMenuCommand()) return;
-
-        if (interaction.isUserContextMenuCommand()) {
+        else if (interaction.isUserContextMenuCommand()) {
             const command = interaction.client.contextMenuCommands.get(interaction.commandName);
 
             if (!command) {
