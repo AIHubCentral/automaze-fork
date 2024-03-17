@@ -1,5 +1,4 @@
 const { ApplicationCommandType, ContextMenuCommandBuilder, EmbedBuilder } = require('discord.js');
-const { BotResponseBuilder } = require('../../utils');
 
 module.exports = {
     category: 'Tags',
@@ -12,7 +11,7 @@ module.exports = {
 
         if (targetUser.bot) return await interaction.reply({ content: 'That user is a bot.', ephemeral: true });
 
-        const { botData, botConfigs } = client;
+        const { botData } = client;
 
         const embeds = [];
 
