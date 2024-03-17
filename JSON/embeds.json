@@ -5,6 +5,7 @@
             "embeds": [
                 {
                     "title": "☁️ Google Colabs",
+                    "color": "f9ab00",
                     "description": [
                         "- **Applio**, by IA Hispano [Google Colab](https://colab.research.google.com/github/iahispano/applio/blob/master/assets/Applio.ipynb)",
                         "- **AICoverGen-WebUI**, *modded by Hina* [Google Colab](https://colab.research.google.com/github/hinabl/AICoverGen-Colab/blob/main/Hina_Mod_AICoverGen_colab.ipynb)",
@@ -17,6 +18,7 @@
                 },
                 {
                     "title": "🤗 Hugginface Spaces",
+                    "color": "ffcc4d",
                     "description": [
                         "- **Applio**, by IA Hispano [Huggingface Spaces](https://huggingface.co/spaces/IAHispano/Applio)",
                         "- **Ilaria RVC**, by thestingerx [Hugginface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
