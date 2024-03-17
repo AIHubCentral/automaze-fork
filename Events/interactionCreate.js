@@ -8,7 +8,7 @@ module.exports = {
             const command = interaction.client.slashCommands.get(interaction.commandName);
 
             if (!command) {
-                console.error(`No command matching ${interaction.commandName} was found.`);
+                client.logger.error(`No command matching ${interaction.commandName} was found.`);
                 return;
             }
 
@@ -23,8 +23,10 @@ module.exports = {
 
             const now = Date.now();
             const timestamps = cooldowns.slashCommands.get(command.data.name);
-            const defaultCooldownDuration = 3; // duration in seconds
-            const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000; // convert to milliseconds
+            // duration in seconds
+            const defaultCooldownDuration = 3;
+            // convert to milliseconds
+            const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000; 
 
             if (timestamps.has(interaction.user.id)) {
                 const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
@@ -42,7 +44,7 @@ module.exports = {
                 await command.execute(interaction);
             }
             catch (error) {
-                console.error(error);
+                client.logger.error(`Failed to execute command ${command.data.name}`, error);
                 if (interaction.replied || interaction.deferred) {
                     await interaction.followUp({ content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``, ephemeral: true });
                 }
@@ -56,7 +58,7 @@ module.exports = {
             const command = interaction.client.slashCommands.get(interaction.commandName);
 
             if (!command) {
-                console.error(`No command matching ${interaction.commandName} was found.`);
+                client.logger.error(`No command matching ${interaction.commandName} was found.`);
                 return;
             }
 
@@ -64,7 +66,7 @@ module.exports = {
                 await command.autocomplete(client, interaction);
             }
             catch (error) {
-                console.error(error);
+                client.logger.error(error);
             }
         }
 
@@ -75,7 +77,7 @@ module.exports = {
             const command = interaction.client.contextMenuCommands.get(interaction.commandName);
 
             if (!command) {
-                console.error(`No context command matching ${interaction.commandName} was found.`);
+                client.logger.error(`No context command matching ${interaction.commandName} was found.`);
                 return;
             }
 
@@ -83,7 +85,7 @@ module.exports = {
                 await command.execute(interaction);
             }
             catch (error) {
-                console.error(error);
+                client.logger.error(error);
             }
         }
     },
