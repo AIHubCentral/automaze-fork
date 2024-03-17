@@ -1,15 +1,7 @@
-const fs = require('node:fs');
-const path = require('node:path');
-const { saveJSON } = require('../utils.js');
-
-function logEmojiToFile(data) {
-    return saveJSON('reactions', data);
-}
-
 module.exports = {
     name: 'messageReactionAdd',
     once: false,
-    async run (client, reaction, user){
+    async run(client, reaction, user) {
         // only add cooldown if the reaction was added by the bot
         if (user.id !== client.user.id) return;
 
@@ -24,7 +16,7 @@ module.exports = {
             const expirationDate = new Date();
             expirationDate.setMinutes(expirationDate.getMinutes() + 5);
             client.cooldowns.reactions.set(reaction.message.author.id, expirationDate);
-            console.log(reaction.message.author.id, 'added to cooldown, expires in', expirationDate);
+            client.logger.info(reaction.message.author.id, 'added to cooldown, expires in', expirationDate);
 
             // log the emoji to a file
             const logData = {
@@ -33,9 +25,9 @@ module.exports = {
                     userName: reaction.message.author.username,
                 },
                 reaction: reaction.emoji,
-                link: `https://discordapp.com/channels/${reaction.message.guildId}/${reaction.message.channelId}/${reaction.message.id}`
+                link: `https://discordapp.com/channels/${reaction.message.guildId}/${reaction.message.channelId}/${reaction.message.id}`,
             };
-            if (logEmojiToFile(logData)) console.log('Emoji log saved!');
+            client.logger.info('Added emoji reaction', logData);
         }
-    }
-}
+    },
+};

@@ -3,6 +3,22 @@ const { ChannelType } = require('discord.js');
 const { getChannelById } = require('../utils.js');
 const delay = require('node:timers/promises').setTimeout;
 
+function isUserOnCooldown(client, userId) {
+	let result = false;
+	if (client.cooldowns.reactions.has(userId)) {
+		client.logger.info(`${userId} is on cooldown...`);
+		result = true;
+		const cooldownExpiration = client.cooldowns.reactions.get(userId);
+		const currentDate = new Date();
+		if (currentDate.getTime() > cooldownExpiration.getTime()) {
+			client.cooldowns.reactions.delete(userId);
+			client.logger.info(`${userId} cooldown has expired`);
+			result = false;
+		}
+	}
+	return result;
+}
+
 module.exports = {
 	name: 'messageCreate',
 	once: false,
@@ -25,20 +41,7 @@ module.exports = {
 			return await message.react('<:e_boorgir:1159654275069255750>');
 		}
 
-		// check if user is on cooldown
-		if (client.cooldowns.reactions.has(message.author.id)) {
-			const cooldownExpiration = client.cooldowns.reactions.get(message.author.id);
-			const currentDate = new Date();
-
-			if (currentDate.getTime() < cooldownExpiration.getTime()) {
-				// user is on cooldown, don't add reactions
-				return;
-			}
-			else {
-				// cooldown expired
-				client.cooldowns.reactions.delete(message.author.id);
-			}
-		}
+		if (isUserOnCooldown(client, message.author.id)) return;
 
 		// don't add reaction if there are attachments
 		if (message.attachments.size > 0) return;
@@ -98,16 +101,31 @@ module.exports = {
 						// console.log('found', item);
 						const botResponse = { allowedMentions: { repliedUser: true } };
 
+						const messageInfo = {
+							messageId: message.id,
+							channelId: message.channel.id,
+							guildId: message.guild.id,
+						};
+
 						switch (item.kind) {
 							case 'sticker':
 								botResponse.stickers = [item.stickerId];
 								await delay(3_000);
-								await message.reply(botResponse);
+
+								try {
+									client.logger.info(`Attempting to add sticker ${item.stickerId}`, messageInfo);
+									await message.reply(botResponse);
+								}
+								catch (error) {
+									client.logger.error(`Failed to add sticker ${item.stickerId}`, error);
+								}
+
 								break;
 							case 'text':
 								botResponse.content = client.botUtils.getRandomFromArray(item.responses);
 								await message.channel.sendTyping();
 								await delay(botResponse.content.length * 350);
+								client.logger.info(`Sendind text: ${botResponse.content}`, messageInfo);
 								await message.reply(botResponse);
 								break;
 							default:
