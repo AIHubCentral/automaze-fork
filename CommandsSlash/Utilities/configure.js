@@ -5,6 +5,7 @@ const { SlashCommandBuilder,
 	StringSelectMenuOptionBuilder,
 	ActionRowBuilder,
 	ComponentType,
+	EmbedBuilder,
 } = require('discord.js');
 
 const { getThemes } = require('../../utils.js');
@@ -123,17 +124,28 @@ module.exports = {
 		)
 		.addSubcommand(subcommand =>
 			subcommand
-				.setName('model_tracking')
-				.setDescription('Saves new models to a JSON file')
+				.setName('logs')
+				.setDescription('Configure logs')
+				.addStringOption(option =>
+					option
+						.setName('category')
+						.setDescription('Which log to configure')
+						.setRequired(true)
+						.addChoices(
+							{ name: 'Emojis', value: 'emojis' },
+							{ name: 'Stickers', value: 'stickers' },
+							{ name: 'Models', value: 'models' },
+						),
+				)
 				.addBooleanOption(option =>
 					option
-						.setName('save_models')
-						.setDescription('If the bot should save the new voice models')
-						.setRequired(true),
+						.setName('enabled')
+						.setDescription('Enable or disable this log'),
 				),
 		),
 	async execute(interaction) {
-		const client = interaction.client;
+		const { client } = interaction;
+		const { botConfigs } = client;
 
 		if (interaction.options.getSubcommand() === 'comission') {
 			const sendMessages = interaction.options.getBoolean('bot_responses');
@@ -280,10 +292,31 @@ module.exports = {
 
 			await interaction.reply(botResponse);
 		}
-		else if (interaction.options.getSubcommand() === 'model_tracking') {
-			const shouldSave = interaction.options.getBoolean('save_models');
-			client.botConfigs.trackModels = shouldSave;
-			await interaction.reply({ content: `Model tracking: ${shouldSave}`, ephemeral: true });
+		else if (interaction.options.getSubcommand() === 'logs') {
+			const logsCategory = interaction.options.getString('category');
+			const logEnabled = interaction.options.getBoolean('enabled');
+
+			client.logger.info('Configuring logs...', { more: { logsCategory, logEnabled } });
+
+			if (logEnabled != null) {
+				botConfigs.logs[logsCategory] = logEnabled;
+			}
+
+			const embedDescription = [];
+
+			for (const key in botConfigs.logs) {
+				embedDescription.push(`- ${key}: \`${botConfigs.logs[key]}\``);
+			}
+
+			const embed = new EmbedBuilder()
+				.setTitle('Logs configuration')
+				.setDescription(embedDescription.join('\n'))
+				.setColor('Blurple');
+
+			await interaction.reply({
+				embeds: [embed],
+				ephemeral: true,
+			});
 		}
 	},
 };

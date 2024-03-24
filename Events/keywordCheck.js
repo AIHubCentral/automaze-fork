@@ -117,7 +117,16 @@ module.exports = {
 									await message.reply(botResponse);
 								}
 								catch (error) {
-									client.logger.error(`Failed to add sticker ${item.stickerId}`, error);
+									if (client.botConfigs.logs.stickers) {
+										const logData = {
+											'error': error,
+											'more': {
+												'messageLink': `https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`,
+												'stickerId': item.stickerId,
+											},
+										};
+										client.logger.error('Failed to add sticker', logData);
+									}
 								}
 
 								break;
@@ -141,15 +150,14 @@ module.exports = {
 			}
 		}
 		catch (error) {
-			console.log('Failed to add reaction');
-			console.error(error);
-			// sends a log to the dev server
-			if (client.botConfigs.general.sendLogs) {
-				const { botConfigs } = client;
-				const devServerGuild = client.guilds.cache.get(botConfigs.devServerId);
-				const botDebugChannel = await getChannelById(botConfigs.debugChannelId, devServerGuild);
-				const messageLink = `https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`;
-				await botDebugChannel.send(`Failed to add reaction:\n> [Go to message](${messageLink})`);
+			if (client.botConfigs.logs.emojis) {
+				const logData = {
+					'error': error,
+					'more': {
+						'messageLink': `https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`,
+					},
+				};
+				client.logger.error('Failed to add reaction', logData);
 			}
 		}
 	},

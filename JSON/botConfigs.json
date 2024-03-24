@@ -25,5 +25,10 @@
     "prefix": {
         "dev": "?",
         "prod": "-"
+    },
+    "logs": {
+        "emojis": true,
+        "stickers": true,
+        "models": false
     }
 }

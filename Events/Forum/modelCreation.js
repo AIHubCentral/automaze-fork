@@ -1,5 +1,4 @@
 const { Events } = require('discord.js');
-const { saveJSON } = require('../../utils.js');
 
 /*
 const fs = require(`fs`);
@@ -9,20 +8,24 @@ const rll = require('read-last-lines');
 */
 
 module.exports = {
-	name: Events.ThreadCreate,
-	once: false,
-	run(client, thread) {
-		if (!client.botConfigs.trackModels) return;
-		const { discordIDs } = client;
-		if (thread.parentId !== discordIDs.Forum.VoiceModel) return;
-		saveJSON('model', {
-			name: thread.name,
-			ownerId: thread.ownerId,
-			createdAt: new Date(thread._createdTimestamp).toISOString(),
-			appliedTags: thread.appliedTags,
-			link: `https://discordapp.com/channels/${thread.guild.id}/${thread.parentId}/${thread.id}`,
-		});
-	},
+    name: Events.ThreadCreate,
+    once: false,
+    run(client, thread) {
+        const { discordIDs } = client;
+
+        if (client.botConfigs.logs.models && (thread.parentId == discordIDs.Forum.VoiceModel)) {
+            const logData = {
+                more: {
+                    threadName: thread.name,
+                    ownerId: thread.ownerId,
+                    createdAt: new Date(thread._createdTimestamp).toISOString(),
+                    appliedTags: thread.appliedTags,
+                    link: `https://discordapp.com/channels/${thread.guild.id}/${thread.parentId}/${thread.id}`,
+                },
+            };
+            client.logger.info('New model added', logData);
+        }
+    },
 };
 
 /*

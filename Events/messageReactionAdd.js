@@ -18,16 +18,19 @@ module.exports = {
             client.cooldowns.reactions.set(reaction.message.author.id, expirationDate);
             client.logger.info(reaction.message.author.id, 'added to cooldown, expires in', expirationDate);
 
-            // log the emoji to a file
-            const logData = {
-                author: {
-                    displayName: reaction.message.author.displayName,
-                    userName: reaction.message.author.username,
-                },
-                reaction: reaction.emoji,
-                link: `https://discordapp.com/channels/${reaction.message.guildId}/${reaction.message.channelId}/${reaction.message.id}`,
-            };
-            client.logger.info('Added emoji reaction', logData);
+            if (client.botConfigs.logs.emojis) {
+                // log the emoji to a file
+                const logData = {
+                    more: {
+                        author: {
+                            displayName: reaction.message.author.displayName,
+                            userName: reaction.message.author.username,
+                        },
+                        reaction: reaction.emoji,
+                        link: `https://discordapp.com/channels/${reaction.message.guildId}/${reaction.message.channelId}/${reaction.message.id}` },
+                };
+                client.logger.info('Added emoji reaction', logData);
+            }
         }
     },
 };
