@@ -1,4 +1,11 @@
-const { SlashCommandBuilder } = require('discord.js');
+const {
+    SlashCommandBuilder,
+    EmbedBuilder,
+    ActionRowBuilder,
+    ComponentType,
+    ButtonBuilder, ButtonStyle,
+} = require('discord.js');
+
 const delay = require('node:timers/promises').setTimeout;
 const fs = require('node:fs').promises;
 const path = require('node:path');
@@ -58,6 +65,28 @@ async function deleteFile(filePath, logger) {
     catch (error) {
         logger.error(`Error deleting ${filePath}`, error);
     }
+}
+
+function generateEmbeds(logFiles, itemsPerPage) {
+    /* generate embeds for implementing pagination */
+
+    const embeds = [];
+
+    for (let i = 0; i < logFiles.length; i += itemsPerPage) {
+        const currentItems = logFiles.slice(i, i + itemsPerPage);
+
+        // Create a new Embed for each page
+        const embed = new EmbedBuilder()
+            .setColor('Blurple')
+            .setTitle('Logs')
+            .setDescription(currentItems.join('\n'))
+            .setTimestamp();
+
+        // Add the embed to the array of embeds
+        embeds.push(embed);
+    }
+
+    return embeds;
 }
 
 module.exports = {
@@ -132,26 +161,77 @@ module.exports = {
 
             try {
                 const fileNames = await getFileNames(targetFolder, client.logger);
-                botResponse.content = ['**Logs**:'];
-                fileNames.forEach(file => {
-                    // list all logs if date not provided
-                    if (!targetDateString) {
-                        botResponse.content.push(`- ${file}`);
-                    }
-                    else if (file.includes(targetDateString)) {
-                        botResponse.content.push(`- ${file}`);
-                    }
-                });
-                if (botResponse.content.length === 1) {
-                    botResponse.content.push('No logs found.');
+
+                if (fileNames.length === 0) {
+                    return await interaction.editReply('No logs found.');
                 }
+
+                botResponse.content = ['**Logs**:'];
+
+                const itemsPerPage = 15;
+                let currentPage = 0;
+                const embeds = generateEmbeds(fileNames, itemsPerPage);
+
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('previous')
+                            .setLabel('Previous')
+                            .setStyle(ButtonStyle.Primary)
+                            .setDisabled(true),
+                        new ButtonBuilder()
+                            .setCustomId('next')
+                            .setLabel('Next')
+                            .setStyle(ButtonStyle.Primary)
+                            .setDisabled(fileNames.length <= itemsPerPage),
+                    );
+
                 botResponse.content = botResponse.content.join('\n');
+                botResponse.embeds = [embeds[currentPage]];
+                botResponse.components = [row];
+
+                const response = await interaction.editReply(botResponse);
+
+                // handle pagination buttons
+                const collector = response.createMessageComponentCollector({
+                    componentType: ComponentType.Button,
+                    time: 120_000,
+                });
+
+                collector.on('collect', async (i) => {
+                    if (i.customId === 'next') {
+                        currentPage = Math.min(currentPage + 1, embeds.length - 1);
+                        console.log('next');
+                    }
+                    else if (i.customId === 'previous') {
+                        currentPage = Math.max(currentPage - 1, 0);
+                        console.log('previous');
+                    }
+
+                    await i.update({
+                        embeds: [embeds[currentPage]],
+                        components: [row],
+                    });
+
+                    // Update the buttons' disabled state based on the current page
+                    row.components[0].setDisabled(currentPage === 0);
+                    row.components[1].setDisabled(currentPage === embeds.length - 1);
+                });
+
+                collector.on('end', collected => {
+                    client.logger.info(`Collected ${collected.size} interactions on ${interaction.channel.id}.`);
+                    // disable the buttons after the collector ends
+                    row.components.forEach(button => button.setDisabled(true));
+                    interaction.editReply({
+                        content:'This interaction has expired.',
+                        components: [],
+                        embeds: [],
+                    });
+                });
             }
             catch (error) {
-                botResponse.content = error;
+                return await interaction.editReply('```javascript\n' + error + '\n```');
             }
-
-            await interaction.editReply(botResponse);
         }
         else if (interaction.options.getSubcommand() === 'manage') {
             client.logger.info(`Managing log files in ${targetFolder}`);
@@ -177,7 +257,7 @@ module.exports = {
                 }
             }
             catch (error) {
-                botResponse.content = `'''${error}'''`;
+                botResponse.content = '```javascript\n' + error + '\n```';
                 client.logger.error('Errored', error);
             }
 
