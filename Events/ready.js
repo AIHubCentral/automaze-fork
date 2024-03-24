@@ -8,9 +8,13 @@ module.exports = {
         const guilds = client.guilds.cache;
         client.logger.info(`Bot is currently in ${guilds.size} guild(s):`);
 
+        const guildsInfo = [];
+
         guilds.forEach((guild) => {
-            client.logger.info(`${guild.id}: ${guild.name}`);
+            guildsInfo.push({ guildId: guild.id, guildName: guild.name });
         });
+
+        client.logger.info('Bot guilds', guildsInfo);
 
         const { botConfigs } = client;
 
