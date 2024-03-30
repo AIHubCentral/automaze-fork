@@ -43,10 +43,23 @@ module.exports = {
                 // embedData.description.push('- Feeling a tad bit generous? [Buy me a coffee!](https://ko-fi.com/fungusdesu)');
                 embedData.description.push('- Forgot a specific command? Try `/help` or `-help`');
 
-                client.logger.info(`Bot mentioned - guild:${message.guild.id};channel:${message.channel.id}`);
-
                 const embed = client.botUtils.createEmbed(embedData);
                 await message.reply({ embeds: [embed] });
+
+                client.logger.info('Bot mentioned', {
+                    more: {
+                        guildId: message.guild.id,
+                        channelId: message.channel.id,
+                    },
+                });
+
+                const isDebugGuildSetup = client.botConfigs.debugGuild.id && client.botConfigs.debugGuild.channelId;
+
+                if (client.botConfigs.sendLogs && isDebugGuildSetup) {
+                    const debugGuild = client.guilds.cache.get(client.botConfigs.debugGuild.id);
+                    const debugChannel = debugGuild.channels.cache.get(client.botConfigs.debugGuild.channelId);
+                    await debugChannel.send({ content: `Bot mentioned in channel ${message.channel.name} on guild ${message.guild.name}` });
+                }
 
                 return;
             }
