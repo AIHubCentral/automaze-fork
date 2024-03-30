@@ -64,11 +64,17 @@ module.exports = {
 		botResponse.setText('This guide is not available in the selected language yet.');
 
 		const sender = new TagResponseSender();
-		//sender.setChannel(interaction.channel);
+		// sender.setChannel(interaction.channel);
 		sender.setConfigs(botConfigs);
 		sender.setResponse(botResponse);
 		sender.setTargetMessage(interaction);
 		sender.setTargetUser(targetUser);
+
+		client.logger.debug('sending guide', { more: {
+			category, language,
+			channelId: interaction.channel.id,
+			guildId: interaction.guild.id,
+		} });
 
 		if (category === 'realtime') {
 			selectedGuide = botData.embeds.guides.realtime[language];
