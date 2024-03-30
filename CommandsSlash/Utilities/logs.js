@@ -67,28 +67,6 @@ async function deleteFile(filePath, logger) {
     }
 }
 
-function generateEmbeds(logFiles, itemsPerPage) {
-    /* generate embeds for implementing pagination */
-
-    const embeds = [];
-
-    for (let i = 0; i < logFiles.length; i += itemsPerPage) {
-        const currentItems = logFiles.slice(i, i + itemsPerPage);
-
-        // Create a new Embed for each page
-        const embed = new EmbedBuilder()
-            .setColor('Blurple')
-            .setTitle('Logs')
-            .setDescription(currentItems.join('\n'))
-            .setTimestamp();
-
-        // Add the embed to the array of embeds
-        embeds.push(embed);
-    }
-
-    return embeds;
-}
-
 module.exports = {
     category: 'Utilities',
     cooldown: 15,
@@ -155,7 +133,7 @@ module.exports = {
         await createDirectoryIfNotExist(targetFolder, client.logger);
 
         if (interaction.options.getSubcommand() === 'list') {
-            client.logger.info(`Listing log files in ${targetFolder}`);
+            client.logger.debug(`Listing log files in ${targetFolder}`);
 
             const targetDateString = interaction.options.getString('date');
 
@@ -163,70 +141,76 @@ module.exports = {
                 const fileNames = await getFileNames(targetFolder, client.logger);
 
                 if (fileNames.length === 0) {
-                    return await interaction.editReply('No logs found.');
+                    return await interaction.editReply('No log found.');
                 }
 
-                botResponse.content = ['**Logs**:'];
-
                 const itemsPerPage = 15;
-                let currentPage = 0;
-                const embeds = generateEmbeds(fileNames, itemsPerPage);
+                const pages = Math.ceil(fileNames.length / itemsPerPage);
+                let currentPage = 1;
 
-                const row = new ActionRowBuilder()
-                    .addComponents(
+                const getEmbed = (page) => {
+                    const startIndex = (page - 1) * itemsPerPage;
+                    const endIndex = Math.min(page * itemsPerPage, fileNames.length);
+                    const listedItems = fileNames.slice(startIndex, endIndex);
+
+                    const embed = new EmbedBuilder()
+                        .setTitle('Logs')
+                        .setDescription(listedItems.join('\n'))
+                        .setColor('Blurple')
+                        .setFooter({ text: `Page ${currentPage} of ${pages}` });
+
+                    const row = new ActionRowBuilder();
+
+                    row.addComponents(
                         new ButtonBuilder()
                             .setCustomId('previous')
                             .setLabel('Previous')
                             .setStyle(ButtonStyle.Primary)
-                            .setDisabled(true),
+                            .setDisabled(currentPage === 1),
+                    );
+
+                    row.addComponents(
                         new ButtonBuilder()
                             .setCustomId('next')
                             .setLabel('Next')
                             .setStyle(ButtonStyle.Primary)
-                            .setDisabled(fileNames.length <= itemsPerPage),
+                            .setDisabled(currentPage === pages),
                     );
 
-                botResponse.content = botResponse.content.join('\n');
-                botResponse.embeds = [embeds[currentPage]];
-                botResponse.components = [row];
+                    return { embeds: [embed], components: [row] };
+                };
 
-                const response = await interaction.editReply(botResponse);
+                const response = await interaction.editReply(getEmbed(currentPage));
+                const interactionDuration = 60_000;
 
-                // handle pagination buttons
                 const collector = response.createMessageComponentCollector({
                     componentType: ComponentType.Button,
-                    time: 120_000,
+                    time: interactionDuration,
                 });
 
-                collector.on('collect', async (i) => {
-                    if (i.customId === 'next') {
-                        currentPage = Math.min(currentPage + 1, embeds.length - 1);
-                        console.log('next');
+                collector.on('collect', async (buttonInteraction) => {
+                    if (!buttonInteraction.isButton()) return;
+                    await buttonInteraction.deferUpdate();
+
+                    if (buttonInteraction.customId === 'previous') {
+                        currentPage--;
                     }
-                    else if (i.customId === 'previous') {
-                        currentPage = Math.max(currentPage - 1, 0);
-                        console.log('previous');
+                    else if (buttonInteraction.customId === 'next') {
+                        currentPage++;
                     }
 
-                    await i.update({
-                        embeds: [embeds[currentPage]],
-                        components: [row],
-                    });
+                    await buttonInteraction.editReply(getEmbed(currentPage));
 
-                    // Update the buttons' disabled state based on the current page
-                    row.components[0].setDisabled(currentPage === 0);
-                    row.components[1].setDisabled(currentPage === embeds.length - 1);
+                    // Reset timeout on interaction
+                    collector.resetTimer();
                 });
 
-                collector.on('end', collected => {
-                    client.logger.info(`Collected ${collected.size} interactions on ${interaction.channel.id}.`);
-                    // disable the buttons after the collector ends
-                    row.components.forEach(button => button.setDisabled(true));
-                    interaction.editReply({
-                        content:'This interaction has expired.',
-                        components: [],
-                        embeds: [],
-                    });
+                collector.on('end', async () => {
+                    const embed = new EmbedBuilder()
+                        .setTitle('Users')
+                        .setDescription('Interaction timed out.')
+                        .setColor('Red');
+                    await interaction.editReply({ embeds: [embed], components: [] });
                 });
             }
             catch (error) {
