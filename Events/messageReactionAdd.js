@@ -16,7 +16,14 @@ module.exports = {
             const expirationDate = new Date();
             expirationDate.setMinutes(expirationDate.getMinutes() + 5);
             client.cooldowns.reactions.set(reaction.message.author.id, expirationDate);
-            client.logger.info(reaction.message.author.id, 'added to cooldown, expires in', expirationDate);
+            client.logger.debug('User added to cooldown', {
+                more: {
+                    userId: reaction.message.author.id,
+                    channelId: reaction.message.channel.id,
+                    guildId: reaction.message.guild.id,
+                    expiresIn: expirationDate,
+                },
+            });
 
             if (client.botConfigs.logs.emojis) {
                 // log the emoji to a file
