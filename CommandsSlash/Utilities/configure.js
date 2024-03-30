@@ -150,6 +150,7 @@ module.exports = {
 							{ name: 'Emojis', value: 'emojis' },
 							{ name: 'Stickers', value: 'stickers' },
 							{ name: 'Models', value: 'models' },
+							{ name: 'ModelRequests', value: 'modelRequests' },
 						),
 				)
 				.addBooleanOption(option =>

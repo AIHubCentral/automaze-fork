@@ -29,7 +29,8 @@
     "logs": {
         "emojis": true,
         "stickers": true,
-        "models": false
+        "models": false,
+        "modelRequests": false
     },
     "debugGuild": {
         "id": "",
