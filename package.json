@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "echo \"Starting bot in dev mode\" && node .",
-    "dbInit": "node ./database/dbInit.js"
+    "dbInit": "npx knex migrate:latest && npx knex seed:run"
   },
   "keywords": [],
   "author": "FungusDesu and RayTracerGC",

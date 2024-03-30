@@ -10,6 +10,7 @@ result.json
 
 # database files
 *.sqlite
+*.sqlite3
 
 # configs
 .npm
