@@ -263,10 +263,29 @@ async function banan(interaction, targetUser, guildMember) {
 
 	if (botRevenge) {
 		await interaction.reply(selectedResponse);
-		return interaction.followUp({ embeds: [embed] });
+		return await interaction.followUp({ embeds: [embed] });
 	}
 
-	interaction.reply({ embeds: [embed] });
+	await interaction.reply({ embeds: [embed] });
+
+	client.logger.debug('Banan', { more: {
+		targetUserId: targetUser.id },
+	});
+
+	if (client.botConfigs.sendLogs && (client.botConfigs.debugGuild.id && client.botConfigs.debugGuild.channelId)) {
+		const embedDescription = [
+			`- **Guild**: ${interaction.guild.id} (${interaction.guild.name})`,
+			`- **Channel**: ${interaction.channel.id} (${interaction.channel.name})`,
+		];
+		const debugEmbed = new EmbedBuilder()
+			.setTitle('Banan')
+			.setColor('Yellow')
+			.setDescription(embedDescription.join('\n'));
+
+		const guild = client.guilds.cache.get(client.botConfigs.debugGuild.id);
+		const channel = guild.channels.cache.get(client.botConfigs.debugGuild.channelId);
+		await channel.send({ embeds: [debugEmbed] });
+    }
 }
 
 exports.banan = banan;
@@ -365,12 +384,14 @@ class Scheduler {
 		await wait(60_000);
 		*/
 
-		if (botConfigs.general.sendLogs) {
+		this.client.logger.debug('Guides sent');
+
+		if (botConfigs.sendLogs && (botConfigs.debugGuild.id && botConfigs.debugGuild.channelId)) {
 			// notify dev server
 			botResponse.embeds = [];
 			botResponse.content = `📚 Guides sent to ${helpChannel} and ${helpOkadaChannel}.`;
-			const devServerGuild = this.client.guilds.cache.get(botConfigs.devServerId);
-			const debugChannel = await getChannelById(botConfigs.debugChannelId, devServerGuild);
+			const debugServerGuild = this.client.guilds.cache.get(botConfigs.debugGuild.id);
+			const debugChannel = await getChannelById(botConfigs.debugChannel.id, debugServerGuild);
 			await debugChannel.send(botResponse);
 		}
 	}

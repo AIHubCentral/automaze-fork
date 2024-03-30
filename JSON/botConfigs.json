@@ -30,5 +30,10 @@
         "emojis": true,
         "stickers": true,
         "models": false
-    }
+    },
+    "debugGuild": {
+        "id": "",
+        "channelId": ""
+    },
+    "sendLogs": true
 }

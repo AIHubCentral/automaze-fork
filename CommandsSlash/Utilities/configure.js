@@ -124,6 +124,21 @@ module.exports = {
 		)
 		.addSubcommand(subcommand =>
 			subcommand
+				.setName('debug_guild')
+				.setDescription('Guild to send debug logs')
+				.addStringOption(option =>
+					option
+						.setName('guild_id')
+						.setDescription('The guild ID'),
+				)
+				.addStringOption(option =>
+					option
+						.setName('channel_id')
+						.setDescription('Channel to send the logs'),
+				),
+		)
+		.addSubcommand(subcommand =>
+			subcommand
 				.setName('logs')
 				.setDescription('Configure logs')
 				.addStringOption(option =>
@@ -291,6 +306,21 @@ module.exports = {
 			}
 
 			await interaction.reply(botResponse);
+		}
+		else if (interaction.options.getSubcommand() === 'debug_guild') {
+			const guildId = interaction.options.getString('guild_id');
+			const channelId = interaction.options.getString('channel_id');
+			client.botConfigs.debugGuild.id = guildId ?? '';
+			client.botConfigs.debugGuild.channelId = channelId ?? '';
+			const embedDescription = [
+				`- **Guild ID**: ${client.botConfigs.debugGuild.id}`,
+				`- **Channel ID**: ${client.botConfigs.debugGuild.channelId}`,
+			];
+			const embed = new EmbedBuilder()
+				.setTitle('Debug Guild')
+				.setColor('Blurple')
+				.setDescription(embedDescription.join('\n'));
+			await interaction.reply({ embeds: [embed] });
 		}
 		else if (interaction.options.getSubcommand() === 'logs') {
 			const logsCategory = interaction.options.getString('category');
