@@ -13,12 +13,24 @@ module.exports = {
     ,
     async execute(interaction) {
         const targetUser = interaction.options.getUser('user');
+
+        if (targetUser === null) {
+            console.log('NuLLLL')
+            interaction.client.logger.debug('No user specified for banan', {
+                more: {
+                    guildId: interaction.guild.id,
+                    channelId: interaction.channel.id,
+                }
+            });
+            return interaction.reply({ content: 'You forgot to select the user!', ephemeral: true });
+        }
+
         let guildMember = interaction.guild.members.cache.get(targetUser.id);
 
-        if (!guildMember) {
-            console.log('Guild member not found in cache...Fetching');
+        if (guildMember === null) {
+            interaction.client.debug('Guild member not found in cache...Fetching ' + targetUser.id);
             guildMember = interaction.guild.members.fetch(targetUser.id);
         }
-        banan(interaction, targetUser, guildMember);
+        await banan(interaction, targetUser, guildMember);
     }
 }
