@@ -369,14 +369,7 @@
                     "description": [
                         "### 📚 All-In-One English documentation",
                         "**https://docs.aihub.wtf/**",
-                        "### ❔ English FAQ",
-                        "**https://docs.aihub.wtf/faq**"
-                    ],
-                    "footer": "Credits: AI HUB FRANCE"
-                },
-                {
-                    "title": "✨ More guides",
-                    "description": [
+                        "",
                         "### Full AI Voice Model Training Guide (Local)",
                         "Link: **[YouTube](https://youtu.be/Hx2IHzt5tAc?si=c_WpdbAVLF0pNeur)**",
                         "Credits: **Christopher Villanueva**",
@@ -388,10 +381,7 @@
                         "Credits: **Eddy (Spanish Helper)**",
                         "### Create a model with RVC disconnected (colab)",
                         "Link: **[Google Docs](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk)**",
-                        "Credits: **Angetyde**",
-                        "### How To Make an AI Cover With Ilaria RVC",
-                        "Link: **[Rentry](https://rentry.org/ilarvc_inf_guide)**",
-                        "Credits: 👽 **Julia** *(ailen2091)*"
+                        "Credits: **Angetyde**"
                     ]
                 }
             ],

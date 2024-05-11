@@ -380,7 +380,7 @@ class Scheduler {
 
 		// send guides to help channel
 		botResponse.content = '# RVC Guides (How to Make AI Cover)';
-		botResponse.embeds = createEmbeds(botData.embeds.rvc.main.embeds, availableColors);
+		botResponse.embeds = createEmbeds(botData.embeds.guides.rvc.en, availableColors);
 		const helpChannel = await getChannelById(discordIDs.Channel.HelpRVC, guild);
 		await helpChannel.send(botResponse);
 		await wait(60_000);
