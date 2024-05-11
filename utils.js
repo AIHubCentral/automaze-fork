@@ -162,6 +162,13 @@ exports.getAvailableColors = getAvailableColors;
 async function banan(interaction, targetUser, guildMember) {
 	const { client, user } = interaction;
 
+	client.logger.debug("executing banan", {
+		"more": {
+			guildId: interaction.guild.id,
+			channelId: interaction.channel.id,
+		}
+	});
+
 	// check if user is on cooldown
 	if (Date.now() <= client.cooldowns.banana.get(user.id)) {
 		return interaction.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${client.cooldowns.banana.get(interaction.user.id) - Date.now()} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`);
@@ -197,22 +204,23 @@ async function banan(interaction, targetUser, guildMember) {
 	let userData;
 
 	if (dbResult.length === 0) {
-		console.log('User not found in database');
+		client.logger.debug(`User ${member.id} not found in database`);
+
 		userData = {
 			id: `${member.id}`,
-			username: member.username,
+			userName: member.username,
 		};
 
 		if (guildMember.nickname) {
-			userData.displayName = guildMember.nickname;
+			userData.userName = guildMember.nickname;
 		}
 
 		await client.knexInstance('user').insert(userData);
-		console.log(`${member.username} added to database`);
+		client.logger.debug(`${member.username} (${member.id}) added to database`);
 	}
 	else if (guildMember.nickname !== dbResult[0].displayName) {
 		await client.knexInstance('user').update({ display_name: guildMember.nickname ?? member.displayName }).where({ id: member.id });
-		console.log(`Added ${guildMember.nickname ?? member.displayName} display name for ${member.username}`);
+		client.logger.debug(`Added ${guildMember.nickname ?? member.displayName} display name for ${member.username}`);
 	}
 
 	// check if banana is in the user inventory
@@ -268,8 +276,10 @@ async function banan(interaction, targetUser, guildMember) {
 
 	await interaction.reply({ embeds: [embed] });
 
-	client.logger.debug('Banan', { more: {
-		targetUserId: targetUser.id },
+	client.logger.debug('Banan', {
+		more: {
+			targetUserId: targetUser.id
+		},
 	});
 
 	if (client.botConfigs.sendLogs && (client.botConfigs.debugGuild.id && client.botConfigs.debugGuild.channelId)) {
@@ -285,7 +295,7 @@ async function banan(interaction, targetUser, guildMember) {
 		const guild = client.guilds.cache.get(client.botConfigs.debugGuild.id);
 		const channel = guild.channels.cache.get(client.botConfigs.debugGuild.channelId);
 		await channel.send({ embeds: [debugEmbed] });
-    }
+	}
 }
 
 exports.banan = banan;
