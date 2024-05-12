@@ -194,16 +194,17 @@ async function banan(interaction, targetUser, guildMember) {
 			return interaction.reply(selectedResponse);
 		}
 
-		// change the banan target to the user who tried to banan automaze or any other bot
+		// change the banan target to the user who tried to banan a bot
 		member = interaction.user;
 		botRevenge = true;
 	}
 
-	// check if user is in database
-	let dbResult = await client.knexInstance('user').where('id', `${member.id}`);
+	/* check if user exists in database, otherwise add it */
+
+	let dbResult = await client.knexInstance('user').where('id', `${member.id}`).first();
 	let userData;
 
-	if (dbResult.length === 0) {
+	if (dbResult == null) {
 		client.logger.debug(`User ${member.id} not found in database`);
 
 		userData = {
@@ -217,12 +218,21 @@ async function banan(interaction, targetUser, guildMember) {
 
 		await client.knexInstance('user').insert(userData);
 		client.logger.debug(`${member.username} (${member.id}) added to database`);
+		dbResult = await client.knexInstance('user').where('id', `${member.id}`).first();
 	}
-	else if (guildMember.nickname !== dbResult[0].displayName) {
+	else if (guildMember.nickname !== dbResult.displayName) {
 		await client.knexInstance('user').update({ display_name: guildMember.nickname ?? member.displayName }).where({ id: member.id });
 		client.logger.debug(`Added ${guildMember.nickname ?? member.displayName} display name for ${member.username}`);
 	}
 
+	/* increment banana count */
+	await client.knexInstance('user')
+		.where('id', '=', member.id)
+		.increment('bananas', 1);
+
+	dbResult = await client.knexInstance('user').where('id', `${member.id}`).first();
+
+	/*
 	// check if banana is in the user inventory
 	dbResult = await client.knexInstance('inventory').where({
 		// banana id: 1
@@ -253,14 +263,16 @@ async function banan(interaction, targetUser, guildMember) {
 		'user_id': `${member.id}`,
 		'item_id': 1,
 	});
+	*/
 
-	// copy embed data
+	/* create and send embeds */
+
 	const embedData = JSON.parse(JSON.stringify(client.botData.embeds.banana));
 	embedData.title = embedData.title.replace('$username', guildMember.nickname ?? member.displayName ?? member.username);
 	embedData.description[0] = embedData.description[0].replaceAll('$member', member);
-	embedData.footer = embedData.footer.replace('$quantity', dbResult[0].quantity);
+	embedData.footer = embedData.footer.replace('$quantity', dbResult.bananas);
 
-	if (dbResult[0].quantity > 1) {
+	if (dbResult.bananas > 1) {
 		embedData.footer = embedData.footer.replace('TIME', 'TIMES');
 	}
 

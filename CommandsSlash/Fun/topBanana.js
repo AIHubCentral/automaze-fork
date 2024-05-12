@@ -24,20 +24,19 @@ module.exports = {
 			description: [],
 		};
 
-		// fetch inventory from database
-		const inventory = await client.knexInstance('inventory').orderBy('quantity', 'desc').limit(15);
+		const users = await client.knexInstance('user').orderBy('bananas', 'desc').limit(15);
 
-		if (inventory.length === 0) {
+		if (users.length === 0) {
 			embedData.description.push('> The leaderboard is empty, `/banana` someone to show results here!');
 			return await interaction.editReply({ embeds: [client.botUtils.createEmbed(embedData)] });
 		}
 
 		let rankCounter = 1;
-		for (const entry of inventory) {
-			const user = await client.knexInstance('user').where('id', entry['user_id']);
-			const userDisplay = user[0].display_name ?? user[0].username;
-			const userProfileLink = 'https://discordapp.com/users/' + user[0].id;
-			embedData.description.push(`${rankCounter}. [${userDisplay}](${userProfileLink}) — ${entry.quantity}`);
+		for (const entry of users) {
+			const user = entry;
+			const userDisplay = user.display_name ?? user.username;
+			const userProfileLink = 'https://discordapp.com/users/' + user.id;
+			embedData.description.push(`${rankCounter}. [${userDisplay}](${userProfileLink}) — ${user.bananas}`);
 			rankCounter++;
 		}
 

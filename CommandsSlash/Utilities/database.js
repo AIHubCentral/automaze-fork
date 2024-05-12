@@ -126,18 +126,20 @@ module.exports = {
                         if (response.ok) {
                             const data = await response.json();
 
+                            client.logger.info('Inserting records into database...');
+
                             for (const record of data) {
                                 const dataToInsert = {
-                                    'user_id': record.user_id,
-                                    'item_id': 1, // banana item id
-                                    quantity: record.bananaCount,
-                                };
-                                await client.knexInstance('inventory').insert(dataToInsert);
-                                await client.knexInstance('user').insert({
                                     id: record.user_id,
                                     username: record.userName,
-                                });
+                                    bananas: record.bananaCount,
+
+                                };
+                                client.logger.debug(dataToInsert);
+                                await client.knexInstance('user').insert(dataToInsert);
                             }
+
+                            client.logger.info('Records inserted!');
                             await interaction.editReply({ content: 'JSON data updated!' });
                         }
                         else {
@@ -154,18 +156,17 @@ module.exports = {
             }
             else if (subcommand === 'export') {
                 const jsonData = [];
-                const inventory = await client.knexInstance('inventory').orderBy('quantity', 'desc');
+                const users = await client.knexInstance('user').orderBy('bananas', 'desc');
 
-                if (inventory.length === 0) {
+                if (users.length === 0) {
                     return await interaction.editReply({ content: 'The leaderboard is empty.' });
                 }
 
-                for (const entry of inventory) {
-                    const user = await client.knexInstance('user').where('id', entry['user_id']);
+                for (const user of users) {
                     jsonData.push({
-                        user_id: user[0].id,
-                        userName: user[0].username,
-                        bananaCount: entry.quantity,
+                        user_id: user.id,
+                        userName: user.username,
+                        bananaCount: user.bananas,
                     });
                 }
 
@@ -182,6 +183,8 @@ module.exports = {
 
             if (subcommand === 'create') {
                 const userName = interaction.options.getString('user_name').toLowerCase();
+                client.logger.debug(`/database users create user_id:${userId} user_name:${userName}`);
+
                 User = await client.knexInstance('user').where('id', userId).first();
                 if (!User) {
                     await client.knexInstance('user').insert({
@@ -193,6 +196,7 @@ module.exports = {
                 await interaction.editReply({ content: 'That user is already in database.' });
             }
             else if (subcommand === 'read') {
+                client.logger.debug(`/database users read user_id: ${userId}`);
                 User = await client.knexInstance('user').where('id', userId).first();
 
                 if (!User) {
@@ -203,6 +207,7 @@ module.exports = {
                     `- **ID**: ${User.id}`,
                     `- **Username**: ${User.username}`,
                     `- **Display**: ${User.display_name ?? 'N/A'}`,
+                    `- **Bananas**: ${User.bananas}`,
                 ];
 
                 const embed = new EmbedBuilder()
@@ -212,15 +217,17 @@ module.exports = {
                 await interaction.editReply({ embeds: [embed] });
             }
             else if (subcommand === 'update') {
+                const userName = interaction.options.getString('username');
+                const displayName = interaction.options.getString('display_name');
+                const bananas = interaction.options.getInteger('bananas');
+
+                client.logger.debug(`/database users update user_id: ${userId} username:${userName} display_name: ${displayName} bananas: ${bananas}`);
+
                 User = await client.knexInstance('user').where('id', userId).first();
 
                 if (!User) {
                     return await interaction.editReply({ content: 'User not found.' });
                 }
-
-                const displayName = interaction.options.getString('display_name');
-                const userName = interaction.options.getString('user_name');
-                const bananas = interaction.options.getInteger('bananas');
 
                 const dataToUpdate = {};
 
@@ -232,6 +239,10 @@ module.exports = {
                     dataToUpdate['display_name'] = displayName;
                 }
 
+                if (bananas) {
+                    dataToUpdate['bananas'] = bananas;
+                }
+
                 if (Object.keys(dataToUpdate).length === 0) {
                     return await interaction.editReply({ content: 'Nothing changed.' });
                 }
@@ -240,6 +251,7 @@ module.exports = {
                 await interaction.editReply({ content: `User ${userId} updated.` });
             }
             else if (subcommand === 'delete') {
+                client.logger.debug(`/database users delete user_id: ${userId}`);
                 User = await client.knexInstance('user').where('id', userId).first();
 
                 if (!User) {
@@ -251,8 +263,12 @@ module.exports = {
                 await interaction.editReply({ content: `User ${userId} deleted.` });
             }
             else if (subcommand === 'get_all') {
-
+                client.logger.debug('/database users get_all');
                 const users = await client.knexInstance.select('*').from('user');
+
+                if (users.length === 0) {
+                    return await interaction.editReply({ content: 'No users in database.' });
+                }
 
                 const embedDescription = users.map((user) => `- ${user.id}: ${user.username}`);
 
