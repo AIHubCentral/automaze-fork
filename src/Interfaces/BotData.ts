@@ -6,13 +6,14 @@ interface EmbedFields {
     inline?: boolean;
 }
 
-interface EmbedData {
+export interface EmbedData {
     title: string,
     color?: string,
     description?: string[],
     image?: string,
     fields?: EmbedFields[];
-    footer?: string
+    footer?: string;
+    timestamp?: boolean;
 }
 
 interface SelectMenuData {

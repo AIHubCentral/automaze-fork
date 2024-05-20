@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "echo \"Starting bot in dev mode\" && node .",
+    "dev": "npx tsc && node dist/index.js",
     "dbInit": "node ./database/dbInit.js"
   },
   "keywords": [],

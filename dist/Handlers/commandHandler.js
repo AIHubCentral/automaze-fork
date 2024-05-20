@@ -1,26 +1,20 @@
 "use strict";
-const fs = require(`fs`);
-module.exports = client => {
-    const categoriesPath = `${process.cwd()}/dist/Commands`;
-    const categoryFolders = fs.readdirSync(categoriesPath);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const node_fs_1 = __importDefault(require("node:fs"));
+const node_path_1 = __importDefault(require("node:path"));
+const ROOT_DIR = node_path_1.default.join(process.cwd(), 'dist', 'Commands');
+function setPrefixCommands(client) {
+    const categoryFolders = node_fs_1.default.readdirSync(ROOT_DIR);
     for (const folder of categoryFolders) {
-        const commandFiles = fs.readdirSync(`${categoriesPath}/${folder}`).filter(file => file.endsWith(`.js`));
+        const commandFiles = node_fs_1.default.readdirSync(node_path_1.default.join(ROOT_DIR, folder)).filter(file => file.endsWith(`.js`));
         for (const file of commandFiles) {
-            const filePath = `${categoriesPath}/${folder}/${file}`;
-            const command = require(filePath);
-            if (`name` in command && `run` in command) {
-                client.commands.set(command.name, command);
-            }
-            else {
-                console.log(`[WARNING] A command in ${filePath} is missing name or run property`);
-            }
+            const filePath = node_path_1.default.join(ROOT_DIR, folder, file);
+            const command = require(filePath).default || require(filePath);
+            client.commands.set(command.name, command);
         }
     }
-    const itemsPath = `${process.cwd()}/dist/Commands/Game/items`;
-    const itemFiles = fs.readdirSync(itemsPath).filter(file => file.endsWith(`.js`));
-    for (const file of itemFiles) {
-        const filePath = `${itemsPath}/${file}`;
-        const item = require(filePath);
-        client.use.set(item.name, item);
-    }
-};
+}
+exports.default = setPrefixCommands;

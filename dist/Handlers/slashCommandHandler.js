@@ -1,19 +1,22 @@
 "use strict";
-const fs = require(`node:fs`);
-module.exports = client => {
-    const categoriesPath = `${process.cwd()}/dist/CommandsSlash`;
-    const categoryFolders = fs.readdirSync(categoriesPath);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const node_fs_1 = __importDefault(require("node:fs"));
+const node_path_1 = __importDefault(require("node:path"));
+const ROOT_DIR = node_path_1.default.join(process.cwd(), 'dist', 'CommandsSlash');
+function setSlashCommands(client) {
+    const categoryFolders = node_fs_1.default.readdirSync(ROOT_DIR);
     for (const folder of categoryFolders) {
-        const commandFiles = fs.readdirSync(`${categoriesPath}/${folder}`).filter(file => file.endsWith(`.js`));
+        const commandFiles = node_fs_1.default.readdirSync(node_path_1.default.join(ROOT_DIR, folder)).filter(file => file.endsWith(`.js`));
         for (const file of commandFiles) {
-            const filePath = `${categoriesPath}/${folder}/${file}`;
-            const command = require(filePath);
-            if (`data` in command && `execute` in command && (command.type === 'slash')) {
-                client.slashCommands.set(command.data.name, command);
-            }
-            else {
-                console.log(`[WARNING] A slash command in ${filePath} is missing data or execute property, or is having incorrect type!`);
-            }
+            //if (!file.includes('doxx')) continue;
+            //console.log(file);
+            const filePath = node_path_1.default.join(ROOT_DIR, folder, file);
+            const command = require(filePath).default || require(filePath);
+            client.slashCommands.set(command.data.name, command);
         }
     }
-};
+}
+exports.default = setSlashCommands;

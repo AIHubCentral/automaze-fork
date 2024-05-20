@@ -4,6 +4,11 @@ require('dotenv').config();
 import * as Discord from 'discord.js';
 import Logger from './logger';
 import ExtendedClient, { ExtendedClientOptions } from './Core/extendedClient';
+import registerEvents from './Handlers/eventHandler';
+import IEventData from './Interfaces/Events';
+import setPrefixCommands from './Handlers/commandHandler';
+import setSlashCommands from './Handlers/slashCommandHandler';
+import path from 'node:path';
 
 // Exports
 const {
@@ -53,11 +58,23 @@ const client = new ExtendedClient(
         },
     }, extendedOptions);
 
+/*
 // Read all handlers of the folder
 const handlerFiles: string[] = getAllFiles(`${process.cwd()}/dist/Handlers`).filter((file: string) => file.endsWith('.js'));
 
 for (const handler of handlerFiles) {
-    require(handler)(client, Discord);
+require(handler)(client, Discord);
 }
+*/
+
+
+/* const events: IEventData[] = [
+    readyEvent, reactionAddEvent, messageCreateEvent, interactionCreateEvent,
+]; */
+
+
+setPrefixCommands(client);
+setSlashCommands(client);
+registerEvents(client);
 
 client.login(process.env.token);

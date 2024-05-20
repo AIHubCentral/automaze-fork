@@ -1,15 +1,21 @@
 "use strict";
-const { getAllFiles } = require('../utils');
-module.exports = Client => {
-    const eventsPath = `${process.cwd()}/dist/Events`;
-    const eventFiles = getAllFiles(eventsPath).filter(file => file.endsWith('.js'));
-    for (const fileEvent of eventFiles) {
-        const Event = require(fileEvent);
-        if (Event.once) {
-            Client.once(Event.name, async (...args) => await Event.run(Client, ...args));
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const node_path_1 = __importDefault(require("node:path"));
+const utils_1 = require("../utils");
+const EVENTS_PATH = node_path_1.default.join(process.cwd(), 'dist', 'Events');
+function registerEvents(client) {
+    const eventFiles = (0, utils_1.getAllFiles)(EVENTS_PATH);
+    for (const file of eventFiles) {
+        const eventData = require(file).default || require(file);
+        if (eventData.once) {
+            client.once(eventData.name, (...args) => eventData.run(client, ...args));
         }
         else {
-            Client.on(Event.name, async (...args) => await Event.run(Client, ...args));
+            client.on(eventData.name, (...args) => eventData.run(client, ...args));
         }
     }
-};
+}
+exports.default = registerEvents;

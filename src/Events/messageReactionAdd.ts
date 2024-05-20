@@ -1,30 +1,32 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const reactionAddEvent = {
+import { MessageReaction, User } from "discord.js";
+import IEventData from "../Interfaces/Events";
+
+const reactionAddEvent: IEventData = {
     name: 'messageReactionAdd',
     once: false,
-    async run(client, reaction, user) {
+    async run(client, reaction: MessageReaction, user: User) {
         // only add cooldown if the reaction was added by the bot
         const botId = client.user?.id;
-        if (user.id !== botId)
-            return;
+        if (user.id !== botId) return;
+
         const reactionAuthor = reaction.message.author;
-        if (!reactionAuthor)
-            return;
+        if (!reactionAuthor) return;
+
         // don't add cooldown if the bot reacted to itself like the voting embed for instance
-        if (reactionAuthor.id === botId)
-            return;
+        if (reactionAuthor.id === botId) return;
+
         // cooldown immune users
-        if (client.botData.cooldownImmuneUsers.has(reactionAuthor.id))
-            return;
+        if (client.botData.cooldownImmuneUsers.has(reactionAuthor.id)) return;
+
         // add user to cooldown
-        if (client.cooldowns.reactions.has(reactionAuthor.id))
-            return;
+        if (client.cooldowns.reactions.has(reactionAuthor.id)) return;
+
         const expirationDate = new Date();
         expirationDate.setMinutes(expirationDate.getMinutes() + 5);
         client.cooldowns.reactions.set(reactionAuthor.id, expirationDate);
-        if (!client.botConfigs.logs.emojis)
-            return;
+
+        if (!client.botConfigs.logs.emojis) return;
+
         client.logger.debug('User added to cooldown', {
             more: {
                 user: {
@@ -35,6 +37,7 @@ const reactionAddEvent = {
                 expiresIn: expirationDate,
             }
         });
+
         client.logger.info('Added emoji reaction', {
             more: {
                 user: {
@@ -50,4 +53,5 @@ const reactionAddEvent = {
         });
     },
 };
-exports.default = reactionAddEvent;
+
+export default reactionAddEvent;

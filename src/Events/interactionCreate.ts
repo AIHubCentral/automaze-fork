@@ -1,18 +1,28 @@
-const { Collection } = require('discord.js');
+import { Collection } from 'discord.js';
+import IEventData from '../Interfaces/Events';
+import ExtendedClient from '../Core/extendedClient';
 
-module.exports = {
+const interactionCreateEvent: IEventData = {
     name: 'interactionCreate',
     once: false,
-    async run(client, interaction) {
+    async run(client: ExtendedClient, interaction: any) {
+
         if (interaction.isChatInputCommand()) {
-            const command = interaction.client.slashCommands.get(interaction.commandName);
+            const command = client.slashCommands.get(interaction.commandName);
 
             if (!command) {
                 client.logger.error(`No command matching ${interaction.commandName} was found.`);
                 return;
             }
 
-            client.logger.info(`Executing command (${command.data.name}) - guild:${interaction.guild.id};channel:${interaction.channel.id};type:slash`);
+            client.logger.info(`Executing slash command`, {
+                more: {
+                    channelId: interaction.channel.id,
+                    commandName: command.data.name,
+                    guildId: interaction.guild.id,
+                    type: command.type,
+                }
+            });
 
             // handle cooldowns if command exists
             const { cooldowns } = client;
@@ -26,7 +36,7 @@ module.exports = {
             // duration in seconds
             const defaultCooldownDuration = 3;
             // convert to milliseconds
-            const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000; 
+            const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000;
 
             if (timestamps.has(interaction.user.id)) {
                 const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
@@ -43,8 +53,9 @@ module.exports = {
             try {
                 await command.execute(interaction);
             }
-            catch (error) {
+            catch (error: any) {
                 client.logger.error(`Failed to execute command ${command.data.name}`, error);
+
                 if (interaction.replied || interaction.deferred) {
                     await interaction.followUp({ content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``, ephemeral: true });
                 }
@@ -86,4 +97,6 @@ module.exports = {
             }
         }
     },
-};
+}
+
+export default interactionCreateEvent;

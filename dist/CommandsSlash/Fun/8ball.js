@@ -1,23 +1,27 @@
 "use strict";
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
 const Chance = require(`chance`);
 const chance = new Chance;
 const wait = require('node:timers/promises').setTimeout;
 const utils = require('../../utils.js');
-module.exports = {
-    category: `Fun`,
-    type: `slash`,
-    data: new SlashCommandBuilder()
+const EightBall = {
+    category: 'Fun',
+    type: 'slash',
+    data: new discord_js_1.SlashCommandBuilder()
         .setName('8ball')
         .setDescription('Answer questions of your life')
-        .addStringOption(option => option.setName('question').setDescription('Ask questions about your life').setRequired(true)),
+        .addStringOption((option) => option.setName('question')
+        .setDescription('Ask questions about your life')
+        .setRequired(true)),
     async execute(interaction) {
+        const client = interaction.client;
         const question = interaction.options.getString('question');
         if (!question) {
             await interaction.reply('You need to provide a question!\n\n> Example: `/8ball` `Is RVC better than SVC?`');
         }
         else {
-            const botResponses = interaction.client.botResponses.responses['8ball'];
+            const botResponses = client.botResponses.responses['8ball'];
             const affirmativeResponses = botResponses.affirmative;
             const noncommittalResponses = botResponses.nonCommital;
             const negativeResponses = botResponses.negative;
@@ -37,13 +41,13 @@ module.exports = {
                 const bar = [`*[*`, Array(filled).fill(`▰`), Array(10 - filled).fill(`▱`), `*]*`].flat();
                 return bar.join(``);
             }
-            const loadingEmbed = new EmbedBuilder()
+            const loadingEmbed = new discord_js_1.EmbedBuilder()
                 .setTitle(`🎱 Predicting the future... 🎱`)
                 .setColor(`DarkButNotBlack`);
             await interaction.reply({ embeds: [loadingEmbed] });
             // wait between 3 to 5 seconds
             await wait(utils.getRandomNumber(3000, 5000));
-            const answerEmbed = new EmbedBuilder()
+            const answerEmbed = new discord_js_1.EmbedBuilder()
                 .setTitle(question)
                 .setColor(response[1])
                 .setDescription(`## ${response[0]}\n# ${percentToBar(100 - percent)} - ${100 - percent}% possible`);
@@ -51,3 +55,4 @@ module.exports = {
         }
     }
 };
+exports.default = EightBall;

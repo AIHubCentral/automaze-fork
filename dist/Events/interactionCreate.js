@@ -1,20 +1,28 @@
 "use strict";
-const { Collection } = require('discord.js');
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const interactionCreateEvent = {
     name: 'interactionCreate',
     once: false,
     async run(client, interaction) {
         if (interaction.isChatInputCommand()) {
-            const command = interaction.client.slashCommands.get(interaction.commandName);
+            const command = client.slashCommands.get(interaction.commandName);
             if (!command) {
                 client.logger.error(`No command matching ${interaction.commandName} was found.`);
                 return;
             }
-            client.logger.info(`Executing command (${command.data.name}) - guild:${interaction.guild.id};channel:${interaction.channel.id};type:slash`);
+            client.logger.info(`Executing slash command`, {
+                more: {
+                    channelId: interaction.channel.id,
+                    commandName: command.data.name,
+                    guildId: interaction.guild.id,
+                    type: command.type,
+                }
+            });
             // handle cooldowns if command exists
             const { cooldowns } = client;
             if (!cooldowns.slashCommands.has(command.data.name)) {
-                cooldowns.slashCommands.set(command.data.name, new Collection());
+                cooldowns.slashCommands.set(command.data.name, new discord_js_1.Collection());
             }
             const now = Date.now();
             const timestamps = cooldowns.slashCommands.get(command.data.name);
@@ -73,3 +81,4 @@ module.exports = {
         }
     },
 };
+exports.default = interactionCreateEvent;

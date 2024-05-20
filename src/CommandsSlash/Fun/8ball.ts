@@ -1,23 +1,32 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+import { EmbedBuilder, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { SlashCommand } from "../../Interfaces/Command";
+import ExtendedClient from "../../Core/extendedClient";
+
 const Chance = require(`chance`);
 const chance = new Chance;
+
 const wait = require('node:timers/promises').setTimeout;
 const utils = require('../../utils.js');
 
-module.exports = {
-	category: `Fun`,
-	type: `slash`,
+const EightBall: SlashCommand = {
+	category: 'Fun',
+	type: 'slash',
 	data: new SlashCommandBuilder()
 		.setName('8ball')
 		.setDescription('Answer questions of your life')
-		.addStringOption(option => option.setName('question').setDescription('Ask questions about your life').setRequired(true)),
+		.addStringOption(
+			(option: SlashCommandStringOption) => option.setName('question')
+				.setDescription('Ask questions about your life')
+				.setRequired(true)),
 	async execute(interaction) {
+		const client = <ExtendedClient>interaction.client;
+
 		const question = interaction.options.getString('question');
 		if (!question) {
 			await interaction.reply('You need to provide a question!\n\n> Example: `/8ball` `Is RVC better than SVC?`')
 		}
 		else {
-			const botResponses = interaction.client.botResponses.responses['8ball'];
+			const botResponses = client.botResponses.responses['8ball'];
 			const affirmativeResponses = botResponses.affirmative;
 			const noncommittalResponses = botResponses.nonCommital;
 			const negativeResponses = botResponses.negative;
@@ -33,7 +42,7 @@ module.exports = {
 				response = [negativeResponses[Math.floor(Math.random() * negativeResponses.length)], `Red`];
 			}
 
-			function percentToBar(percentile) {
+			function percentToBar(percentile: number) {
 				const filled = Math.floor(percentile / 10);
 				const bar = [`*[*`, Array(filled).fill(`▰`), Array(10 - filled).fill(`▱`), `*]*`].flat();
 				return bar.join(``);
@@ -56,4 +65,6 @@ module.exports = {
 			interaction.editReply({ embeds: [answerEmbed] });
 		}
 	}
-}
+};
+
+export default EightBall;
