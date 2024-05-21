@@ -71,7 +71,14 @@ const interactionCreateEvent = {
                 client.logger.error(`No context command matching ${interaction.commandName} was found.`);
                 return;
             }
-            client.logger.info(`Executing command (${command.data.name}) - guild:${interaction.guild.id};channel:${interaction.channel.id};type:context`);
+            client.logger.info(`Executing context command`, {
+                more: {
+                    channelId: interaction.channel.id,
+                    commandName: command.data.name,
+                    guildId: interaction.guild.id,
+                    type: command.type,
+                }
+            });
             try {
                 await command.execute(interaction);
             }

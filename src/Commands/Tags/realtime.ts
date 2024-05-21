@@ -53,7 +53,6 @@ module.exports = {
         const realtimeActionRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(realtimeGuidesSelectMenu);
 
         let botResponse: MessageReplyOptions = {
-            content: selectedGuide?.content,
             embeds: botUtils.createEmbeds(selectedGuide?.embeds, availableColors),
             components: [realtimeActionRow]
         };

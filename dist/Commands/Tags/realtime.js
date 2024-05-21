@@ -35,7 +35,6 @@ module.exports = {
             .addOptions(menuOptions);
         const realtimeActionRow = new discord_js_1.ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
         let botResponse = {
-            content: selectedGuide?.content,
             embeds: botUtils.createEmbeds(selectedGuide?.embeds, availableColors),
             components: [realtimeActionRow]
         };

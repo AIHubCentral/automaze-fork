@@ -111,32 +111,28 @@
             ]
         },
         "en": {
-            "docs": {
-                "title": "Documentation",
-                "color": "029afe",
-                "description": [
-                    "## 🇺🇸 English Documentation\n> https://docs.aihub.wtf/\n\nCredits: **AI HUB FRANCE**",
-                    "## 🇺🇸 English FAQ\n> https://docs.aihub.wtf/faq\n\nCredits: **AI HUB FRANCE**"
-                ]
-            },
-            "translations": {
-                "title": "🌐 Translations",
-                "description": [
-                    "- 🇫🇷  [French Documentation](https://docs.aihubfrance.fr/guides-clone-de-voix/rvc-v2)",
-                    "- 🇮🇹  [Italian Documentation](https://docs.aihub.wtf/v/italy/)",
-                    "- 🇷🇺  [Russian FAQ for RVC/Voice changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)",
-                    "- 🇪🇸  [Spain Documentation](https://docs.aihub.wtf/v/spain/)",
-                    "- 🇧🇷  [Brasil Documentation](https://docs.aihub.wtf/v/brazil/)"
-                ]
-            },
-            "alt": {
-                "docs": {
+            "embeds": [
+                {
                     "title": "Documentation",
                     "description": [
-                        "test"
+                        "### 📚 All-In-One English documentation",
+                        "**https://docs.aihub.wtf/**",
+                        "",
+                        "### Full AI Voice Model Training Guide (Local)",
+                        "Link: **[YouTube](https://youtu.be/Hx2IHzt5tAc?si=c_WpdbAVLF0pNeur)**",
+                        "Credits: **Christopher Villanueva**",
+                        "### Model training with Mainline RVC",
+                        "Link: **[Rentry](https://rentry.co/TrainingVoiceModels)**",
+                        "credits: **Raven** *(ravencutie21)*",
+                        "### AICoverGen Colab Guide",
+                        "Link: **[Google Docs](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub)**",
+                        "Credits: **Eddy (Spanish Helper)**",
+                        "### Create a model with RVC disconnected (colab)",
+                        "Link: **[Google Docs](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk)**",
+                        "Credits: **Angetyde**"
                     ]
                 }
-            }
+            ]
         },
         "tr": {
             "title": "Rehberler",
@@ -251,28 +247,12 @@
                 "content": "### 🎙️ Realtime Voice Changer (Local)",
                 "embeds": [
                     {
-                        "title": "",
-                        "fields": [
-                            {
-                                "name": "Guide for W-Okada's RealTimeVoiceChangerClient",
-                                "value": "> **Description**: This one has more options and is somewhat more convenient to use than Real-time RVC.\n> **Link**: [Rentry](https://rentry.co/VoiceChangerGuide)\n> **Credits**: ravencutie21"
-                            },
-                            {
-                                "name": "\u0020",
-                                "value": "\u0020"
-                            },
-                            {
-                                "name": "How to use real time conversion with RVC (voice changer)",
-                                "value": "> **Description**: More accurate than W-Okada's, but requires a decent GPU.\n> **Link**: [Google Docs](https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs/edit)\n> **Credits**: teas.hi"
-                            },
-                            {
-                                "name": "\u0020",
-                                "value": "\u0020"
-                            },
-                            {
-                                "name": "RVC TTS",
-                                "value": "> **Description**: Text to speech with RVC\n> **Link**: [Rentry](https://rentry.co/RVC-TTS-Guide)"
-                            }
+                        "title": "💻 (Local) Realtime Voice Changer",
+                        "color": "#07C7F7",
+                        "description": [
+                            "- [Guide for W-Okada's RealTimeVoiceChangerClient](https://rentry.co/VoiceChangerGuide)",
+                            "- [How to use real time conversion with RVC (voice changer)](https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs)",
+                            "- [RVC TTS](https://rentry.co/RVC-TTS-Guide)"
                         ]
                     }
                 ]
@@ -281,10 +261,11 @@
                 "content": "### 🎙️ Realtime Voice Changer (Online)",
                 "embeds": [
                     {
-                        "title": "(Online) W-Okada - Colab Version",
+                        "title": "☁ (Online) W-Okada - Colab Version",
+                        "color": "#077CF7",
                         "description": [
-                            "A free, online version of W-Okada that allows you to run code on Google's powerful GPUs.",
-                            "\n🔗 [How to use W-Okada's Voice Changer](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)\n"
+                            "- 🔗 [How to use W-Okada's Voice Changer](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)",
+                            "> A free, online version of W-Okada that allows you to run code on Google's powerful GPUs."
                         ],
                         "footer": "ⓘ Please note that this doesn't work on mobile because there's no VAC (Voice Audio Cable) for it"
                     }
@@ -294,9 +275,10 @@
                 "content": "### 🎙️ Realtime Voice Changer (FAQ)",
                 "embeds": [
                     {
-                        "title": "Russian FAQ for voice changer",
+                        "title": "❔ Russian FAQ for voice changer",
+                        "color": "#07F7D9",
                         "description": [
-                            "\n🔗 [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
+                            "- 🔗 [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
                         ],
                         "footer": "Credits: blackcat76it, elektroeban, redoverflow and tntmaxim"
                     }
@@ -776,5 +758,29 @@
                 ]
             }
         ]
+    },
+    "upload": {
+        "en": {
+            "mentionMessage": "Suggestions for $user",
+            "embeds": [
+                {
+                    "title": "huggingface.co upload Guides",
+                    "description": [
+                        "## English guide",
+                        "Link: https://rentry.org/fdg_guide_newer",
+                        "Credits: **FDG**",
+                        "## Spanish Guide",
+                        "Link: https://rentry.org/AI_Hub_guide_esp",
+                        "Credits: **Julia (ailen2091)**",
+                        "## Hindi guide",
+                        "Link: https://rentry.org/AI_hub_guide_hi",
+                        "Credits: **Enes**",
+                        "## Turkish guide",
+                        "Link: https://rentry.org/AI_hub_guide_tr",
+                        "Credits: **Enes**"
+                    ]
+                }
+            ]
+        }
     }
 }

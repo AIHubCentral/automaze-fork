@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, Message } from "discord.js";
+import { ChatInputCommandInteraction, ContextMenuCommandBuilder, InteractionResponse, Message, UserContextMenuCommandInteraction } from "discord.js";
 import ExtendedClient from "../Core/extendedClient";
 
 export interface SlashCommand {
@@ -7,6 +7,13 @@ export interface SlashCommand {
     data: any;
     cooldown?: number,
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
+}
+
+export interface ContextCommand {
+    category: string;
+    type: string;
+    data: ContextMenuCommandBuilder;
+    execute: (interaction: UserContextMenuCommandInteraction) => Promise<InteractionResponse<boolean> | undefined | void>;
 }
 
 export interface PrefixCommand {

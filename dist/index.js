@@ -33,9 +33,8 @@ const logger_1 = __importDefault(require("./logger"));
 const extendedClient_1 = __importDefault(require("./Core/extendedClient"));
 const eventHandler_1 = __importDefault(require("./Handlers/eventHandler"));
 const commandHandler_1 = __importDefault(require("./Handlers/commandHandler"));
-const slashCommandHandler_1 = __importDefault(require("./Handlers/slashCommandHandler"));
 // Exports
-const { getAllFiles, createEmbed, createEmbeds, getAvailableColors, getRandomNumber, getRandomFromArray } = require('./utils');
+const { createEmbed, createEmbeds, getAvailableColors, getRandomNumber, getRandomFromArray } = require('./utils');
 // JSONs
 const DiscordIDs = {
     prod: '../JSON/configs/idsDiscordProd.json',
@@ -71,18 +70,6 @@ const client = new extendedClient_1.default({
         parse: ['users'],
     },
 }, extendedOptions);
-/*
-// Read all handlers of the folder
-const handlerFiles: string[] = getAllFiles(`${process.cwd()}/dist/Handlers`).filter((file: string) => file.endsWith('.js'));
-
-for (const handler of handlerFiles) {
-require(handler)(client, Discord);
-}
-*/
-/* const events: IEventData[] = [
-    readyEvent, reactionAddEvent, messageCreateEvent, interactionCreateEvent,
-]; */
 (0, commandHandler_1.default)(client);
-(0, slashCommandHandler_1.default)(client);
 (0, eventHandler_1.default)(client);
 client.login(process.env.token);

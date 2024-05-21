@@ -1,23 +1,28 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /* context menu version of /banana */
-const discord_js_1 = require("discord.js");
+import { ApplicationCommandType, ContextMenuCommandBuilder, UserContextMenuCommandInteraction } from "discord.js";
+import { ContextCommand } from "../../Interfaces/Command";
+import ExtendedClient from "../../Core/extendedClient";
 const { banan } = require('../../utils.js');
-const Banan = {
+
+const Banan: ContextCommand = {
     category: 'Fun',
     type: 'context-menu',
-    data: new discord_js_1.ContextMenuCommandBuilder()
+    data: new ContextMenuCommandBuilder()
         .setName('banan')
-        .setType(discord_js_1.ApplicationCommandType.User),
+        .setType(ApplicationCommandType.User)
+    ,
     async execute(interaction) {
-        const client = interaction.client;
+        const client = <ExtendedClient>interaction.client;
         const targetUser = interaction.targetUser;
         let guildMember = interaction.guild?.members.cache.get(targetUser.id);
+
         if (!guildMember) {
             client.logger.debug(`Guild member ${targetUser.id} not found in cache...Fetching`);
             guildMember = await interaction.guild?.members.fetch(targetUser.id);
         }
+
         await banan(interaction, targetUser, guildMember);
     }
-};
-exports.default = Banan;
+}
+
+export default Banan;

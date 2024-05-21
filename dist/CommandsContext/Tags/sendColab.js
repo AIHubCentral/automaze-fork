@@ -1,11 +1,13 @@
 "use strict";
-const { ApplicationCommandType, ContextMenuCommandBuilder, EmbedBuilder } = require('discord.js');
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const discordUtilities_1 = require("../../Utils/discordUtilities");
+const SendColabGuides = {
     category: 'Tags',
     type: 'context-menu',
-    data: new ContextMenuCommandBuilder()
+    data: new discord_js_1.ContextMenuCommandBuilder()
         .setName('Send Colab links')
-        .setType(ApplicationCommandType.User),
+        .setType(discord_js_1.ApplicationCommandType.User),
     async execute(interaction) {
         const { client, targetUser } = interaction;
         if (targetUser.bot)
@@ -13,15 +15,14 @@ module.exports = {
         const { botData } = client;
         const embeds = [];
         const embedData = botData.embeds.colab.en;
-        embedData.embeds.forEach(content => {
-            const currentEmbed = new EmbedBuilder()
-                .setTitle(content.title)
-                .setDescription(content.description.join('\n'))
-                .setColor(content.color ?? 'Yellow');
-            embeds.push(currentEmbed);
+        embedData.embeds?.forEach(content => {
+            embeds.push((0, discordUtilities_1.createEmbed)(content));
         });
         const botResponse = { embeds: embeds };
-        botResponse.content = embedData.mentionMessage.replace('$user', targetUser);
+        if (embedData.mentionMessage) {
+            botResponse.content = embedData.mentionMessage.replace('$user', targetUser.toString());
+        }
         await interaction.reply(botResponse);
     },
 };
+exports.default = SendColabGuides;

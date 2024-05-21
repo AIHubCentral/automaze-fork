@@ -1,28 +1,28 @@
 "use strict";
-const { ApplicationCommandType, ContextMenuCommandBuilder } = require("discord.js");
-module.exports = {
-    category: `Tags`,
-    type: `context-menu`,
-    data: new ContextMenuCommandBuilder()
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const discordUtilities_1 = require("../../Utils/discordUtilities");
+const SendRVCGuides = {
+    category: 'Tags',
+    type: 'context-menu',
+    data: new discord_js_1.ContextMenuCommandBuilder()
         .setName('Send RVC guides')
-        .setType(ApplicationCommandType.User),
+        .setType(discord_js_1.ApplicationCommandType.User),
     async execute(interaction) {
-        const { client, targetUser } = interaction;
-        const { discordIDs } = interaction.client;
+        const { targetUser } = interaction;
         if (targetUser.bot)
             return await interaction.reply({ content: 'That user is a bot.', ephemeral: true });
-        const { botData, botUtils, botConfigs } = client;
-        const availableColors = botUtils.getAvailableColors(botConfigs);
-        let botResponse = {};
-        switch (interaction.channelId) {
-            case discordIDs.Channel.Italiano:
-                botResponse.content = `Ciao ${targetUser}, ecco alcune risorse utili consigliate per te`;
-                botResponse.embeds = botUtils.createEmbeds(botData.embeds.guides.rvc.it, availableColors);
-                break;
-            default:
-                botResponse.content = `Hello, ${targetUser}! Here are some recommended resources for you to learn.`;
-                botResponse.embeds = botUtils.createEmbeds(botData.embeds.guides.rvc.en, availableColors);
-        }
+        const client = interaction.client;
+        const { botData, botConfigs } = client;
+        const availableColors = (0, discordUtilities_1.getAvailableColors)(botConfigs);
+        const guides = botData.embeds.rvc.en;
+        if (!guides.embeds)
+            return;
+        let botResponse = {
+            content: `Hello, ${targetUser}! Here are some recommended resources for you!`,
+            embeds: (0, discordUtilities_1.createEmbeds)(guides.embeds, availableColors),
+        };
         interaction.reply(botResponse);
     }
 };
+exports.default = SendRVCGuides;

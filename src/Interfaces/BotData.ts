@@ -1,4 +1,4 @@
-import { Collection } from "discord.js";
+import { Collection, ColorResolvable } from "discord.js";
 
 interface EmbedFields {
     name: string;
@@ -8,15 +8,16 @@ interface EmbedFields {
 
 export interface EmbedData {
     title: string,
-    color?: string,
+    color?: ColorResolvable,
     description?: string[],
     image?: string,
     fields?: EmbedFields[];
     footer?: string;
     timestamp?: boolean;
+    thumbnail?: string;
 }
 
-interface SelectMenuData {
+export interface SelectMenuData {
     content: string;
     embeds: EmbedData[];
 }
