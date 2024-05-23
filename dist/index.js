@@ -41,7 +41,7 @@ const DiscordIDs = {
     dev: '../JSON/configs/idsDiscordDev.json',
 };
 const botConfigs = require('../JSON/botConfigs.json');
-const botResponses = require('../JSON/bot_responses.json');
+const botResponses = require('../JSON/botResponses.json');
 // set dev=true in .env to use the development guild ids
 const devMode = process.env.dev;
 /* Discord Client initialization */
@@ -57,6 +57,9 @@ const extendedOptions = {
         getAvailableColors, getRandomNumber, getRandomFromArray
     }
 };
+if (!devMode) {
+    extendedOptions.botConfigs.messageOnStartup = true;
+}
 const client = new extendedClient_1.default({
     intents: [
         Discord.GatewayIntentBits.Guilds,

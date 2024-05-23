@@ -37,14 +37,14 @@ const readyEvent: IEventData = {
 
             if (!botDebugChannel) {
                 botDebugChannel = await devServerGuild.channels.fetch(botConfigs.debugChannelId) ?? undefined;
+            }
 
-                if (botDebugChannel) {
-                    botDebugChannel = <TextChannel>botDebugChannel;
-                    await botDebugChannel.send('🟢 Bot is online!');
-                }
-                else {
-                    client.logger.error(`Failed to fetch ${botConfigs.debugChannelId}`);
-                }
+            if (botDebugChannel) {
+                botDebugChannel = <TextChannel>botDebugChannel;
+                await botDebugChannel.send('🟢 Bot is online!');
+            }
+            else {
+                client.logger.error(`Failed to fetch ${botConfigs.debugChannelId}`);
             }
         }
     },

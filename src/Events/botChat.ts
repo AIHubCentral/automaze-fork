@@ -1,7 +1,11 @@
-module.exports = {
+import { Message } from "discord.js";
+import IEventData from "../Interfaces/Events";
+import { delay } from "../Utils/generalUtilities";
+
+const BotChat: IEventData = {
 	name: 'messageCreate',
 	once: false,
-	async run(client, message, _) {
+	async run(client, message: Message) {
 		// only proceed if feture is enabled in configs
 		if (!client.botConfigs.general.chat) return;
 
@@ -36,8 +40,21 @@ module.exports = {
 					selectedAnswer = selectedAnswer.replace('$user', message.author);
 				}
 
+				const answerLength = selectedAnswer.length;
+				const typingDurationMs = 500;
+				await message.channel.sendTyping();
+				await delay(answerLength * typingDurationMs);
 				await message.reply(selectedAnswer);
-			}  
+				client.logger.info('Bot chat', {
+					more: {
+						channelId: message.channel.id,
+						guildId: message.guild?.id,
+						reply: selectedAnswer,
+					}
+				});
+			}
 		}
 	}
 }
+
+export default BotChat;

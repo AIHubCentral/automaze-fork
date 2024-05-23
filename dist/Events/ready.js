@@ -22,13 +22,13 @@ const readyEvent = {
             let botDebugChannel = devServerGuild.channels.cache.get(botConfigs.debugChannelId);
             if (!botDebugChannel) {
                 botDebugChannel = await devServerGuild.channels.fetch(botConfigs.debugChannelId) ?? undefined;
-                if (botDebugChannel) {
-                    botDebugChannel = botDebugChannel;
-                    await botDebugChannel.send('🟢 Bot is online!');
-                }
-                else {
-                    client.logger.error(`Failed to fetch ${botConfigs.debugChannelId}`);
-                }
+            }
+            if (botDebugChannel) {
+                botDebugChannel = botDebugChannel;
+                await botDebugChannel.send('🟢 Bot is online!');
+            }
+            else {
+                client.logger.error(`Failed to fetch ${botConfigs.debugChannelId}`);
             }
         }
     },

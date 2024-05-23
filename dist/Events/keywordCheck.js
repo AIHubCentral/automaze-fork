@@ -1,8 +1,8 @@
 "use strict";
-/* eslint-disable indent */
+Object.defineProperty(exports, "__esModule", { value: true });
+const generalUtilities_1 = require("../Utils/generalUtilities");
 const { ChannelType } = require('discord.js');
-const { getChannelById } = require('../utils.js');
-const delay = require('node:timers/promises').setTimeout;
+const generalUtilities_2 = require("../Utils/generalUtilities");
 function isUserOnCooldown(client, userId) {
     let result = false;
     if (client.cooldowns.reactions.has(userId)) {
@@ -18,7 +18,20 @@ function isUserOnCooldown(client, userId) {
     }
     return result;
 }
-module.exports = {
+function getNumberBasedOnFrequency(frequency) {
+    let randomNumber = 0;
+    if (frequency === 'rare') {
+        randomNumber = (0, generalUtilities_1.getRandomNumber)(0, 100);
+    }
+    else if (frequency === 'sometimes') {
+        randomNumber = (0, generalUtilities_1.getRandomNumber)(0, 10);
+    }
+    else if (frequency === 'often') {
+        randomNumber = (0, generalUtilities_1.getRandomNumber)(0, 2);
+    }
+    return randomNumber;
+}
+const KeyWordCheck = {
     name: 'messageCreate',
     once: false,
     async run(client, message) {
@@ -32,12 +45,12 @@ module.exports = {
         if (message.channel.type === ChannelType.PublicThread)
             return;
         // skip prefix commands
-        const prefix = client.prefix;
-        if (message.content.startsWith(prefix))
+        if (message.content.startsWith(client.prefix))
             return;
         // e_boorgir reaction ignores cooldown
         if (message.content.includes(':e_boorgir:')) {
-            return await message.react('<:e_boorgir:1159654275069255750>');
+            await message.react('<:e_boorgir:1159654275069255750>');
+            return;
         }
         if (isUserOnCooldown(client, message.author.id))
             return;
@@ -57,19 +70,9 @@ module.exports = {
             for (const item of client.botData.reactionKeywords) {
                 if (reactionCounter >= 20)
                     break;
-                let randomNumber = 0;
                 let shouldProceed = true;
                 if (item.frequency) {
-                    if (item.frequency === 'rare') {
-                        randomNumber = client.botUtils.getRandomNumber(0, 100);
-                    }
-                    else if (item.frequency === 'sometimes') {
-                        randomNumber = client.botUtils.getRandomNumber(0, 10);
-                    }
-                    else if (item.frequency === 'often') {
-                        randomNumber = client.botUtils.getRandomNumber(0, 2);
-                    }
-                    shouldProceed = randomNumber === 0;
+                    shouldProceed = getNumberBasedOnFrequency(item.frequency) === 0;
                 }
                 if (!shouldProceed)
                     continue;
@@ -94,23 +97,23 @@ module.exports = {
                         const messageInfo = {
                             messageId: message.id,
                             channelId: message.channel.id,
-                            guildId: message.guild.id,
+                            guildId: message.guild?.id,
                         };
                         switch (item.kind) {
                             case 'sticker':
                                 botResponse.stickers = [item.stickerId];
-                                await delay(3000);
+                                await (0, generalUtilities_2.delay)(3000);
                                 try {
-                                    client.logger.info(`Attempting to add sticker ${item.stickerId}`, messageInfo);
+                                    client.logger.debug(`Attempting to add sticker ${item.stickerId}`, messageInfo);
                                     await message.reply(botResponse);
                                 }
                                 catch (error) {
                                     if (client.botConfigs.logs.stickers) {
                                         const logData = {
-                                            'error': error,
-                                            'more': {
-                                                'messageLink': `https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`,
-                                                'stickerId': item.stickerId,
+                                            error: error,
+                                            more: {
+                                                messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
+                                                stickerId: item.stickerId,
                                             },
                                         };
                                         client.logger.error('Failed to add sticker', logData);
@@ -118,17 +121,27 @@ module.exports = {
                                 }
                                 break;
                             case 'text':
-                                botResponse.content = client.botUtils.getRandomFromArray(item.responses);
-                                await message.channel.sendTyping();
-                                await delay(botResponse.content.length * 350);
-                                client.logger.info(`Sendind text: ${botResponse.content}`, messageInfo);
-                                await message.reply(botResponse);
+                                if (!item.responses)
+                                    break;
+                                try {
+                                    botResponse.content = (0, generalUtilities_1.getRandomFromArray)(item.responses);
+                                    const typingDuration = 350;
+                                    await (0, generalUtilities_2.delay)(botResponse.content.length * typingDuration);
+                                    await message.channel.sendTyping();
+                                    client.logger.info(`Sendind text: ${botResponse.content}`, { more: messageInfo });
+                                    await message.reply(botResponse);
+                                }
+                                catch (error) {
+                                    client.logger.error('failed to add text reaction', { more: messageInfo });
+                                }
                                 break;
                             default:
-                                for (const emoji of item.emojis) {
-                                    await message.react(emoji);
-                                    await delay(2000);
-                                    reactionCounter++;
+                                if (item.emojis) {
+                                    for (const emoji of item.emojis) {
+                                        await message.react(emoji);
+                                        await (0, generalUtilities_2.delay)(2000);
+                                        reactionCounter++;
+                                    }
                                 }
                         }
                     }
@@ -139,9 +152,9 @@ module.exports = {
         catch (error) {
             if (client.botConfigs.logs.emojis) {
                 const logData = {
-                    'error': error,
-                    'more': {
-                        'messageLink': `https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`,
+                    error: error,
+                    more: {
+                        messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
                     },
                 };
                 client.logger.error('Failed to add reaction', logData);
@@ -149,3 +162,4 @@ module.exports = {
         }
     },
 };
+exports.default = KeyWordCheck;
