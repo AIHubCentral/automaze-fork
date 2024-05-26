@@ -1,23 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const discordUtilities_1 = require("../../Utils/discordUtilities");
 function createEmbeds(guides) {
     const embeds = [];
     for (const guide of guides) {
         for (const data of guide.embeds) {
-            const embed = new discord_js_1.EmbedBuilder().setTitle(data.title);
-            if (data.fields) {
-                embed.setFields(data.fields);
-            }
-            if (data.color) {
-                embed.setColor(data.color);
-            }
-            if (data.description) {
-                embed.setDescription(data.description.join('\n'));
-            }
-            if (data.footer) {
-                embed.setFooter({ text: data.footer });
-            }
+            const embed = (0, discordUtilities_1.createEmbed)(data);
             embeds.push(embed);
         }
     }

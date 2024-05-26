@@ -6,6 +6,7 @@ import Logger from './logger';
 import ExtendedClient, { ExtendedClientOptions } from './Core/extendedClient';
 import registerEvents from './Handlers/eventHandler';
 import registerCommands from './Handlers/commandHandler';
+import registerProcesses from './Handlers/processHandler';
 
 // Exports
 const {
@@ -61,5 +62,6 @@ const client = new ExtendedClient(
 
 registerCommands(client);
 registerEvents(client);
+registerProcesses(client);
 
 client.login(process.env.token);

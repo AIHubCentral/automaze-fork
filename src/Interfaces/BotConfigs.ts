@@ -25,7 +25,7 @@ interface IDebugGuild {
 }
 
 export default interface IBotConfigs {
-    comissions: IConfigToggle;
+    commissions: IConfigToggle;
     general: IConfigToggle;
     trackModels: boolean;
     colors: IConfigColors;

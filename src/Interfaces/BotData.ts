@@ -7,7 +7,7 @@ interface EmbedFields {
 }
 
 export interface EmbedData {
-    title: string,
+    title?: string,
     color?: ColorResolvable,
     description?: string[],
     image?: string,

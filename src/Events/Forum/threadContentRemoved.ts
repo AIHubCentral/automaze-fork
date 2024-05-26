@@ -1,11 +1,12 @@
-const { Events } = require('discord.js');
+import { Events, ThreadChannel } from 'discord.js';
+import IEventData from '../../Interfaces/Events';
 
 /* checks if thread content was deleted */
 
-module.exports = {
+const ThreadUpdate: IEventData = {
     name: Events.ThreadUpdate,
     once: false,
-    async run(client, oldThread, newThread) {
+    async run(client, oldThread: ThreadChannel, newThread: ThreadChannel) {
         const { discordIDs } = client;
         if (newThread.parentId != discordIDs.Forum.VoiceModel) return;
         if (!(newThread.name.toLowerCase().includes('deleted'))) return;
@@ -16,17 +17,22 @@ module.exports = {
                 newThreadName: newThread.name,
                 threadId: newThread.id,
                 threadParentId: newThread.parentId,
+                updatedMessage: '',
             },
         };
 
         try {
             const starterMessage = await newThread.fetchStarterMessage();
-            logData.more.updatedMessage = starterMessage.content;
+            if (starterMessage) {
+                logData.more.updatedMessage = starterMessage.content;
+            }
         }
         catch (error) {
             logData.more.updatedMessage = 'Original message was deleted';
         }
 
-        client.logger.debug('Voice model deleted', logData);
+        client.logger.info('Voice model deleted', logData);
     },
 };
+
+export default ThreadUpdate;

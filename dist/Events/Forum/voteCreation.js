@@ -1,41 +1,51 @@
 "use strict";
-const Discord = require('discord.js');
-const { delay } = require('../../utils.js');
-module.exports = {
-    name: "threadCreate",
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const generalUtilities_1 = require("../../Utils/generalUtilities");
+const discordUtilities_1 = require("../../Utils/discordUtilities");
+const VoteCreation = {
+    name: discord_js_1.Events.ThreadCreate,
     once: false,
-    async run(Client, Threader, newlyCreated) {
+    async run(client, thread, newlyCreated) {
+        const logData = {
+            more: {
+                threadId: thread.id,
+                parentId: thread.parentId,
+                guildId: thread.guildId,
+            }
+        };
         try {
-            // Channels needed
-            let Forums = {
-                [Client.discordIDs.Forum.Suggestions]: "Vote for this suggestion!",
-                [Client.discordIDs.Forum.TaskSTAFF]: "Vote for this Task!"
+            let embedMessages = {
+                [client.discordIDs.Forum.Suggestions]: "Vote for this suggestion!",
+                [client.discordIDs.Forum.TaskSTAFF]: "Vote for this task!",
             };
-            // Check is a Request Forum
             if (!newlyCreated)
                 return;
-            if (Threader.guildId != Client.discordIDs.Guild)
+            if (thread.guildId != client.discordIDs.Guild)
                 return;
-            if (!Forums[Threader.parentId])
+            if (!thread.parentId)
                 return;
-            // Votation Embed
-            const voteEmbed = new Discord.EmbedBuilder()
-                .setTitle(Forums[Threader.parentId])
-                .setColor(Client.botConfigs.colors.theme.primary);
-            // Check if exists the channel
-            await delay(2000);
-            if (!(await Threader.guild.channels.cache.get(Threader.id)))
+            if (!embedMessages[thread.parentId])
+                return;
+            const voteEmbed = (0, discordUtilities_1.createEmbed)({
+                title: embedMessages[thread.parentId],
+                color: client.botConfigs.colors.theme.primary,
+            });
+            // Check if the thread was created successfully
+            await (0, generalUtilities_1.delay)(2000);
+            if (!(thread.guild.channels.cache.get(thread.id)))
                 return;
             // Create reactions
-            const Message = await Threader.send({ embeds: [voteEmbed] });
+            const message = await thread.send({ embeds: [voteEmbed] });
             await Promise.all([
-                Message.react(`🔼`),
-                Message.react(`🔽`)
+                message.react(`🔼`),
+                message.react(`🔽`),
             ]);
+            client.logger.info('Added voting embed', logData);
         }
-        catch (e) {
-            // Oh no, dat error.
-            console.log(e);
+        catch (error) {
+            client.logger.error('Failed to add voting embed', error, logData);
         }
     }
 };
+exports.default = VoteCreation;

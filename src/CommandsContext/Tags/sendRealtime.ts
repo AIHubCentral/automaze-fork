@@ -1,26 +1,15 @@
-import { ApplicationCommandType, ColorResolvable, ContextMenuCommandBuilder, EmbedBuilder } from "discord.js";
+import { ApplicationCommandType, ContextMenuCommandBuilder, EmbedBuilder } from "discord.js";
 import { ContextCommand } from "../../Interfaces/Command";
 import ExtendedClient from "../../Core/extendedClient";
 import { SelectMenuData } from "../../Interfaces/BotData";
+import { createEmbed } from "../../Utils/discordUtilities";
 
 function createEmbeds(guides: SelectMenuData[]): EmbedBuilder[] {
     const embeds: EmbedBuilder[] = [];
 
     for (const guide of guides) {
         for (const data of guide.embeds) {
-            const embed = new EmbedBuilder().setTitle(data.title);
-            if (data.fields) {
-                embed.setFields(data.fields);
-            }
-            if (data.color) {
-                embed.setColor(data.color as ColorResolvable);
-            }
-            if (data.description) {
-                embed.setDescription(data.description.join('\n'));
-            }
-            if (data.footer) {
-                embed.setFooter({ text: data.footer });
-            }
+            const embed = createEmbed(data);
             embeds.push(embed);
         }
     }

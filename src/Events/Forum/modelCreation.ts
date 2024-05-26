@@ -1,32 +1,31 @@
-const { Events } = require('discord.js');
+import { Events, ThreadChannel } from 'discord.js';
+import IEventData from '../../Interfaces/Events';
 
-/*
-const fs = require(`fs`);
-const Extractor = require('../../Misc/extractor.js')
-const modelsFile = require('../../JSON/_models.json')
-const rll = require('read-last-lines');
-*/
+const ModelCreation: IEventData = {
+	name: Events.ThreadCreate,
+	once: false,
+	async run(client, thread: ThreadChannel) {
+		const { botConfigs, discordIDs } = client;
 
-module.exports = {
-    name: Events.ThreadCreate,
-    once: false,
-    run(client, thread) {
-        const { discordIDs } = client;
-
-        if (client.botConfigs.logs.models && (thread.parentId == discordIDs.Forum.VoiceModel)) {
-            const logData = {
-                more: {
-                    threadName: thread.name,
-                    ownerId: thread.ownerId,
-                    createdAt: new Date(thread._createdTimestamp).toISOString(),
-                    appliedTags: thread.appliedTags,
-                    link: `https://discordapp.com/channels/${thread.guild.id}/${thread.parentId}/${thread.id}`,
-                },
-            };
-            client.logger.info('New model added', logData);
-        }
-    },
+		if (botConfigs.logs.models && (thread.parentId == discordIDs.Forum.VoiceModel)) {
+			const logData = {
+				more: {
+					threadName: thread.name,
+					ownerId: thread.ownerId,
+					createdAt: '',
+					appliedTags: thread.appliedTags,
+					link: `https://discordapp.com/channels/${thread.guild.id}/${thread.parentId}/${thread.id}`,
+				},
+			};
+			if (thread.createdTimestamp) {
+				logData.more.createdAt = new Date(thread.createdTimestamp).toISOString();
+			}
+			client.logger.info('New model added', logData);
+		}
+	},
 };
+
+export default ModelCreation;
 
 /*
 async function updateModels(thread) {

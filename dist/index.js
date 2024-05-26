@@ -33,6 +33,7 @@ const logger_1 = __importDefault(require("./logger"));
 const extendedClient_1 = __importDefault(require("./Core/extendedClient"));
 const eventHandler_1 = __importDefault(require("./Handlers/eventHandler"));
 const commandHandler_1 = __importDefault(require("./Handlers/commandHandler"));
+const processHandler_1 = __importDefault(require("./Handlers/processHandler"));
 // Exports
 const { createEmbed, createEmbeds, getAvailableColors, getRandomNumber, getRandomFromArray } = require('./utils');
 // JSONs
@@ -75,4 +76,5 @@ const client = new extendedClient_1.default({
 }, extendedOptions);
 (0, commandHandler_1.default)(client);
 (0, eventHandler_1.default)(client);
+(0, processHandler_1.default)(client);
 client.login(process.env.token);

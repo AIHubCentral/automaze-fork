@@ -1,14 +1,11 @@
 "use strict";
-const fs = require(`fs`);
-module.exports = () => {
-    const processesPath = `${process.cwd()}/dist/Processes`;
-    const processFiles = fs.readdirSync(processesPath).filter(file => file.endsWith(`.js`));
-    for (const file of processFiles) {
-        const filePath = `${processesPath}/${file}`;
-        const _process = require(filePath);
-        const processName = file.split(`.`)[0];
-        process.on(processName, (arg) => {
-            _process.run(arg);
-        });
-    }
-};
+Object.defineProperty(exports, "__esModule", { value: true });
+function registerProcesses(client) {
+    process.on('uncaughtException', error => {
+        client.logger.error('uncaughtException', error);
+    });
+    process.on('unhandledRejection', error => {
+        client.logger.error('unhandledRejection', error);
+    });
+}
+exports.default = registerProcesses;
