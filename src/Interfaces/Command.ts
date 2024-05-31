@@ -22,5 +22,5 @@ export interface PrefixCommand {
     description: string,
     aliases: string[],
     syntax: string,
-    run: (client: ExtendedClient, message?: Message, args?: string[], prefix?: string) => Promise<void>;
+    run: (client: ExtendedClient, message?: Message, args?: string[], prefix?: string) => Promise<any>;
 }
