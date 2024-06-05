@@ -1,18 +1,26 @@
 "use strict";
-const { EmbedBuilder } = require('discord.js');
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const botUtilities_1 = require("../../Utils/botUtilities");
+const HFStatus = {
     name: 'hfstatus',
     category: 'Tags',
     description: 'Where to check hugginface status',
     aliases: ['hfstatus'],
     syntax: 'hfstatus [member]',
-    run: async (client, message) => {
+    async run(client, message) {
         const { botData } = client;
-        const embedData = botData.embeds.hfstatus.embeds[0];
-        const embed = new EmbedBuilder()
-            .setTitle(embedData.title)
-            .setColor(embedData.color)
-            .setDescription(embedData.description.join('\n'));
-        await message.reply({ embeds: [embed] });
+        if (!botData.embeds.hfstatus.en.embeds) {
+            client.logger.error('Missing embed data for -hfstatus');
+            return;
+        }
+        if (!message) {
+            client.logger.error('Message was not available in -hfstatus');
+            return;
+        }
+        const sender = new botUtilities_1.TagResponseSender(client);
+        sender.setEmbeds(botData.embeds.hfstatus.en.embeds);
+        sender.config(message);
+        await sender.send();
     },
 };
+exports.default = HFStatus;

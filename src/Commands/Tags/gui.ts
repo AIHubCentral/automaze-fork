@@ -1,23 +1,23 @@
-const delay = require('node:timers/promises').setTimeout;
+import { MessageReplyOptions } from "discord.js";
+import { PrefixCommand } from "../../Interfaces/Command";
+import { delay } from "../../Utils/generalUtilities";
 
-module.exports = {
+const GUI: PrefixCommand = {
 	name: 'gui',
 	category: 'Tags',
 	description: 'yeah i still use rvc easy gui',
 	aliases: [],
 	syntax: 'gui',
-	/**
-	 *
-	 * @param {Client} client
-	 * @param {Message} message
-	 * @param {string[]} args
-	 * @param {String} prefix
-	 */
-	run: async (client, message) => {
+	async run(client, message) {
+		if (!message) {
+			client.logger.error('Failed to fetch message');
+			return;
+		}
+
 		const { botUtils } = client;
-		const botResponse = {};
+		const botResponse: MessageReplyOptions = {};
 		const randomNumber = botUtils.getRandomNumber(0, 10);
-		const mentionedUser = message.mentions.members.first();
+		const mentionedUser = message?.mentions.members?.first();
 
 		if (randomNumber !== 0) {
 			botResponse.content = 'https://cdn.discordapp.com/attachments/1122285248844144733/1203460490475343953/caption.gif?ex=65d12cec&is=65beb7ec&hm=bd2fb8d010006dd7c6e3c1c67d3ae846fd1478e1a3124c544c31b43086fe54aa&';
@@ -48,3 +48,5 @@ module.exports = {
 		return message.reply(botResponse);
 	},
 };
+
+export default GUI;

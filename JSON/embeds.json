@@ -1,4 +1,29 @@
 {
+    "audio": {
+        "en": {
+            "embeds": [
+                {
+                    "title": "📚 Audio Guides",
+                    "description": [
+                        "- **Perfecting Audio Isolation on Low-End Rigs: A Practical Guide**, by Litsa The Dancer and Faze Masta [Google Docs](https://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing)",
+                        "- **Gathering and Isolating Audio**, by SCRFilms [Google Docs](https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv)",
+                        "- **Creating Datasets for RVC using iZotope RX**, by LUSBERT <:lusbertmoment:1159804751924432906> [Rentry](https://rentry.org/RVC-dataset-RX)",
+                        "- **Vocal Mixing Tutorial**, by Roomie [YouTube](https://www.youtube.com/watch?v=rSxLF3kkBw0)"
+                    ]
+                },
+                {
+                    "title": "🛠️ Tools",
+                    "description": [
+                        "### Audio Separation/Isolation",
+                        "- https://mvsep.com/",
+                        "- https://multimedia.easeus.com/vocal-remover/",
+                        "- [MDX-NET Colab](https://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb)"
+                    ],
+                    "footer": "More commands: -colab, -uvr, -karafan, -overtrain, -help"
+                }
+            ]
+        }
+    },
     "colab": {
         "en": {
             "mentionMessage": "Suggestions for $user",
@@ -8,12 +33,12 @@
                     "color": "f9ab00",
                     "description": [
                         "- **Applio**, by IA Hispano [Google Colab](https://colab.research.google.com/github/iahispano/applio/blob/master/assets/Applio.ipynb)",
+                        "- **RVC Disconnected**, by Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
                         "- **AICoverGen-WebUI**, *modded by Hina* [Google Colab](https://colab.research.google.com/github/hinabl/AICoverGen-Colab/blob/main/Hina_Mod_AICoverGen_colab.ipynb)",
                         "- **AICoverGen-NoWebUI [English]**, by Ardha, *fixed by Eddy, Hina and Gdr* [Google Colab](https://colab.research.google.com/drive/1u1brjK8IZt647UsbZuGYfW29oFM2I4tk?usp=sharing)",
                         "- **AICoverGen-NoWebUI [Spanish]**, *credits to Eddy, Hina and Gdr for translating and fixing* [Google Colab](https://colab.research.google.com/drive/1qezaBvCn4eSG1U2L4a64tEHTynbIu8eN?usp=sharing)",
-                        "- **Ilaria RVC**, by thestingerx [Google Colab](https://colab.research.google.com/drive/16LkwvFZeudTpUOsE_6bMjOq2qkxFo8Hr?usp=sharing)",
-                        "- **RVC Disconnected**, by Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
-                        "- **easyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)",
+                        "- **Ilaria RVC**, by thestingerx [Google Colab](https://colab.research.google.com/drive/1mHKTGH5e3SAyDSBss1KtiYRbDdQzwSMs)",
+                        "- **EasyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)",
                         "- 🆕 **UVR5 NO UI for Google Colab**, by Eddy [Google Colab](https://colab.research.google.com/github/Eddycrack864/UVR5-NO-UI/blob/main/UVR5_NO_UI.ipynb)\n> [How to use?](https://github.com/Eddycrack864/UVR5-NO-UI#how-to-use)"
                     ]
                 },
@@ -22,7 +47,7 @@
                     "color": "ffcc4d",
                     "description": [
                         "- **Applio**, by IA Hispano [Huggingface Spaces](https://huggingface.co/spaces/IAHispano/Applio)",
-                        "- **Ilaria RVC**, by thestingerx [Hugginface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
+                        "- **Ilaria RVC**, by thestingerx [Hugginface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC_Mainline)",
                         "- **RVC-HFv2**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/RVC_HFv2)",
                         "- **AICoverGen**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
                         "- **Advanced RVC Inference**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/Advanced-RVC-Inference)",
@@ -381,15 +406,17 @@
         ]
     },
     "hfstatus": {
-        "embeds": [
-            {
-                "title": "🤗 Hugginface Status",
-                "color": "Yellow",
-                "description": [
-                    "https://status.huggingface.co/"
-                ]
-            }
-        ]
+        "en": {
+            "embeds": [
+                {
+                    "title": "🤗 Hugginface Status",
+                    "color": "Yellow",
+                    "description": [
+                        "https://status.huggingface.co/"
+                    ]
+                }
+            ]
+        }
     },
     "egirl": {
         "embeds": [
