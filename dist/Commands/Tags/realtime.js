@@ -15,7 +15,7 @@ function createMenuOptions(availableOptions) {
     }
     return menuOptions;
 }
-module.exports = {
+const Realtime = {
     name: 'realtime',
     category: 'Tags',
     description: 'RVC real-time conversion guide',
@@ -69,10 +69,7 @@ module.exports = {
                     guide = realtimeGuides.faq;
                 }
                 if (targetUser) {
-                    botResponse.content = guide?.content + `\nSuggestions for ${targetUser}`;
-                }
-                else {
-                    botResponse.content = guide?.content;
+                    botResponse.content = `\nSuggestions for ${targetUser}`;
                 }
                 botResponse.embeds = botUtils.createEmbeds(guide?.embeds, availableColors);
                 i.update(botResponse);
@@ -89,3 +86,4 @@ module.exports = {
         });
     }
 };
+exports.default = Realtime;

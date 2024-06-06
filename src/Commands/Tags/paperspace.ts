@@ -1,24 +1,27 @@
 import { PrefixCommand } from '../../Interfaces/Command';
 import { TagResponseSender } from '../../Utils/botUtilities';
 
-const Audio: PrefixCommand = {
-	name: 'audio',
+const Paperspace: PrefixCommand = {
+	name: 'paperspace',
 	category: 'Tags',
-	description: 'Guides on how to isolate audio for making datasets',
-	aliases: ['dataset'],
-	syntax: 'audio [member]',
+	description: 'Paperspace tutorial by LollenApe',
+	aliases: [],
+	syntax: 'paperspace [member]',
 	async run(client, message) {
 		const { botData } = client;
-		if (!botData.embeds.audio.en.embeds) {
+		const content = botData.embeds.paperspace.en;
+
+		if (!content.embeds || !content.buttons) {
 			client.logger.error(`Missing embed data for -${this.name}`);
 			return;
 		}
 
 		const sender = new TagResponseSender(client);
-		sender.setEmbeds(botData.embeds.audio.en.embeds);
+		sender.setEmbeds(content.embeds);
+		sender.setButtons(content.buttons)
 		sender.config(message);
 		await sender.send();
 	},
 };
 
-export default Audio;
+export default Paperspace;

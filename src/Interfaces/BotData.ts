@@ -17,6 +17,11 @@ export interface EmbedData {
     thumbnail?: string;
 }
 
+export interface ButtonData {
+    label: string;
+    url: string;
+}
+
 export interface SelectMenuData {
     content: string;
     embeds: EmbedData[];
@@ -30,8 +35,9 @@ export interface SelectMenuOption {
 }
 
 interface LanguageData {
-    mentionMessage?: string;
     embeds?: EmbedData[];
+    buttons?: ButtonData[];
+    mentionMessage?: string;
     local?: SelectMenuData;
     online?: SelectMenuData;
     faq?: SelectMenuData;

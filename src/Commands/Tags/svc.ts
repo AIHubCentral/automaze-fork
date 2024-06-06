@@ -1,33 +1,30 @@
-const { EmbedBuilder } = require('discord.js');
-const path = require('node:path');
-const delay = require('node:timers/promises').setTimeout;
+import { MessageReplyOptions } from "discord.js";
+import { PrefixCommand } from "../../Interfaces/Command";
+import { delay, getRandomFromArray, getRandomNumber } from "../../Utils/generalUtilities";
 
-module.exports = {
+const SVC: PrefixCommand = {
 	name: 'svc',
 	category: 'Tags',
 	description: 'why do you still use svc',
 	aliases: [],
 	syntax: 'svc',
-	/**
-	 *
-	 * @param {Client} client
-	 * @param {Message} message
-	 * @param {string[]} args
-	 * @param {String} prefix
-	 */
-	run: async (client, message) => {
-		const { botResponses, botUtils } = client;
-		const botResponse = {};
-		const randomNumber = botUtils.getRandomNumber(0, 1000);
-		const mentionedUser = message.mentions.members.first();
+	async run(client, message) {
+		const { botResponses } = client;
+		const botResponse: MessageReplyOptions = {};
 
+		const randomNumber = getRandomNumber(0, 9);
 		if (randomNumber !== 0) {
 			botResponse.content = 'https://cdn.discordapp.com/attachments/1159822429137412177/1194008385113301003/svc.gif?ex=65c13ef6&is=65aec9f6&hm=ce1f57bc316793f641c80f9b359ba9db7d1312af6918b1aed9c8468c74035bac&';
 			return message.reply(botResponse);
 		}
-
-		const selectedMessage = botUtils.getRandomFromArray(botResponses.responses.svc);
+		const selectedMessage = getRandomFromArray(botResponses.responses.svc);
 		botResponse.content = selectedMessage;
+
+		let mentionedUser = null;
+
+		if (message.mentions.members?.size) {
+			mentionedUser = message.mentions.members.first();
+		}
 
 		if (mentionedUser) {
 			botResponse.content = `${mentionedUser} ${selectedMessage}`;
@@ -50,3 +47,5 @@ module.exports = {
 		return message.reply(botResponse);
 	},
 };
+
+export default SVC;

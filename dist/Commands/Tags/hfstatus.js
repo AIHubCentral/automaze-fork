@@ -10,11 +10,7 @@ const HFStatus = {
     async run(client, message) {
         const { botData } = client;
         if (!botData.embeds.hfstatus.en.embeds) {
-            client.logger.error('Missing embed data for -hfstatus');
-            return;
-        }
-        if (!message) {
-            client.logger.error('Message was not available in -hfstatus');
+            client.logger.error(`Missing embed data for -${this.name}`);
             return;
         }
         const sender = new botUtilities_1.TagResponseSender(client);

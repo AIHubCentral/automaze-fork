@@ -8,10 +8,6 @@ const GUI = {
     aliases: [],
     syntax: 'gui',
     async run(client, message) {
-        if (!message) {
-            client.logger.error('Failed to fetch message');
-            return;
-        }
         const { botUtils } = client;
         const botResponse = {};
         const randomNumber = botUtils.getRandomNumber(0, 10);

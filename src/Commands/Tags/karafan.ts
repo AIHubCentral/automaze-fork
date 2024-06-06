@@ -1,24 +1,27 @@
 import { PrefixCommand } from '../../Interfaces/Command';
 import { TagResponseSender } from '../../Utils/botUtilities';
 
-const Audio: PrefixCommand = {
-	name: 'audio',
+const Karafan: PrefixCommand = {
+	name: 'karafan',
 	category: 'Tags',
-	description: 'Guides on how to isolate audio for making datasets',
-	aliases: ['dataset'],
-	syntax: 'audio [member]',
+	description: 'KaraFan audio separation tool',
+	aliases: [],
+	syntax: 'karafan [member]',
 	async run(client, message) {
 		const { botData } = client;
-		if (!botData.embeds.audio.en.embeds) {
+		const content = botData.embeds.karafan.en;
+
+		if (!content.embeds || !content.buttons) {
 			client.logger.error(`Missing embed data for -${this.name}`);
 			return;
 		}
 
 		const sender = new TagResponseSender(client);
-		sender.setEmbeds(botData.embeds.audio.en.embeds);
+		sender.setEmbeds(content.embeds);
+		sender.setButtons(content.buttons)
 		sender.config(message);
 		await sender.send();
 	},
 };
 
-export default Audio;
+export default Karafan;

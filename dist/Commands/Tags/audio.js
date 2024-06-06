@@ -10,11 +10,7 @@ const Audio = {
     async run(client, message) {
         const { botData } = client;
         if (!botData.embeds.audio.en.embeds) {
-            client.logger.error('Missing embed data for -audio');
-            return;
-        }
-        if (!message) {
-            client.logger.error('Message was not available in -audio');
+            client.logger.error(`Missing embed data for -${this.name}`);
             return;
         }
         const sender = new botUtilities_1.TagResponseSender(client);

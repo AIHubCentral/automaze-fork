@@ -9,6 +9,7 @@ import {
 
 import ExtendedClient from '../../Core/extendedClient';
 import { SelectMenuOption } from '../../Interfaces/BotData';
+import { PrefixCommand } from '../../Interfaces/Command';
 
 function createMenuOptions(availableOptions: SelectMenuOption[]): StringSelectMenuOptionBuilder[] {
     const menuOptions: StringSelectMenuOptionBuilder[] = [];
@@ -27,7 +28,7 @@ function createMenuOptions(availableOptions: SelectMenuOption[]): StringSelectMe
     return menuOptions;
 }
 
-module.exports = {
+const Realtime: PrefixCommand = {
     name: 'realtime',
     category: 'Tags',
     description: 'RVC real-time conversion guide',
@@ -98,9 +99,7 @@ module.exports = {
                 }
 
                 if (targetUser) {
-                    botResponse.content = guide?.content + `\nSuggestions for ${targetUser}`;
-                } else {
-                    botResponse.content = guide?.content;
+                    botResponse.content = `\nSuggestions for ${targetUser}`;
                 }
 
                 botResponse.embeds = botUtils.createEmbeds(guide?.embeds, availableColors);
@@ -119,3 +118,5 @@ module.exports = {
         });
     }
 }
+
+export default Realtime;

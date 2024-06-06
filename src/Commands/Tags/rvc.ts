@@ -1,24 +1,26 @@
 import { PrefixCommand } from "../../Interfaces/Command";
 import { TagResponseSender } from "../../Utils/botUtilities";
 
-const Colab: PrefixCommand = {
-	name: 'colab',
+const RVC: PrefixCommand = {
+	name: 'rvc',
 	category: 'Tags',
-	description: 'Links to all working colabs/spaces',
-	aliases: ['colabs', 'disconnected', 'train', 'training', 'spaces', 'hf', 'hugginface'],
-	syntax: 'colab [member]',
+	description: 'Retrieval-based Voice Conversion Documentation (a.k.a How to Make AI Cover)',
+	aliases: ['guide', 'guides', 'docs', 'doc', 'documentation'],
+	syntax: 'rvc [member]',
 	async run(client, message) {
 		const { botData } = client;
-		if (!botData.embeds.colab.en.embeds) {
+		const content = botData.embeds.rvc.en;
+
+		if (!content.embeds) {
 			client.logger.error(`Missing embed data for -${this.name}`);
 			return;
 		}
 
 		const sender = new TagResponseSender(client);
-		sender.setEmbeds(botData.embeds.colab.en.embeds);
+		sender.setEmbeds(content.embeds);
 		sender.config(message);
 		await sender.send();
 	},
 };
 
-export default Colab;
+export default RVC;

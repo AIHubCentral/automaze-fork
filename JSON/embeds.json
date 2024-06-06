@@ -60,25 +60,22 @@
     },
     "local": {
         "en": {
-            "content": {
-                "title": "🖥️ Local stuff",
-                "description": [
-                    "- **🍏 Applio**, by IA Hispano [GitHub](https://github.com/IAHispano/Applio)",
-                    "- **Mangio-RVC-Fork**, by Mangio621 [Huggingface](https://huggingface.co/MangioRVC/Mangio-RVC-Huggingface/tree/main)",
-                    "- **RVC Studio**, by SayanoAI [Huggingface](https://huggingface.co/datasets/SayanoAI/RVC-Studio/tree/main)",
-                    "- **AICoverGen**, by SociallyIneptWeeb [GitHub](https://github.com/SociallyIneptWeeb/AICoverGen)",
-                    "- **Replay**, by Replay Team [Website](https://www.tryreplay.io/)",
-                    "- **Original RVC**, by the RVC-Project team [GitHub](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/releases)",
-                    "- **GPT-SoVITS**, by RVC-Boss [GitHub](https://github.com/RVC-Boss/GPT-SoVITS)"
-                ]
-            },
-            "message": {
-                "title": "Need some help? 🤔",
-                "description": [
-                    "You can find more info on the $guides channel. If you can't find your answer, feel free to ask for help in $helpRVC. Credits to $fazemasta and $antasma for compiling these links."
-                ],
-                "footer": "More commands: -audio, -colabs, -overtrain, -realtime, -rvc, -help"
-            }
+            "embeds": [
+                {
+                    "title": "🖥️ Local stuff",
+                    "description": [
+                        "- **🍏 Applio**, by IA Hispano [GitHub](https://github.com/IAHispano/Applio)",
+                        "- **Mangio-RVC-Fork**, by Mangio621 [Huggingface](https://huggingface.co/MangioRVC/Mangio-RVC-Huggingface/tree/main)",
+                        "- **RVC Studio**, by SayanoAI [Huggingface](https://huggingface.co/datasets/SayanoAI/RVC-Studio/tree/main)",
+                        "- **AICoverGen**, by SociallyIneptWeeb [GitHub](https://github.com/SociallyIneptWeeb/AICoverGen)",
+                        "- **Replay**, by Replay Team [Website](https://www.tryreplay.io/)",
+                        "- **Original RVC**, by the RVC-Project team [GitHub](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/releases)",
+                        "- **GPT-SoVITS**, by RVC-Boss [GitHub](https://github.com/RVC-Boss/GPT-SoVITS)",
+                        "> Credits to $fazemasta and $antasma for compiling these links."
+                    ],
+                    "footer": "More commands: -audio, -colabs, -overtrain, -realtime, -rvc, -help"
+                }
+            ]
         }
     },
     "rvc": {
@@ -140,21 +137,19 @@
                 {
                     "title": "Documentation",
                     "description": [
-                        "### 📚 All-In-One English documentation",
+                        "### <:AIHUB:1181640583966629968> AI HUB Docs",
                         "**https://docs.aihub.wtf/**",
-                        "",
-                        "### Full AI Voice Model Training Guide (Local)",
-                        "Link: **[YouTube](https://youtu.be/Hx2IHzt5tAc?si=c_WpdbAVLF0pNeur)**",
-                        "Credits: **Christopher Villanueva**",
-                        "### Model training with Mainline RVC",
-                        "Link: **[Rentry](https://rentry.co/TrainingVoiceModels)**",
-                        "credits: **Raven** *(ravencutie21)*",
-                        "### AICoverGen Colab Guide",
-                        "Link: **[Google Docs](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub)**",
-                        "Credits: **Eddy (Spanish Helper)**",
-                        "### Create a model with RVC disconnected (colab)",
-                        "Link: **[Google Docs](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk)**",
-                        "Credits: **Angetyde**"
+                        "### 🍏 Applio Docs",
+                        "**https://docs.applio.org/**"
+                    ]
+                },
+                {
+                    "title": "✨ More guides",
+                    "description": [
+                        "- [Full AI Voice Model Training Guide (local)](https://youtu.be/Hx2IHzt5tAc?si=c_WpdbAVLF0pNeur) by **Christopher Villanueva**",
+                        "- [Model training with Mainline RVC](https://rentry.co/TrainingVoiceModels) by **Raven** *(ravencutie21)*",
+                        "- [AICoverGen Colab Guide](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub) by **Eddy (Spanish Helper)**",
+                        "- [Create a model with RVC disconnected (colab)](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk) by **Angetyde**"
                     ]
                 }
             ]
@@ -352,58 +347,66 @@
     },
     "tracker": {
         "en": {
-            "color": "Red",
-            "description": [
-                "## RVC Archive Tracker (outdated)",
-                "https://docs.google.com/spreadsheets/d/1tAUaQrEHYgRsm1Lvrnj14HFHDwJWl0Bd9x0QePewNco/edit#gid=0"
+            "embeds": [
+                {
+                    "color": "Red",
+                    "description": [
+                        "## RVC Archive Tracker (outdated)",
+                        "https://docs.google.com/spreadsheets/d/1tAUaQrEHYgRsm1Lvrnj14HFHDwJWl0Bd9x0QePewNco/edit#gid=0"
+                    ]
+                }
             ]
         }
     },
     "uvr": {
-        "embeds": [
-            {
-                "title": "Ultimate Vocal Remover",
-                "description": [
-                    "One of the best free and open source vocal and instrumental isolation tool."
-                ],
-                "color": "05998c",
-                "image": "https://img1.wsimg.com/isteam/ip/27b42b0b-4e5c-4246-8229-db96bd3bf24e/UVR_v5.6.png/:/",
-                "footer": "Tip: Use /guides UVR to learn how to use it."
-            }
-        ],
-        "buttons": [
-            {
-                "label": "Website",
-                "url": "https://ultimatevocalremover.com/"
-            },
-            {
-                "label": "GitHub",
-                "url": "https://github.com/Anjok07/ultimatevocalremovergui"
-            }
-        ]
+        "en": {
+            "embeds": [
+                {
+                    "title": "Ultimate Vocal Remover",
+                    "description": [
+                        "One of the best free and open source vocal and instrumental isolation tool."
+                    ],
+                    "color": "05998c",
+                    "image": "https://img1.wsimg.com/isteam/ip/27b42b0b-4e5c-4246-8229-db96bd3bf24e/UVR_v5.6.png/:/",
+                    "footer": "Tip: Use /guides UVR to learn how to use it."
+                }
+            ],
+            "buttons": [
+                {
+                    "label": "Website",
+                    "url": "https://ultimatevocalremover.com/"
+                },
+                {
+                    "label": "GitHub",
+                    "url": "https://github.com/Anjok07/ultimatevocalremovergui"
+                }
+            ]
+        }
     },
     "karafan": {
-        "embeds": [
-            {
-                "title": "KaraFan (Improved Version)",
-                "color": "8b1d90",
-                "description": [
-                    "🥇 Awarded to **1st** place by the community as the Best software in the World, for having the less vocal residues in Music track!"
-                ],
-                "image": "https://raw.githubusercontent.com/Captain-FLAM/KaraFan/master/images/KaraFan_Banner.jpg",
-                "footer": "Note: Improved by AI HUB Staff members. Eddy and Leo_Frixi."
-            }
-        ],
-        "buttons": [
-            {
-                "label": "GitHub",
-                "url": "https://github.com/Captain-FLAM/KaraFan"
-            },
-            {
-                "label": "Google Colab",
-                "url": "https://colab.research.google.com/github/Eddycrack864/KaraFan/blob/master/KaraFan_Improved_Version.ipynb"
-            }
-        ]
+        "en": {
+            "embeds": [
+                {
+                    "title": "KaraFan (Improved Version)",
+                    "color": "8b1d90",
+                    "description": [
+                        "🥇 Awarded to **1st** place by the community as the Best software in the World, for having the less vocal residues in Music track!"
+                    ],
+                    "image": "https://raw.githubusercontent.com/Captain-FLAM/KaraFan/master/images/KaraFan_Banner.jpg",
+                    "footer": "Note: Improved by AI HUB Staff members. Eddy and Leo_Frixi."
+                }
+            ],
+            "buttons": [
+                {
+                    "label": "GitHub",
+                    "url": "https://github.com/Captain-FLAM/KaraFan"
+                },
+                {
+                    "label": "Google Colab",
+                    "url": "https://colab.research.google.com/github/Eddycrack864/KaraFan/blob/master/KaraFan_Improved_Version.ipynb"
+                }
+            ]
+        }
     },
     "hfstatus": {
         "en": {
@@ -806,6 +809,41 @@
                         "Link: https://rentry.org/AI_hub_guide_tr",
                         "Credits: **Enes**"
                     ]
+                }
+            ]
+        }
+    },
+    "overtrain": {
+        "en": {
+            "embeds": [
+                {
+                    "title": "Overtraining",
+                    "description": [
+                        "You can detect if a model is overtraining if the **TensorBoard** graph starts to rise and never comes back down. An overtrained model will sound robotic, muffled, and won't be able to articulate words well.",
+                        "\n**Check these resources to learn more about this topic**",
+                        "- [Epochs & TensorBoard](https://docs.aihub.wtf/rvc/resources/epochs--tensorboard/) from <:AIHUB:1181640583966629968> AI HUB Docs",
+                        "- [TensorBoard](https://docs.applio.org/get-started/tensorboard/) from 🍏 Applio Docs",
+                        ""
+                    ]
+                }
+            ]
+        }
+    },
+    "paperspace": {
+        "en": {
+            "embeds": [
+                {
+                    "title": "RVC v2 Tutorial for Paperspace",
+                    "description": [
+                        "💡 Click on the button below to open the guide."
+                    ],
+                    "footer": "Credits: LollenApe"
+                }
+            ],
+            "buttons": [
+                {
+                    "label": "Google Docs",
+                    "url": "https://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing"
                 }
             ]
         }

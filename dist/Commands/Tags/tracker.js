@@ -1,22 +1,23 @@
 "use strict";
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const botUtilities_1 = require("../../Utils/botUtilities");
+const Tracker = {
     name: 'tracker',
     category: 'Tags',
     description: 'RVC real time tracker in spreadsheet',
     aliases: ['ss', 'spreadsheet'],
     syntax: `tracker [member]`,
-    /**
-     *
-     * @param {Client} client
-     * @param {Message} message
-     * @param {string[]} args
-     * @param {String} prefix
-     */
-    run: (client, message, args, prefix) => {
-        const embed = client.botUtils.createEmbed(client.botData.embeds.tracker.en);
-        if (message.mentions.members.first()) {
-            return message.channel.send({ content: `*Tag suggestion for ${message.mentions.members.first()}*`, embeds: [embed] });
+    async run(client, message) {
+        const { botData } = client;
+        const content = botData.embeds.tracker.en;
+        if (!content.embeds) {
+            client.logger.error(`Missing embed data for -${this.name}`);
+            return;
         }
-        message.channel.send({ embeds: [embed] });
+        const sender = new botUtilities_1.TagResponseSender(client);
+        sender.setEmbeds(content.embeds);
+        sender.config(message);
+        await sender.send();
     }
 };
+exports.default = Tracker;

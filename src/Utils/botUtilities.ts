@@ -1,7 +1,7 @@
-import { ColorResolvable, EmbedBuilder, Message, TextBasedChannel } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ColorResolvable, EmbedBuilder, Message, TextBasedChannel } from "discord.js";
 import IBotConfigs from "../Interfaces/BotConfigs";
 import ExtendedClient from "../Core/extendedClient";
-import { EmbedData } from "../Interfaces/BotData";
+import { ButtonData, EmbedData } from "../Interfaces/BotData";
 import { createEmbeds } from "./discordUtilities";
 
 export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
@@ -19,20 +19,39 @@ export class TagResponseSender {
 
     client: ExtendedClient;
     embeds: EmbedBuilder[];
+    buttons: ButtonBuilder[];
+    actionRow: ActionRowBuilder | null;
     channel: TextBasedChannel | null;
     message: Message | null;
     botResponse: any;
+    sendAsReply: boolean;
 
     constructor(client: ExtendedClient) {
         this.client = client;
         this.embeds = [];
+        this.buttons = [];
+        this.actionRow = null;
         this.channel = null;
         this.message = null;
         this.botResponse = {};
+        this.sendAsReply = true;
     }
 
     setEmbeds(embeds: EmbedData[]): void {
         this.embeds = createEmbeds(embeds, getThemeColors(this.client.botConfigs));
+    }
+
+    setButtons(buttonsData: ButtonData[]): void {
+        if (!this.actionRow) {
+            this.actionRow = new ActionRowBuilder();
+        }
+
+        const buttons = buttonsData.map(btnData => {
+            return new ButtonBuilder().setLabel(btnData.label).setURL(btnData.url).setStyle(ButtonStyle.Link);
+        });
+
+        this.actionRow.addComponents(buttons);
+        this.botResponse.components = [this.actionRow];
     }
 
     config(message: Message): void {
@@ -56,7 +75,12 @@ export class TagResponseSender {
             this.botResponse.content = `Suggestions for ${mentionedUser}`;
         }
 
-        await this.channel.send(this.botResponse);
+        if (this.sendAsReply) {
+            await this.message.reply(this.botResponse);
+        }
+        else {
+            await this.channel.send(this.botResponse);
+        }
     };
 
     /*

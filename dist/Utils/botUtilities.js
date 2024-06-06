@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TagResponseSender = exports.getThemeColors = void 0;
+const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
 function getThemeColors(botConfigs) {
     const colors = [
@@ -15,12 +16,25 @@ class TagResponseSender {
     constructor(client) {
         this.client = client;
         this.embeds = [];
+        this.buttons = [];
+        this.actionRow = null;
         this.channel = null;
         this.message = null;
         this.botResponse = {};
+        this.sendAsReply = true;
     }
     setEmbeds(embeds) {
         this.embeds = (0, discordUtilities_1.createEmbeds)(embeds, getThemeColors(this.client.botConfigs));
+    }
+    setButtons(buttonsData) {
+        if (!this.actionRow) {
+            this.actionRow = new discord_js_1.ActionRowBuilder();
+        }
+        const buttons = buttonsData.map(btnData => {
+            return new discord_js_1.ButtonBuilder().setLabel(btnData.label).setURL(btnData.url).setStyle(discord_js_1.ButtonStyle.Link);
+        });
+        this.actionRow.addComponents(buttons);
+        this.botResponse.components = [this.actionRow];
     }
     config(message) {
         this.message = message;
@@ -38,7 +52,12 @@ class TagResponseSender {
         if (mentionedUser) {
             this.botResponse.content = `Suggestions for ${mentionedUser}`;
         }
-        await this.channel.send(this.botResponse);
+        if (this.sendAsReply) {
+            await this.message.reply(this.botResponse);
+        }
+        else {
+            await this.channel.send(this.botResponse);
+        }
     }
     ;
     /*

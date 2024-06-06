@@ -1,22 +1,24 @@
 "use strict";
-const { BotResponseBuilder, TagResponseSender } = require('../../utils');
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const botUtilities_1 = require("../../Utils/botUtilities");
+const Paperspace = {
     name: 'paperspace',
     category: 'Tags',
     description: 'Paperspace tutorial by LollenApe',
     aliases: [],
     syntax: 'paperspace [member]',
-    run: async (client, message) => {
-        const { botConfigs, botData } = client;
-        const selectedGuide = botData.embeds.guides.paperspace['en'];
-        const botResponse = new BotResponseBuilder();
-        botResponse.addEmbeds(selectedGuide.embeds, botConfigs);
-        botResponse.addButtons(selectedGuide.buttons);
-        const sender = new TagResponseSender();
-        sender.setConfigs(botConfigs);
-        sender.setTargetUser(message.mentions.members.first());
-        sender.setResponse(botResponse);
-        sender.setTargetMessage(message);
+    async run(client, message) {
+        const { botData } = client;
+        const content = botData.embeds.paperspace.en;
+        if (!content.embeds || !content.buttons) {
+            client.logger.error(`Missing embed data for -${this.name}`);
+            return;
+        }
+        const sender = new botUtilities_1.TagResponseSender(client);
+        sender.setEmbeds(content.embeds);
+        sender.setButtons(content.buttons);
+        sender.config(message);
         await sender.send();
     },
 };
+exports.default = Paperspace;

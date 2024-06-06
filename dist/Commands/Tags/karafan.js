@@ -1,24 +1,24 @@
 "use strict";
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const botUtilities_1 = require("../../Utils/botUtilities");
+const Karafan = {
     name: 'karafan',
     category: 'Tags',
     description: 'KaraFan audio separation tool',
     aliases: [],
     syntax: 'karafan [member]',
-    run: (client, message) => {
-        const { botData, botUtils } = client;
-        const mentionedUser = message.mentions.members.first();
-        const botResponse = {};
-        const buttons = botData.embeds.karafan.buttons.map(btnData => {
-            return new ButtonBuilder().setLabel(btnData.label).setURL(btnData.url).setStyle(ButtonStyle.Link);
-        });
-        botResponse.embeds = [botUtils.createEmbed(botData.embeds.karafan.embeds[0])];
-        botResponse.components = [new ActionRowBuilder().addComponents(buttons)];
-        if (mentionedUser) {
-            botResponse.content = `*Suggestion for ${mentionedUser}*`;
-            return message.channel.send(botResponse);
+    async run(client, message) {
+        const { botData } = client;
+        const content = botData.embeds.karafan.en;
+        if (!content.embeds || !content.buttons) {
+            client.logger.error(`Missing embed data for -${this.name}`);
+            return;
         }
-        message.reply(botResponse);
+        const sender = new botUtilities_1.TagResponseSender(client);
+        sender.setEmbeds(content.embeds);
+        sender.setButtons(content.buttons);
+        sender.config(message);
+        await sender.send();
     },
 };
+exports.default = Karafan;
