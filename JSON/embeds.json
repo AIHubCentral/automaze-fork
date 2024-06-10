@@ -34,16 +34,24 @@
                     "description": [
                         "- **Applio**, by IA Hispano [Google Colab](https://colab.research.google.com/github/iahispano/applio/blob/master/assets/Applio.ipynb)",
                         "- **RVC Disconnected**, by Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
+                        "- **RVC Mainline**, by Hina [Google Colab](https://colab.research.google.com/github/hinabl/RVC-Online/blob/main/Mainline_Colab_Full.ipynb)",
                         "- **AICoverGen-WebUI**, *modded by Hina* [Google Colab](https://colab.research.google.com/github/hinabl/AICoverGen-Colab/blob/main/Hina_Mod_AICoverGen_colab.ipynb)",
                         "- **AICoverGen-NoWebUI [English]**, by Ardha, *fixed by Eddy, Hina and Gdr* [Google Colab](https://colab.research.google.com/drive/1u1brjK8IZt647UsbZuGYfW29oFM2I4tk?usp=sharing)",
                         "- **AICoverGen-NoWebUI [Spanish]**, *credits to Eddy, Hina and Gdr for translating and fixing* [Google Colab](https://colab.research.google.com/drive/1qezaBvCn4eSG1U2L4a64tEHTynbIu8eN?usp=sharing)",
                         "- **Ilaria RVC**, by thestingerx [Google Colab](https://colab.research.google.com/drive/1mHKTGH5e3SAyDSBss1KtiYRbDdQzwSMs)",
                         "- **EasyGUI**, by rejects [Google Colab](https://colab.research.google.com/drive/1r4IRL0UA7JEoZ0ZK8PKfMyTIBHKpyhcw)",
-                        "- 🆕 **UVR5 NO UI for Google Colab**, by Eddy [Google Colab](https://colab.research.google.com/github/Eddycrack864/UVR5-NO-UI/blob/main/UVR5_NO_UI.ipynb)\n> [How to use?](https://github.com/Eddycrack864/UVR5-NO-UI#how-to-use)"
-                    ]
-                },
+                        "- **UVR5 NO UI for Google Colab**, by Eddy [Google Colab](https://colab.research.google.com/github/Eddycrack864/UVR5-NO-UI/blob/main/UVR5_NO_UI.ipynb)"
+                    ],
+                    "footer": "More commands: -audio, -hf, -local, -kaggle, -overtraining, -realtime, -rvc, -help"
+                }
+            ]
+        }
+    },
+    "hf": {
+        "en": {
+            "embeds": [
                 {
-                    "title": "🤗 Hugginface Spaces",
+                    "title": "<:huggingface:1179800228946268270> Hugginface Spaces",
                     "color": "ffcc4d",
                     "description": [
                         "- **Applio**, by IA Hispano [Huggingface Spaces](https://huggingface.co/spaces/IAHispano/Applio)",
@@ -53,7 +61,21 @@
                         "- **Advanced RVC Inference**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/Advanced-RVC-Inference)",
                         "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)"
                     ],
-                    "footer": "More commands: -audio, -local, -overtrain, -realtime, -rvc, -help"
+                    "footer": "More commands: -audio, -colabs, -kaggle, -local, -overtraining, -realtime, -rvc, -help"
+                }
+            ]
+        }
+    },
+    "kaggle": {
+        "en": {
+            "embeds": [
+                {
+                    "title": "Kaggle Notebooks",
+                    "description": [
+                        "- [🍏 Applio RVC](https://www.kaggle.com/code/iahispano/applio-rvc-fork) by **IA Hispano**",
+                        "- [✨ RVC Mainline](https://www.kaggle.com/code/hinabl/mainline) by [Hina](https://linktr.ee/_hina__)"
+                    ],
+                    "footer": "More commands: -colabs, -hf, -local, -rvc, -help"
                 }
             ]
         }
