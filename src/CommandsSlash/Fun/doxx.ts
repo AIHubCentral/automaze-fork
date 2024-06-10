@@ -1,9 +1,11 @@
 /* eslint-disable indent */
 const Chance = require('chance');
 const chance = new Chance;
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+import { SlashCommandBuilder, EmbedBuilder, ColorResolvable } from 'discord.js';
+import { SlashCommand } from '../../Interfaces/Command';
+import ExtendedClient from '../../Core/extendedClient';
 
-module.exports = {
+const Doxx: SlashCommand = {
 	category: 'Fun',
 	cooldown: 60,
 	type: 'slash',
@@ -17,18 +19,30 @@ module.exports = {
 				.setRequired(true),
 		),
 	async execute(interaction) {
-		const targetUser = interaction.options.getUser('user');
+		const client = interaction.client as ExtendedClient;
 
-		let guildMember = interaction.guild.members.cache.get(targetUser.id);
+		const targetUser = interaction.options.getUser('user');
+		const guild = interaction.guild;
+		if (!targetUser || !guild) {
+			client.logger.error('Failed to retrieve user or guild', {
+				more: {
+					guild: guild,
+					targetUser: targetUser,
+				}
+			});
+			return;
+		}
+
+		let guildMember = guild.members.cache.get(targetUser.id);
 
 		if (!guildMember) {
-			console.log('Guild member not found in cache...Fetching');
-			guildMember = interaction.guild.members.fetch(targetUser.id);
+			client.logger.debug(`Guild member ${targetUser.id} not found in cache...Fetching`);
+			guildMember = await guild.members.fetch(targetUser.id);
 		}
 
 		const bot = interaction.client.user;
 
-		const [ip, ipv6, mac, address] = interaction.client.doxx.ensure(
+		const [ip, ipv6, mac, address] = client.doxx.ensure(
 			targetUser.id, () => [chance.ip(), chance.ipv6(), chance.mac_address(), chance.address()],
 		);
 
@@ -74,9 +88,11 @@ module.exports = {
 		const foundEmbed = new EmbedBuilder()
 			.setTitle(doxxData.title)
 			.setDescription(embedDescription)
-			.setColor(doxxData.embedColor);
+			.setColor(doxxData.embedColor as ColorResolvable);
 		setTimeout(async () => {
 			await reply.edit({ embeds: [foundEmbed] });
 		}, doxxData.duration);
 	},
 };
+
+export default Doxx;

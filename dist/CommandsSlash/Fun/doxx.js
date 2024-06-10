@@ -1,13 +1,14 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable indent */
 const Chance = require('chance');
 const chance = new Chance;
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-module.exports = {
+const discord_js_1 = require("discord.js");
+const Doxx = {
     category: 'Fun',
     cooldown: 60,
     type: 'slash',
-    data: new SlashCommandBuilder()
+    data: new discord_js_1.SlashCommandBuilder()
         .setName('doxx')
         .setDescription('NOT ACTUAL DOXXING. creates random ip and house address')
         .addUserOption(option => option
@@ -15,15 +16,26 @@ module.exports = {
         .setDescription('User to doxx')
         .setRequired(true)),
     async execute(interaction) {
+        const client = interaction.client;
         const targetUser = interaction.options.getUser('user');
-        let guildMember = interaction.guild.members.cache.get(targetUser.id);
+        const guild = interaction.guild;
+        if (!targetUser || !guild) {
+            client.logger.error('Failed to retrieve user or guild', {
+                more: {
+                    guild: guild,
+                    targetUser: targetUser,
+                }
+            });
+            return;
+        }
+        let guildMember = guild.members.cache.get(targetUser.id);
         if (!guildMember) {
-            console.log('Guild member not found in cache...Fetching');
-            guildMember = interaction.guild.members.fetch(targetUser.id);
+            client.logger.debug(`Guild member ${targetUser.id} not found in cache...Fetching`);
+            guildMember = await guild.members.fetch(targetUser.id);
         }
         const bot = interaction.client.user;
-        const [ip, ipv6, mac, address] = interaction.client.doxx.ensure(targetUser.id, () => [chance.ip(), chance.ipv6(), chance.mac_address(), chance.address()]);
-        const fetchingEmbed = new EmbedBuilder()
+        const [ip, ipv6, mac, address] = client.doxx.ensure(targetUser.id, () => [chance.ip(), chance.ipv6(), chance.mac_address(), chance.address()]);
+        const fetchingEmbed = new discord_js_1.EmbedBuilder()
             .setTitle('⏳ Fetching...')
             .setColor('Yellow');
         const reply = await interaction.reply({ embeds: [fetchingEmbed] });
@@ -57,7 +69,7 @@ module.exports = {
             `**Address (not exact)**: ${doxxData.address}`,
             `\nUsed: \`/doxx\` ${targetUser}`,
         ].join('\n');
-        const foundEmbed = new EmbedBuilder()
+        const foundEmbed = new discord_js_1.EmbedBuilder()
             .setTitle(doxxData.title)
             .setDescription(embedDescription)
             .setColor(doxxData.embedColor);
@@ -66,3 +78,4 @@ module.exports = {
         }, doxxData.duration);
     },
 };
+exports.default = Doxx;
