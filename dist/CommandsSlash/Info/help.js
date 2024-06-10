@@ -1,12 +1,15 @@
 "use strict";
-const { SlashCommandBuilder } = require('discord.js');
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const Help = {
     category: 'Info',
     type: 'slash',
-    data: new SlashCommandBuilder()
+    data: new discord_js_1.SlashCommandBuilder()
         .setName('help')
         .setDescription('Displays info about Automaze commands.'),
     async execute(interaction) {
-        await interaction.reply({ content: interaction.client.botResponses.responses.help.join('\n'), ephemeral: true });
+        const client = interaction.client;
+        await interaction.reply({ content: client.botResponses.responses.help.join('\n'), ephemeral: true });
     }
 };
+exports.default = Help;
