@@ -5,7 +5,7 @@ const Upload = {
     name: 'upload',
     category: 'Tags',
     description: 'How to upload to `huggingface.co`',
-    aliases: ['huggingface', 'hf'],
+    aliases: [],
     syntax: 'upload [member]',
     async run(client, message) {
         const { botData } = client;
