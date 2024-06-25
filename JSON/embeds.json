@@ -54,8 +54,8 @@
                     "title": "<:huggingface:1179800228946268270> Hugginface Spaces",
                     "color": "ffcc4d",
                     "description": [
-                        "- 🆕 **Ilaria RVC Zero**, by thestingerx [Huggingface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
-                        "- 🆕 **RVC⚡ZERO**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/rvc_zero)",
+                        "- **Ilaria RVC Zero**, by thestingerx [Huggingface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
+                        "- **RVC⚡ZERO**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/rvc_zero)",
                         "- **Applio**, by IA Hispano [Huggingface Spaces](https://huggingface.co/spaces/IAHispano/Applio)",
                         "- **AICoverGen**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
                         "- **Advanced RVC Inference**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/Advanced-RVC-Inference)",
@@ -168,8 +168,8 @@
                 {
                     "title": "✨ More guides",
                     "description": [
+                        "- 🆕 [How to use RVC Mainline Colab](https://rentry.co/RVC-Mainline-Colab) by **Cauthess**",
                         "- [Full AI Voice Model Training Guide (local)](https://youtu.be/Hx2IHzt5tAc?si=c_WpdbAVLF0pNeur) by **Christopher Villanueva**",
-                        "- [Model training with Mainline RVC](https://rentry.co/TrainingVoiceModels) by **Raven** *(ravencutie21)*",
                         "- [AICoverGen Colab Guide](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub) by **Eddy (Spanish Helper)**",
                         "- [Create a model with RVC disconnected (colab)](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk) by **Angetyde**"
                     ]
