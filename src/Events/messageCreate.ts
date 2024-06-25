@@ -40,7 +40,7 @@ async function handleBotMentioned(prefix: string, message: Message, client: Exte
         description: [],
     };
 
-    embedData.description?.push(`\n- My prefix in this server is \`${prefix}\` (customizable with \`${prefix}prefix\`)`);
+    embedData.description?.push(`\n- My prefix in this server is \`${prefix}\``);
     embedData.description?.push('- Interested in how I\'m built? [I\'m actually open source!](https://github.com/DeprecatedTable/automaze)');
     embedData.description?.push('- Forgot a specific command? Try `/help` or `-help`');
 
