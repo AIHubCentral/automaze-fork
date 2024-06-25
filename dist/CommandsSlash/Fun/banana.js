@@ -1,30 +1,36 @@
 "use strict";
-const { SlashCommandBuilder } = require("discord.js");
-const { banan } = require('../../utils.js');
-module.exports = {
-    category: `Fun`,
-    type: `slash`,
-    data: new SlashCommandBuilder()
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const botUtilities_js_1 = require("../../Utils/botUtilities.js");
+const Banana = {
+    category: 'Fun',
+    type: 'slash',
+    data: new discord_js_1.SlashCommandBuilder()
         .setName('banana')
         .setDescription('BANAN SOMEOME!!!!11!111!11')
         .addUserOption(option => option.setName('user').setDescription('User to banan')),
     async execute(interaction) {
+        const client = interaction.client;
         const targetUser = interaction.options.getUser('user');
         if (targetUser === null) {
-            console.log('NuLLLL');
-            interaction.client.logger.debug('No user specified for banan', {
+            client.logger.debug('No user specified for banan', {
                 more: {
-                    guildId: interaction.guild.id,
-                    channelId: interaction.channel.id,
+                    guildId: interaction.guildId,
+                    channelId: interaction.channelId,
                 }
             });
             return interaction.reply({ content: 'You forgot to select the user!', ephemeral: true });
         }
-        let guildMember = interaction.guild.members.cache.get(targetUser.id);
-        if (guildMember === null) {
-            interaction.client.debug('Guild member not found in cache...Fetching ' + targetUser.id);
-            guildMember = interaction.guild.members.fetch(targetUser.id);
+        let guildMember = interaction.guild?.members.cache.get(targetUser.id);
+        if (!guildMember) {
+            client.logger.debug(`Guild member ${targetUser.id} not found in cache...Fetching`);
+            guildMember = await interaction.guild?.members.fetch(targetUser.id);
         }
-        await banan(interaction, targetUser, guildMember);
+        if (!guildMember) {
+            client.logger.debug(`Failed to get guild member ${targetUser.id}`);
+            return interaction.reply({ content: "Failed to banan user.", ephemeral: true });
+        }
+        await (0, botUtilities_js_1.banan)(interaction, targetUser, guildMember);
     }
 };
+exports.default = Banana;

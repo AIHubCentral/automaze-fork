@@ -37,7 +37,7 @@ const TopBanana: SlashCommand = {
 		let rankCounter = 1;
 		for (const entry of users) {
 			const user = entry;
-			const userDisplay = user.display_name ?? user.username;
+			const userDisplay = user.displayName ?? user.userName;
 			const userProfileLink = 'https://discordapp.com/users/' + user.id;
 			embedData.description?.push(`${rankCounter}. [${userDisplay}](${userProfileLink}) — ${user.bananas}`);
 			rankCounter++;

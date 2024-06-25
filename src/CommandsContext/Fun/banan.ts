@@ -2,7 +2,7 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder, UserContextMenuCommandInteraction } from "discord.js";
 import { ContextCommand } from "../../Interfaces/Command";
 import ExtendedClient from "../../Core/extendedClient";
-const { banan } = require('../../utils.js');
+import { banan } from "../../Utils/botUtilities";
 
 const Banan: ContextCommand = {
     category: 'Fun',
@@ -19,6 +19,11 @@ const Banan: ContextCommand = {
         if (!guildMember) {
             client.logger.debug(`Guild member ${targetUser.id} not found in cache...Fetching`);
             guildMember = await interaction.guild?.members.fetch(targetUser.id);
+        }
+
+        if (!guildMember) {
+            client.logger.debug(`Failed to get guild member ${targetUser.id}`);
+            return interaction.reply({ content: "Failed to banan user.", ephemeral: true });
         }
 
         await banan(interaction, targetUser, guildMember);

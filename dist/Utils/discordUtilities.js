@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAvailableColors = exports.createEmbeds = exports.createEmbed = void 0;
+exports.getChannelById = exports.getGuildById = exports.getAvailableColors = exports.createEmbeds = exports.createEmbed = void 0;
 const discord_js_1 = require("discord.js");
 function createEmbed(data, color) {
     /**
@@ -54,3 +54,22 @@ function getAvailableColors(configs) {
     return Object.values(configs.colors.theme);
 }
 exports.getAvailableColors = getAvailableColors;
+async function getGuildById(guildId, client) {
+    /* attempts to get a guid from cache, fetch if not found */
+    let guild = client.guilds.cache.get(guildId);
+    if (!guild) {
+        client.logger.debug(`Guild ${guildId} not found in cache...Fetching`);
+        guild = await client.guilds.fetch(guildId);
+    }
+    return guild;
+}
+exports.getGuildById = getGuildById;
+async function getChannelById(channelId, guild) {
+    /* attempts to get a channel from cache, fetch if not found */
+    let channel = guild.channels.cache.get(channelId) ?? null;
+    if (!channel) {
+        channel = await guild.channels.fetch(channelId);
+    }
+    return channel;
+}
+exports.getChannelById = getChannelById;

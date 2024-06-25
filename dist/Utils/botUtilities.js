@@ -1,8 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TagResponseSender = exports.getThemeColors = void 0;
+exports.banan = exports.TagResponseSender = exports.getThemeColors = void 0;
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
+const userService_1 = __importDefault(require("../Services/userService"));
 function getThemeColors(botConfigs) {
     const colors = [
         botConfigs.colors.theme.primary,
@@ -160,4 +164,99 @@ build() {
     return response;
 }
 }
-*/ 
+*/
+async function banan(interaction, targetUser, guildMember) {
+    const user = interaction.user;
+    const client = interaction.client;
+    client.logger.debug("executing banan", {
+        "more": {
+            guildId: interaction.guildId,
+            channelId: interaction.channelId,
+        }
+    });
+    // check if user is on cooldown
+    if (Date.now() <= client.cooldowns.banana.get(user.id)) {
+        return interaction.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${client.cooldowns.banana.get(interaction.user.id) - Date.now()} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`);
+    }
+    let member = targetUser;
+    const botResponses = client.botResponses.responses.banana;
+    let selectedResponse = null;
+    // if its true automaze banan the user instead
+    let botRevenge = false;
+    if (!member)
+        return interaction.reply(botResponses.targetNone);
+    if (member.bot) {
+        const responses = botResponses.targetBot;
+        selectedResponse = responses[Math.floor(Math.random() * responses.length)];
+        if (!selectedResponse.startsWith('NO,')) {
+            return interaction.reply(selectedResponse);
+        }
+        // change the banan target to the user who tried to banan a bot
+        member = interaction.user;
+        botRevenge = true;
+    }
+    /* check if user exists in database, otherwise add it */
+    const userService = new userService_1.default(client.knexInstance);
+    let userModel = await userService.getById(member.id);
+    if (!userModel) {
+        client.logger.debug(`User ${member.id} not found in database, creating...`);
+        const newUser = {
+            id: `${member.id}`,
+            userName: member.username,
+            displayName: guildMember.displayName ?? guildMember.nickname ?? member.username,
+            bananas: 0,
+        };
+        userModel = await userService.add(newUser);
+        client.logger.debug(`${userModel.userName} (${userModel.id}) added to database`);
+    }
+    // check if display name changed
+    if (guildMember.displayName != null && guildMember.displayName !== userModel.displayName) {
+        await userService.update(member.id, { display_name: guildMember.nickname ?? member.displayName });
+        client.logger.debug(`Added ${guildMember.nickname ?? member.displayName} display name for ${member.username}`);
+    }
+    /* increment banana count */
+    userModel = await userService.incrementBananaCount(member.id);
+    if (!userModel) {
+        client.logger.error(`Failed to update ${member.username} banan count`);
+        return interaction.reply({ content: 'Failed to banan user.', ephemeral: true });
+    }
+    const embedData = JSON.parse(JSON.stringify(client.botData.embeds.banana));
+    embedData.title = embedData.title.replace('$username', guildMember.nickname ?? member.displayName ?? member.username);
+    embedData.description[0] = embedData.description[0].replaceAll('$member', member);
+    embedData.footer = embedData.footer.replace('$quantity', userModel.bananas);
+    if (userModel.bananas > 1) {
+        embedData.footer = embedData.footer.replace('TIME', 'TIMES');
+    }
+    const embed = client.botUtils.createEmbed(embedData, 'Yellow');
+    // cooldown expires in 1 minute
+    client.cooldowns.banana.set(interaction.user.id, Date.now() + (1 * 60 * 1000));
+    if (botRevenge) {
+        await interaction.reply(selectedResponse);
+        return await interaction.followUp({ embeds: [embed] });
+    }
+    await interaction.reply({ embeds: [embed] });
+    client.logger.debug('Banan', {
+        more: {
+            targetUserId: targetUser.id
+        },
+    });
+    if (client.botConfigs.sendLogs && (client.botConfigs.debugGuild.id && client.botConfigs.debugGuild.channelId)) {
+        const embedDescription = [
+            `- **Guild**: ${interaction.guildId} (${interaction.guild?.name})`,
+            `- **Channel**: ${interaction.channelId}`,
+        ];
+        const debugEmbed = new discord_js_1.EmbedBuilder()
+            .setTitle('Banan')
+            .setColor('Yellow')
+            .setDescription(embedDescription.join('\n'));
+        const guild = await (0, discordUtilities_1.getGuildById)(client.botConfigs.debugGuild.id, client);
+        if (!guild)
+            return;
+        let channel = await (0, discordUtilities_1.getChannelById)(client.botConfigs.debugGuild.channelId, guild);
+        if (!channel)
+            return;
+        channel = channel;
+        await channel.send({ embeds: [debugEmbed] });
+    }
+}
+exports.banan = banan;

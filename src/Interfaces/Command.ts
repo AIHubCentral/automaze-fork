@@ -6,14 +6,14 @@ export interface SlashCommand {
     type: string;
     data: any;
     cooldown?: number,
-    execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
+    execute: (interaction: ChatInputCommandInteraction) => Promise<any>;
 }
 
 export interface ContextCommand {
     category: string;
     type: string;
     data: ContextMenuCommandBuilder;
-    execute: (interaction: UserContextMenuCommandInteraction) => Promise<InteractionResponse<boolean> | undefined | void>;
+    execute: (interaction: UserContextMenuCommandInteraction) => Promise<any>;
 }
 
 export interface PrefixCommand {

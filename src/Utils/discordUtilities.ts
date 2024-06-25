@@ -1,6 +1,7 @@
-import { ColorResolvable, Colors, EmbedBuilder } from "discord.js";
+import { ColorResolvable, Colors, EmbedBuilder, Guild, GuildBasedChannel } from "discord.js";
 import { EmbedData } from "../Interfaces/BotData";
 import IBotConfigs from "../Interfaces/BotConfigs";
+import ExtendedClient from "../Core/extendedClient";
 
 export function createEmbed(data: EmbedData, color?: ColorResolvable): EmbedBuilder {
     /**
@@ -62,4 +63,29 @@ export function createEmbeds(contents: EmbedData[], colors: ColorResolvable[]): 
 
 export function getAvailableColors(configs: IBotConfigs): ColorResolvable[] {
     return Object.values(configs.colors.theme);
+}
+
+export async function getGuildById(guildId: string, client: ExtendedClient): Promise<Guild | undefined> {
+    /* attempts to get a guid from cache, fetch if not found */
+
+    let guild = client.guilds.cache.get(guildId);
+
+    if (!guild) {
+        client.logger.debug(`Guild ${guildId} not found in cache...Fetching`);
+        guild = await client.guilds.fetch(guildId);
+    }
+
+    return guild;
+}
+
+export async function getChannelById(channelId: string, guild: Guild): Promise<GuildBasedChannel | null> {
+    /* attempts to get a channel from cache, fetch if not found */
+
+    let channel = guild.channels.cache.get(channelId) ?? null;
+
+    if (!channel) {
+        channel = await guild.channels.fetch(channelId);
+    }
+
+    return channel;
 }
