@@ -1,10 +1,11 @@
 "use strict";
-const { SlashCommandBuilder, AttachmentBuilder, ChannelType } = require('discord.js');
-const { getChannelById } = require('../../utils.js');
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const discordUtilities_1 = require("../../Utils/discordUtilities");
+const Debug = {
     category: 'Utilities',
     type: 'slash',
-    data: new SlashCommandBuilder()
+    data: new discord_js_1.SlashCommandBuilder()
         .setName('debug')
         .setDescription('Bot debug')
         .addStringOption(option => option
@@ -19,79 +20,58 @@ module.exports = {
         .setName('guild_id')
         .setDescription('Guild ID')),
     async execute(interaction) {
-        // usable on dev server only
-        const { client } = interaction;
+        const client = interaction.client;
         const userId = interaction.user.id;
-        const botResponse = { content: 'You are not allowed to use this command.' };
-        await interaction.deferReply({ ephemeral: true });
-        if (!client.botAdminIds.includes(userId))
-            return interaction.editReply(botResponse);
-        botResponse.content = [];
+        if (!client.botAdminIds.includes(userId)) {
+            return interaction.reply("You're not allowed to use this command.");
+        }
         const selectedOption = interaction.options.getString('options');
         const guildId = interaction.options.getString('guild_id') ?? client.discordIDs.Guild;
-        let guild = client.guilds.cache.get(guildId);
+        const botResponse = {};
+        const embedContent = [];
+        await interaction.deferReply({ ephemeral: true });
+        const guild = await (0, discordUtilities_1.getGuildById)(guildId, client);
         if (!guild) {
-            console.log('Guild not found in cache...Fetching');
-            guild = await client.guilds.fetch(guildId);
+            return interaction.editReply(`Failed to fetch guild: ${guildId}`);
         }
-        botResponse.content.push('**Guild:**');
-        botResponse.content.push(`Name: ${guild.name}`);
+        embedContent.push((0, discord_js_1.bold)('Guild:'));
+        embedContent.push(`Name: ${guild.name}`);
         if (selectedOption === 'emojis') {
-            const emojiManager = guild.emojis;
-            const emojiData = [];
-            botResponse.content.push('\n**Guild Emojis**:');
-            emojiManager.cache.forEach(emoji => {
-                emojiData.push(emoji);
-            });
-            const buffer = Buffer.from(JSON.stringify(emojiData, null, 4), 'utf-8');
-            const attachment = new AttachmentBuilder(buffer, { name: 'emojis.json' });
-            botResponse.content = ['Getting emojis...'];
+            const guildEmojis = Array.from(guild.emojis.cache.values());
+            embedContent.push(`\n${(0, discord_js_1.bold)('Guild Emojis')}:`);
+            const buffer = Buffer.from(JSON.stringify(guildEmojis, null, 4), 'utf-8');
+            const attachment = new discord_js_1.AttachmentBuilder(buffer, { name: 'emojis.json' });
             botResponse.files = [attachment];
         }
         else if (selectedOption === 'stickers') {
-            const stickerManager = guild.stickers;
-            const stickerData = [];
-            botResponse.content.push('\n**Guild Stickers**:');
-            stickerManager.cache.forEach(sticker => {
-                stickerData.push(sticker);
-            });
-            const buffer = Buffer.from(JSON.stringify(stickerData, null, 4), 'utf-8');
-            const attachment = new AttachmentBuilder(buffer, { name: 'stickers.json' });
-            botResponse.content = ['Getting stickers...'];
+            const guildStickers = Array.from(guild.stickers.cache.values());
+            embedContent.push(`\n${(0, discord_js_1.bold)('Guild Stickers')}:`);
+            const buffer = Buffer.from(JSON.stringify(guildStickers, null, 4), 'utf-8');
+            const attachment = new discord_js_1.AttachmentBuilder(buffer, { name: 'stickers.json' });
             botResponse.files = [attachment];
         }
         else if (selectedOption === 'channel_info') {
-            const channelId = interaction.options.getString('channel_id');
-            const channel = await getChannelById(channelId, guild);
-            botResponse.content.push('\n**Channel:**');
-            botResponse.content.push(`> Name: ${channel.name}`);
-            botResponse.content.push(`> ID: ${channelId}`);
-            botResponse.content.push(`> Type: ${channel.type}`);
-            const isThread = channel.type === ChannelType.PublicThread;
-            botResponse.content.push(`> Is thread: ${isThread}`);
+            const channelId = interaction.options.getString('channel_id') ?? '';
+            const channel = await (0, discordUtilities_1.getChannelById)(channelId, guild);
+            embedContent.push(`\n${(0, discord_js_1.bold)('Channel')}:`);
+            embedContent.push((0, discord_js_1.blockQuote)(`Name: ${channel?.name}`));
+            embedContent.push((0, discord_js_1.blockQuote)(`Channel ID: ${channelId}`));
+            embedContent.push((0, discord_js_1.blockQuote)(`Channel Type: ${channel?.type}`));
+            const isThread = channel?.type === discord_js_1.ChannelType.PublicThread;
+            embedContent.push((0, discord_js_1.blockQuote)(`Is thread: ${isThread}`));
             if (isThread) {
-                botResponse.content.push('\n**Thread**:');
-                botResponse.content.push(`> Locked: ${channel.locked}`);
-                botResponse.content.push(`> Message count: ${channel.messageCount}`);
-                botResponse.content.push(`> Archived: ${channel.archived}`);
-                botResponse.content.push(`> autoArchiveDuration: ${channel.autoArchiveDuration}`);
-                botResponse.content.push(`> archiveTimestamp: ${channel.archiveTimestamp}`);
-                botResponse.content.push(`> Owner ID: ${channel.ownerId}`);
-                botResponse.content.push(`> Parent ID: ${channel.parentId}`);
-                if (channel.appliedTags.length) {
-                    const parentChannel = channel.parent;
-                    const availableTags = parentChannel.availableTags;
-                    botResponse.content.push('> Applied tags:');
-                    const channelTags = channel.appliedTags.map((tagId) => {
-                        return availableTags.find((tag) => tag.id === tagId);
-                    });
-                    for (const tag of channelTags) {
-                        botResponse.content.push(`> - ${tag.id} - ${tag.name}`);
-                    }
-                }
+                embedContent.push(`\n${(0, discord_js_1.bold)('Thread')}:`);
+                embedContent.push((0, discord_js_1.blockQuote)(`Locked: ${channel.locked}`));
+                embedContent.push((0, discord_js_1.blockQuote)(`Message count: ${channel.messageCount}`));
+                embedContent.push((0, discord_js_1.blockQuote)(`Archived: ${channel.archived}`));
+                embedContent.push((0, discord_js_1.blockQuote)(`autoArchiveDuration: ${channel.autoArchiveDuration}`));
+                embedContent.push((0, discord_js_1.blockQuote)(`archiveTimestamp: ${channel.archiveTimestamp}`));
+                embedContent.push((0, discord_js_1.blockQuote)(`Owner ID: ${channel.ownerId}`));
+                embedContent.push((0, discord_js_1.blockQuote)(`Parent ID: ${channel.parentId}`));
             }
         }
-        botResponse.content = botResponse.content.join('\n');
+        botResponse.content = embedContent.join('\n');
         await interaction.editReply(botResponse);
     },
 };
+exports.default = Debug;
