@@ -5,7 +5,7 @@
                 {
                     "title": "📚 Audio Guides",
                     "description": [
-                        "- 🆕 [Creating Datasets for RVC using iZotope RX11](https://rentry.co/RVC-dataset-RX11), by **Cauthess**",
+                        "- [Creating Datasets for RVC using iZotope RX11](https://rentry.co/RVC-dataset-RX11), by **Cauthess**",
                         "- [Perfecting Audio Isolation on Low-End Rigs](https://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing), by **Litsa The Dancer** and **Faze Masta**",
                         "- [Gathering and Isolating Audio](https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv), by **SCRFilms** :snowflake:",
                         "- [Vocal Mixing Tutorial](https://www.youtube.com/watch?v=rSxLF3kkBw0), by **Roomie**"
@@ -72,6 +72,7 @@
                 {
                     "title": "Kaggle Notebooks",
                     "description": [
+                        "- 🆕 [How to use RVC Mainline Kaggle](https://rentry.co/RVC-Mainline-Kaggle) by **Cauthess**",
                         "- [🍏 Applio RVC](https://www.kaggle.com/code/iahispano/applio-rvc-fork) by **IA Hispano**",
                         "- [✨ RVC Mainline](https://www.kaggle.com/code/hinabl/mainline) by [Hina](https://linktr.ee/_hina__)"
                     ],
