@@ -1,10 +1,10 @@
 "use strict";
-/* eslint-disable indent */
-const { SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, ComponentType, } = require('discord.js');
-const { TagResponseSender, BotResponseBuilder } = require('../../utils');
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const discordUtilities_1 = require("../../Utils/discordUtilities");
+const Guides = {
     category: 'Info',
-    data: new SlashCommandBuilder()
+    data: new discord_js_1.SlashCommandBuilder()
         .setName('guides')
         .setDescription('Guides for RVC (how to make ai cover).')
         .addStringOption(option => option.setName('category')
@@ -17,134 +17,129 @@ module.exports = {
         .addUserOption(option => option.setName('user')
         .setDescription('(Optional) Send this guide to an user')),
     async execute(interaction) {
-        const category = interaction.options.getString('category');
+        const category = interaction.options.getString('category') ?? '';
         const language = interaction.options.getString('language') ?? 'en';
         const targetUser = interaction.options.getUser('user');
         const mainUser = interaction.user;
-        const { client } = interaction;
-        const { botData, botConfigs, botUtils } = client;
-        const availableColors = botUtils.getAvailableColors(botConfigs);
-        let selectedGuide;
-        let botResponse = new BotResponseBuilder();
-        botResponse.setEphemeral(true);
-        botResponse.setText('This guide is not available in the selected language yet.');
-        const sender = new TagResponseSender();
-        // sender.setChannel(interaction.channel);
-        sender.setConfigs(botConfigs);
-        sender.setResponse(botResponse);
-        sender.setTargetMessage(interaction);
-        sender.setTargetUser(targetUser);
+        const client = interaction.client;
+        const { botData, botConfigs } = client;
         client.logger.debug('sending guide', {
             more: {
                 category, language,
-                channelId: interaction.channel.id,
-                guildId: interaction.guild.id,
+                channelId: interaction.channelId,
+                guildId: interaction.guildId,
             }
         });
         if (category === 'realtime') {
-            selectedGuide = botData.embeds.realtime[language];
-            if (!selectedGuide)
-                return interaction.reply(botResponse.build());
-            botResponse.setEphemeral(false);
-            const realtimeSelectOptions = selectedGuide['menuOptions'].map(menuOption => new StringSelectMenuOptionBuilder()
-                .setLabel(menuOption.label)
-                .setDescription(menuOption.description)
-                .setValue(menuOption.value)
-                .setEmoji(menuOption.emoji));
-            const realtimeGuidesSelectMenu = new StringSelectMenuBuilder()
-                .setCustomId('realtime_guides')
-                .setPlaceholder('Select a guide')
-                .addOptions(realtimeSelectOptions);
-            const realtimeActionRow = new ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
-            botResponse.setText(selectedGuide.local.content);
-            if (targetUser) {
-                botResponse.setText(botResponse.text + '\n' + `Suggestion for ${targetUser}`);
+            const guideForRealtime = botData.embeds[category][language];
+            if (!guideForRealtime)
+                return await interaction.reply({ content: 'This guide is not available in the selected language.', ephemeral: true });
+            await handleRealtimeGuide(guideForRealtime, mainUser, targetUser, interaction);
+            return;
+        }
+        // other than realtime guides
+        let selectedGuide = botData.embeds[category][language];
+        if (!selectedGuide)
+            return interaction.reply({ content: "This guide is not available in the selected language.", ephemeral: true });
+        const botResponse = prepareGuideReply(selectedGuide, targetUser, botConfigs.colors);
+        await interaction.reply(botResponse);
+    }
+};
+exports.default = Guides;
+function createSelectMenu(content) {
+    if (!content.menuOptions)
+        throw new Error("Missing menu content");
+    const realtimeSelectOptions = content.menuOptions.map(menuOption => {
+        const menuOptionBuilder = new discord_js_1.StringSelectMenuOptionBuilder()
+            .setLabel(menuOption.label)
+            .setDescription(menuOption.description)
+            .setValue(menuOption.value);
+        if (menuOption.emoji) {
+            menuOptionBuilder.setEmoji(menuOption.emoji);
+        }
+        return menuOptionBuilder;
+    });
+    const realtimeGuidesSelectMenu = new discord_js_1.StringSelectMenuBuilder()
+        .setCustomId('realtime_guides')
+        .setPlaceholder('Select a guide')
+        .addOptions(realtimeSelectOptions);
+    const selectMenuActionRow = new discord_js_1.ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
+    return selectMenuActionRow;
+}
+async function handleRealtimeGuide(content, mainUser, targetUser, interaction) {
+    const realtimeActionRow = createSelectMenu(content);
+    const embeds = [];
+    const botResponse = {};
+    content.local?.embeds.forEach((embedData) => {
+        embeds.push((0, discordUtilities_1.createEmbed)(embedData));
+    });
+    botResponse.embeds = embeds;
+    botResponse.components = [realtimeActionRow];
+    if (targetUser) {
+        botResponse.content = `Suggestion for ${targetUser}`;
+    }
+    const botReply = await interaction.reply(botResponse);
+    const selectMenuDisplayMinutes = 30;
+    const collector = botReply.createMessageComponentCollector({
+        componentType: discord_js_1.ComponentType.StringSelect,
+        time: selectMenuDisplayMinutes * 60 * 1000,
+    });
+    collector.on('collect', (i) => {
+        let allowedToInteract = i.user.id === mainUser.id;
+        // allow the mentioned user to interact as well
+        if (targetUser) {
+            allowedToInteract = i.user.id === mainUser.id || i.user.id === targetUser.id;
+        }
+        if (allowedToInteract) {
+            const selectMenuResult = i.values[0];
+            const realtimeGuides = content;
+            let currentGuide;
+            if (selectMenuResult === 'realtime_local') {
+                currentGuide = (0, discordUtilities_1.createEmbed)(realtimeGuides.local.embeds[0]);
+                botResponse.embeds = [currentGuide];
             }
-            botResponse.addEmbeds(selectedGuide.local.embeds, botConfigs);
-            botResponse = botResponse.build();
-            botResponse.components = [realtimeActionRow];
-            const botReply = await interaction.reply(botResponse);
-            const selectMenuDisplayMinutes = 30;
-            const collector = botReply.createMessageComponentCollector({
-                componentType: ComponentType.StringSelect,
-                time: selectMenuDisplayMinutes * 60 * 1000,
-            });
-            collector.on('collect', (i) => {
-                let allowedToInteract = i.user.id === mainUser.id;
-                if (targetUser) {
-                    allowedToInteract = i.user.id === mainUser.id || i.user.id === targetUser.id;
-                }
-                if (allowedToInteract) {
-                    const selectMenuResult = i.values[0];
-                    const realtimeGuides = botData.embeds.realtime.en;
-                    let guide;
-                    if (selectMenuResult === 'realtime_local') {
-                        guide = realtimeGuides.local;
-                    }
-                    else if (selectMenuResult === 'realtime_online') {
-                        guide = realtimeGuides.online;
-                    }
-                    else if (selectMenuResult === 'realtime_faq') {
-                        guide = realtimeGuides.faq;
-                    }
-                    botResponse.content = guide.content;
-                    botResponse.embeds = botUtils.createEmbeds(guide.embeds, availableColors);
-                    i.update(botResponse);
-                }
-                else {
-                    i.reply({ content: 'You didn\'t start this interaction, use `/guides realtime` if you wish to choose an option.', ephemeral: true });
-                }
-            });
-            collector.on('end', (i) => {
-                botResponse.content = '> This interaction has expired, use the command `/guides realtime` if you wish to see it again.';
-                botResponse.embeds = [];
-                botResponse.components = [];
-                botReply.edit(botResponse);
-            });
+            else if (selectMenuResult === 'realtime_online') {
+                currentGuide = (0, discordUtilities_1.createEmbed)(realtimeGuides.online.embeds[0]);
+                botResponse.embeds = [currentGuide];
+            }
+            else if (selectMenuResult === 'realtime_faq') {
+                currentGuide = (0, discordUtilities_1.createEmbed)(realtimeGuides.faq.embeds[0]);
+                botResponse.embeds = [currentGuide];
+            }
+            i.update(botResponse);
         }
         else {
-            if (category === 'applio') {
-                selectedGuide = botData.embeds.guides.applio[language];
-                if (!selectedGuide)
-                    return interaction.reply(botResponse.build());
-            }
-            else if (category === 'audio') {
-                selectedGuide = botData.embeds.guides.audio[language];
-                if (!selectedGuide)
-                    return interaction.reply(botResponse.build());
-            }
-            else if (category === 'paperspace') {
-                selectedGuide = botData.embeds.guides.paperspace[language];
-                if (!selectedGuide)
-                    return interaction.reply(botResponse.build());
-            }
-            else if (category === 'upload') {
-                selectedGuide = botData.embeds.guides.upload[language];
-                if (!selectedGuide)
-                    return interaction.reply(botResponse.build());
-            }
-            else if (category === 'uvr') {
-                selectedGuide = botData.embeds.guides.uvr[language];
-                if (!selectedGuide)
-                    return interaction.reply(botResponse.build());
-            }
-            else if (category === 'rvc') {
-                selectedGuide = botData.embeds.guides.rvc[language];
-                if (!selectedGuide)
-                    return interaction.reply(botResponse.build());
-            }
-            botResponse.setText('');
-            botResponse.setEphemeral(false);
-            if (selectedGuide.embeds) {
-                botResponse.addEmbeds(selectedGuide.embeds, botConfigs);
-            }
-            else {
-                botResponse.addEmbeds(selectedGuide, botConfigs);
-            }
-            if (selectedGuide.buttons) {
-                botResponse.addButtons(selectedGuide.buttons);
-            }
-            await sender.send();
+            i.reply({ content: 'You didn\'t start this interaction, use `/guides realtime` if you wish to choose an option.', ephemeral: true });
         }
-    },
-};
+    });
+    collector.on('end', () => {
+        botResponse.content = '> This interaction has expired, use the command `/guides realtime` if you wish to see it again.';
+        botResponse.embeds = [];
+        botResponse.components = [];
+        botReply.edit(botResponse);
+    });
+}
+function prepareGuideReply(guide, targetUser, embedColors) {
+    if (!guide.embeds)
+        throw new Error('Missing embeds for a guide');
+    const result = { embeds: [] };
+    const colors = [
+        embedColors.theme.primary,
+        embedColors.theme.secondary,
+        embedColors.theme.tertiary
+    ];
+    result.embeds = (0, discordUtilities_1.createEmbeds)(guide.embeds, colors);
+    if (targetUser) {
+        result.content = `Suggestion for ${targetUser}`;
+    }
+    if (guide.buttons) {
+        const buttonsActionRow = new discord_js_1.ActionRowBuilder();
+        const buttonBuilders = guide.buttons.map(btnData => new discord_js_1.ButtonBuilder()
+            .setLabel(btnData.label)
+            .setURL(btnData.url)
+            .setStyle(discord_js_1.ButtonStyle.Link));
+        buttonsActionRow.addComponents(buttonBuilders);
+        result.components = [buttonsActionRow];
+    }
+    return result;
+}

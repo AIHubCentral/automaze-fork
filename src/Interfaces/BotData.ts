@@ -34,7 +34,7 @@ export interface SelectMenuOption {
     emoji?: string;
 }
 
-interface LanguageData {
+export interface LanguageData {
     embeds?: EmbedData[];
     buttons?: ButtonData[];
     mentionMessage?: string;

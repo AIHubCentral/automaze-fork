@@ -105,57 +105,15 @@
         }
     },
     "rvc": {
-        "pt": {
-            "guides": {
-                "description": [
-                    "## 🇧🇷 Guias RVC em PT-BR",
-                    "- Brasil Documentation [link](https://docs.aihub.wtf/v/brazil/)",
-                    "### AI-Cover-Gen-No-UI",
-                    "- Acesse o guia [neste link](https://docs.google.com/document/d/1BA_ln2159GbwTiJvTjCvqOAuYLq32A21PshW3RXhT6E/edit?usp=sharing).",
-                    "### 🍏 Applio-RVC-Fork: Guia PT-BR",
-                    "- Acesse o guia [neste link](https://docs.google.com/document/d/1PIMJ39xHp2kfbh4kUuvD2MZjVdeweezmwIm8Y8l6p8A/edit?usp=sharing).",
-                    "\n> ⚠️ Aviso: O Kaggle está banindo contas que utilizam RVC na plataforma, use por sua conta e risco."
-                ]
-            },
-            "videos": {
-                "description": [
-                    "## Tutoriais em Vídeo",
-                    "- [Como fazer AI COVER - Método NOVO](https://youtu.be/QTz18CSyYmE) (créditos **AI HUB BRASIL**)",
-                    "- [COMO TREINAR UM MODELO DE VOZ PARA O RVC NO CELULAR](https://youtu.be/PoNoaI8DFP8?si=VccKwtkEKgAcaPNn) (créditos **Vector Lua**)",
-                    "- [Como fazer Deep Fake (Maneira Fácil) - Android e PC](https://youtu.be/Z_k1YV_Tn40?si=Fu4hmEZOPOuGZ0On) (créditos **AI HUB BRASIL**)'",
-                    "\n> 💡 **Dica**: Use o comando `-colabs_br` para links de colabs traduzidos em **Português**",
-                    "### Servidor AI HUB BRASIL",
-                    "> https://discord.gg/aihubbrasil"
-                ]
-            }
-        },
-        "nl": {
-            "description": [
-                "## • Nederlandse Cover Handleiding",
-                "https://docs.google.com/document/d/1jNLqaC0BaWsL7w-T8OLolAiQQFVn05p5O8QH-dKFBK8/edit?usp=sharing"
-            ]
-        },
         "it": {
-            "title": "Risorse",
-            "description": [
-                "## • Link utili a cura di Ilaria",
-                "https://rentry.org/link-utili"
-            ]
-        },
-        "jp": {
-            "description": [
-                "## • 和訳版RVCガイド (KJAV 訳 SUSHI 校)",
-                "https://docs.google.com/document/d/1heKuaedmHNBTXvOnTNpwj-w2Djbk4kndXsZ2Vx_Zkxc/edit?usp=sharing",
-                "## • Mangio RVC Fork WebUI和訳版 (翻訳予定、インストール推奨)",
-                "https://drive.google.com/drive/folders/1IZ8dr2PFHYiEXqNwruFljAYpsYt-fgKI?usp=sharing"
-            ]
-        },
-        "kr": {
-            "description": [
-                "## • RVC 가이드 한국어 번역본 (KJAV 譯)",
-                "https://docs.google.com/document/d/1EeOBSJx7dm_amysCRPq9qRf2Q3RIZc9KUoUynQgauBo/edit?usp=sharing",
-                "## • Mangio RVC Fork WebUI 한국어 번역본 (KJAV 譯, 설치 권장)",
-                "https://drive.google.com/drive/folders/1-GamZ6opREYX0lMZLoWThJUFkS2o52X9?usp=sharing"
+            "embeds": [
+                {
+                    "title": "Risorse",
+                    "description": [
+                        "## • Link utili a cura di Ilaria",
+                        "https://rentry.org/link-utili"
+                    ]
+                }
             ]
         },
         "en": {
@@ -176,101 +134,6 @@
                         "- [Full AI Voice Model Training Guide (local)](https://youtu.be/Hx2IHzt5tAc?si=c_WpdbAVLF0pNeur) by **Christopher Villanueva**",
                         "- [AICoverGen Colab Guide](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub) by **Eddy (Spanish Helper)**",
                         "- [Create a model with RVC disconnected (colab)](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk) by **Angetyde**"
-                    ]
-                }
-            ]
-        },
-        "tr": {
-            "title": "Rehberler",
-            "description": [
-                "## • RVC V2 Türkçe Cover Rehberi",
-                "https://docs.google.com/document/d/1-DStwOFy5kvOVk-AOdPNoXQOjS8P23p_/edit",
-                "## • Türkçe EasyGui Colab (translated by AI Lab)",
-                "https://colab.research.google.com/drive/1Kp62OdcNtH0flPKoAQJiiOkuUH4ftWeI?usp=sharing",
-                "## Turkish discord server",
-                "> https://discord.gg/ailab"
-            ]
-        },
-        "vn": {
-            "description": [
-                "## • Hướng dẫn huấn luyện + tạo tập dữ liệu",
-                "https://docs.google.com/document/d/1YfmB9I9m1zZRZfZobsDFd0m9hNt7wFd86tSBkh-EqXw/edit"
-            ]
-        },
-        "main": {
-            "embeds": [
-                {
-                    "title": "Documentation",
-                    "fields": [
-                        {
-                            "name": "🇺🇸 English (main)",
-                            "value": "https://docs.aihub.wtf/"
-                        },
-                        {
-                            "name": "\u200B",
-                            "value": "**Translation by country**"
-                        },
-                        {
-                            "name": "🇧🇷 Brasil (PT-BR)",
-                            "value": "https://docs.aihub.wtf/v/brazil",
-                            "inline": true
-                        },
-                        {
-                            "name": "🇪🇸 Spain",
-                            "value": "https://docs.aihub.wtf/v/spain/",
-                            "inline": true
-                        },
-                        {
-                            "name": "\u0020",
-                            "value": "\u0020"
-                        },
-                        {
-                            "name": "🇫🇷 France",
-                            "value": "https://docs.aihub.wtf/v/france",
-                            "inline": true
-                        },
-                        {
-                            "name": "🇩🇪 Germany",
-                            "value": "https://docs.aihub.wtf/v/germany",
-                            "inline": true
-                        },
-                        {
-                            "name": "\u0020",
-                            "value": "\u0020"
-                        },
-                        {
-                            "name": "🇯🇵 Japan",
-                            "value": "https://docs.aihub.wtf/v/japan",
-                            "inline": true
-                        },
-                        {
-                            "name": "🇰🇷 Korea",
-                            "value": "https://docs.aihub.wtf/v/korea",
-                            "inline": true
-                        },
-                        {
-                            "name": "\u0020",
-                            "value": "\u0020"
-                        },
-                        {
-                            "name": "🇵🇱 Poland",
-                            "value": "https://docs.aihub.wtf/v/poland",
-                            "inline": true
-                        },
-                        {
-                            "name": "🇷🇺 Russia",
-                            "value": "https://docs.aihub.wtf/v/russia",
-                            "inline": true
-                        },
-                        {
-                            "name": "\u0020",
-                            "value": "\u0020"
-                        },
-                        {
-                            "name": "🇮🇹 Italy",
-                            "value": "https://docs.aihub.wtf/v/italy",
-                            "inline": true
-                        }
                     ]
                 }
             ]
@@ -350,26 +213,7 @@
                     "emoji": "❔"
                 }
             ]
-        },
-        "it": [
-            {
-                "title": "Ilaria TTS",
-                "description": [
-                    "Link: [Google Docs](https://docs.google.com/document/d/1BCHyPQUxNkvf6JrdUVnYFYy0L1JtUxE1c6KUFK5mQEk/edit?usp=sharing)"
-                ],
-                "footer": "Credits: Nick088"
-            }
-        ],
-        "ru": [
-            {
-                "title": "❔ Russian FAQ for voice changer",
-                "description": [
-                    "Часто задаваемые вопросы по преобразователю голоса на русском языке",
-                    "Link: [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
-                ],
-                "footer": "Credits: blackcat76it, elektroeban, redoverflow and tntmaxim"
-            }
-        ]
+        }
     },
     "tracker": {
         "en": {
@@ -393,8 +237,7 @@
                         "One of the best free and open source vocal and instrumental isolation tool."
                     ],
                     "color": "05998c",
-                    "image": "https://img1.wsimg.com/isteam/ip/27b42b0b-4e5c-4246-8229-db96bd3bf24e/UVR_v5.6.png/:/",
-                    "footer": "Tip: Use /guides UVR to learn how to use it."
+                    "image": "https://img1.wsimg.com/isteam/ip/27b42b0b-4e5c-4246-8229-db96bd3bf24e/UVR_v5.6.png/:/"
                 }
             ],
             "buttons": [
@@ -405,6 +248,10 @@
                 {
                     "label": "GitHub",
                     "url": "https://github.com/Anjok07/ultimatevocalremovergui"
+                },
+                {
+                    "label": "Guide",
+                    "url": "https://docs.aihub.wtf/rvc/resources/vocal-isolation/"
                 }
             ]
         }
@@ -465,6 +312,119 @@
             }
         ]
     },
+    "applio": {
+        "en": {
+            "embeds": [
+                {
+                    "color": "Green",
+                    "title": "🍏 Applio-RVC-Fork",
+                    "description": [
+                        "Enhanced RVC Variant: Optimized Performance Through Modifications, Built upon Mangio-RVC-Fork."
+                    ],
+                    "image": "https://docs.applio.org/assets/applio.png"
+                }
+            ],
+            "buttons": [
+                {
+                    "label": "Learn Applio",
+                    "url": "https://docs.applio.org/"
+                }
+            ]
+        },
+        "fr": {
+            "embeds": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Comment installer et utiliser Applio\nLien: [Documentation](https://docs.aihubfrance.fr/guides-clone-de-voix/applio)\n\nCredits: **AI HUB FRANCE**"
+                    ]
+                }
+            ]
+        },
+        "de": {
+            "embeds": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Wie Sie Applio installieren und nutzen\nLien: [Dokumentation](https://docs.aihub.wtf/v/germany/anleitung-zur-stimmerzeugung/applio)\n\nCredits: **AI HUB FRANCE**"
+                    ]
+                }
+            ]
+        },
+        "it": {
+            "embeds": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Come installare e utilizzare Applio\nLien: [Documentazione](https://docs.aihub.wtf/v/italy/guida-alla-clonazione-vocale/applio)\n\nCredits: **AI HUB FRANCE**"
+                    ]
+                }
+            ]
+        },
+        "jp": {
+            "embeds": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Applioのインストールと使用方法\nLien: [ドキュメンテーション](https://docs.aihub.wtf/v/japan/nokurngaido/applio)\n\nCredits: **AI HUB FRANCE**"
+                    ]
+                }
+            ]
+        },
+        "kr": {
+            "embeds": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Applio 설치 및 사용 방법\nLien: [문서](https://docs.aihub.wtf/v/japan/nokurngaido/applio)\n\nCredits: **AI HUB FRANCE**"
+                    ]
+                }
+            ]
+        },
+        "pl": {
+            "embeds": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Jak zainstalować i używać Applio\nLien: [Dokumentacja](https://docs.aihub.wtf/v/poland/przewodnik-po-klonowaniu-glosu/applio)\n\nCredits: **AI HUB FRANCE**"
+                    ]
+                }
+            ]
+        },
+        "pt": {
+            "embeds": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Como instalar e usar o Applio\nLien: [Documentação](https://docs.aihub.wtf/v/brazil/guia-de-clonagem-vocal/applio)\n\nCredits: **AI HUB FRANCE**"
+                    ]
+                }
+            ]
+        },
+        "ru": {
+            "embeds": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Как установить и использовать Applio\nLien: [Документация](https://docs.aihub.wtf/v/russia/rukovodstvo-po-klonirovaniyu-golosa/applio)\n\nCredits: **AI HUB FRANCE**"
+                    ]
+                }
+            ]
+        },
+        "es": {
+            "embeds": [
+                {
+                    "color": "Green",
+                    "description": [
+                        "## 🍏 Tutorial de Applio en español",
+                        "Link: [YouTube](https://www.youtube.com/watch?v=bOAM_9xyHFY)",
+                        "Autor: IA Hispano",
+                        "### Servidor IA Hispano\n> https://discord.gg/iahispano"
+                    ]
+                }
+            ]
+        }
+    },
     "banana": {
         "title": "$username GOT BANANA LOL LOL LOL",
         "description": [
@@ -472,335 +432,6 @@
         ],
         "image": "https://media.tenor.com/29FOpiFsnn8AAAAC/banana-meme.gif",
         "footer": "BRO GOT BANAN'D $quantity TIME XDDDDDD"
-    },
-    "guides": {
-        "rvc": {
-            "en": [
-                {
-                    "title": "Documentation",
-                    "description": [
-                        "### 📚 All-In-One English documentation",
-                        "**https://docs.aihub.wtf/**",
-                        "",
-                        "### Full AI Voice Model Training Guide (Local)",
-                        "Link: **[YouTube](https://youtu.be/Hx2IHzt5tAc?si=c_WpdbAVLF0pNeur)**",
-                        "Credits: **Christopher Villanueva**",
-                        "### Model training with Mainline RVC",
-                        "Link: **[Rentry](https://rentry.co/TrainingVoiceModels)**",
-                        "credits: **Raven** *(ravencutie21)*",
-                        "### AICoverGen Colab Guide",
-                        "Link: **[Google Docs](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub)**",
-                        "Credits: **Eddy (Spanish Helper)**",
-                        "### Create a model with RVC disconnected (colab)",
-                        "Link: **[Google Docs](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk)**",
-                        "Credits: **Angetyde**"
-                    ]
-                }
-            ],
-            "it": {
-                "mentionMessage": "Suggerimento per $user",
-                "embeds": [
-                    {
-                        "title": "Documentazione",
-                        "description": [
-                            "### 📚 AI HUB Docs",
-                            "https://docs.aihub.wtf/v/italy",
-                            "### ❔ Domande frequenti",
-                            "https://docs.aihub.wtf/v/italy/faq",
-                            "### 🔗 Unisciti al nostro discord",
-                            "https://discord.com/invite/BZteU35xX6"
-                        ]
-                    }
-                ]
-            },
-            "pt": {
-                "mentionMessage": "Sugestões para $user",
-                "embeds": [
-                    {
-                        "title": "Documentação",
-                        "description": [
-                            "### 📚 AI HUB Docs",
-                            "https://docs.aihub.wtf/v/brazil",
-                            "### ❔ Perguntas Frequentes",
-                            "https://docs.aihub.wtf/v/brazil/faq",
-                            "### 🔗 Servidor AI HUB Brasil",
-                            "https://discord.gg/aihubbrasil"
-                        ],
-                        "footer": "Créditos: AI HUB France, MrM0dz"
-                    }
-                ]
-            },
-            "es": {
-                "mentionMessage": "Sugerencia para $user",
-                "embeds": [
-                    {
-                        "title": "Documentación",
-                        "description": [
-                            "### 📚 AI HUB Docs",
-                            "https://docs.aihub.wtf/v/spain",
-                            "### ❔ Perguntas Frecuentes",
-                            "https://docs.aihub.wtf/v/spain/faq",
-                            "### 🔗 Servidor IA Hispano",
-                            "https://discord.gg/iahispano"
-                        ],
-                        "footer": "Créditos: IA Hispano"
-                    },
-                    {
-                        "title": "✨ Otras Guías",
-                        "description": [
-                            "### \u2022 **Guía de Uso del Colab AICoverGen**",
-                            "Link: **[Google Docs](https://docs.google.com/document/d/e/2PACX-1vSM9bLJPzN-Du8HDpkaLvgkf7X7rPymkYzddiPZ6HzPNBFaFbkwF8aN_SolxC-ZdUNJb77fz_whquqr/pub)**",
-                            "Créditos: **Eddy (Spanish Helper)**",
-                            "### \u2022 **Cómo Hacer un Cover de IA Usando Ilaria RVC**",
-                            "Link: **[Rentry](https://rentry.org/ilarvc_inf_guide_es)**",
-                            "Créditos: **Julia (ailen2091)**"
-                        ]
-                    }
-                ]
-            },
-            "fr": {
-                "mentionMessage": "Suggestions pour $user",
-                "embeds": [
-                    {
-                        "title": "Documentation",
-                        "description": [
-                            "### 📚 AI HUB Docs",
-                            "https://docs.aihub.wtf/v/france",
-                            "### ❔ FAQ",
-                            "https://docs.aihub.wtf/v/france/faq",
-                            "### 🔗 Discord",
-                            "https://discord.gg/aihubfr"
-                        ],
-                        "footer": "Credits: AI HUB France"
-                    }
-                ]
-            }
-        },
-        "applio": {
-            "en": {
-                "embeds": [
-                    {
-                        "color": "Green",
-                        "title": "🍏 Applio-RVC-Fork",
-                        "description": [
-                            "Enhanced RVC Variant: Optimized Performance Through Modifications, Built upon Mangio-RVC-Fork."
-                        ],
-                        "image": "https://docs.applio.org/assets/applio.png"
-                    }
-                ],
-                "buttons": [
-                    {
-                        "label": "Learn Applio",
-                        "url": "https://docs.applio.org/"
-                    }
-                ]
-            },
-            "fr": {
-                "embeds": [
-                    {
-                        "color": "Green",
-                        "description": [
-                            "## 🍏 Comment installer et utiliser Applio\nLien: [Documentation](https://docs.aihubfrance.fr/guides-clone-de-voix/applio)\n\nCredits: **AI HUB FRANCE**"
-                        ]
-                    }
-                ]
-            },
-            "de": {
-                "embeds": [
-                    {
-                        "color": "Green",
-                        "description": [
-                            "## 🍏 Wie Sie Applio installieren und nutzen\nLien: [Dokumentation](https://docs.aihub.wtf/v/germany/anleitung-zur-stimmerzeugung/applio)\n\nCredits: **AI HUB FRANCE**"
-                        ]
-                    }
-                ]
-            },
-            "it": {
-                "embeds": [
-                    {
-                        "color": "Green",
-                        "description": [
-                            "## 🍏 Come installare e utilizzare Applio\nLien: [Documentazione](https://docs.aihub.wtf/v/italy/guida-alla-clonazione-vocale/applio)\n\nCredits: **AI HUB FRANCE**"
-                        ]
-                    }
-                ]
-            },
-            "jp": {
-                "embeds": [
-                    {
-                        "color": "Green",
-                        "description": [
-                            "## 🍏 Applioのインストールと使用方法\nLien: [ドキュメンテーション](https://docs.aihub.wtf/v/japan/nokurngaido/applio)\n\nCredits: **AI HUB FRANCE**"
-                        ]
-                    }
-                ]
-            },
-            "kr": {
-                "embeds": [
-                    {
-                        "color": "Green",
-                        "description": [
-                            "## 🍏 Applio 설치 및 사용 방법\nLien: [문서](https://docs.aihub.wtf/v/japan/nokurngaido/applio)\n\nCredits: **AI HUB FRANCE**"
-                        ]
-                    }
-                ]
-            },
-            "pl": {
-                "embeds": [
-                    {
-                        "color": "Green",
-                        "description": [
-                            "## 🍏 Jak zainstalować i używać Applio\nLien: [Dokumentacja](https://docs.aihub.wtf/v/poland/przewodnik-po-klonowaniu-glosu/applio)\n\nCredits: **AI HUB FRANCE**"
-                        ]
-                    }
-                ]
-            },
-            "pt": {
-                "embeds": [
-                    {
-                        "color": "Green",
-                        "description": [
-                            "## 🍏 Como instalar e usar o Applio\nLien: [Documentação](https://docs.aihub.wtf/v/brazil/guia-de-clonagem-vocal/applio)\n\nCredits: **AI HUB FRANCE**"
-                        ]
-                    }
-                ]
-            },
-            "ru": {
-                "embeds": [
-                    {
-                        "color": "Green",
-                        "description": [
-                            "## 🍏 Как установить и использовать Applio\nLien: [Документация](https://docs.aihub.wtf/v/russia/rukovodstvo-po-klonirovaniyu-golosa/applio)\n\nCredits: **AI HUB FRANCE**"
-                        ]
-                    }
-                ]
-            },
-            "es": {
-                "embeds": [
-                    {
-                        "color": "Green",
-                        "description": [
-                            "## 🍏 Tutorial de Applio en español",
-                            "Link: [YouTube](https://www.youtube.com/watch?v=bOAM_9xyHFY)",
-                            "Autor: IA Hispano",
-                            "### Servidor IA Hispano\n> https://discord.gg/iahispano"
-                        ]
-                    }
-                ]
-            }
-        },
-        "uvr": {
-            "en": [
-                {
-                    "title": "Ultimate Vocal Remover",
-                    "description": [
-                        "This guide shows how to separate the vocals and the instrumental of songs using UVR locally",
-                        "Link: https://docs.aihub.wtf/vocal-cloning-guide/vocal-and-music-separation/uvr"
-                    ],
-                    "footer": "Credits: Nick088"
-                },
-                {
-                    "title": "Ilaria UVR",
-                    "description": [
-                        "Link: https://docs.google.com/document/d/1M3rEj5RPSE60f17RdM9MaIKKkS2bLrj-dwwuCUOdRaY/edit?usp=drivesdk"
-                    ],
-                    "footer": "Credits: Angetyde"
-                }
-            ],
-            "it": [
-                {
-                    "title": "Ilaria UVR",
-                    "description": [
-                        "Link: [Google Docs](https://docs.google.com/document/d/1UFTDDbptxRwkyj0n0NEqlChNuF3MJM48iowBYzlhmvI/edit?usp=drivesdk)"
-                    ],
-                    "footer": "Credits: Angetyde"
-                }
-            ]
-        },
-        "audio": {
-            "en": [
-                {
-                    "title": "📚 Audio Guides",
-                    "description": [
-                        "- **Perfecting Audio Isolation on Low-End Rigs: A Practical Guide**, by Litsa The Dancer and Faze Masta [Google Docs](https://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing)",
-                        "- **Gathering and Isolating Audio**, by SCRFilms [Google Docs](https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv)",
-                        "- **Creating Datasets for RVC using iZotope RX**, by LUSBERT <:lusbertmoment:1159804751924432906> [Rentry](https://rentry.org/RVC-dataset-RX)",
-                        "- **Vocal Mixing Tutorial**, by Roomie [YouTube](https://www.youtube.com/watch?v=rSxLF3kkBw0)"
-                    ]
-                },
-                {
-                    "title": "🛠️ Tools",
-                    "description": [
-                        "### Audio Separation/Isolation",
-                        "- https://mvsep.com/",
-                        "- https://multimedia.easeus.com/vocal-remover/",
-                        "- [MDX-NET Colab](https://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb)"
-                    ],
-                    "footer": "More commands: -colab, -uvr, -karafan, -overtrain, -help"
-                }
-            ]
-        },
-        "upload": {
-            "en": {
-                "mentionMessage": "Suggestions for $user",
-                "embeds": [
-                    {
-                        "title": "huggingface.co upload Guides",
-                        "description": [
-                            "## English guide",
-                            "Link: https://rentry.org/fdg_guide_newer",
-                            "Credits: **FDG**",
-                            "## Spanish Guide",
-                            "Link: https://rentry.org/AI_Hub_guide_esp",
-                            "Credits: **Julia (ailen2091)**",
-                            "## Hindi guide",
-                            "Link: https://rentry.org/AI_hub_guide_hi",
-                            "Credits: **Enes**",
-                            "## Turkish guide",
-                            "Link: https://rentry.org/AI_hub_guide_tr",
-                            "Credits: **Enes**"
-                        ]
-                    }
-                ]
-            },
-            "es": {
-                "mentionMessage": "Sugerencia para $user",
-                "embeds": [
-                    {
-                        "title": "Guía de cómo publicar modelos a AI Hub",
-                        "description": [
-                            "Hecho por FDG (Traducido por Julia)"
-                        ],
-                        "footer": "Credits: 👽 Julia (ailen2091)"
-                    }
-                ],
-                "buttons": [
-                    {
-                        "label": "Acceso (Rentry)",
-                        "url": "https://rentry.org/AI_Hub_guide_esp"
-                    }
-                ]
-            }
-        },
-        "paperspace": {
-            "en": {
-                "embeds": [
-                    {
-                        "title": "RVC v2 Tutorial for Paperspace",
-                        "description": [
-                            "💡 Click on the button below to open the guide."
-                        ],
-                        "footer": "Credits: LollenApe"
-                    }
-                ],
-                "buttons": [
-                    {
-                        "label": "Google Docs",
-                        "url": "https://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing"
-                    }
-                ]
-            }
-        }
     },
     "help": {
         "WOkada": [

@@ -36,7 +36,7 @@ async function deployCommands(credentials, commands) {
     commands.slashCommands.forEach(command => mergedCommands.push(command.data.toJSON()));
     commands.contextCommands.forEach(command => mergedCommands.push(command.data.toJSON()));
     try {
-        console.log(`Started refreshing ${commands.slashCommands.length} application (/) commands and ${commands.contextCommands.length} context command.`);
+        console.log(`Started refreshing ${commands.slashCommands.length} application (/) commands and ${commands.contextCommands.length} context commands.`);
         // The put method is used to fully refresh all commands in the guild with the current set
         const data = await rest.put(discord_js_1.Routes.applicationGuildCommands(credentials.clientId, credentials.guildId), { body: mergedCommands });
         console.log(`Successfully reloaded ${data.length} commands in ${credentials.guildId}.`);

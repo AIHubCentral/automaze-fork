@@ -1,7 +1,7 @@
-import { ColorResolvable, Colors, EmbedBuilder, Guild, GuildBasedChannel } from "discord.js";
-import { EmbedData } from "../Interfaces/BotData";
+import { APIEmbed, ColorResolvable, Colors, EmbedBuilder, Guild, GuildBasedChannel } from "discord.js";
 import IBotConfigs from "../Interfaces/BotConfigs";
 import ExtendedClient from "../Core/extendedClient";
+import { EmbedData } from "../Interfaces/BotData";
 
 export function createEmbed(data: EmbedData, color?: ColorResolvable): EmbedBuilder {
     /**

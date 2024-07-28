@@ -7,7 +7,7 @@ interface CountryColors {
     [key: string]: string[];
 }
 
-interface IConfigColors {
+export interface IConfigColors {
     theme: any;
     country: CountryColors;
 }
