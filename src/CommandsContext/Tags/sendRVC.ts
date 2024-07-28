@@ -5,7 +5,6 @@ import { createEmbeds, getAvailableColors } from "../../Utils/discordUtilities";
 
 const SendRVCGuides: ContextCommand = {
     category: 'Tags',
-    type: 'context-menu',
     data: new ContextMenuCommandBuilder()
         .setName('Send RVC guides')
         .setType(ApplicationCommandType.User)

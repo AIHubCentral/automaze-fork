@@ -28,7 +28,6 @@ const fetch = (...args) => Promise.resolve().then(() => __importStar(require('no
 const delay = require('node:timers/promises').setTimeout;
 module.exports = {
     category: 'Utilities',
-    type: 'slash',
     data: new SlashCommandBuilder()
         .setName('database')
         .setDescription('Manages bot database data')

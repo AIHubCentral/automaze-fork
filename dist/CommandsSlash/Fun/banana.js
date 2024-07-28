@@ -4,7 +4,6 @@ const discord_js_1 = require("discord.js");
 const botUtilities_js_1 = require("../../Utils/botUtilities.js");
 const Banana = {
     category: 'Fun',
-    type: 'slash',
     data: new discord_js_1.SlashCommandBuilder()
         .setName('banana')
         .setDescription('BANAN SOMEOME!!!!11!111!11')

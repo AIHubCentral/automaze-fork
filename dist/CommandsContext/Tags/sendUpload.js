@@ -4,7 +4,6 @@ const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const SendUploadGuides = {
     category: 'Tags',
-    type: 'context-menu',
     data: new discord_js_1.ContextMenuCommandBuilder()
         .setName('Send upload guides')
         .setType(discord_js_1.ApplicationCommandType.User),

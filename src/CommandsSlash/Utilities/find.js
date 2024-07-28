@@ -2,8 +2,6 @@ const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, StringSelectMenu
 
 module.exports = {
     category: 'Utilities',
-    type: 'slash',
-
     data: new SlashCommandBuilder()
         .setName('find')
         .setDescription('find a voice model')

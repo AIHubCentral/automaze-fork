@@ -4,7 +4,6 @@ const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const Debug = {
     category: 'Utilities',
-    type: 'slash',
     data: new discord_js_1.SlashCommandBuilder()
         .setName('debug')
         .setDescription('Bot debug')

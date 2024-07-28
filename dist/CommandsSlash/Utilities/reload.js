@@ -7,7 +7,6 @@ const pm2 = require('pm2');
 module.exports = {
     category: 'Utilities',
     cooldown: 30,
-    type: 'slash',
     data: new SlashCommandBuilder()
         .setName('reload')
         .setDescription('Reloads bot data')

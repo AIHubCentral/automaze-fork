@@ -15,7 +15,6 @@ const delay = require('node:timers/promises').setTimeout;
 module.exports = {
 	category: 'Utilities',
 	cooldown: 30,
-	type: 'slash',
 	data: new SlashCommandBuilder()
 		.setName('configure')
 		.setDescription('Configure bot settings')

@@ -10,7 +10,6 @@ const utils = require('../../utils.js');
 
 const EightBall: SlashCommand = {
 	category: 'Fun',
-	type: 'slash',
 	data: new SlashCommandBuilder()
 		.setName('8ball')
 		.setDescription('Answer questions of your life')

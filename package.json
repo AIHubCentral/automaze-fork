@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx tsc && node dist/index.js",
-    "dbInit": "node ./database/dbInit.js"
+    "dbInit": "node ./database/dbInit.js",
+    "build": "npx tsc",
+    "deploy": "node ./dist/deployInteractive.js"
   },
   "keywords": [],
   "author": "FungusDesu and RayTracerGC",

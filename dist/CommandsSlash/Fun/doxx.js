@@ -7,7 +7,6 @@ const discord_js_1 = require("discord.js");
 const Doxx = {
     category: 'Fun',
     cooldown: 60,
-    type: 'slash',
     data: new discord_js_1.SlashCommandBuilder()
         .setName('doxx')
         .setDescription('NOT ACTUAL DOXXING. creates random ip and house address')

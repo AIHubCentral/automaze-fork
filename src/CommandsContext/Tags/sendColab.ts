@@ -5,7 +5,6 @@ import { createEmbed } from '../../Utils/discordUtilities';
 
 const SendColabGuides: ContextCommand = {
     category: 'Tags',
-    type: 'context-menu',
     data: new ContextMenuCommandBuilder()
         .setName('Send Colab links')
         .setType(ApplicationCommandType.User),

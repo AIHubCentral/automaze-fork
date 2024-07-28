@@ -7,7 +7,6 @@ const wait = require('node:timers/promises').setTimeout;
 const utils = require('../../utils.js');
 const EightBall = {
     category: 'Fun',
-    type: 'slash',
     data: new discord_js_1.SlashCommandBuilder()
         .setName('8ball')
         .setDescription('Answer questions of your life')

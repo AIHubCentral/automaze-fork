@@ -5,7 +5,6 @@ import ExtendedClient from "../../Core/extendedClient.js";
 
 const Banana: SlashCommand = {
     category: 'Fun',
-    type: 'slash',
     data: new SlashCommandBuilder()
         .setName('banana')
         .setDescription('BANAN SOMEOME!!!!11!111!11')

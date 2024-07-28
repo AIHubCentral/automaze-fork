@@ -55,7 +55,6 @@ async function deleteFile(filePath, logger) {
 module.exports = {
     category: 'Utilities',
     cooldown: 15,
-    type: 'slash',
     data: new SlashCommandBuilder()
         .setName('logs')
         .setDescription('Manage bot logs')

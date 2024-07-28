@@ -15,7 +15,6 @@ const delay = require('node:timers/promises').setTimeout;
 module.exports = {
     category: 'Utilities',
     cooldown: 15,
-    type: 'slash',
     data: new SlashCommandBuilder()
         .setName('send')
         .setDescription('Send something to a guild channel')

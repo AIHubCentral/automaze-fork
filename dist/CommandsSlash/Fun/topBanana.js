@@ -8,7 +8,6 @@ const userService_1 = __importDefault(require("../../Services/userService"));
 const TopBanana = {
     category: 'Fun',
     cooldown: 15,
-    type: 'slash',
     data: new discord_js_1.SlashCommandBuilder()
         .setName('topbanana')
         .setDescription('SEE HOW MUCH SOMEONE GOT BANAN!!!!11!111!11'),

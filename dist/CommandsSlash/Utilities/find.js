@@ -2,7 +2,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, StringSelectMenuBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 module.exports = {
     category: 'Utilities',
-    type: 'slash',
     data: new SlashCommandBuilder()
         .setName('find')
         .setDescription('find a voice model')

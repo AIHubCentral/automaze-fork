@@ -4,7 +4,6 @@ const { SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuil
 const { TagResponseSender, BotResponseBuilder } = require('../../utils');
 module.exports = {
     category: 'Info',
-    type: 'slash',
     data: new SlashCommandBuilder()
         .setName('guides')
         .setDescription('Guides for RVC (how to make ai cover).')

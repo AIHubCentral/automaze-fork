@@ -27,7 +27,6 @@ const fetch = (...args) => Promise.resolve().then(() => __importStar(require('no
 const fs = require('node:fs');
 module.exports = {
     category: 'Utilities',
-    type: 'slash',
     data: new SlashCommandBuilder()
         .setName('embed_data')
         .setDescription('Manages embed data for tag commands')

@@ -4,7 +4,6 @@ const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const SendColabGuides = {
     category: 'Tags',
-    type: 'context-menu',
     data: new discord_js_1.ContextMenuCommandBuilder()
         .setName('Send Colab links')
         .setType(discord_js_1.ApplicationCommandType.User),

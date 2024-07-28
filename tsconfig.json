@@ -16,7 +16,6 @@
     "exclude": [
         "./node_modules",
         "./Archive",
-        "./deploy-interactive.js",
         "./dist"
     ]
 }

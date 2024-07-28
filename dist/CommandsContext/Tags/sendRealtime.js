@@ -14,7 +14,6 @@ function createEmbeds(guides) {
 }
 const SendRealtimeGuides = {
     category: 'Tags',
-    type: 'context-menu',
     data: new discord_js_1.ContextMenuCommandBuilder()
         .setName('Send Realtime guides')
         .setType(discord_js_1.ApplicationCommandType.User),

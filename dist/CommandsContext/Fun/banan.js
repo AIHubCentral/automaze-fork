@@ -5,7 +5,6 @@ const discord_js_1 = require("discord.js");
 const botUtilities_1 = require("../../Utils/botUtilities");
 const Banan = {
     category: 'Fun',
-    type: 'context-menu',
     data: new discord_js_1.ContextMenuCommandBuilder()
         .setName('banan')
         .setType(discord_js_1.ApplicationCommandType.User),

@@ -7,7 +7,6 @@ import UserService from '../../Services/userService';
 const TopBanana: SlashCommand = {
 	category: 'Fun',
 	cooldown: 15,
-	type: 'slash',
 	data: new SlashCommandBuilder()
 		.setName('topbanana')
 		.setDescription('SEE HOW MUCH SOMEONE GOT BANAN!!!!11!111!11'),

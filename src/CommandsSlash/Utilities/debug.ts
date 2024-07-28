@@ -5,7 +5,6 @@ import ExtendedClient from '../../Core/extendedClient';
 
 const Debug: SlashCommand = {
 	category: 'Utilities',
-	type: 'slash',
 	data: new SlashCommandBuilder()
 		.setName('debug')
 		.setDescription('Bot debug')

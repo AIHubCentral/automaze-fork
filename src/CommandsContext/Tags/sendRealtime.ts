@@ -19,7 +19,6 @@ function createEmbeds(guides: SelectMenuData[]): EmbedBuilder[] {
 
 const SendRealtimeGuides: ContextCommand = {
     category: 'Tags',
-    type: 'context-menu',
     data: new ContextMenuCommandBuilder()
         .setName('Send Realtime guides')
         .setType(ApplicationCommandType.User)

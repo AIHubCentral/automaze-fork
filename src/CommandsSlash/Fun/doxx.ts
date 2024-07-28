@@ -8,7 +8,6 @@ import ExtendedClient from '../../Core/extendedClient';
 const Doxx: SlashCommand = {
 	category: 'Fun',
 	cooldown: 60,
-	type: 'slash',
 	data: new SlashCommandBuilder()
 		.setName('doxx')
 		.setDescription('NOT ACTUAL DOXXING. creates random ip and house address')

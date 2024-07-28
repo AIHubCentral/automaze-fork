@@ -6,7 +6,6 @@ import { banan } from "../../Utils/botUtilities";
 
 const Banan: ContextCommand = {
     category: 'Fun',
-    type: 'context-menu',
     data: new ContextMenuCommandBuilder()
         .setName('banan')
         .setType(ApplicationCommandType.User)

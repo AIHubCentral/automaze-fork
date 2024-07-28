@@ -5,7 +5,6 @@ import { createEmbeds, getAvailableColors } from '../../Utils/discordUtilities';
 
 const SendUploadGuides: ContextCommand = {
 	category: 'Tags',
-	type: 'context-menu',
 	data: new ContextMenuCommandBuilder()
 		.setName('Send upload guides')
 		.setType(ApplicationCommandType.User),

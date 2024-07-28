@@ -4,7 +4,6 @@ import ExtendedClient from '../../Core/extendedClient';
 
 const Help: SlashCommand = {
     category: 'Info',
-    type: 'slash',
     data: new SlashCommandBuilder()
         .setName('help')
         .setDescription('Displays info about Automaze commands.')
