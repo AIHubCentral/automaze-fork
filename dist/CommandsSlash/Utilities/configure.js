@@ -1,12 +1,12 @@
 "use strict";
-/* eslint-disable indent */
-const { SlashCommandBuilder, ActivityType, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, ComponentType, EmbedBuilder, } = require('discord.js');
-const { getThemes } = require('../../utils.js');
-const delay = require('node:timers/promises').setTimeout;
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
+const generalUtilities_js_1 = require("../../Utils/generalUtilities.js");
+const botUtilities_js_1 = require("../../Utils/botUtilities.js");
+const Configure = {
     category: 'Utilities',
     cooldown: 30,
-    data: new SlashCommandBuilder()
+    data: new discord_js_1.SlashCommandBuilder()
         .setName('configure')
         .setDescription('Configure bot settings')
         .addSubcommand(subcommand => subcommand
@@ -90,169 +90,219 @@ module.exports = {
         .setName('enabled')
         .setDescription('Enable or disable this log'))),
     async execute(interaction) {
-        const { client } = interaction;
+        const client = interaction.client;
         const { botConfigs } = client;
         if (interaction.options.getSubcommand() === 'comission') {
-            const sendMessages = interaction.options.getBoolean('bot_responses');
-            const deleteMessages = interaction.options.getBoolean('delete_messages');
-            client.botConfigs.commissions.sendMessages = sendMessages;
-            client.botConfigs.commissions.deleteMessages = deleteMessages;
-            await interaction.reply({ content: `Bot configured:\n- sendMessages: **${sendMessages}**\n- deleteMessages: **${deleteMessages}**`, ephemeral: true });
+            await configureCommision(interaction, botConfigs);
         }
         else if (interaction.options.getSubcommand() === 'theme') {
-            const themeOptions = [
-                {
-                    label: 'Default',
-                    description: 'Default theme',
-                    value: 'defaultTheme',
-                    emoji: '📁',
-                },
-                {
-                    label: 'Christmas',
-                    description: 'Christmas theme',
-                    value: 'xmasTheme',
-                    emoji: '🎄',
-                },
-            ];
-            const selectMenu = new StringSelectMenuBuilder()
-                .setCustomId(interaction.id)
-                .setPlaceholder('Select the desired theme')
-                .addOptions(themeOptions.map((theme) => new StringSelectMenuOptionBuilder()
-                .setLabel(theme.label)
-                .setDescription(theme.description)
-                .setValue(theme.value)
-                .setEmoji(theme.emoji)));
-            const actionRow = new ActionRowBuilder().addComponents(selectMenu);
-            const botReply = await interaction.reply({ components: [actionRow] });
-            const collector = botReply.createMessageComponentCollector({
-                ComponentType: ComponentType.StringSelect,
-                filter: (i) => i.user.id === interaction.user.id && i.customId === interaction.id,
-                time: 60000,
-            });
-            collector.on('collect', (i) => {
-                const themeName = i.values[0];
-                const themes = getThemes();
-                client.botConfigs.colors.theme = themes[themeName];
-                i.reply(`Theme changed to **${themeName}**.`);
-            });
+            await configureTheme(interaction, botConfigs);
         }
         else if (interaction.options.getSubcommand() === 'status') {
-            await interaction.deferReply({ ephemeral: true });
-            const selectedStatus = interaction.options.getString('statuses');
-            client.user.setStatus(selectedStatus);
-            await delay(5000);
-            await interaction.editReply({ content: `Status: ${selectedStatus}` });
+            await configureStatus(interaction);
         }
         else if (interaction.options.getSubcommand() === 'activity') {
-            await interaction.deferReply({ ephemeral: true });
-            let activityType = interaction.options.getString('activity_type');
-            const activityName = interaction.options.getString('activity_name');
-            if (activityType === 'reset') {
-                client.user.setPresence({});
-                await delay(3000);
-                await interaction.editReply({ content: 'Activity reseted' });
-            }
-            else {
-                switch (activityType) {
-                    case 'watching':
-                        activityType = ActivityType.Watching;
-                        break;
-                    case 'listening':
-                        activityType = ActivityType.Listening;
-                        break;
-                }
-                client.user.setActivity({
-                    name: activityName ?? 'AI HUB',
-                    type: activityType,
-                });
-                await delay(3000);
-                await interaction.editReply({ content: 'Activity updated!' });
-            }
+            await configureActivity(interaction);
         }
         else if (interaction.options.getSubcommand() === 'general') {
-            const botReactions = interaction.options.getBoolean('bot_reactions');
-            const sendLogs = interaction.options.getBoolean('send_logs');
-            const botResponse = { content: 'Nothing changed.', ephemeral: true };
-            if ((botReactions == null) && (sendLogs == null))
-                return await interaction.reply(botResponse);
-            botResponse.content = ['### General configs changed'];
-            if (botReactions != null) {
-                client.botConfigs.general.reactions = botReactions;
-                botResponse.content.push(`- Reactions: \`${botReactions}\``);
-            }
-            if (sendLogs != null) {
-                client.botConfigs.general.sendLogs = sendLogs;
-                botResponse.content.push(`- Send logs: \`${sendLogs}\``);
-            }
-            botResponse.content = botResponse.content.join('\n');
-            await interaction.reply(botResponse);
+            await configureGeneral(interaction);
         }
         else if (interaction.options.getSubcommand() === 'cooldown_immune') {
-            const userId = interaction.options.getString('user_id');
-            const cooldownImmunity = interaction.options.getBoolean('immune');
-            if (cooldownImmunity) {
-                client.botData.cooldownImmuneUsers.set(userId, cooldownImmunity);
-                client.cooldowns.reactions.delete(userId);
-                client.cooldowns.banana.delete(userId);
-                client.cooldowns.slashCommands.delete(userId);
-            }
-            else {
-                client.botData.cooldownImmuneUsers.delete(userId);
-            }
-            await interaction.reply({ content: `User: ${userId}\nCooldown immunity: ${cooldownImmunity}`, ephemeral: true });
+            await configureCooldownImmunity(interaction);
         }
         else if (interaction.options.getSubcommand() === 'automated_messages') {
-            const sendMessages = interaction.options.getBoolean('send_messages');
-            const botResponse = { ephemeral: true };
-            if (sendMessages) {
-                if (client.scheduler.isRunning) {
-                    botResponse.content = 'Scheduler is already running.';
-                }
-                else {
-                    botResponse.content = 'Scheduler started.';
-                    client.scheduler.start();
-                }
-            }
-            else {
-                botResponse.content = 'Scheduler stopped.';
-                client.scheduler.stop();
-            }
-            await interaction.reply(botResponse);
+            await configureAutomatedMessages(interaction);
         }
         else if (interaction.options.getSubcommand() === 'debug_guild') {
-            const guildId = interaction.options.getString('guild_id');
-            const channelId = interaction.options.getString('channel_id');
-            client.botConfigs.debugGuild.id = guildId ?? '';
-            client.botConfigs.debugGuild.channelId = channelId ?? '';
-            const embedDescription = [
-                `- **Guild ID**: ${client.botConfigs.debugGuild.id}`,
-                `- **Channel ID**: ${client.botConfigs.debugGuild.channelId}`,
-            ];
-            const embed = new EmbedBuilder()
-                .setTitle('Debug Guild')
-                .setColor('Blurple')
-                .setDescription(embedDescription.join('\n'));
-            await interaction.reply({ embeds: [embed] });
+            await configureDebugGuild(interaction);
         }
         else if (interaction.options.getSubcommand() === 'logs') {
-            const logsCategory = interaction.options.getString('category');
-            const logEnabled = interaction.options.getBoolean('enabled');
-            client.logger.info('Configuring logs...', { more: { logsCategory, logEnabled } });
-            if (logEnabled != null) {
-                botConfigs.logs[logsCategory] = logEnabled;
-            }
-            const embedDescription = [];
-            for (const key in botConfigs.logs) {
-                embedDescription.push(`- ${key}: \`${botConfigs.logs[key]}\``);
-            }
-            const embed = new EmbedBuilder()
-                .setTitle('Logs configuration')
-                .setDescription(embedDescription.join('\n'))
-                .setColor('Blurple');
-            await interaction.reply({
-                embeds: [embed],
-                ephemeral: true,
-            });
+            await configureLogs(interaction);
         }
     },
 };
+exports.default = Configure;
+async function configureCommision(interaction, configs) {
+    const sendMessages = interaction.options.getBoolean('bot_responses') ?? false;
+    const deleteMessages = interaction.options.getBoolean('delete_messages') ?? false;
+    configs.commissions.sendMessages = sendMessages;
+    configs.commissions.deleteMessages = deleteMessages;
+    const responseLines = [
+        (0, discord_js_1.heading)('Bot Configured', discord_js_1.HeadingLevel.Three),
+        (0, discord_js_1.codeBlock)('js', JSON.stringify({ sendMessages, deleteMessages }, null, 4))
+    ];
+    await interaction.reply({ content: responseLines.join('\n'), ephemeral: true });
+}
+async function configureTheme(interaction, configs) {
+    const themeOptions = [
+        {
+            label: 'Default',
+            description: 'Default theme',
+            value: 'defaultTheme',
+            emoji: '📁',
+        },
+        {
+            label: 'Christmas',
+            description: 'Christmas theme',
+            value: 'xmasTheme',
+            emoji: '🎄',
+        },
+    ];
+    const selectMenu = new discord_js_1.StringSelectMenuBuilder()
+        .setCustomId(interaction.id)
+        .setPlaceholder('Select the desired theme')
+        .addOptions(themeOptions.map((theme) => new discord_js_1.StringSelectMenuOptionBuilder()
+        .setLabel(theme.label)
+        .setDescription(theme.description)
+        .setValue(theme.value)
+        .setEmoji(theme.emoji)));
+    const actionRow = new discord_js_1.ActionRowBuilder().addComponents(selectMenu);
+    const botReply = await interaction.reply({ components: [actionRow] });
+    const collector = botReply.createMessageComponentCollector({
+        componentType: discord_js_1.ComponentType.StringSelect,
+        filter: (i) => i.user.id === interaction.user.id && i.customId === interaction.id,
+        time: 60000,
+    });
+    collector.on('collect', (i) => {
+        const themeName = i.values[0];
+        const themes = (0, botUtilities_js_1.getThemes)();
+        configs.colors.theme = themes[themeName];
+        i.reply(`Theme changed to ** ${themeName}**.`);
+    });
+    collector.on('end', async () => {
+        await botReply.delete();
+    });
+}
+async function configureStatus(interaction) {
+    await interaction.deferReply({ ephemeral: true });
+    const selectedStatus = interaction.options.getString('statuses') ?? 'online';
+    interaction.client.user.setStatus(selectedStatus);
+    await (0, generalUtilities_js_1.delay)(5000);
+    await interaction.editReply({ content: `Status: ${selectedStatus} ` });
+}
+async function configureActivity(interaction) {
+    await interaction.deferReply({ ephemeral: true });
+    let activityTypeInput = interaction.options.getString('activity_type');
+    const activityName = interaction.options.getString('activity_name') ?? 'AI HUB';
+    let activityType = undefined;
+    if (activityTypeInput === 'reset') {
+        interaction.client.user.setPresence({});
+        await (0, generalUtilities_js_1.delay)(3000);
+        await interaction.editReply({ content: 'Activity reseted' });
+    }
+    else {
+        switch (activityTypeInput) {
+            case 'watching':
+                activityType = discord_js_1.ActivityType.Watching;
+                break;
+            case 'listening':
+                activityType = discord_js_1.ActivityType.Listening;
+                break;
+        }
+        interaction.client.user.setActivity({
+            name: activityName,
+            type: activityType,
+        });
+        await (0, generalUtilities_js_1.delay)(3000);
+        await interaction.editReply({ content: 'Activity updated!' });
+    }
+}
+async function configureGeneral(interaction) {
+    const botReactions = interaction.options.getBoolean('bot_reactions');
+    const sendLogs = interaction.options.getBoolean('send_logs');
+    const client = interaction.client;
+    if (botReactions != null) {
+        client.botConfigs.general.reactions = botReactions;
+    }
+    if (sendLogs != null) {
+        client.botConfigs.general.sendLogs = sendLogs;
+    }
+    const responseListing = (0, discord_js_1.unorderedList)([
+        `Reactions: ${(0, discord_js_1.inlineCode)(String(client.botConfigs.general.reactions))}`,
+        `Send logs: ${(0, discord_js_1.inlineCode)(String(client.botConfigs.general.sendLogs))}`
+    ]);
+    const embed = new discord_js_1.EmbedBuilder()
+        .setTitle("General configs")
+        .setDescription(responseListing)
+        .setColor(discord_js_1.Colors.Aqua)
+        .setTimestamp();
+    await interaction.reply({ embeds: [embed], ephemeral: true });
+}
+async function configureCooldownImmunity(interaction) {
+    const userId = interaction.options.getString('user_id');
+    if (!userId)
+        return;
+    const cooldownImmunity = interaction.options.getBoolean('immune') ?? false;
+    const client = interaction.client;
+    if (cooldownImmunity) {
+        client.botData.cooldownImmuneUsers.set(userId, cooldownImmunity);
+        client.cooldowns.reactions.delete(userId);
+        client.cooldowns.banana.delete(userId);
+        client.cooldowns.slashCommands.delete(userId);
+    }
+    else {
+        client.botData.cooldownImmuneUsers.delete(userId);
+    }
+    const embed = new discord_js_1.EmbedBuilder()
+        .setTitle("Cooldown Immunity")
+        .setDescription((0, discord_js_1.unorderedList)([
+        `User: ${(0, discord_js_1.userMention)(userId)}`,
+        `Immunity: ${(0, discord_js_1.inlineCode)(String(cooldownImmunity))}`,
+    ]))
+        .setColor(discord_js_1.Colors.DarkAqua);
+    await interaction.reply({ embeds: [embed], ephemeral: true });
+}
+async function configureAutomatedMessages(interaction) {
+    const sendMessages = interaction.options.getBoolean('send_messages') ?? false;
+    const botResponse = { ephemeral: true };
+    const client = interaction.client;
+    if (sendMessages) {
+        if (client.scheduler.isRunning) {
+            botResponse.content = 'Scheduler is already running.';
+        }
+        else {
+            botResponse.content = 'Scheduler started.';
+            client.scheduler.start();
+        }
+    }
+    else {
+        botResponse.content = 'Scheduler stopped.';
+        client.scheduler.stop();
+    }
+    await interaction.reply(botResponse);
+}
+async function configureDebugGuild(interaction) {
+    const guildId = interaction.options.getString('guild_id');
+    const channelId = interaction.options.getString('channel_id');
+    const client = interaction.client;
+    client.botConfigs.debugGuild.id = guildId ?? '';
+    client.botConfigs.debugGuild.channelId = channelId ?? '';
+    const embed = new discord_js_1.EmbedBuilder()
+        .setTitle('Debug Guild')
+        .setColor(discord_js_1.Colors.DarkBlue)
+        .setDescription((0, discord_js_1.unorderedList)([
+        `${(0, discord_js_1.bold)("Guild ID")}: ${(0, discord_js_1.inlineCode)(client.botConfigs.debugGuild.id)}`,
+        `${(0, discord_js_1.bold)("Channel ID")}: ${(0, discord_js_1.inlineCode)(client.botConfigs.debugGuild.channelId)}`
+    ]));
+    await interaction.reply({ embeds: [embed] });
+}
+async function configureLogs(interaction) {
+    const logsCategory = interaction.options.getString('category');
+    const logEnabled = interaction.options.getBoolean('enabled');
+    const client = interaction.client;
+    if (logEnabled != null) {
+        client.botConfigs.logs[logsCategory] = logEnabled;
+    }
+    const embedDescription = [];
+    for (const key in client.botConfigs.logs) {
+        embedDescription.push(`- ${key}: \`${client.botConfigs.logs[key]}\``);
+    }
+    const embed = new discord_js_1.EmbedBuilder()
+        .setTitle('Logs configuration')
+        .setDescription(embedDescription.join('\n'))
+        .setColor(discord_js_1.Colors.DarkButNotBlack);
+    await interaction.reply({
+        embeds: [embed],
+        ephemeral: true,
+    });
+}

@@ -4,41 +4,6 @@
 const fs = require('fs');
 const path = require('node:path');
 const { Collection, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-// Will give you all the files in a folder recursively
-function getAllFiles(currentPath) {
-    let currentFiles = [];
-    for (const thatFile of fs.readdirSync(currentPath)) {
-        const filePath = currentPath + '/' + thatFile;
-        if (fs.lstatSync(filePath).isDirectory()) {
-            currentFiles = currentFiles.concat(currentFiles, getAllFiles(filePath));
-        }
-        else {
-            currentFiles.push(filePath);
-        }
-    }
-    return [...new Set(currentFiles)];
-}
-exports.getAllFiles = getAllFiles;
-function getThemes() {
-    const themes = {};
-    const themesDirectory = path.join(process.cwd(), 'JSON', 'themes');
-    const themeFiles = getAllFiles(themesDirectory).filter(file => path.extname(file) === '.json');
-    themeFiles.forEach(filePath => {
-        const themeData = fs.readFileSync(filePath).toString();
-        // remove .json extension from file name
-        const themeName = path.parse(filePath).name;
-        themes[themeName] = JSON.parse(themeData);
-    });
-    return themes;
-}
-exports.getThemes = getThemes;
-// Create delay async in the script
-async function delay(ms) {
-    return new Promise(resolve => {
-        setTimeout(resolve, ms);
-    });
-}
-exports.delay = delay;
 function getRandomNumber(min, max) {
     /* gets a random number between min and max */
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -77,40 +42,6 @@ function getCommands(basePath, subPath) {
     return commands;
 }
 exports.getCommands = getCommands;
-function createEmbed(data, color = '') {
-    /**
-     * Creates a discord embed from an object passed as `data` argument
-     */
-    const embed = new EmbedBuilder();
-    // if the color not provided as an argument, try to use from data
-    if (!color) {
-        color = data.color;
-    }
-    embed.setColor(color ?? 'Yellow');
-    if (data.title) {
-        embed.setTitle(data.title);
-    }
-    if (data.description) {
-        embed.setDescription(data.description.join('\n'));
-    }
-    if (data.fields) {
-        embed.setFields(data.fields);
-    }
-    if (data.image) {
-        embed.setImage(data.image);
-    }
-    if (data.thumbnail) {
-        embed.setThumbnail(data.thumbnail);
-    }
-    if (data.footer) {
-        embed.setFooter({ text: data.footer });
-    }
-    if (data.timestamp) {
-        embed.setTimestamp();
-    }
-    return embed;
-}
-exports.createEmbed = createEmbed;
 function createEmbeds(contents, colors) {
     /* create embeds from an array of objects and assign colors */
     let colorIndex = 0;

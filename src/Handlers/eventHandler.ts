@@ -1,7 +1,7 @@
 import path from "node:path";
 import ExtendedClient from "../Core/extendedClient";
 import IEventData from "../Interfaces/Events";
-import { getAllFiles } from "../utils";
+import { getAllFiles } from "../Utils/fileUtilities";
 
 const EVENTS_PATH = path.join(process.cwd(), 'dist', 'Events');
 

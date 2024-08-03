@@ -4,6 +4,9 @@ import ExtendedClient from "../Core/extendedClient";
 import { ButtonData, EmbedData } from "../Interfaces/BotData";
 import { createEmbeds, getChannelById, getGuildById } from "./discordUtilities";
 import UserService, { UserModel } from "../Services/userService";
+import path from "path";
+import fs from "fs";
+import { getAllFiles } from "./fileUtilities";
 
 export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
     const colors = [
@@ -12,6 +15,19 @@ export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
         botConfigs.colors.theme.tertiary,
     ];
     return colors;
+}
+
+export function getThemes() {
+    const themes: { [key: string]: string } = {};
+    const themesDirectory = path.join(process.cwd(), 'JSON', 'themes');
+    const themeFiles = getAllFiles(themesDirectory).filter(file => path.extname(file) === '.json');
+    themeFiles.forEach(filePath => {
+        const themeData = fs.readFileSync(filePath).toString();
+        // remove .json extension from file name
+        const themeName = path.parse(filePath).name;
+        themes[themeName] = JSON.parse(themeData);
+    });
+    return themes;
 }
 
 export class TagResponseSender {

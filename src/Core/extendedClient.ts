@@ -6,7 +6,8 @@ import IDiscordIDs from '../Interfaces/DiscordIDs';
 import { createInstance } from '../Database/dbManager';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import IBotUtils from '../Interfaces/BotUtils';
-import { Scheduler, getThemes } from '../utils';
+import { Scheduler } from '../utils';
+import { getThemes } from '../Utils/botUtilities';
 
 export interface ExtendedClientOptions {
     logger: winston.Logger;

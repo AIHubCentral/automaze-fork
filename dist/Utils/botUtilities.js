@@ -3,10 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.banan = exports.TagResponseSender = exports.getThemeColors = void 0;
+exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
 const userService_1 = __importDefault(require("../Services/userService"));
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const fileUtilities_1 = require("./fileUtilities");
 function getThemeColors(botConfigs) {
     const colors = [
         botConfigs.colors.theme.primary,
@@ -16,6 +19,19 @@ function getThemeColors(botConfigs) {
     return colors;
 }
 exports.getThemeColors = getThemeColors;
+function getThemes() {
+    const themes = {};
+    const themesDirectory = path_1.default.join(process.cwd(), 'JSON', 'themes');
+    const themeFiles = (0, fileUtilities_1.getAllFiles)(themesDirectory).filter(file => path_1.default.extname(file) === '.json');
+    themeFiles.forEach(filePath => {
+        const themeData = fs_1.default.readFileSync(filePath).toString();
+        // remove .json extension from file name
+        const themeName = path_1.default.parse(filePath).name;
+        themes[themeName] = JSON.parse(themeData);
+    });
+    return themes;
+}
+exports.getThemes = getThemes;
 class TagResponseSender {
     constructor(client) {
         this.client = client;

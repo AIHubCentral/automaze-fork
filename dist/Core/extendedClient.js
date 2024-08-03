@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = __importStar(require("discord.js"));
 const dbManager_1 = require("../Database/dbManager");
 const utils_1 = require("../utils");
+const botUtilities_1 = require("../Utils/botUtilities");
 class ExtendedClient extends Discord.Client {
     constructor(options, extendedOptions) {
         super(options);
@@ -60,7 +61,7 @@ class ExtendedClient extends Discord.Client {
         this.setupBot();
     }
     loadThemes() {
-        const themes = (0, utils_1.getThemes)();
+        const themes = (0, botUtilities_1.getThemes)();
         const selectedTheme = process.env.theme ?? 'defaultTheme';
         this.botConfigs.colors.theme = themes[selectedTheme];
     }
