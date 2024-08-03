@@ -10,6 +10,7 @@ import {
 import ExtendedClient from '../../Core/extendedClient';
 import { SelectMenuOption } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
+import { createEmbeds } from '../../Utils/discordUtilities';
 
 function createMenuOptions(availableOptions: SelectMenuOption[]): StringSelectMenuOptionBuilder[] {
     const menuOptions: StringSelectMenuOptionBuilder[] = [];
@@ -54,7 +55,7 @@ const Realtime: PrefixCommand = {
         const realtimeActionRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(realtimeGuidesSelectMenu);
 
         let botResponse: MessageReplyOptions = {
-            embeds: botUtils.createEmbeds(selectedGuide?.embeds, availableColors),
+            embeds: createEmbeds(selectedGuide!.embeds, availableColors),
             components: [realtimeActionRow]
         };
 
@@ -102,7 +103,7 @@ const Realtime: PrefixCommand = {
                     botResponse.content = `\nSuggestions for ${targetUser}`;
                 }
 
-                botResponse.embeds = botUtils.createEmbeds(guide?.embeds, availableColors);
+                botResponse.embeds = createEmbeds(guide!.embeds, availableColors);
 
                 i.update(<InteractionUpdateOptions>botResponse);
             } else {

@@ -36,7 +36,6 @@ const extendedOptions: ExtendedClientOptions = {
     botResponses: botResponses,
     botAdminIds: process.env.developerIds ? process.env.developerIds.split(',') : [],
     botUtils: {
-        createEmbed, createEmbeds,
         getAvailableColors, getRandomNumber, getRandomFromArray
     }
 };

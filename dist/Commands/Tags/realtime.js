@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const discordUtilities_1 = require("../../Utils/discordUtilities");
 function createMenuOptions(availableOptions) {
     const menuOptions = [];
     for (const option of availableOptions ?? []) {
@@ -35,7 +36,7 @@ const Realtime = {
             .addOptions(menuOptions);
         const realtimeActionRow = new discord_js_1.ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
         let botResponse = {
-            embeds: botUtils.createEmbeds(selectedGuide?.embeds, availableColors),
+            embeds: (0, discordUtilities_1.createEmbeds)(selectedGuide.embeds, availableColors),
             components: [realtimeActionRow]
         };
         let selectMenuDisplayMinutes = 5; // allow interaction with the select menu for 5 minutes
@@ -71,7 +72,7 @@ const Realtime = {
                 if (targetUser) {
                     botResponse.content = `\nSuggestions for ${targetUser}`;
                 }
-                botResponse.embeds = botUtils.createEmbeds(guide?.embeds, availableColors);
+                botResponse.embeds = (0, discordUtilities_1.createEmbeds)(guide.embeds, availableColors);
                 i.update(botResponse);
             }
             else {

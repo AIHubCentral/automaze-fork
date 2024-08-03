@@ -243,7 +243,7 @@ async function banan(interaction, targetUser, guildMember) {
     if (userModel.bananas > 1) {
         embedData.footer = embedData.footer.replace('TIME', 'TIMES');
     }
-    const embed = client.botUtils.createEmbed(embedData, 'Yellow');
+    const embed = (0, discordUtilities_1.createEmbed)(embedData, 'Yellow');
     // cooldown expires in 1 minute
     client.cooldowns.banana.set(interaction.user.id, Date.now() + (1 * 60 * 1000));
     if (botRevenge) {

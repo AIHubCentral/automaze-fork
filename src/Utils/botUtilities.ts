@@ -2,7 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteracti
 import IBotConfigs from "../Interfaces/BotConfigs";
 import ExtendedClient from "../Core/extendedClient";
 import { ButtonData, EmbedData } from "../Interfaces/BotData";
-import { createEmbeds, getChannelById, getGuildById } from "./discordUtilities";
+import { createEmbed, createEmbeds, getChannelById, getGuildById } from "./discordUtilities";
 import UserService, { UserModel } from "../Services/userService";
 import path from "path";
 import fs from "fs";
@@ -326,7 +326,7 @@ export async function banan(interaction: ChatInputCommandInteraction | UserConte
         embedData.footer = embedData.footer.replace('TIME', 'TIMES');
     }
 
-    const embed = client.botUtils.createEmbed(embedData, 'Yellow');
+    const embed = createEmbed(embedData, 'Yellow');
 
     // cooldown expires in 1 minute
     client.cooldowns.banana.set(interaction.user.id, Date.now() + (1 * 60 * 1000));

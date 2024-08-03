@@ -49,22 +49,6 @@ function getCommands(basePath, subPath) {
 
 exports.getCommands = getCommands;
 
-function createEmbeds(contents, colors) {
-	/* create embeds from an array of objects and assign colors */
-	let colorIndex = 0;
-	const embeds = contents.map(item => {
-		if (colorIndex >= colors.length) {
-			// goes back to the start of the array after reaching the end
-			colorIndex = 0;
-		}
-		const selectedColor = item.color ?? colors[colorIndex++];
-		return createEmbed(item, selectedColor);
-	});
-	return embeds;
-}
-
-exports.createEmbeds = createEmbeds;
-
 function getAvailableColors(configs) {
 	return Object.values(configs.colors.theme);
 }

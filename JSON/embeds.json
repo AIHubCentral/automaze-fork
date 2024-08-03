@@ -158,6 +158,7 @@
                         "title": "💻 (Local) Realtime Voice Changer",
                         "color": "#07C7F7",
                         "description": [
+                            "- [Guide for deiteris' modified W-Okada's Voice Changer Client (Fork)](https://rentry.co/ForkVoiceChangerGuide)",
                             "- [Guide for W-Okada's RealTimeVoiceChangerClient](https://rentry.co/VoiceChangerGuide)",
                             "- [How to use real time conversion with RVC (voice changer)](https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs)",
                             "- [RVC TTS](https://rentry.co/RVC-TTS-Guide)"
