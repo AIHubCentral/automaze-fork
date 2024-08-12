@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-// Libraries
 import * as Discord from 'discord.js';
 import Logger from './logger';
 import ExtendedClient, { ExtendedClientOptions } from './Core/extendedClient';
@@ -10,7 +9,6 @@ import registerProcesses from './Handlers/processHandler';
 
 // Exports
 const {
-    createEmbed, createEmbeds,
     getAvailableColors, getRandomNumber, getRandomFromArray
 } = require('./utils');
 

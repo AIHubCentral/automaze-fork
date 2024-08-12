@@ -27,7 +27,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
-// Libraries
 const Discord = __importStar(require("discord.js"));
 const logger_1 = __importDefault(require("./logger"));
 const extendedClient_1 = __importDefault(require("./Core/extendedClient"));
@@ -35,7 +34,7 @@ const eventHandler_1 = __importDefault(require("./Handlers/eventHandler"));
 const commandHandler_1 = __importDefault(require("./Handlers/commandHandler"));
 const processHandler_1 = __importDefault(require("./Handlers/processHandler"));
 // Exports
-const { createEmbed, createEmbeds, getAvailableColors, getRandomNumber, getRandomFromArray } = require('./utils');
+const { getAvailableColors, getRandomNumber, getRandomFromArray } = require('./utils');
 // JSONs
 const DiscordIDs = {
     prod: '../JSON/configs/idsDiscordProd.json',

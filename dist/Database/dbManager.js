@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.importData = exports.exportData = exports.createInstance = void 0;
+exports.resourcesDatabase = exports.RESOURCES_DATABASE_PATH = exports.importData = exports.exportData = exports.createInstance = void 0;
 const knex_1 = __importDefault(require("knex"));
+const path_1 = __importDefault(require("path"));
 function createInstance(sqliteFilePath) {
     /* returns a knex instance */
     const knexConfig = {
@@ -34,3 +35,13 @@ async function importData(knex, data) {
     console.log('Data imported!');
 }
 exports.importData = importData;
+const RESOURCES_DATABASE_PATH = path_1.default.join(process.cwd(), 'database', 'resources.sqlite');
+exports.RESOURCES_DATABASE_PATH = RESOURCES_DATABASE_PATH;
+const resourcesDatabase = (0, knex_1.default)({
+    client: 'sqlite3',
+    connection: {
+        filename: RESOURCES_DATABASE_PATH,
+    },
+    useNullAsDefault: true,
+});
+exports.resourcesDatabase = resourcesDatabase;
