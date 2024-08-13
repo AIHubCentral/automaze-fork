@@ -105,7 +105,23 @@ export default class ResourceService {
         }
     }
 
-    update() { }
+    /**
+     * 
+     * @param id Resource ID
+     * @param resource Object
+     * @returns boolean Whether the operation succeeded
+     */
+    async update(id: number, resource: Partial<IResource>): Promise<boolean> {
+        try {
+            await resourcesDatabase('resources').where({ id }).update(resource);
+            this.logger.info(`Resouce with id ${id} updated`);
+            return true;
+        }
+        catch (error) {
+            this.logger.error(`Failed updating resource with id ${id}`, error);
+            return false;
+        }
+    }
 
     /**
      * Deletes a resource by its id
@@ -135,5 +151,20 @@ export default class ResourceService {
         }
     }
 
-    toJSON() { }
+    /**
+     * Inserts multiple resources in the database
+     * @param resources Array of IResource
+     * @returns boolean Successfully inserted or not
+     */
+    async importData(resources: IResource[]): Promise<boolean> {
+        try {
+            const result = await resourcesDatabase('resources').insert(resources);
+            this.logger.info(`Resource data imported`);
+            return result.length > 0;
+        }
+        catch (error) {
+            this.logger.error('Error inserting multiple resources: ', error);
+            return false;
+        }
+    }
 }

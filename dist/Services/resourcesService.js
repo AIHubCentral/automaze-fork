@@ -89,7 +89,23 @@ class ResourceService {
             this.logger.error(`Error fetching resource with category ${category}`, error);
         }
     }
-    update() { }
+    /**
+     *
+     * @param id Resource ID
+     * @param resource Object
+     * @returns boolean Whether the operation succeeded
+     */
+    async update(id, resource) {
+        try {
+            await (0, dbManager_1.resourcesDatabase)('resources').where({ id }).update(resource);
+            this.logger.info(`Resouce with id ${id} updated`);
+            return true;
+        }
+        catch (error) {
+            this.logger.error(`Failed updating resource with id ${id}`, error);
+            return false;
+        }
+    }
     /**
      * Deletes a resource by its id
      * @param id of the resource
@@ -115,6 +131,21 @@ class ResourceService {
             this.logger.error(`Failed to delete resources`, error);
         }
     }
-    toJSON() { }
+    /**
+     * Inserts multiple resources in the database
+     * @param resources Array of IResource
+     * @returns boolean Successfully inserted or not
+     */
+    async importData(resources) {
+        try {
+            const result = await (0, dbManager_1.resourcesDatabase)('resources').insert(resources);
+            this.logger.info(`Resource data imported`);
+            return result.length > 0;
+        }
+        catch (error) {
+            this.logger.error('Error inserting multiple resources: ', error);
+            return false;
+        }
+    }
 }
 exports.default = ResourceService;

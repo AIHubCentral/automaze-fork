@@ -1,7 +1,7 @@
-import { codeBlock, SlashCommandBuilder } from "discord.js";
+import { AttachmentBuilder, codeBlock, SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../../Interfaces/Command";
 import ExtendedClient from "../../Core/extendedClient";
-import ResourceService from "../../Services/resourcesService";
+import ResourceService, { IResource } from "../../Services/resourcesService";
 
 const Resources: SlashCommand = {
     category: 'Utilities',
@@ -21,6 +21,41 @@ const Resources: SlashCommand = {
         )
         .addSubcommand(subcommand =>
             subcommand
+                .setName('insert')
+                .setDescription('Create a new record in the database')
+                .addStringOption(option =>
+                    option
+                        .setName('category')
+                        .setDescription('Resource category')
+                        .setRequired(true)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('url')
+                        .setDescription('Resource URL')
+                        .setRequired(true)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('display_title')
+                        .setDescription('Friendly title for the URL')
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('emoji')
+                        .setDescription('Emoji for the the URL title')
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('authors')
+                        .setDescription('Resource authors')
+                        .setRequired(false)
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('find_all')
                 .setDescription('Returns all the resources')
         )
@@ -30,6 +65,44 @@ const Resources: SlashCommand = {
                 .setDescription('Gets a resource')
                 .addStringOption(option =>
                     option.setName('category').setDescription('Resource category').setRequired(true)
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('update')
+                .setDescription('Update a record in the database')
+                .addIntegerOption(option =>
+                    option.setName('id').setDescription('Resource ID').setRequired(true)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('category')
+                        .setDescription('Resource category')
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('url')
+                        .setDescription('Resource URL')
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('display_title')
+                        .setDescription('Friendly title for the URL')
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('emoji')
+                        .setDescription('Emoji for the the URL title')
+                        .setRequired(false)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('authors')
+                        .setDescription('Resource authors')
+                        .setRequired(false)
                 )
         )
         .addSubcommand(subcommand =>
@@ -44,6 +117,21 @@ const Resources: SlashCommand = {
             subcommand
                 .setName('clear')
                 .setDescription('Deletes all the resources')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('import_data')
+                .setDescription('Imports data from a JSON file to the database')
+                .addAttachmentOption(option =>
+                    option.setName('file')
+                        .setDescription('Upload a JSON file')
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('export_data')
+                .setDescription('Exports data from database to a JSON file')
         ),
     async execute(interaction) {
         const client = interaction.client as ExtendedClient;
@@ -98,6 +186,82 @@ const Resources: SlashCommand = {
         else if (interaction.options.getSubcommand() === 'clear') {
             await service.clear();
             await interaction.reply({ content: 'Done.' });
+        }
+        else if (interaction.options.getSubcommand() === 'insert') {
+            const resourceCategory = interaction.options.getString('category') ?? '';
+            const url = interaction.options.getString('url') ?? '';
+            const displayTitle = interaction.options.getString('display_title') ?? '';
+            const emoji = interaction.options.getString('emoji') ?? '';
+            const authors = interaction.options.getString('authors') ?? '';
+
+            const result = {
+                category: resourceCategory,
+                url,
+                displayTitle,
+                emoji,
+                authors
+            };
+
+            const resourceId = await service.insert(result);
+
+            if (resourceId == -1) {
+                await interaction.reply({ content: 'Failed to insert data', ephemeral: true });
+            }
+            else {
+                await interaction.reply({ content: `Inserted new resource with id ${resourceId}`, ephemeral: true });
+            }
+        }
+        else if (interaction.options.getSubcommand() === 'update') {
+            const resourceCategory = interaction.options.getString('category');
+            const url = interaction.options.getString('url');
+            const displayTitle = interaction.options.getString('display_title');
+            const emoji = interaction.options.getString('emoji');
+            const authors = interaction.options.getString('authors');
+
+            const result: Partial<IResource> = {
+                ...(resourceCategory && { category: resourceCategory }),
+                ...(url && { url }),
+                ...(displayTitle && { displayTitle }),
+                ...(emoji && { emoji }),
+                ...(authors && { authors }),
+            };
+
+            const resourceUpdated: boolean = await service.update(id, result);
+
+            if (!resourceUpdated) {
+                await interaction.reply({ content: 'Failed to update data', ephemeral: true });
+            }
+            else {
+                await interaction.reply({ content: `Updated resource with id ${id}`, ephemeral: true });
+            }
+        }
+        else if (interaction.options.getSubcommand() === 'export_data') {
+            const resources: IResource[] = await service.findAll();
+
+            if (resources.length === 0) {
+                await interaction.reply({ content: `No resource found`, ephemeral: true });
+            }
+            else {
+                const jsonResult = JSON.stringify(resources, null, 4);
+                const buffer = Buffer.from(jsonResult, 'utf-8');
+                const attachment = new AttachmentBuilder(buffer, { name: 'resources.json' });
+                await interaction.reply({ files: [attachment], ephemeral: true });
+            }
+        }
+        else if (interaction.options.getSubcommand() === 'import_data') {
+            const file = interaction.options.getAttachment('file');
+
+            if (!file?.name.endsWith('.json')) {
+                await interaction.reply({ content: 'Not a valid JSON file', ephemeral: true });
+                return;
+            }
+
+            const response = await fetch(file.url);
+            const jsonResult = await response.json() as IResource[];
+
+            const insertedValues: boolean = await service.importData(jsonResult);
+            const replyMessage = insertedValues ? `Data imported` : 'No data provided';
+            await interaction.reply({ content: replyMessage, ephemeral: true });
         }
     }
 }
