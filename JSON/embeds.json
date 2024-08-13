@@ -40,7 +40,20 @@
                         "- **AICoverGen-NoWebUI [Spanish]**, *credits to Eddy, Hina and Gdr for translating and fixing* [Google Colab](https://colab.research.google.com/drive/1qezaBvCn4eSG1U2L4a64tEHTynbIu8eN?usp=sharing)",
                         "- **Ilaria RVC**, by thestingerx [Google Colab](https://colab.research.google.com/drive/1mHKTGH5e3SAyDSBss1KtiYRbDdQzwSMs)",
                         "- **UVR5 NO UI for Google Colab**, by Eddy [Google Colab](https://colab.research.google.com/github/Eddycrack864/UVR5-NO-UI/blob/main/UVR5_NO_UI.ipynb)",
-                        "- **UVR5 UI**, by Eddy [Google Colab](https://colab.research.google.com/github/Eddycrack864/UVR5-UI/blob/main/UVR_UI.ipynb)"
+                        "- **UVR5 UI**, by Eddy [Google Colab](https://colab.research.google.com/github/Eddycrack864/UVR5-UI/blob/main/UVR_UI.ipynb)",
+                        "- 🆕 [Modified W-Okada's Voice Changer Google Colab](https://colab.research.google.com/github/deiteris/voice-changer/blob/master-custom/Colab_RealtimeVoiceChanger.ipynb)"
+                    ]
+                }
+            ]
+        }
+    },
+    "colab_notice": {
+        "en": {
+            "embeds": [
+                {
+                    "title": "ℹ️ Note",
+                    "description": [
+                        "While the Colab free plan provides up to 12 hours of daily usage, the GPU is typically available for only about 4 hours each day on average."
                     ],
                     "footer": "More commands: -audio, -hf, -local, -kaggle, -overtraining, -realtime, -rvc, -help"
                 }
@@ -76,7 +89,9 @@
                         "- [UVR5 NO UI](https://www.kaggle.com/code/eddycrack864/uvr5-no-ui) by **Eddy**",
                         "- [How to use RVC Mainline Kaggle](https://rentry.co/RVC-Mainline-Kaggle) by **Cauthess**",
                         "- [🍏 Applio RVC](https://www.kaggle.com/code/iahispano/applio-rvc-fork) by **IA Hispano**",
-                        "- [✨ RVC Mainline](https://www.kaggle.com/code/hinabl/mainline) by [Hina](https://linktr.ee/_hina__)"
+                        "- [✨ RVC Mainline](https://www.kaggle.com/code/hinabl/mainline) by [Hina](https://linktr.ee/_hina__)",
+                        "- 🆕 [Original W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/hinabl/public-w-okada-voice-changer)",
+                        "- 🆕 [Modified W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/suneku/voice-changer-public)"
                     ],
                     "footer": "More commands: -colabs, -hf, -local, -rvc, -help"
                 }
@@ -151,6 +166,30 @@
     },
     "realtime": {
         "en": {
+            "online": {
+                "content": "### 🎙️ Realtime Voice Changer (Online)",
+                "embeds": [
+                    {
+                        "title": "☁ (Online) W-Okada - Colab Version",
+                        "color": "#077CF7",
+                        "description": [
+                            "- [How to use Original W-Okada's Voice Changer Google Colab](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)",
+                            "- 🆕 [Modified W-Okada's Voice Changer Google Colab](https://colab.research.google.com/github/deiteris/voice-changer/blob/master-custom/Colab_RealtimeVoiceChanger.ipynb)",
+                            "- 🆕 [Original W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/hinabl/public-w-okada-voice-changer)",
+                            "- 🆕 [Modified W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/suneku/voice-changer-public)"
+                        ]
+                    },
+                    {
+                        "title": "⚠️ Notes",
+                        "color": "Yellow",
+                        "description": [
+                            "- Colab free plan GPUs tipically works for about 4 hours each day",
+                            "- Kaggle restricts GPU usage to 30 hours per week",
+                            "- These options may not work on mobile devices due to the lack of a Voice Audio Cable (VAC)"
+                        ]
+                    }
+                ]
+            },
             "local": {
                 "content": "### 🎙️ Realtime Voice Changer (Local)",
                 "embeds": [
@@ -163,20 +202,6 @@
                             "- [How to use real time conversion with RVC (voice changer)](https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs)",
                             "- [RVC TTS](https://rentry.co/RVC-TTS-Guide)"
                         ]
-                    }
-                ]
-            },
-            "online": {
-                "content": "### 🎙️ Realtime Voice Changer (Online)",
-                "embeds": [
-                    {
-                        "title": "☁ (Online) W-Okada - Colab Version",
-                        "color": "#077CF7",
-                        "description": [
-                            "- 🔗 [How to use W-Okada's Voice Changer](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)",
-                            "> A free, online version of W-Okada that allows you to run code on Google's powerful GPUs."
-                        ],
-                        "footer": "ⓘ Please note that this doesn't work on mobile because there's no VAC (Voice Audio Cable) for it"
                     }
                 ]
             },

@@ -15,6 +15,8 @@ const Kaggle: PrefixCommand = {
             return;
         }
 
+        content[0].description?.push("> Note: Kaggle limits GPU usage to 30 hours per week.");
+
         const sender = new TagResponseSender(client);
         sender.setEmbeds(content);
         sender.config(message);

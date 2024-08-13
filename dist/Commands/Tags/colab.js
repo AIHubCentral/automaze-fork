@@ -14,6 +14,12 @@ const Colab = {
             client.logger.error(`Missing embed data for -${this.name}`);
             return;
         }
+        let noticeEmbeds = botData.embeds.colab_notice.en.embeds;
+        if (noticeEmbeds) {
+            for (const embed of noticeEmbeds) {
+                content.push(embed);
+            }
+        }
         const sender = new botUtilities_1.TagResponseSender(client);
         sender.setEmbeds(content);
         sender.config(message);

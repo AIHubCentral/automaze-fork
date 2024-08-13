@@ -15,6 +15,13 @@ const Colab: PrefixCommand = {
 			return;
 		}
 
+		let noticeEmbeds = botData.embeds.colab_notice.en.embeds;
+		if (noticeEmbeds) {
+			for (const embed of noticeEmbeds) {
+				content.push(embed);
+			}
+		}
+
 		const sender = new TagResponseSender(client);
 		sender.setEmbeds(content);
 		sender.config(message);

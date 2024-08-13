@@ -14,6 +14,7 @@ const Kaggle = {
             client.logger.error(`Missing embed data for -${this.name}`);
             return;
         }
+        content[0].description?.push("> Note: Kaggle limits GPU usage to 30 hours per week.");
         const sender = new botUtilities_1.TagResponseSender(client);
         sender.setEmbeds(content);
         sender.config(message);

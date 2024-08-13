@@ -59,13 +59,12 @@ const Realtime: PrefixCommand = {
             components: [realtimeActionRow]
         };
 
-        let selectMenuDisplayMinutes = 5;  // allow interaction with the select menu for 5 minutes
+        let selectMenuDisplayMinutes = 15;  // allow interaction with the select menu for 15 minutes
         let targetUser = message.mentions.members?.first();
         let mainUser = message.author;
 
         if (targetUser) {
             botResponse.content = `*Tag suggestion for ${message.mentions.members?.first()}*`;
-            selectMenuDisplayMinutes = 30;  // menu available for 30 minutes if it was sent to someone
         }
 
         const botReply = await message.reply(botResponse);
