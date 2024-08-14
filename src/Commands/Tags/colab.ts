@@ -9,13 +9,16 @@ const Colab: PrefixCommand = {
 	syntax: 'colab [member]',
 	async run(client, message) {
 		const { botData } = client;
-		const content = botData.embeds.colab.en.embeds;
+
+		// make a copy of the original embed data
+		const content = JSON.parse(JSON.stringify(botData.embeds.colab.en.embeds));
 		if (!content) {
 			client.logger.error(`Missing embed data for -${this.name}`);
 			return;
 		}
 
 		let noticeEmbeds = botData.embeds.colab_notice.en.embeds;
+
 		if (noticeEmbeds) {
 			for (const embed of noticeEmbeds) {
 				content.push(embed);

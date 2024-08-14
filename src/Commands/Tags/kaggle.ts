@@ -9,7 +9,9 @@ const Kaggle: PrefixCommand = {
     syntax: 'kaggle [member]',
     async run(client, message) {
         const { botData } = client;
-        const content = botData.embeds.kaggle.en.embeds;
+
+        // make a copy of the original embed data
+        const content = JSON.parse(JSON.stringify(botData.embeds.kaggle.en.embeds));
         if (!content) {
             client.logger.error(`Missing embed data for -${this.name}`);
             return;
