@@ -41,7 +41,7 @@
                         "- **Ilaria RVC**, by thestingerx [Google Colab](https://colab.research.google.com/drive/1mHKTGH5e3SAyDSBss1KtiYRbDdQzwSMs)",
                         "- **UVR5 NO UI for Google Colab**, by Eddy [Google Colab](https://colab.research.google.com/github/Eddycrack864/UVR5-NO-UI/blob/main/UVR5_NO_UI.ipynb)",
                         "- **UVR5 UI**, by Eddy [Google Colab](https://colab.research.google.com/github/Eddycrack864/UVR5-UI/blob/main/UVR_UI.ipynb)",
-                        "- 🆕 [Modified W-Okada's Voice Changer Google Colab](https://colab.research.google.com/github/deiteris/voice-changer/blob/master-custom/Colab_RealtimeVoiceChanger.ipynb)"
+                        "- [Modified W-Okada's Voice Changer Google Colab](https://colab.research.google.com/github/deiteris/voice-changer/blob/master-custom/Colab_RealtimeVoiceChanger.ipynb)"
                     ]
                 }
             ]
@@ -88,10 +88,9 @@
                     "description": [
                         "- [UVR5 NO UI](https://www.kaggle.com/code/eddycrack864/uvr5-no-ui) by **Eddy**",
                         "- [How to use RVC Mainline Kaggle](https://rentry.co/RVC-Mainline-Kaggle) by **Cauthess**",
-                        "- [🍏 Applio RVC](https://www.kaggle.com/code/iahispano/applio-rvc-fork) by **IA Hispano**",
                         "- [✨ RVC Mainline](https://www.kaggle.com/code/hinabl/mainline) by [Hina](https://linktr.ee/_hina__)",
-                        "- 🆕 [Original W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/hinabl/public-w-okada-voice-changer)",
-                        "- 🆕 [Modified W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/suneku/voice-changer-public)"
+                        "- [Original W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/hinabl/public-w-okada-voice-changer)",
+                        "- [Modified W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/suneku/voice-changer-public)"
                     ],
                     "footer": "More commands: -colabs, -hf, -local, -rvc, -help"
                 }
@@ -174,9 +173,9 @@
                         "color": "#077CF7",
                         "description": [
                             "- [How to use Original W-Okada's Voice Changer Google Colab](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)",
-                            "- 🆕 [Modified W-Okada's Voice Changer Google Colab](https://colab.research.google.com/github/deiteris/voice-changer/blob/master-custom/Colab_RealtimeVoiceChanger.ipynb)",
-                            "- 🆕 [Original W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/hinabl/public-w-okada-voice-changer)",
-                            "- 🆕 [Modified W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/suneku/voice-changer-public)"
+                            "- [Modified W-Okada's Voice Changer Google Colab](https://colab.research.google.com/github/deiteris/voice-changer/blob/master-custom/Colab_RealtimeVoiceChanger.ipynb)",
+                            "- [Original W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/hinabl/public-w-okada-voice-changer)",
+                            "- [Modified W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/suneku/voice-changer-public)"
                         ]
                     },
                     {

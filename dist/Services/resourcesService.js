@@ -83,11 +83,21 @@ class ResourceService {
         try {
             const resources = await (0, dbManager_1.resourcesDatabase)('resources').where({ category });
             this.logger.info('Resource fetched:', resources);
+            if (!resources) {
+                return [];
+            }
             return resources;
         }
         catch (error) {
             this.logger.error(`Error fetching resource with category ${category}`, error);
+            return [];
         }
+    }
+    async getPaginatedResult(offset, recordsPerPage) {
+        this.logger.debug('Requesting paginated resources', { offset, recordsPerPage });
+        const data = await (0, dbManager_1.resourcesDatabase)('resources').select('*').limit(recordsPerPage).offset(offset);
+        const counter = await (0, dbManager_1.resourcesDatabase)('resources').count('* as count').first();
+        return { data, counter };
     }
     /**
      *

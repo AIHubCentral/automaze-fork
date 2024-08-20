@@ -94,15 +94,27 @@ export default class ResourceService {
         }
     }
 
-    async findByCategory(category: string): Promise<IResource[] | undefined> {
+    async findByCategory(category: string): Promise<IResource[]> {
         try {
             const resources = await resourcesDatabase('resources').where({ category });
             this.logger.info('Resource fetched:', resources);
+            if (!resources) {
+                return [];
+            }
             return resources;
         }
         catch (error) {
             this.logger.error(`Error fetching resource with category ${category}`, error);
+            return [];
         }
+    }
+
+    async getPaginatedResult(offset: number, recordsPerPage: number,): Promise<any> {
+        this.logger.debug('Requesting paginated resources', { offset, recordsPerPage });
+
+        const data = await resourcesDatabase('resources').select('*').limit(recordsPerPage).offset(offset);
+        const counter = await resourcesDatabase('resources').count('* as count').first();
+        return { data, counter };
     }
 
     /**

@@ -1,4 +1,7 @@
+import { bold, EmbedBuilder, hyperlink, quote } from "discord.js";
+import { EmbedData } from "../../Interfaces/BotData";
 import { PrefixCommand } from "../../Interfaces/Command";
+import ResourceService from "../../Services/resourcesService";
 import { TagResponseSender } from "../../Utils/botUtilities";
 
 const Kaggle: PrefixCommand = {
@@ -14,16 +17,63 @@ const Kaggle: PrefixCommand = {
         const content = JSON.parse(JSON.stringify(botData.embeds.kaggle.en.embeds));
         if (!content) {
             client.logger.error(`Missing embed data for -${this.name}`);
+            await message.reply({ content: 'Failed to retrieve data...Try again later.' });
             return;
         }
 
-        content[0].description?.push("> Note: Kaggle limits GPU usage to 30 hours per week.");
+        const resourceService = new ResourceService(client.logger);
 
+        const embeds: EmbedData[] = await createResponse(content, resourceService);
         const sender = new TagResponseSender(client);
-        sender.setEmbeds(content);
+        sender.setEmbeds(embeds);
         sender.config(message);
         await sender.send();
     },
 };
 
 export default Kaggle;
+
+async function createResponse(kaggleEmbeds: EmbedData[], service: ResourceService): Promise<EmbedData[]> {
+    const response: EmbedData[] = [];
+
+    const embed: EmbedData = {
+        title: '📘 Kaggle Notebooks',
+        footer: kaggleEmbeds[0].footer,
+    };
+
+    const embedDescription: string[] = [];
+
+    // try to get info from database first
+    const records = await service.findByCategory('kaggle');
+
+    if (records.length > 0) {
+        records.forEach(record => {
+            const processedResource = ["- "];
+
+            if (record.emoji) {
+                processedResource.push(record.emoji);
+                processedResource.push(" ");
+            }
+
+            processedResource.push(record.displayTitle ? hyperlink(record.displayTitle, record.url) : record.url);
+
+            if (record.authors) {
+                processedResource.push(` by ${bold(record.authors)}`);
+            }
+
+            embedDescription.push(processedResource.join(""));
+        });
+    }
+
+    // merge with data from json
+    kaggleEmbeds[0].description?.forEach(item => embedDescription.push(item));
+
+    // add the notice
+    embedDescription.push(quote("Note: Kaggle limits GPU usage to 30 hours per week."))
+
+    embed.description = embedDescription;
+
+    response.push(embed);
+
+    return response;
+}

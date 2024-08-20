@@ -1,11 +1,11 @@
-import { AttachmentBuilder, codeBlock, SlashCommandBuilder } from "discord.js";
+import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, codeBlock, Colors, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../../Interfaces/Command";
 import ExtendedClient from "../../Core/extendedClient";
 import ResourceService, { IResource } from "../../Services/resourcesService";
 
 const Resources: SlashCommand = {
     category: 'Utilities',
-    cooldown: 15,
+    cooldown: 5,
     data: new SlashCommandBuilder()
         .setName('resources')
         .setDescription('Configure resources (links / docs)')
@@ -160,14 +160,78 @@ const Resources: SlashCommand = {
 
         }
         else if (interaction.options.getSubcommand() === 'find_all') {
-            const resources = await service.findAll();
+            let pageNumber = 1;
 
-            if (resources.length === 0) {
+            const { data, totalPages } = await getPaginatedData(pageNumber, service);
+
+            if (!data || data.length === 0) {
                 await interaction.reply({ content: 'No resource was found.' });
+                return;
             }
-            else {
-                await interaction.reply({ content: codeBlock('javascript', JSON.stringify(resources, null, 4)) });
-            }
+
+            const embed = createPaginatedEmbed(data, pageNumber, totalPages);
+
+            const row = new ActionRowBuilder<ButtonBuilder>()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`prev_0`)
+                        .setLabel("Previous")
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(true),
+                    new ButtonBuilder()
+                        .setCustomId(`next_2`)
+                        .setLabel("Next")
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(totalPages === 1),
+                );
+
+            const sentMessage = await interaction.reply({ embeds: [embed], components: [row], fetchReply: true });
+
+            // show for 5 minutes (300k ms)
+            const collector = sentMessage.createMessageComponentCollector({ time: 300_000 });
+
+            collector.on('collect', async (i) => {
+                if (!i.isButton()) return;
+
+                const currentPage = parseInt(i.customId.split('_')[1]);
+                const { data, totalPages } = await getPaginatedData(currentPage, service);
+
+                const embed = createPaginatedEmbed(data, currentPage, totalPages);
+
+                const row = new ActionRowBuilder<ButtonBuilder>()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId(`prev_${currentPage - 1}`)
+                            .setLabel('Previous')
+                            .setStyle(ButtonStyle.Primary)
+                            .setDisabled(currentPage === 1),
+                        new ButtonBuilder()
+                            .setCustomId(`next_${currentPage + 1}`)
+                            .setLabel('Next')
+                            .setStyle(ButtonStyle.Primary)
+                            .setDisabled(currentPage === totalPages)
+                    );
+
+                await i.update({ embeds: [embed], components: [row] });
+            });
+
+            collector.on('end', async () => {
+                const disabledRow = new ActionRowBuilder<ButtonBuilder>()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('prev_0')
+                            .setLabel('Previous')
+                            .setStyle(ButtonStyle.Primary)
+                            .setDisabled(true),
+                        new ButtonBuilder()
+                            .setCustomId('next_2')
+                            .setLabel('Next')
+                            .setStyle(ButtonStyle.Primary)
+                            .setDisabled(true)
+                    );
+
+                await sentMessage.edit({ components: [disabledRow] });
+            })
         }
         else if (interaction.options.getSubcommand() === 'find_by_category') {
             const category = interaction.options.getString('category') ?? 'rvc';
@@ -267,3 +331,33 @@ const Resources: SlashCommand = {
 }
 
 export default Resources;
+
+async function getPaginatedData(page: number, resourceService: ResourceService): Promise<any> {
+    const perPage = 10;
+    const offset = (page - 1) * perPage;
+    const { data, counter } = await resourceService.getPaginatedResult(offset, perPage);
+    const totalPages = Math.ceil(counter.count / perPage);
+    return { data, totalPages };
+}
+
+function createPaginatedEmbed(data: any, currentPage: number, totalPages: number): EmbedBuilder {
+    return new EmbedBuilder()
+        .setTitle(`All Resources`)
+        .setColor(Colors.Greyple)
+        .setDescription(data.map((record: any) => {
+            const result = [
+                '- ', record.id, `. **URL**: ${record.url}`, ` | **Category**: ${record.category}`
+            ];
+
+            if (record.displayTitle) {
+                result.push(` | **Title**: ${record.displayTitle}`)
+            }
+
+            if (record.authors) {
+                result.push(` | **Authors**: ${record.authors}`);
+            }
+
+            return result.join('');
+        }).join('\n'))
+        .setFooter({ text: `Page ${currentPage} of ${totalPages}` });
+}
