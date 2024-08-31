@@ -36,13 +36,25 @@ async function deployCommands(credentials, commands) {
     commands.slashCommands.forEach(command => mergedCommands.push(command.data.toJSON()));
     commands.contextCommands.forEach(command => mergedCommands.push(command.data.toJSON()));
     try {
-        console.log(`Started refreshing ${commands.slashCommands.length} application (/) commands and ${commands.contextCommands.length} context commands.`);
+        console.log(`\nStarted refreshing ${commands.slashCommands.length} application (/) commands and ${commands.contextCommands.length} context commands.`);
+        mergedCommands.forEach(cmd => console.log(`- ${cmd.name}`));
         // The put method is used to fully refresh all commands in the guild with the current set
         const data = await rest.put(discord_js_1.Routes.applicationGuildCommands(credentials.clientId, credentials.guildId), { body: mergedCommands });
-        console.log(`Successfully reloaded ${data.length} commands in ${credentials.guildId}.`);
+        console.log(`\nSuccessfully reloaded ${data.length} commands in ${credentials.guildId}.`);
     }
     catch (error) {
         console.error('Error reloading application (/) commands:', error);
+    }
+}
+async function clearDeployedCommands(credentials) {
+    const rest = new discord_js_1.REST({ version: '10' }).setToken(credentials.token);
+    console.log(`\nClearing deployed commands in guild: ${credentials.guildId}`);
+    try {
+        await rest.put(discord_js_1.Routes.applicationGuildCommands(credentials.clientId, credentials.guildId), { body: [] });
+        console.log("Successfully removed all commands.");
+    }
+    catch (error) {
+        console.error("Failed to clear deployed commands.", error);
     }
 }
 // dotenv
@@ -53,9 +65,27 @@ async function deployCommands(credentials, commands) {
         let token = await promptWithDefault("Token: ", process.env.token ?? '');
         let clientId = await promptWithDefault("Client ID: ", process.env.clientId ?? '');
         let guildId = await promptWithDefault("Guild ID: ", process.env.guildId ?? '');
-        if (token && clientId && guildId) {
-            const slashCommandFiles = (0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash"));
+        let devMode = await promptWithDefault("Dev mode: ", process.env.dev ?? 'false');
+        if (!token || !clientId || !guildId) {
+            console.log("Missing token, client id or guild id");
+            rl.close();
+            return;
+        }
+        let clearAll = await promptWithDefault("Clear all commands? (y/n): ", "n");
+        let shouldClearDeployedCommands = clearAll.trim().toLowerCase() === "y";
+        if (shouldClearDeployedCommands) {
+            await clearDeployedCommands({ token, clientId, guildId });
+        }
+        else {
             const contextCommandFiles = (0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsContext"));
+            let slashCommandFiles = [
+                ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Fun")),
+                ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Info")),
+            ];
+            // add the utilities commands if in dev mode
+            if (devMode === 'true') {
+                slashCommandFiles = slashCommandFiles.concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Utilities")));
+            }
             const slashCommands = [];
             const contextCommands = [];
             slashCommandFiles.forEach((commandFile) => {
@@ -67,9 +97,6 @@ async function deployCommands(credentials, commands) {
                 contextCommands.push(command);
             });
             await deployCommands({ token, clientId, guildId }, { slashCommands, contextCommands });
-        }
-        else {
-            console.error('Missing token, client id or guild id.');
         }
         rl.close();
     }
