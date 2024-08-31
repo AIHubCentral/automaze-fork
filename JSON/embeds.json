@@ -6,7 +6,6 @@
                     "title": "📚 Audio Guides",
                     "description": [
                         "- [Creating Datasets for RVC using iZotope RX11](https://rentry.co/RVC-dataset-RX11), by **Cauthess**",
-                        "- [Perfecting Audio Isolation on Low-End Rigs](https://docs.google.com/document/d/1HmkG9cmL8SLX7-vJcPT1-1KgUQtCrwXB8CicYmG4LW8/edit?usp=sharing), by **Litsa The Dancer** and **Faze Masta**",
                         "- [Gathering and Isolating Audio](https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv), by **SCRFilms** :snowflake:",
                         "- [Vocal Mixing Tutorial](https://www.youtube.com/watch?v=rSxLF3kkBw0), by **Roomie**"
                     ]
@@ -71,9 +70,7 @@
                         "- **Ilaria RVC Zero**, by Ilaria [Huggingface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
                         "- **RVC⚡ZERO**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/rvc_zero)",
                         "- **Applio**, by IA Hispano [Huggingface Spaces](https://huggingface.co/spaces/IAHispano/Applio)",
-                        "- **AICoverGen**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)",
-                        "- **Advanced RVC Inference**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/Advanced-RVC-Inference)",
-                        "- **RVC v2 Huggingface version**, by Clebersla [Huggingface Spaces](https://huggingface.co/spaces/Clebersla/RVC_V2_Huggingface_Version)"
+                        "- **AICoverGen**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)"
                     ],
                     "footer": "More commands: -audio, -colabs, -kaggle, -local, -overtraining, -realtime, -rvc, -help"
                 }

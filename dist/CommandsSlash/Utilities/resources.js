@@ -101,7 +101,6 @@ const Resources = {
         client.logger.debug('/resources', logData);
         const collaboratorsService = new collaboratorService_1.default(client.logger);
         const collaboratorUser = await collaboratorsService.findById(interaction.user.id);
-        console.log(collaboratorUser);
         if (!collaboratorUser) {
             await interaction.reply({ content: 'Ask **RayTracer** if you want to use this command!', ephemeral: true });
             return;
