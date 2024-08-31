@@ -13,6 +13,12 @@ export interface IResource {
     authors?: string,
 }
 
+export interface ICollaborator {
+    discordId: string,
+    username: string,
+    displayName?: string,
+}
+
 export default class ResourceService {
     private logger: winston.Logger;
 
@@ -35,6 +41,21 @@ export default class ResourceService {
                 table.string('emoji');
                 table.string('authors');
             });
+
+            await resourcesDatabase.schema.createTable('collaborators', (table) => {
+                table.string('discordId').primary();
+                table.string('username').notNullable();
+                table.string('displayName')
+            });
+
+            await resourcesDatabase.schema.createTable('settings', (table) => {
+                table.increments('id').primary();
+                table.string('debug_guild_id');
+                table.string('debug_guild_channel_id');
+                table.boolean('send_logs');
+                table.boolean('send_automated_messages');
+            });
+
             return true;
         }
         catch (error) {

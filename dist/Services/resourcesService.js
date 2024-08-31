@@ -25,6 +25,18 @@ class ResourceService {
                 table.string('emoji');
                 table.string('authors');
             });
+            await dbManager_1.resourcesDatabase.schema.createTable('collaborators', (table) => {
+                table.string('discordId').primary();
+                table.string('username').notNullable();
+                table.string('displayName');
+            });
+            await dbManager_1.resourcesDatabase.schema.createTable('settings', (table) => {
+                table.increments('id').primary();
+                table.string('debug_guild_id');
+                table.string('debug_guild_channel_id');
+                table.boolean('send_logs');
+                table.boolean('send_automated_messages');
+            });
             return true;
         }
         catch (error) {

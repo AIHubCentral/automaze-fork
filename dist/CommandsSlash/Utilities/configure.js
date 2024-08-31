@@ -1,11 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const generalUtilities_js_1 = require("../../Utils/generalUtilities.js");
 const botUtilities_js_1 = require("../../Utils/botUtilities.js");
+const collaboratorService_js_1 = __importDefault(require("../../Services/collaboratorService.js"));
 const Configure = {
     category: 'Utilities',
-    cooldown: 30,
+    cooldown: 15,
     data: new discord_js_1.SlashCommandBuilder()
         .setName('configure')
         .setDescription('Configure bot settings')
@@ -88,10 +92,30 @@ const Configure = {
         .addChoices({ name: 'Emojis', value: 'emojis' }, { name: 'Stickers', value: 'stickers' }, { name: 'Models', value: 'models' }, { name: 'ModelRequests', value: 'modelRequests' }))
         .addBooleanOption(option => option
         .setName('enabled')
-        .setDescription('Enable or disable this log'))),
+        .setDescription('Enable or disable this log')))
+        .addSubcommand(subcommand => subcommand
+        .setName('collaborators')
+        .setDescription('Configure who can edit bot links')
+        .addStringOption(option => option
+        .setName('task')
+        .setDescription('Add or remove a collaborator')
+        .setRequired(true)
+        .addChoices({ name: 'Add', value: 'add' }, { name: 'Remove', value: 'remove' }, { name: 'List', value: 'showAll' }))
+        .addStringOption(option => option
+        .setName('discord_id')
+        .setDescription('Discord ID of the user')
+        .setRequired(true))
+        .addStringOption(option => option
+        .setName('discord_username')
+        .setDescription('Discord username')
+        .setRequired(true))
+        .addStringOption(option => option
+        .setName('discord_displayname')
+        .setDescription('Discord display name')
+        .setRequired(false))),
     async execute(interaction) {
         const client = interaction.client;
-        const { botConfigs } = client;
+        const { botConfigs, logger } = client;
         if (interaction.options.getSubcommand() === 'comission') {
             await configureCommision(interaction, botConfigs);
         }
@@ -118,6 +142,10 @@ const Configure = {
         }
         else if (interaction.options.getSubcommand() === 'logs') {
             await configureLogs(interaction);
+        }
+        else if (interaction.options.getSubcommand() === 'collaborators') {
+            const service = new collaboratorService_js_1.default(logger);
+            await configureCollaborators(interaction, service);
         }
     },
 };
@@ -305,4 +333,53 @@ async function configureLogs(interaction) {
         embeds: [embed],
         ephemeral: true,
     });
+}
+async function configureCollaborators(interaction, service) {
+    const taskName = interaction.options.getString('task', true);
+    const userDiscordId = interaction.options.getString('discord_id', true);
+    const username = interaction.options.getString('discord_username', true);
+    const displayName = interaction.options.getString('discord_displayname') ?? '';
+    const embedColor = taskName === 'remove' ? discord_js_1.Colors.DarkOrange : discord_js_1.Colors.DarkGreen;
+    const embed = new discord_js_1.EmbedBuilder()
+        .setTitle("Collaborators")
+        .setColor(embedColor);
+    const collaborator = {
+        discordId: userDiscordId,
+        username,
+        displayName
+    };
+    if (taskName === 'add') {
+        const id = await service.insert(collaborator);
+        if (id === -1) {
+            embed.setDescription('Failed to insert collaborator');
+            embed.setColor(discord_js_1.Colors.Red);
+        }
+        else {
+            embed.setDescription(`Added collaborator with id: ${id}`);
+        }
+    }
+    else if (taskName === 'remove') {
+        const successfullyRemoved = await service.delete(collaborator.discordId);
+        if (successfullyRemoved) {
+            embed.setDescription(`Removed collaborator with id: ${collaborator.discordId}`);
+        }
+        else {
+            embed.setDescription(`Failed to remove collaborator with id: ${collaborator.discordId}`);
+            embed.setColor(discord_js_1.Colors.Red);
+        }
+    }
+    else {
+        const collaborators = await service.findAll();
+        if (collaborators.length === 0) {
+            embed.setDescription("> No collaborator found");
+        }
+        else {
+            const embedDescriptionLines = [];
+            collaborators.forEach(collaborator => {
+                embedDescriptionLines.push(`- ${collaborator.discordId}: ${collaborator.username} (${collaborator.displayName || 'No display name'})`);
+            });
+            embed.setDescription(embedDescriptionLines.join('\n'));
+        }
+    }
+    await interaction.reply({ embeds: [embed] });
 }

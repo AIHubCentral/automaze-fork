@@ -2,6 +2,7 @@ import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, codeBl
 import { SlashCommand } from "../../Interfaces/Command";
 import ExtendedClient from "../../Core/extendedClient";
 import ResourceService, { IResource } from "../../Services/resourcesService";
+import CollaboratorService from "../../Services/collaboratorService";
 
 const Resources: SlashCommand = {
     category: 'Utilities',
@@ -137,6 +138,23 @@ const Resources: SlashCommand = {
         const client = interaction.client as ExtendedClient;
         const service = new ResourceService(client.logger);
         const id = interaction.options.getInteger('id') ?? 1;  // defaults to 1
+
+        const logData = {
+            guildId: interaction.guildId,
+            channelId: interaction.channelId,
+            userId: interaction.user.id,
+            userName: interaction.user.username,
+        }
+
+        client.logger.debug('/resources', logData);
+
+        const collaboratorsService = new CollaboratorService(client.logger);
+        const collaboratorUser = await collaboratorsService.findById(interaction.user.id);
+
+        if (!collaboratorUser) {
+            await interaction.reply({ content: 'Ask **RayTracer** if you want to use this command!', ephemeral: true });
+            return;
+        }
 
         if (interaction.options.getSubcommand() === 'create') {
             const databaseCreated = await service.createDatabase();

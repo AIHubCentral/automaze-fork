@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const resourcesService_1 = __importDefault(require("../../Services/resourcesService"));
+const collaboratorService_1 = __importDefault(require("../../Services/collaboratorService"));
 const Resources = {
     category: 'Utilities',
     cooldown: 5,
@@ -91,6 +92,20 @@ const Resources = {
         const client = interaction.client;
         const service = new resourcesService_1.default(client.logger);
         const id = interaction.options.getInteger('id') ?? 1; // defaults to 1
+        const logData = {
+            guildId: interaction.guildId,
+            channelId: interaction.channelId,
+            userId: interaction.user.id,
+            userName: interaction.user.username,
+        };
+        client.logger.debug('/resources', logData);
+        const collaboratorsService = new collaboratorService_1.default(client.logger);
+        const collaboratorUser = await collaboratorsService.findById(interaction.user.id);
+        console.log(collaboratorUser);
+        if (!collaboratorUser) {
+            await interaction.reply({ content: 'Ask **RayTracer** if you want to use this command!', ephemeral: true });
+            return;
+        }
         if (interaction.options.getSubcommand() === 'create') {
             const databaseCreated = await service.createDatabase();
             if (databaseCreated) {

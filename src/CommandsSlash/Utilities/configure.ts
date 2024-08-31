@@ -11,10 +11,13 @@ import { SlashCommand } from '../../Interfaces/Command.js';
 import ExtendedClient from '../../Core/extendedClient.js';
 import IBotConfigs from '../../Interfaces/BotConfigs.js';
 import { getThemes } from '../../Utils/botUtilities.js';
+import { createEmbed } from '../../Utils/discordUtilities.js';
+import ResourceService from '../../Services/resourcesService.js';
+import CollaboratorService, { ICollaborator } from '../../Services/collaboratorService.js';
 
 const Configure: SlashCommand = {
 	category: 'Utilities',
-	cooldown: 30,
+	cooldown: 15,
 	data: new SlashCommandBuilder()
 		.setName('configure')
 		.setDescription('Configure bot settings')
@@ -157,10 +160,44 @@ const Configure: SlashCommand = {
 						.setName('enabled')
 						.setDescription('Enable or disable this log'),
 				),
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('collaborators')
+				.setDescription('Configure who can edit bot links')
+				.addStringOption(option =>
+					option
+						.setName('task')
+						.setDescription('Add or remove a collaborator')
+						.setRequired(true)
+						.addChoices(
+							{ name: 'Add', value: 'add' },
+							{ name: 'Remove', value: 'remove' },
+							{ name: 'List', value: 'showAll' }
+						),
+				)
+				.addStringOption(option =>
+					option
+						.setName('discord_id')
+						.setDescription('Discord ID of the user')
+						.setRequired(true)
+				)
+				.addStringOption(option =>
+					option
+						.setName('discord_username')
+						.setDescription('Discord username')
+						.setRequired(true)
+				)
+				.addStringOption(option =>
+					option
+						.setName('discord_displayname')
+						.setDescription('Discord display name')
+						.setRequired(false)
+				),
 		),
 	async execute(interaction) {
 		const client = interaction.client as ExtendedClient;
-		const { botConfigs } = client;
+		const { botConfigs, logger } = client;
 
 		if (interaction.options.getSubcommand() === 'comission') {
 			await configureCommision(interaction, botConfigs);
@@ -188,6 +225,10 @@ const Configure: SlashCommand = {
 		}
 		else if (interaction.options.getSubcommand() === 'logs') {
 			await configureLogs(interaction);
+		}
+		else if (interaction.options.getSubcommand() === 'collaborators') {
+			const service = new CollaboratorService(logger);
+			await configureCollaborators(interaction, service);
 		}
 	},
 
@@ -420,4 +461,60 @@ async function configureLogs(interaction: ChatInputCommandInteraction): Promise<
 		embeds: [embed],
 		ephemeral: true,
 	});
+}
+
+async function configureCollaborators(interaction: ChatInputCommandInteraction, service: CollaboratorService): Promise<void> {
+	const taskName = interaction.options.getString('task', true);
+	const userDiscordId = interaction.options.getString('discord_id', true);
+	const username = interaction.options.getString('discord_username', true);
+	const displayName = interaction.options.getString('discord_displayname') ?? '';
+
+	const embedColor = taskName === 'remove' ? Colors.DarkOrange : Colors.DarkGreen;
+
+	const embed = new EmbedBuilder()
+		.setTitle("Collaborators")
+		.setColor(embedColor);
+
+	const collaborator: ICollaborator = {
+		discordId: userDiscordId,
+		username,
+		displayName
+	}
+
+	if (taskName === 'add') {
+		const id = await service.insert(collaborator);
+
+		if (id === -1) {
+			embed.setDescription('Failed to insert collaborator');
+			embed.setColor(Colors.Red);
+		}
+		else {
+			embed.setDescription(`Added collaborator with id: ${id}`);
+		}
+	}
+	else if (taskName === 'remove') {
+		const successfullyRemoved: boolean = await service.delete(collaborator.discordId);
+		if (successfullyRemoved) {
+			embed.setDescription(`Removed collaborator with id: ${collaborator.discordId}`);
+		}
+		else {
+			embed.setDescription(`Failed to remove collaborator with id: ${collaborator.discordId}`);
+			embed.setColor(Colors.Red);
+		}
+	}
+	else {
+		const collaborators = await service.findAll();
+		if (collaborators.length === 0) {
+			embed.setDescription("> No collaborator found");
+		}
+		else {
+			const embedDescriptionLines: string[] = [];
+			collaborators.forEach(collaborator => {
+				embedDescriptionLines.push(`- ${collaborator.discordId}: ${collaborator.username} (${collaborator.displayName || 'No display name'})`)
+			});
+			embed.setDescription(embedDescriptionLines.join('\n'));
+		}
+	}
+
+	await interaction.reply({ embeds: [embed] });
 }
