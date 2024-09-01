@@ -296,6 +296,9 @@ function resourcesToUnorderedList(resources) {
             if (category === 'colab') {
                 category = "Google Colab";
             }
+            else if (category === 'hf') {
+                category = "Huggingface Spaces";
+            }
             else if (category === 'kaggle') {
                 category = "Kaggle";
             }

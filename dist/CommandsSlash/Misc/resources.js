@@ -36,7 +36,7 @@ const Resources = {
         .setDescriptionLocalizations({
         'pt-BR': 'Categoria do recurso'
     })
-        .addChoices({ name: 'Colab', value: 'colab' }, { name: 'Kaggle', value: 'kaggle' })
+        .addChoices({ name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' })
         .setRequired(true))
         .addStringOption(option => option
         .setName('url')
@@ -97,7 +97,7 @@ const Resources = {
         .setDescriptionLocalizations({
         'pt-BR': 'Categoria do recurso'
     })
-        .addChoices({ name: 'Colab', value: 'colab' }, { name: 'Kaggle', value: 'kaggle' })
+        .addChoices({ name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' })
         .setRequired(true))
         .addStringOption(option => option
         .setName('url')
@@ -167,7 +167,7 @@ const Resources = {
         .setDescriptionLocalizations({
         'pt-BR': 'Categoria do recurso'
     })
-        .addChoices({ name: 'Colab', value: 'colab' }, { name: 'Kaggle', value: 'kaggle' })
+        .addChoices({ name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' })
         .setRequired(true))),
     async execute(interaction) {
         const client = interaction.client;

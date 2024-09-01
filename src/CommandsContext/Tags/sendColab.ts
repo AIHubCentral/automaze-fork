@@ -2,7 +2,7 @@ import { ApplicationCommandType, ColorResolvable, ContextMenuCommandBuilder, Emb
 import { ContextCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
 import { createEmbed } from '../../Utils/discordUtilities';
-import { getResourceData, resourcesToUnorderedList, TagResponseSender } from '../../Utils/botUtilities';
+import { getResourceData, resourcesToUnorderedList } from '../../Utils/botUtilities';
 
 const SendColabGuides: ContextCommand = {
     category: 'Tags',

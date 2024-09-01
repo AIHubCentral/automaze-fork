@@ -37,8 +37,9 @@ const Resources: SlashCommand = {
                             'pt-BR': 'Categoria do recurso'
                         })
                         .addChoices(
-                            { name: 'Colab', value: 'colab' },
-                            { name: 'Kaggle', value: 'kaggle' },
+                            { name: 'colab', value: 'colab' },
+                            { name: 'huggingface', value: 'hf' },
+                            { name: 'kaggle', value: 'kaggle' },
                         )
                         .setRequired(true)
                 )
@@ -115,8 +116,9 @@ const Resources: SlashCommand = {
                             'pt-BR': 'Categoria do recurso'
                         })
                         .addChoices(
-                            { name: 'Colab', value: 'colab' },
-                            { name: 'Kaggle', value: 'kaggle' },
+                            { name: 'colab', value: 'colab' },
+                            { name: 'huggingface', value: 'hf' },
+                            { name: 'kaggle', value: 'kaggle' },
                         )
                         .setRequired(true)
                 )
@@ -204,8 +206,9 @@ const Resources: SlashCommand = {
                             'pt-BR': 'Categoria do recurso'
                         })
                         .addChoices(
-                            { name: 'Colab', value: 'colab' },
-                            { name: 'Kaggle', value: 'kaggle' },
+                            { name: 'colab', value: 'colab' },
+                            { name: 'huggingface', value: 'hf' },
+                            { name: 'kaggle', value: 'kaggle' },
                         )
                         .setRequired(true)
                 )
