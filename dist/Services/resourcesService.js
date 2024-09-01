@@ -94,10 +94,11 @@ class ResourceService {
     async findByCategory(category) {
         try {
             const resources = await (0, dbManager_1.resourcesDatabase)('resources').where({ category });
-            this.logger.info('Resource fetched:', resources);
             if (!resources) {
+                this.logger.debug(`No resource found for ${category}`);
                 return [];
             }
+            this.logger.debug(`${resources.length} resources fetched for ${category}`);
             return resources;
         }
         catch (error) {

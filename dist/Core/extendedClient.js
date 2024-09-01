@@ -55,6 +55,7 @@ class ExtendedClient extends Discord.Client {
         this.botConfigs = extendedOptions.botConfigs;
         this.botResponses = extendedOptions.botResponses;
         this.botUtils = extendedOptions.botUtils;
+        this.botCache = new Discord.Collection();
         // cron job
         this.scheduler = new utils_1.Scheduler(this);
         // finish setup

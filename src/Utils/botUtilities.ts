@@ -1,4 +1,4 @@
-import { ActionRowBuilder, bold, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ColorResolvable, EmbedBuilder, GuildBasedChannel, GuildMember, hyperlink, Message, TextBasedChannel, unorderedList, User, UserContextMenuCommandInteraction } from "discord.js";
+import { ActionRowBuilder, bold, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, Collection, ColorResolvable, EmbedBuilder, GuildBasedChannel, GuildMember, hyperlink, Message, TextBasedChannel, unorderedList, User, UserContextMenuCommandInteraction } from "discord.js";
 import IBotConfigs from "../Interfaces/BotConfigs";
 import ExtendedClient from "../Core/extendedClient";
 import { ButtonData, EmbedData } from "../Interfaces/BotData";
@@ -7,7 +7,8 @@ import UserService, { UserModel } from "../Services/userService";
 import path from "path";
 import fs from "fs";
 import { getAllFiles } from "./fileUtilities";
-import { IResource } from "../Services/resourcesService";
+import ResourceService, { IResource } from "../Services/resourcesService";
+import winston from "winston";
 
 export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
     const colors = [
@@ -406,4 +407,23 @@ export function resourcesToUnorderedList(resources: IResource[]): string {
     })
 
     return unorderedList(processedResources);
+}
+
+export async function getResourceData(queryKey: string, cache: Collection<string, IResource[]>, logger: winston.Logger): Promise<IResource[]> {
+    //const now = Date.now();
+
+    // try to get from cache first
+    if (cache.has(queryKey)) {
+        const cachedData = cache.get(queryKey) || [];
+        return cachedData;
+    }
+
+    logger.debug(`Requesting ${queryKey} data from DB`);
+
+    const resourceService = new ResourceService(logger);
+
+    const resources = await resourceService.findByCategory(queryKey);
+    cache.set(queryKey, resources);
+
+    return resources;
 }

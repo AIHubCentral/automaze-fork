@@ -3,13 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resourcesToUnorderedList = exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
+exports.getResourceData = exports.resourcesToUnorderedList = exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
 const userService_1 = __importDefault(require("../Services/userService"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const fileUtilities_1 = require("./fileUtilities");
+const resourcesService_1 = __importDefault(require("../Services/resourcesService"));
 function getThemeColors(botConfigs) {
     const colors = [
         botConfigs.colors.theme.primary,
@@ -308,3 +309,17 @@ function resourcesToUnorderedList(resources) {
     return (0, discord_js_1.unorderedList)(processedResources);
 }
 exports.resourcesToUnorderedList = resourcesToUnorderedList;
+async function getResourceData(queryKey, cache, logger) {
+    //const now = Date.now();
+    // try to get from cache first
+    if (cache.has(queryKey)) {
+        const cachedData = cache.get(queryKey) || [];
+        return cachedData;
+    }
+    logger.debug(`Requesting ${queryKey} data from DB`);
+    const resourceService = new resourcesService_1.default(logger);
+    const resources = await resourceService.findByCategory(queryKey);
+    cache.set(queryKey, resources);
+    return resources;
+}
+exports.getResourceData = getResourceData;

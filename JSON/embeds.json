@@ -23,29 +23,6 @@
             ]
         }
     },
-    "colab": {
-        "en": {
-            "mentionMessage": "Suggestions for $user",
-            "embeds": [
-                {
-                    "title": "☁️ Google Colabs",
-                    "color": "f9ab00",
-                    "description": [
-                        "- **Applio**, by IA Hispano [Google Colab](https://colab.research.google.com/github/iahispano/applio/blob/master/assets/Applio.ipynb)",
-                        "- **RVC Disconnected**, by Kit Lemonfoot [Google Colab](https://colab.research.google.com/drive/1XIPCP9ken63S7M6b5ui1b36Cs17sP-NS)",
-                        "- **RVC Mainline**, by Hina [Google Colab](https://colab.research.google.com/github/hinabl/RVC-Online/blob/main/Mainline_Colab_Full.ipynb)",
-                        "- **AICoverGen-WebUI**, *modded by Hina* [Google Colab](https://colab.research.google.com/github/hinabl/AICoverGen-Colab/blob/main/Hina_Mod_AICoverGen_colab.ipynb)",
-                        "- **AICoverGen-NoWebUI [English]**, by Ardha, *fixed by Eddy, Hina and Gdr* [Google Colab](https://colab.research.google.com/drive/1u1brjK8IZt647UsbZuGYfW29oFM2I4tk?usp=sharing)",
-                        "- **AICoverGen-NoWebUI [Spanish]**, *credits to Eddy, Hina and Gdr for translating and fixing* [Google Colab](https://colab.research.google.com/drive/1qezaBvCn4eSG1U2L4a64tEHTynbIu8eN?usp=sharing)",
-                        "- **Ilaria RVC**, by thestingerx [Google Colab](https://colab.research.google.com/drive/1mHKTGH5e3SAyDSBss1KtiYRbDdQzwSMs)",
-                        "- **UVR5 NO UI for Google Colab**, by Eddy [Google Colab](https://colab.research.google.com/github/Eddycrack864/UVR5-NO-UI/blob/main/UVR5_NO_UI.ipynb)",
-                        "- **UVR5 UI**, by Eddy [Google Colab](https://colab.research.google.com/github/Eddycrack864/UVR5-UI/blob/main/UVR_UI.ipynb)",
-                        "- [Modified W-Okada's Voice Changer Google Colab](https://colab.research.google.com/github/deiteris/voice-changer/blob/master-custom/Colab_RealtimeVoiceChanger.ipynb)"
-                    ]
-                }
-            ]
-        }
-    },
     "colab_notice": {
         "en": {
             "embeds": [

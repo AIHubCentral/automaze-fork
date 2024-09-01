@@ -8,12 +8,15 @@ const Colab = {
     aliases: ['colabs', 'disconnected', 'train', 'training'],
     syntax: 'colab [member]',
     async run(client, message) {
-        const { botData } = client;
-        // make a copy of the original embed data
-        const content = JSON.parse(JSON.stringify(botData.embeds.colab.en.embeds));
-        if (!content) {
-            client.logger.error(`Missing embed data for -${this.name}`);
-            return;
+        const { botCache, botData, logger } = client;
+        const resources = await (0, botUtilities_1.getResourceData)("colab", botCache, logger);
+        let content = [];
+        if (resources.length > 0) {
+            content.push({
+                title: "☁️ Google Colabs",
+                color: "f9ab00",
+                description: [(0, botUtilities_1.resourcesToUnorderedList)(resources)],
+            });
         }
         let noticeEmbeds = botData.embeds.colab_notice.en.embeds;
         if (noticeEmbeds) {
