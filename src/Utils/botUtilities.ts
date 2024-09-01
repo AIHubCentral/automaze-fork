@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ColorResolvable, EmbedBuilder, GuildBasedChannel, GuildMember, Message, TextBasedChannel, User, UserContextMenuCommandInteraction } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ColorResolvable, EmbedBuilder, GuildBasedChannel, GuildMember, Message, TextBasedChannel, unorderedList, User, UserContextMenuCommandInteraction } from "discord.js";
 import IBotConfigs from "../Interfaces/BotConfigs";
 import ExtendedClient from "../Core/extendedClient";
 import { ButtonData, EmbedData } from "../Interfaces/BotData";
@@ -7,6 +7,7 @@ import UserService, { UserModel } from "../Services/userService";
 import path from "path";
 import fs from "fs";
 import { getAllFiles } from "./fileUtilities";
+import { IResource } from "../Services/resourcesService";
 
 export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
     const colors = [
@@ -364,4 +365,16 @@ export async function banan(interaction: ChatInputCommandInteraction | UserConte
 
         await channel.send({ embeds: [debugEmbed] });
     }
+}
+
+export function resourcesToUnorderedList(resources: IResource[]): string {
+    const processedResources: string[] = [];
+
+    resources.forEach(resource => {
+        const currentLine: string[] = [];
+        currentLine.push(resource.url);
+        processedResources.push(currentLine.join(''));
+    })
+
+    return unorderedList(processedResources);
 }

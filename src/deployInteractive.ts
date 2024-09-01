@@ -94,7 +94,7 @@ config();
         let token: string = await promptWithDefault("Token: ", process.env.token ?? '');
         let clientId: string = await promptWithDefault("Client ID: ", process.env.clientId ?? '');
         let guildId: string = await promptWithDefault("Guild ID: ", process.env.guildId ?? '');
-        let devMode: string = await promptWithDefault("Dev mode: ", process.env.dev ?? 'false');
+        let mode: string = await promptWithDefault("Mode (debug, dev, prod): ", 'prod');
 
         if (!token || !clientId || !guildId) {
             console.log("Missing token, client id or guild id");
@@ -116,9 +116,17 @@ config();
                 ...getAllFiles(path.join(__dirname, "CommandsSlash", "Info")),
             ];
 
-            // add the utilities commands if in dev mode
-            if (devMode === 'true') {
-                slashCommandFiles = slashCommandFiles.concat(getAllFiles(path.join(__dirname, "CommandsSlash", "Utilities")));
+            switch (mode.trim().toLocaleLowerCase()) {
+                case "debug":
+                    console.log("Deploying in debug mode")
+                    slashCommandFiles = slashCommandFiles
+                        .concat(getAllFiles(path.join(__dirname, "CommandsSlash", "Utilities")))
+                        .concat(getAllFiles(path.join(__dirname, "CommandsSlash", "Misc")));
+                    break;
+                case "dev":
+                    console.log("Deploying in dev mode");
+                    slashCommandFiles = slashCommandFiles.concat(getAllFiles(path.join(__dirname, "CommandsSlash", "Misc")));
+                    break;
             }
 
             const slashCommands: SlashCommand[] = [];

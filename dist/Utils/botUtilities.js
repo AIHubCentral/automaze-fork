@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
+exports.resourcesToUnorderedList = exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
 const userService_1 = __importDefault(require("../Services/userService"));
@@ -276,3 +276,13 @@ async function banan(interaction, targetUser, guildMember) {
     }
 }
 exports.banan = banan;
+function resourcesToUnorderedList(resources) {
+    const processedResources = [];
+    resources.forEach(resource => {
+        const currentLine = [];
+        currentLine.push(resource.url);
+        processedResources.push(currentLine.join(''));
+    });
+    return (0, discord_js_1.unorderedList)(processedResources);
+}
+exports.resourcesToUnorderedList = resourcesToUnorderedList;

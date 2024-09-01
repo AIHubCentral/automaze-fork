@@ -65,7 +65,7 @@ async function clearDeployedCommands(credentials) {
         let token = await promptWithDefault("Token: ", process.env.token ?? '');
         let clientId = await promptWithDefault("Client ID: ", process.env.clientId ?? '');
         let guildId = await promptWithDefault("Guild ID: ", process.env.guildId ?? '');
-        let devMode = await promptWithDefault("Dev mode: ", process.env.dev ?? 'false');
+        let mode = await promptWithDefault("Mode (debug, dev, prod): ", 'prod');
         if (!token || !clientId || !guildId) {
             console.log("Missing token, client id or guild id");
             rl.close();
@@ -82,9 +82,17 @@ async function clearDeployedCommands(credentials) {
                 ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Fun")),
                 ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Info")),
             ];
-            // add the utilities commands if in dev mode
-            if (devMode === 'true') {
-                slashCommandFiles = slashCommandFiles.concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Utilities")));
+            switch (mode.trim().toLocaleLowerCase()) {
+                case "debug":
+                    console.log("Deploying in debug mode");
+                    slashCommandFiles = slashCommandFiles
+                        .concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Utilities")))
+                        .concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Misc")));
+                    break;
+                case "dev":
+                    console.log("Deploying in dev mode");
+                    slashCommandFiles = slashCommandFiles.concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Misc")));
+                    break;
             }
             const slashCommands = [];
             const contextCommands = [];
