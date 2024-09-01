@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ColorResolvable, EmbedBuilder, GuildBasedChannel, GuildMember, Message, TextBasedChannel, unorderedList, User, UserContextMenuCommandInteraction } from "discord.js";
+import { ActionRowBuilder, bold, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ColorResolvable, EmbedBuilder, GuildBasedChannel, GuildMember, hyperlink, Message, TextBasedChannel, unorderedList, User, UserContextMenuCommandInteraction } from "discord.js";
 import IBotConfigs from "../Interfaces/BotConfigs";
 import ExtendedClient from "../Core/extendedClient";
 import { ButtonData, EmbedData } from "../Interfaces/BotData";
@@ -372,7 +372,36 @@ export function resourcesToUnorderedList(resources: IResource[]): string {
 
     resources.forEach(resource => {
         const currentLine: string[] = [];
-        currentLine.push(resource.url);
+
+        if (resource.emoji) {
+            currentLine.push(`${resource.emoji} `);
+        }
+
+        if (resource.displayTitle) {
+            currentLine.push(bold(resource.displayTitle));
+            currentLine.push(", ");
+        }
+
+        if (resource.authors) {
+            currentLine.push(`by ${resource.authors} `);
+        }
+
+        if (resource.displayTitle) {
+            let category = resource.category;
+
+            if (category === 'colab') {
+                category = "Google Colab"
+            }
+            else if (category === 'kaggle') {
+                category = "Kaggle";
+            }
+
+            currentLine.push(hyperlink(category, resource.url));
+        }
+        else {
+            currentLine.push(resource.url);
+        }
+
         processedResources.push(currentLine.join(''));
     })
 

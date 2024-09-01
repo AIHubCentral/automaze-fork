@@ -40,18 +40,7 @@ async function createResponse(kaggleEmbeds, service) {
     // try to get info from database first
     const records = await service.findByCategory('kaggle');
     if (records.length > 0) {
-        records.forEach(record => {
-            const processedResource = ["- "];
-            if (record.emoji) {
-                processedResource.push(record.emoji);
-                processedResource.push(" ");
-            }
-            processedResource.push(record.displayTitle ? (0, discord_js_1.hyperlink)(record.displayTitle, record.url) : record.url);
-            if (record.authors) {
-                processedResource.push(` by ${(0, discord_js_1.bold)(record.authors)}`);
-            }
-            embedDescription.push(processedResource.join(""));
-        });
+        embedDescription.push((0, botUtilities_1.resourcesToUnorderedList)(records));
     }
     // merge with data from json
     kaggleEmbeds[0].description?.forEach(item => embedDescription.push(item));

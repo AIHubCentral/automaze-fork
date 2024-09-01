@@ -280,7 +280,29 @@ function resourcesToUnorderedList(resources) {
     const processedResources = [];
     resources.forEach(resource => {
         const currentLine = [];
-        currentLine.push(resource.url);
+        if (resource.emoji) {
+            currentLine.push(`${resource.emoji} `);
+        }
+        if (resource.displayTitle) {
+            currentLine.push((0, discord_js_1.bold)(resource.displayTitle));
+            currentLine.push(", ");
+        }
+        if (resource.authors) {
+            currentLine.push(`by ${resource.authors} `);
+        }
+        if (resource.displayTitle) {
+            let category = resource.category;
+            if (category === 'colab') {
+                category = "Google Colab";
+            }
+            else if (category === 'kaggle') {
+                category = "Kaggle";
+            }
+            currentLine.push((0, discord_js_1.hyperlink)(category, resource.url));
+        }
+        else {
+            currentLine.push(resource.url);
+        }
         processedResources.push(currentLine.join(''));
     });
     return (0, discord_js_1.unorderedList)(processedResources);

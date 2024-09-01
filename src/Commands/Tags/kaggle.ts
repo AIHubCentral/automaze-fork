@@ -2,7 +2,7 @@ import { bold, EmbedBuilder, hyperlink, quote } from "discord.js";
 import { EmbedData } from "../../Interfaces/BotData";
 import { PrefixCommand } from "../../Interfaces/Command";
 import ResourceService from "../../Services/resourcesService";
-import { TagResponseSender } from "../../Utils/botUtilities";
+import { resourcesToUnorderedList, TagResponseSender } from "../../Utils/botUtilities";
 
 const Kaggle: PrefixCommand = {
     name: 'kaggle',
@@ -47,22 +47,7 @@ async function createResponse(kaggleEmbeds: EmbedData[], service: ResourceServic
     const records = await service.findByCategory('kaggle');
 
     if (records.length > 0) {
-        records.forEach(record => {
-            const processedResource = ["- "];
-
-            if (record.emoji) {
-                processedResource.push(record.emoji);
-                processedResource.push(" ");
-            }
-
-            processedResource.push(record.displayTitle ? hyperlink(record.displayTitle, record.url) : record.url);
-
-            if (record.authors) {
-                processedResource.push(` by ${bold(record.authors)}`);
-            }
-
-            embedDescription.push(processedResource.join(""));
-        });
+        embedDescription.push(resourcesToUnorderedList(records));
     }
 
     // merge with data from json
