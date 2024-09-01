@@ -160,14 +160,15 @@ export default class ResourceService {
      * Deletes a resource by its id
      * @param id of the resource
      */
-    async delete(id: number): Promise<void> {
+    async delete(id: number): Promise<boolean> {
         try {
             await resourcesDatabase('resources').where({ id }).del();
             this.logger.info(`Deleted resource with id ${id}`);
-
+            return true;
         }
         catch (error) {
             this.logger.error(`Failed to delete resource with id ${id}`, error);
+            return false;
         }
     }
 

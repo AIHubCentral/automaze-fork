@@ -1,9 +1,8 @@
-import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, codeBlock, Colors, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { Colors, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { SlashCommand } from "../../Interfaces/Command";
 import ExtendedClient from "../../Core/extendedClient";
 import ResourceService, { IResource } from "../../Services/resourcesService";
 import CollaboratorService from "../../Services/collaboratorService";
-import { resourcesToUnorderedList } from "../../Utils/botUtilities";
 
 const Resources: SlashCommand = {
     category: 'Misc',
@@ -234,38 +233,68 @@ const Resources: SlashCommand = {
         }
 
         if (interaction.options.getSubcommand() === 'add') {
-            const category = '';
-            const url = '';
-            const title = '';
-            const authors = '';
-            const emoji = '';
+            const category = interaction.options.getString('category', true);
+            const url = interaction.options.getString('url', true);
+            const title = interaction.options.getString('title') ?? '';
+            const authors = interaction.options.getString('authors') ?? '';
+            const emoji = interaction.options.getString('emoji') ?? '';
 
-            const databaseCreated = await service.createDatabase();
+            const resourceId = await service.insert({
+                category,
+                url,
+                authors,
+                emoji,
+                displayTitle: title,
+            });
 
-            if (databaseCreated) {
-                await interaction.reply({ content: 'Database created.' });
-            }
-            else {
-                await interaction.reply({ content: 'Failed to create database.' });
-            }
-        }
-        else if (interaction.options.getSubcommand() === 'delete') {
             const embed = new EmbedBuilder();
 
-            const databaseDropped = await service.dropDatabase();
-
-            if (databaseDropped) {
-                await interaction.reply({ content: 'Database dropped.' });
+            if (resourceId === -1) {
+                embed.setTitle("Failed to add resource");
+                embed.setColor(Colors.Red);
             }
             else {
-                await interaction.reply({ content: 'Failed to drop database.' });
+                embed.setTitle("Resource added!");
+                embed.setDescription(`ID: **${resourceId}**, URL: ${url}`);
+                embed.setColor(Colors.DarkGreen);
             }
 
+            await interaction.reply({ embeds: [embed] });
+        }
+        else if (interaction.options.getSubcommand() === 'delete') {
+            const id = interaction.options.getInteger('id', true);
+
+            const resource = await service.findById(id);
+
+            const embed = new EmbedBuilder();
+
+            if (!resource) {
+                embed.setTitle("Invalid resource")
+                embed.setDescription(`Coudn't find resource with ID ${id}`);
+                embed.setColor(Colors.Red);
+                await interaction.reply({ embeds: [embed] });
+                return;
+            }
+
+            const deletedSuccessfully: boolean = await service.delete(id);
+
+            if (deletedSuccessfully) {
+                embed.setTitle("Resource deleted")
+                embed.setDescription(`ID: ${id}, URL: ${resource.url}`);
+                embed.setColor(Colors.DarkGreen);
+            }
+            else {
+                embed.setTitle("Failed to delete");
+                embed.setDescription(`ID: ${id}, URL: ${resource.url}`);
+                embed.setColor(Colors.Red);
+            }
+
+            await interaction.reply({ embeds: [embed] });
         }
         else if (interaction.options.getSubcommand() === 'show') {
             const category = interaction.options.getString('category', true);
 
-            const resources = await service.findAll();
+            const resources = await service.findByCategory(category);
 
             const embed = new EmbedBuilder()
                 .setTitle(`${category} resources`);
@@ -276,136 +305,63 @@ const Resources: SlashCommand = {
             }
             else {
                 embed.setColor(Colors.DarkBlue);
-                embed.setDescription(resourcesToUnorderedList(resources));
+
+                const embedDescription: string[] = [];
+
+                resources.forEach((resource) => {
+                    embedDescription.push(`- ID: **${resource.id}** | Category: **${resource.category}** | URL: **${resource.url}** | title: **${resource.displayTitle || 'None'}** | authors: **${resource.authors || 'None'}** | emoji: **${resource.emoji || 'None'}**`);
+                });
+
+                embed.setDescription(embedDescription.join('\n'));
             }
 
             await interaction.reply({ embeds: [embed] })
         }
-        /* else if (interaction.options.getSubcommand() === 'find_by_category') {
-            const category = interaction.options.getString('category') ?? 'rvc';
-            const resource = await service.findByCategory(category);
-            if (!resource) {
-                await interaction.reply({ content: 'No resource was found.' });
-            }
-            else {
-                await interaction.reply({ content: codeBlock('javascript', JSON.stringify(resource, null, 4)) });
-            }
-        }
-        else if (interaction.options.getSubcommand() === 'delete') {
-            await service.delete(id);
-            await interaction.reply({ content: `Deleted resource with id ${id}` });
-        }
-        else if (interaction.options.getSubcommand() === 'clear') {
-            await service.clear();
-            await interaction.reply({ content: 'Done.' });
-        }
-        else if (interaction.options.getSubcommand() === 'insert') {
-            const resourceCategory = interaction.options.getString('category') ?? '';
-            const url = interaction.options.getString('url') ?? '';
-            const displayTitle = interaction.options.getString('display_title') ?? '';
-            const emoji = interaction.options.getString('emoji') ?? '';
-            const authors = interaction.options.getString('authors') ?? '';
-
-            const result = {
-                category: resourceCategory,
-                url,
-                displayTitle,
-                emoji,
-                authors
-            };
-
-            const resourceId = await service.insert(result);
-
-            if (resourceId == -1) {
-                await interaction.reply({ content: 'Failed to insert data', ephemeral: true });
-            }
-            else {
-                await interaction.reply({ content: `Inserted new resource with id ${resourceId}`, ephemeral: true });
-            }
-        }
         else if (interaction.options.getSubcommand() === 'update') {
-            const resourceCategory = interaction.options.getString('category');
-            const url = interaction.options.getString('url');
-            const displayTitle = interaction.options.getString('display_title');
-            const emoji = interaction.options.getString('emoji');
-            const authors = interaction.options.getString('authors');
+            const id = interaction.options.getInteger('id', true);
 
-            const result: Partial<IResource> = {
-                ...(resourceCategory && { category: resourceCategory }),
+            const resource = await service.findById(id);
+
+            const embed = new EmbedBuilder();
+
+            if (!resource) {
+                embed.setTitle("Invalid resource")
+                embed.setDescription(`Coudn't find resource with ID ${id}`);
+                embed.setColor(Colors.Red);
+                await interaction.reply({ embeds: [embed] });
+                return;
+            }
+
+            const category = interaction.options.getString('category', true);
+            const url = interaction.options.getString('url', true);
+            const title = interaction.options.getString('title') ?? '';
+            const authors = interaction.options.getString('authors') ?? '';
+            const emoji = interaction.options.getString('emoji') ?? '';
+
+            const updatedData: Partial<IResource> = {
+                ...(category && { category }),
                 ...(url && { url }),
-                ...(displayTitle && { displayTitle }),
+                ...(title && { displayTitle: title }),
                 ...(emoji && { emoji }),
                 ...(authors && { authors }),
             };
 
-            const resourceUpdated: boolean = await service.update(id, result);
+            const updatedSuccessfully: boolean = await service.update(id, updatedData);
 
-            if (!resourceUpdated) {
-                await interaction.reply({ content: 'Failed to update data', ephemeral: true });
+            if (updatedSuccessfully) {
+                embed.setTitle("Resource updated")
+                embed.setDescription(`**ID**: \`${id}\`, **URL**: ${url}`);
+                embed.setColor(Colors.DarkAqua);
             }
             else {
-                await interaction.reply({ content: `Updated resource with id ${id}`, ephemeral: true });
+                embed.setTitle("Failed to update");
+                embed.setDescription(`**ID**: ${id}, **URL**: ${resource.url}`);
+                embed.setColor(Colors.Red);
             }
+
+            await interaction.reply({ embeds: [embed] });
         }
-        else if (interaction.options.getSubcommand() === 'export_data') {
-            const resources: IResource[] = await service.findAll();
-
-            if (resources.length === 0) {
-                await interaction.reply({ content: `No resource found`, ephemeral: true });
-            }
-            else {
-                const jsonResult = JSON.stringify(resources, null, 4);
-                const buffer = Buffer.from(jsonResult, 'utf-8');
-                const attachment = new AttachmentBuilder(buffer, { name: 'resources.json' });
-                await interaction.reply({ files: [attachment], ephemeral: true });
-            }
-        }
-        else if (interaction.options.getSubcommand() === 'import_data') {
-            const file = interaction.options.getAttachment('file');
-
-            if (!file?.name.endsWith('.json')) {
-                await interaction.reply({ content: 'Not a valid JSON file', ephemeral: true });
-                return;
-            }
-
-            const response = await fetch(file.url);
-            const jsonResult = await response.json() as IResource[];
-
-            const insertedValues: boolean = await service.importData(jsonResult);
-            const replyMessage = insertedValues ? `Data imported` : 'No data provided';
-            await interaction.reply({ content: replyMessage, ephemeral: true });
-        } */
     }
 }
 
 export default Resources;
-
-async function getPaginatedData(page: number, resourceService: ResourceService): Promise<any> {
-    const perPage = 10;
-    const offset = (page - 1) * perPage;
-    const { data, counter } = await resourceService.getPaginatedResult(offset, perPage);
-    const totalPages = Math.ceil(counter.count / perPage);
-    return { data, totalPages };
-}
-
-function createPaginatedEmbed(data: any, currentPage: number, totalPages: number): EmbedBuilder {
-    return new EmbedBuilder()
-        .setTitle(`All Resources`)
-        .setColor(Colors.Greyple)
-        .setDescription(data.map((record: any) => {
-            const result = [
-                '- ', record.id, `. **URL**: ${record.url}`, ` | **Category**: ${record.category}`
-            ];
-
-            if (record.displayTitle) {
-                result.push(` | **Title**: ${record.displayTitle}`)
-            }
-
-            if (record.authors) {
-                result.push(` | **Authors**: ${record.authors}`);
-            }
-
-            return result.join('');
-        }).join('\n'))
-        .setFooter({ text: `Page ${currentPage} of ${totalPages}` });
-}

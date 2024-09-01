@@ -136,9 +136,11 @@ class ResourceService {
         try {
             await (0, dbManager_1.resourcesDatabase)('resources').where({ id }).del();
             this.logger.info(`Deleted resource with id ${id}`);
+            return true;
         }
         catch (error) {
             this.logger.error(`Failed to delete resource with id ${id}`, error);
+            return false;
         }
     }
     /**
