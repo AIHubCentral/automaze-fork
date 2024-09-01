@@ -36,35 +36,14 @@
             ]
         }
     },
-    "hf": {
-        "en": {
-            "embeds": [
-                {
-                    "title": "<:huggingface:1179800228946268270> Hugginface Spaces",
-                    "color": "ffcc4d",
-                    "description": [
-                        "- **UVR5 UI**, by Eddy and Ilaria [Huggingface Spaces](https://huggingface.co/spaces/TheStinger/UVR5_UI)",
-                        "- **Ilaria RVC Zero**, by Ilaria [Huggingface Spaces](https://huggingface.co/spaces/TheStinger/Ilaria_RVC)",
-                        "- **RVC⚡ZERO**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/rvc_zero)",
-                        "- **Applio**, by IA Hispano [Huggingface Spaces](https://huggingface.co/spaces/IAHispano/Applio)",
-                        "- **AICoverGen**, by r3gm [Huggingface Spaces](https://huggingface.co/spaces/r3gm/AICoverGen)"
-                    ],
-                    "footer": "More commands: -audio, -colabs, -kaggle, -local, -overtraining, -realtime, -rvc, -help"
-                }
-            ]
-        }
-    },
     "kaggle": {
         "en": {
             "embeds": [
                 {
-                    "title": "Kaggle Notebooks",
+                    "title": "📘 Kaggle Notebooks",
                     "description": [
-                        "- [UVR5 NO UI](https://www.kaggle.com/code/eddycrack864/uvr5-no-ui) by **Eddy**",
-                        "- [How to use RVC Mainline Kaggle](https://rentry.co/RVC-Mainline-Kaggle) by **Cauthess**",
-                        "- [✨ RVC Mainline](https://www.kaggle.com/code/hinabl/mainline) by [Hina](https://linktr.ee/_hina__)",
-                        "- [Original W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/hinabl/public-w-okada-voice-changer)",
-                        "- [Modified W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/suneku/voice-changer-public)"
+                        "- 📖 [How to use RVC Mainline Kaggle](https://rentry.co/RVC-Mainline-Kaggle) by **Cauthess**",
+                        "> Note: Kaggle limits GPU usage to 30 hours per week."
                     ],
                     "footer": "More commands: -colabs, -hf, -local, -rvc, -help"
                 }

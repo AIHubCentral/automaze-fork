@@ -212,7 +212,14 @@ const Resources: SlashCommand = {
                         )
                         .setRequired(true)
                 )
-
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('refresh')
+                .setDescription('Refresh bot data')
+                .setDescriptionLocalizations({
+                    'pt-BR': 'Atualiza dados do bot'
+                })
         ),
     async execute(interaction) {
         const client = interaction.client as ExtendedClient;
@@ -363,6 +370,16 @@ const Resources: SlashCommand = {
             }
 
             await interaction.reply({ embeds: [embed] });
+        }
+        else if (interaction.options.getSubcommand() === 'refresh') {
+            client.botCache.clear();
+            await interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle("🔃 Data refreshed")
+                        .setColor(Colors.DarkBlue)
+                ]
+            });
         }
     }
 }

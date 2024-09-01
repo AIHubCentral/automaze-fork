@@ -168,7 +168,13 @@ const Resources = {
         'pt-BR': 'Categoria do recurso'
     })
         .addChoices({ name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' })
-        .setRequired(true))),
+        .setRequired(true)))
+        .addSubcommand(subcommand => subcommand
+        .setName('refresh')
+        .setDescription('Refresh bot data')
+        .setDescriptionLocalizations({
+        'pt-BR': 'Atualiza dados do bot'
+    })),
     async execute(interaction) {
         const client = interaction.client;
         const service = new resourcesService_1.default(client.logger);
@@ -288,6 +294,16 @@ const Resources = {
                 embed.setColor(discord_js_1.Colors.Red);
             }
             await interaction.reply({ embeds: [embed] });
+        }
+        else if (interaction.options.getSubcommand() === 'refresh') {
+            client.botCache.clear();
+            await interaction.reply({
+                embeds: [
+                    new discord_js_1.EmbedBuilder()
+                        .setTitle("🔃 Data refreshed")
+                        .setColor(discord_js_1.Colors.DarkBlue)
+                ]
+            });
         }
     }
 };
