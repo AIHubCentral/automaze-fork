@@ -1,11 +1,21 @@
-import { Collection } from 'discord.js';
+import { AutocompleteInteraction, channelMention, Collection, CommandInteraction } from 'discord.js';
 import IEventData from '../Interfaces/Events';
 import ExtendedClient from '../Core/extendedClient';
 
 const interactionCreateEvent: IEventData = {
     name: 'interactionCreate',
     once: false,
-    async run(client: ExtendedClient, interaction: any) {
+    async run(client: ExtendedClient, interaction: CommandInteraction) {
+
+        // don't allow commands in these channels
+        const disallowedChannelIds = [
+            client.discordIDs.Channel.Weights,
+        ];
+
+        if (disallowedChannelIds.includes(interaction.channelId)) {
+            await interaction.reply({ content: `This command is not available here. Visit ${channelMention(client.discordIDs.Channel.BotSpam)} if you wish to use this command.`, ephemeral: true });
+            return;
+        }
 
         if (interaction.isChatInputCommand()) {
             const command = client.slashCommands.get(interaction.commandName);
@@ -17,9 +27,9 @@ const interactionCreateEvent: IEventData = {
 
             client.logger.info(`Executing slash command`, {
                 more: {
-                    channelId: interaction.channel.id,
+                    channelId: interaction.channelId,
                     commandName: command.data.name,
-                    guildId: interaction.guild.id,
+                    guildId: interaction.guildId,
                     type: command.type,
                 }
             });
@@ -65,10 +75,10 @@ const interactionCreateEvent: IEventData = {
             }
         }
         else if (interaction.isAutocomplete()) {
-            const command = interaction.client.slashCommands.get(interaction.commandName);
+            const command = client.slashCommands.get((interaction as AutocompleteInteraction).commandName);
 
             if (!command) {
-                client.logger.error(`No command matching ${interaction.commandName} was found.`);
+                client.logger.error(`No command matching ${(interaction as AutocompleteInteraction).commandName} was found.`);
                 return;
             }
 
@@ -80,7 +90,7 @@ const interactionCreateEvent: IEventData = {
             }
         }
         else if (interaction.isUserContextMenuCommand()) {
-            const command = interaction.client.contextMenuCommands.get(interaction.commandName);
+            const command = client.contextMenuCommands.get(interaction.commandName);
 
             if (!command) {
                 client.logger.error(`No context command matching ${interaction.commandName} was found.`);
@@ -89,9 +99,9 @@ const interactionCreateEvent: IEventData = {
 
             client.logger.info(`Executing context command`, {
                 more: {
-                    channelId: interaction.channel.id,
+                    channelId: interaction.channelId,
                     commandName: command.data.name,
-                    guildId: interaction.guild.id,
+                    guildId: interaction.guildId,
                     type: command.type,
                 }
             });
