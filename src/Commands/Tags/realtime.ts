@@ -10,6 +10,7 @@ import {
 import ExtendedClient from '../../Core/extendedClient';
 import { SelectMenuOption } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
+import { createEmbeds } from '../../Utils/discordUtilities';
 
 function createMenuOptions(availableOptions: SelectMenuOption[]): StringSelectMenuOptionBuilder[] {
     const menuOptions: StringSelectMenuOptionBuilder[] = [];
@@ -54,17 +55,16 @@ const Realtime: PrefixCommand = {
         const realtimeActionRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(realtimeGuidesSelectMenu);
 
         let botResponse: MessageReplyOptions = {
-            embeds: botUtils.createEmbeds(selectedGuide?.embeds, availableColors),
+            embeds: createEmbeds(selectedGuide!.embeds, availableColors),
             components: [realtimeActionRow]
         };
 
-        let selectMenuDisplayMinutes = 5;  // allow interaction with the select menu for 5 minutes
+        let selectMenuDisplayMinutes = 15;  // allow interaction with the select menu for 15 minutes
         let targetUser = message.mentions.members?.first();
         let mainUser = message.author;
 
         if (targetUser) {
             botResponse.content = `*Tag suggestion for ${message.mentions.members?.first()}*`;
-            selectMenuDisplayMinutes = 30;  // menu available for 30 minutes if it was sent to someone
         }
 
         const botReply = await message.reply(botResponse);
@@ -102,7 +102,7 @@ const Realtime: PrefixCommand = {
                     botResponse.content = `\nSuggestions for ${targetUser}`;
                 }
 
-                botResponse.embeds = botUtils.createEmbeds(guide?.embeds, availableColors);
+                botResponse.embeds = createEmbeds(guide!.embeds, availableColors);
 
                 i.update(<InteractionUpdateOptions>botResponse);
             } else {

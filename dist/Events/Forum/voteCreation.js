@@ -16,7 +16,7 @@ const VoteCreation = {
         };
         try {
             let embedMessages = {
-                [client.discordIDs.Forum.Suggestions]: "Vote for this suggestion!",
+                //[client.discordIDs.Forum.Suggestions]: "Vote for this suggestion!",
                 [client.discordIDs.Forum.TaskSTAFF]: "Vote for this task!",
             };
             if (!newlyCreated)
@@ -41,7 +41,7 @@ const VoteCreation = {
                 message.react(`🔼`),
                 message.react(`🔽`),
             ]);
-            client.logger.info('Added voting embed', logData);
+            client.logger.debug('Added voting embed', logData);
         }
         catch (error) {
             client.logger.error('Failed to add voting embed', error, logData);

@@ -3,6 +3,7 @@ import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
 import { EmbedData } from '../../Interfaces/BotData';
 import UserService from '../../Services/userService';
+import { createEmbed } from '../../Utils/discordUtilities';
 
 const TopBanana: SlashCommand = {
 	category: 'Fun',
@@ -29,7 +30,7 @@ const TopBanana: SlashCommand = {
 
 		if (users.length === 0) {
 			embedData.description?.push('> The leaderboard is empty, `/banana` someone to show results here!');
-			await interaction.editReply({ embeds: [client.botUtils.createEmbed(embedData)] });
+			await interaction.editReply({ embeds: [createEmbed(embedData)] });
 			return;
 		}
 
@@ -42,7 +43,7 @@ const TopBanana: SlashCommand = {
 			rankCounter++;
 		}
 
-		await interaction.editReply({ embeds: [client.botUtils.createEmbed(embedData)] });
+		await interaction.editReply({ embeds: [createEmbed(embedData)] });
 	},
 };
 

@@ -8,11 +8,16 @@ const HF = {
     aliases: ['spaces', 'hugginface'],
     syntax: 'hf [member]',
     async run(client, message) {
-        const { botData } = client;
-        const content = botData.embeds.hf.en.embeds;
-        if (!content) {
-            client.logger.error(`Missing embed data for -${this.name}`);
-            return;
+        const { botCache, logger } = client;
+        const resources = await (0, botUtilities_1.getResourceData)("hf", botCache, logger);
+        let content = [];
+        if (resources.length > 0) {
+            content.push({
+                title: "<:huggingface:1179800228946268270> Hugginface Spaces",
+                color: "ffcc4d",
+                description: [(0, botUtilities_1.resourcesToUnorderedList)(resources)],
+                footer: "More commands: -audio, - colabs, -kaggle, -local, -overtraining, -realtime, -rvc, -help"
+            });
         }
         const sender = new botUtilities_1.TagResponseSender(client);
         sender.setEmbeds(content);

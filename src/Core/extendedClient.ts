@@ -6,7 +6,9 @@ import IDiscordIDs from '../Interfaces/DiscordIDs';
 import { createInstance } from '../Database/dbManager';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import IBotUtils from '../Interfaces/BotUtils';
-import { Scheduler, getThemes } from '../utils';
+import { Scheduler } from '../utils';
+import { getThemes } from '../Utils/botUtilities';
+import { IResource } from '../Services/resourcesService';
 
 export interface ExtendedClientOptions {
     logger: winston.Logger;
@@ -36,6 +38,7 @@ class ExtendedClient extends Discord.Client {
     botConfigs: IBotConfigs;
     botUtils: IBotUtils;
     botResponses: any;
+    botCache: Discord.Collection<string, any>;
     scheduler: any;
     knexInstance;
 
@@ -71,6 +74,7 @@ class ExtendedClient extends Discord.Client {
         this.botConfigs = extendedOptions.botConfigs;
         this.botResponses = extendedOptions.botResponses;
         this.botUtils = extendedOptions.botUtils;
+        this.botCache = new Discord.Collection<string, any>();
 
         // cron job
         this.scheduler = new Scheduler(this);

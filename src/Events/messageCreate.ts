@@ -2,6 +2,7 @@ import { ChannelType, Message, PublicThreadChannel, TextChannel, ThreadChannel }
 import IEventData from "../Interfaces/Events";
 import ExtendedClient from "../Core/extendedClient";
 import { EmbedData } from "../Interfaces/BotData";
+import { createEmbed } from "../Utils/discordUtilities";
 
 function handlePrefixCommand(prefix: string, message: Message, client: ExtendedClient): void {
     const commandArguments = message.content.slice(prefix.length).trim().split(/ +/);
@@ -44,7 +45,7 @@ async function handleBotMentioned(prefix: string, message: Message, client: Exte
     embedData.description?.push('- Interested in how I\'m built? [I\'m actually open source!](https://github.com/DeprecatedTable/automaze)');
     embedData.description?.push('- Forgot a specific command? Try `/help` or `-help`');
 
-    const embed = client.botUtils.createEmbed(embedData);
+    const embed = createEmbed(embedData);
     await message.reply({ embeds: [embed] });
 
     client.logger.info('Bot mentioned', {

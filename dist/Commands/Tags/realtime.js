@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const discordUtilities_1 = require("../../Utils/discordUtilities");
 function createMenuOptions(availableOptions) {
     const menuOptions = [];
     for (const option of availableOptions ?? []) {
@@ -35,15 +36,14 @@ const Realtime = {
             .addOptions(menuOptions);
         const realtimeActionRow = new discord_js_1.ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
         let botResponse = {
-            embeds: botUtils.createEmbeds(selectedGuide?.embeds, availableColors),
+            embeds: (0, discordUtilities_1.createEmbeds)(selectedGuide.embeds, availableColors),
             components: [realtimeActionRow]
         };
-        let selectMenuDisplayMinutes = 5; // allow interaction with the select menu for 5 minutes
+        let selectMenuDisplayMinutes = 15; // allow interaction with the select menu for 15 minutes
         let targetUser = message.mentions.members?.first();
         let mainUser = message.author;
         if (targetUser) {
             botResponse.content = `*Tag suggestion for ${message.mentions.members?.first()}*`;
-            selectMenuDisplayMinutes = 30; // menu available for 30 minutes if it was sent to someone
         }
         const botReply = await message.reply(botResponse);
         const collector = botReply.createMessageComponentCollector({
@@ -71,7 +71,7 @@ const Realtime = {
                 if (targetUser) {
                     botResponse.content = `\nSuggestions for ${targetUser}`;
                 }
-                botResponse.embeds = botUtils.createEmbeds(guide?.embeds, availableColors);
+                botResponse.embeds = (0, discordUtilities_1.createEmbeds)(guide.embeds, availableColors);
                 i.update(botResponse);
             }
             else {

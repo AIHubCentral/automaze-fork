@@ -3,10 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.banan = exports.TagResponseSender = exports.getThemeColors = void 0;
+exports.getResourceData = exports.resourcesToUnorderedList = exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
 const userService_1 = __importDefault(require("../Services/userService"));
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const fileUtilities_1 = require("./fileUtilities");
+const resourcesService_1 = __importDefault(require("../Services/resourcesService"));
 function getThemeColors(botConfigs) {
     const colors = [
         botConfigs.colors.theme.primary,
@@ -16,6 +20,19 @@ function getThemeColors(botConfigs) {
     return colors;
 }
 exports.getThemeColors = getThemeColors;
+function getThemes() {
+    const themes = {};
+    const themesDirectory = path_1.default.join(process.cwd(), 'JSON', 'themes');
+    const themeFiles = (0, fileUtilities_1.getAllFiles)(themesDirectory).filter(file => path_1.default.extname(file) === '.json');
+    themeFiles.forEach(filePath => {
+        const themeData = fs_1.default.readFileSync(filePath).toString();
+        // remove .json extension from file name
+        const themeName = path_1.default.parse(filePath).name;
+        themes[themeName] = JSON.parse(themeData);
+    });
+    return themes;
+}
+exports.getThemes = getThemes;
 class TagResponseSender {
     constructor(client) {
         this.client = client;
@@ -227,7 +244,7 @@ async function banan(interaction, targetUser, guildMember) {
     if (userModel.bananas > 1) {
         embedData.footer = embedData.footer.replace('TIME', 'TIMES');
     }
-    const embed = client.botUtils.createEmbed(embedData, 'Yellow');
+    const embed = (0, discordUtilities_1.createEmbed)(embedData, 'Yellow');
     // cooldown expires in 1 minute
     client.cooldowns.banana.set(interaction.user.id, Date.now() + (1 * 60 * 1000));
     if (botRevenge) {
@@ -260,3 +277,52 @@ async function banan(interaction, targetUser, guildMember) {
     }
 }
 exports.banan = banan;
+function resourcesToUnorderedList(resources) {
+    const processedResources = [];
+    resources.forEach(resource => {
+        const currentLine = [];
+        if (resource.emoji) {
+            currentLine.push(`${resource.emoji} `);
+        }
+        if (resource.displayTitle) {
+            currentLine.push((0, discord_js_1.bold)(resource.displayTitle));
+            currentLine.push(", ");
+        }
+        if (resource.authors) {
+            currentLine.push(`by ${resource.authors} `);
+        }
+        if (resource.displayTitle) {
+            let category = resource.category;
+            if (category === 'colab') {
+                category = "Google Colab";
+            }
+            else if (category === 'hf') {
+                category = "Huggingface Spaces";
+            }
+            else if (category === 'kaggle') {
+                category = "Kaggle";
+            }
+            currentLine.push((0, discord_js_1.hyperlink)(category, resource.url));
+        }
+        else {
+            currentLine.push(resource.url);
+        }
+        processedResources.push(currentLine.join(''));
+    });
+    return (0, discord_js_1.unorderedList)(processedResources);
+}
+exports.resourcesToUnorderedList = resourcesToUnorderedList;
+async function getResourceData(queryKey, cache, logger) {
+    //const now = Date.now();
+    // try to get from cache first
+    if (cache.has(queryKey)) {
+        const cachedData = cache.get(queryKey) || [];
+        return cachedData;
+    }
+    logger.debug(`Requesting ${queryKey} data from DB`);
+    const resourceService = new resourcesService_1.default(logger);
+    const resources = await resourceService.findByCategory(queryKey);
+    cache.set(queryKey, resources);
+    return resources;
+}
+exports.getResourceData = getResourceData;

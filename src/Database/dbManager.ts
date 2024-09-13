@@ -1,4 +1,5 @@
 import Knex from 'knex';
+import path from 'path';
 
 function createInstance(sqliteFilePath: string) {
     /* returns a knex instance */
@@ -29,4 +30,14 @@ async function importData(knex: Knex.Knex, data: any) {
     console.log('Data imported!');
 }
 
-export { createInstance, exportData, importData };
+const RESOURCES_DATABASE_PATH = path.join(process.cwd(), 'database', 'resources.sqlite');
+
+const resourcesDatabase = Knex({
+    client: 'sqlite3',
+    connection: {
+        filename: RESOURCES_DATABASE_PATH,
+    },
+    useNullAsDefault: true,
+});
+
+export { createInstance, exportData, importData, RESOURCES_DATABASE_PATH, resourcesDatabase };

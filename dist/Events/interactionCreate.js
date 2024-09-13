@@ -5,6 +5,14 @@ const interactionCreateEvent = {
     name: 'interactionCreate',
     once: false,
     async run(client, interaction) {
+        // don't allow commands in these channels
+        const disallowedChannelIds = [
+            client.discordIDs.Channel.Weights,
+        ];
+        if (disallowedChannelIds.includes(interaction.channelId)) {
+            await interaction.reply({ content: `This command is not available here. Visit ${(0, discord_js_1.channelMention)(client.discordIDs.Channel.BotSpam)} if you wish to use this command.`, ephemeral: true });
+            return;
+        }
         if (interaction.isChatInputCommand()) {
             const command = client.slashCommands.get(interaction.commandName);
             if (!command) {
@@ -13,9 +21,9 @@ const interactionCreateEvent = {
             }
             client.logger.info(`Executing slash command`, {
                 more: {
-                    channelId: interaction.channel.id,
+                    channelId: interaction.channelId,
                     commandName: command.data.name,
-                    guildId: interaction.guild.id,
+                    guildId: interaction.guildId,
                     type: command.type,
                 }
             });
@@ -53,7 +61,7 @@ const interactionCreateEvent = {
             }
         }
         else if (interaction.isAutocomplete()) {
-            const command = interaction.client.slashCommands.get(interaction.commandName);
+            const command = client.slashCommands.get(interaction.commandName);
             if (!command) {
                 client.logger.error(`No command matching ${interaction.commandName} was found.`);
                 return;
@@ -66,16 +74,16 @@ const interactionCreateEvent = {
             }
         }
         else if (interaction.isUserContextMenuCommand()) {
-            const command = interaction.client.contextMenuCommands.get(interaction.commandName);
+            const command = client.contextMenuCommands.get(interaction.commandName);
             if (!command) {
                 client.logger.error(`No context command matching ${interaction.commandName} was found.`);
                 return;
             }
             client.logger.info(`Executing context command`, {
                 more: {
-                    channelId: interaction.channel.id,
+                    channelId: interaction.channelId,
                     commandName: command.data.name,
-                    guildId: interaction.guild.id,
+                    guildId: interaction.guildId,
                     type: command.type,
                 }
             });

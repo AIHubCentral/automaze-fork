@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_path_1 = __importDefault(require("node:path"));
-const utils_1 = require("../utils");
+const fileUtilities_1 = require("../Utils/fileUtilities");
 const EVENTS_PATH = node_path_1.default.join(process.cwd(), 'dist', 'Events');
 function registerEvents(client) {
-    const eventFiles = (0, utils_1.getAllFiles)(EVENTS_PATH);
+    const eventFiles = (0, fileUtilities_1.getAllFiles)(EVENTS_PATH);
     for (const file of eventFiles) {
         const eventData = require(file).default || require(file);
         if (eventData.once) {

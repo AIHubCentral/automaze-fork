@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const discordUtilities_1 = require("../Utils/discordUtilities");
 function handlePrefixCommand(prefix, message, client) {
     const commandArguments = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = commandArguments.shift()?.toLowerCase();
@@ -36,7 +37,7 @@ async function handleBotMentioned(prefix, message, client) {
     embedData.description?.push(`\n- My prefix in this server is \`${prefix}\``);
     embedData.description?.push('- Interested in how I\'m built? [I\'m actually open source!](https://github.com/DeprecatedTable/automaze)');
     embedData.description?.push('- Forgot a specific command? Try `/help` or `-help`');
-    const embed = client.botUtils.createEmbed(embedData);
+    const embed = (0, discordUtilities_1.createEmbed)(embedData);
     await message.reply({ embeds: [embed] });
     client.logger.info('Bot mentioned', {
         more: {

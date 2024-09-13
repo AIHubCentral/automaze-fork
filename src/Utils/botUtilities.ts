@@ -1,9 +1,14 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, ColorResolvable, EmbedBuilder, GuildBasedChannel, GuildMember, Message, TextBasedChannel, User, UserContextMenuCommandInteraction } from "discord.js";
+import { ActionRowBuilder, bold, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, Collection, ColorResolvable, EmbedBuilder, GuildBasedChannel, GuildMember, hyperlink, Message, TextBasedChannel, unorderedList, User, UserContextMenuCommandInteraction } from "discord.js";
 import IBotConfigs from "../Interfaces/BotConfigs";
 import ExtendedClient from "../Core/extendedClient";
 import { ButtonData, EmbedData } from "../Interfaces/BotData";
-import { createEmbeds, getChannelById, getGuildById } from "./discordUtilities";
+import { createEmbed, createEmbeds, getChannelById, getGuildById } from "./discordUtilities";
 import UserService, { UserModel } from "../Services/userService";
+import path from "path";
+import fs from "fs";
+import { getAllFiles } from "./fileUtilities";
+import ResourceService, { IResource } from "../Services/resourcesService";
+import winston from "winston";
 
 export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
     const colors = [
@@ -12,6 +17,19 @@ export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
         botConfigs.colors.theme.tertiary,
     ];
     return colors;
+}
+
+export function getThemes() {
+    const themes: { [key: string]: string } = {};
+    const themesDirectory = path.join(process.cwd(), 'JSON', 'themes');
+    const themeFiles = getAllFiles(themesDirectory).filter(file => path.extname(file) === '.json');
+    themeFiles.forEach(filePath => {
+        const themeData = fs.readFileSync(filePath).toString();
+        // remove .json extension from file name
+        const themeName = path.parse(filePath).name;
+        themes[themeName] = JSON.parse(themeData);
+    });
+    return themes;
 }
 
 export class TagResponseSender {
@@ -310,7 +328,7 @@ export async function banan(interaction: ChatInputCommandInteraction | UserConte
         embedData.footer = embedData.footer.replace('TIME', 'TIMES');
     }
 
-    const embed = client.botUtils.createEmbed(embedData, 'Yellow');
+    const embed = createEmbed(embedData, 'Yellow');
 
     // cooldown expires in 1 minute
     client.cooldowns.banana.set(interaction.user.id, Date.now() + (1 * 60 * 1000));
@@ -348,4 +366,67 @@ export async function banan(interaction: ChatInputCommandInteraction | UserConte
 
         await channel.send({ embeds: [debugEmbed] });
     }
+}
+
+export function resourcesToUnorderedList(resources: IResource[]): string {
+    const processedResources: string[] = [];
+
+    resources.forEach(resource => {
+        const currentLine: string[] = [];
+
+        if (resource.emoji) {
+            currentLine.push(`${resource.emoji} `);
+        }
+
+        if (resource.displayTitle) {
+            currentLine.push(bold(resource.displayTitle));
+            currentLine.push(", ");
+        }
+
+        if (resource.authors) {
+            currentLine.push(`by ${resource.authors} `);
+        }
+
+        if (resource.displayTitle) {
+            let category = resource.category;
+
+            if (category === 'colab') {
+                category = "Google Colab"
+            }
+            else if (category === 'hf') {
+                category = "Huggingface Spaces";
+            }
+            else if (category === 'kaggle') {
+                category = "Kaggle";
+            }
+
+            currentLine.push(hyperlink(category, resource.url));
+        }
+        else {
+            currentLine.push(resource.url);
+        }
+
+        processedResources.push(currentLine.join(''));
+    })
+
+    return unorderedList(processedResources);
+}
+
+export async function getResourceData(queryKey: string, cache: Collection<string, IResource[]>, logger: winston.Logger): Promise<IResource[]> {
+    //const now = Date.now();
+
+    // try to get from cache first
+    if (cache.has(queryKey)) {
+        const cachedData = cache.get(queryKey) || [];
+        return cachedData;
+    }
+
+    logger.debug(`Requesting ${queryKey} data from DB`);
+
+    const resourceService = new ResourceService(logger);
+
+    const resources = await resourceService.findByCategory(queryKey);
+    cache.set(queryKey, resources);
+
+    return resources;
 }
