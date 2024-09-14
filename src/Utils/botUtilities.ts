@@ -368,6 +368,13 @@ export async function banan(interaction: ChatInputCommandInteraction | UserConte
     }
 }
 
+export enum CloudPlatform {
+    Colab = 'colab',
+    Huggingface = 'hf',
+    Kaggle = 'kaggle',
+    Lightning = 'lightning_ai'
+}
+
 export function resourcesToUnorderedList(resources: IResource[]): string {
     const processedResources: string[] = [];
 
@@ -390,16 +397,16 @@ export function resourcesToUnorderedList(resources: IResource[]): string {
         if (resource.displayTitle) {
             let category = resource.category;
 
-            if (category === 'colab') {
+            if (category === CloudPlatform.Colab) {
                 category = "Google Colab"
             }
-            else if (category === 'hf') {
+            else if (category === CloudPlatform.Huggingface) {
                 category = "Huggingface Spaces";
             }
-            else if (category === 'kaggle') {
+            else if (category === CloudPlatform.Kaggle) {
                 category = "Kaggle";
             }
-            else if (category === 'lightning_ai') {
+            else if (category === CloudPlatform.Lightning) {
                 category = "Lightning AI";
             }
 

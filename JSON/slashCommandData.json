@@ -1,0 +1,21 @@
+{
+    "cloud": {
+        "name": "cloud",
+        "description": "Links to useful resources available on the cloud",
+        "descriptionLocalizations": {
+            "pt-BR": "Links para recursos úteis disponíveis na nuvem"
+        },
+        "options": {
+            "platform": {
+                "name": "platform",
+                "nameLocalizations": {
+                    "pt-BR": "plataforma"
+                },
+                "description": "Select a platform",
+                "descriptionLocalizations": {
+                    "pt-BR": "selecione a plataforma"
+                }
+            }
+        }
+    }
+}

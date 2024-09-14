@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getResourceData = exports.resourcesToUnorderedList = exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
+exports.getResourceData = exports.resourcesToUnorderedList = exports.CloudPlatform = exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
 const userService_1 = __importDefault(require("../Services/userService"));
@@ -277,6 +277,13 @@ async function banan(interaction, targetUser, guildMember) {
     }
 }
 exports.banan = banan;
+var CloudPlatform;
+(function (CloudPlatform) {
+    CloudPlatform["Colab"] = "colab";
+    CloudPlatform["Huggingface"] = "hf";
+    CloudPlatform["Kaggle"] = "kaggle";
+    CloudPlatform["Lightning"] = "lightning_ai";
+})(CloudPlatform || (exports.CloudPlatform = CloudPlatform = {}));
 function resourcesToUnorderedList(resources) {
     const processedResources = [];
     resources.forEach(resource => {
@@ -293,16 +300,16 @@ function resourcesToUnorderedList(resources) {
         }
         if (resource.displayTitle) {
             let category = resource.category;
-            if (category === 'colab') {
+            if (category === CloudPlatform.Colab) {
                 category = "Google Colab";
             }
-            else if (category === 'hf') {
+            else if (category === CloudPlatform.Huggingface) {
                 category = "Huggingface Spaces";
             }
-            else if (category === 'kaggle') {
+            else if (category === CloudPlatform.Kaggle) {
                 category = "Kaggle";
             }
-            else if (category === 'lightning_ai') {
+            else if (category === CloudPlatform.Lightning) {
                 category = "Lightning AI";
             }
             currentLine.push((0, discord_js_1.hyperlink)(category, resource.url));
