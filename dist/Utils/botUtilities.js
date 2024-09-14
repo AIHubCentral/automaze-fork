@@ -302,6 +302,9 @@ function resourcesToUnorderedList(resources) {
             else if (category === 'kaggle') {
                 category = "Kaggle";
             }
+            else if (category === 'lightning_ai') {
+                category = "Lightning AI";
+            }
             currentLine.push((0, discord_js_1.hyperlink)(category, resource.url));
         }
         else {

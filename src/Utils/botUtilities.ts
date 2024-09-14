@@ -399,6 +399,9 @@ export function resourcesToUnorderedList(resources: IResource[]): string {
             else if (category === 'kaggle') {
                 category = "Kaggle";
             }
+            else if (category === 'lightning_ai') {
+                category = "Lightning AI";
+            }
 
             currentLine.push(hyperlink(category, resource.url));
         }

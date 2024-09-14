@@ -40,6 +40,7 @@ const Resources: SlashCommand = {
                             { name: 'colab', value: 'colab' },
                             { name: 'huggingface', value: 'hf' },
                             { name: 'kaggle', value: 'kaggle' },
+                            { name: 'lightning', value: 'lightning_ai' },
                         )
                         .setRequired(true)
                 )
@@ -119,6 +120,7 @@ const Resources: SlashCommand = {
                             { name: 'colab', value: 'colab' },
                             { name: 'huggingface', value: 'hf' },
                             { name: 'kaggle', value: 'kaggle' },
+                            { name: 'lightning', value: 'lightning_ai' },
                         )
                         .setRequired(true)
                 )
@@ -209,6 +211,7 @@ const Resources: SlashCommand = {
                             { name: 'colab', value: 'colab' },
                             { name: 'huggingface', value: 'hf' },
                             { name: 'kaggle', value: 'kaggle' },
+                            { name: 'lightning', value: 'lightning_ai' },
                         )
                         .setRequired(true)
                 )
