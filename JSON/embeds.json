@@ -1,28 +1,4 @@
 {
-    "audio": {
-        "en": {
-            "embeds": [
-                {
-                    "title": "📚 Audio Guides",
-                    "description": [
-                        "- [Creating Datasets for RVC using iZotope RX11](https://rentry.co/RVC-dataset-RX11), by **Cauthess**",
-                        "- [Gathering and Isolating Audio](https://docs.google.com/document/d/1wTJ_wutDqEtsA99BJOXDDGax25pPIDE84O5E2Rio5Qk/edit#heading=h.g896c5vbh0dv), by **SCRFilms** :snowflake:",
-                        "- [Vocal Mixing Tutorial](https://www.youtube.com/watch?v=rSxLF3kkBw0), by **Roomie**"
-                    ]
-                },
-                {
-                    "title": "🛠️ Tools",
-                    "description": [
-                        "### Audio Separation/Isolation",
-                        "- https://mvsep.com/",
-                        "- https://multimedia.easeus.com/vocal-remover/",
-                        "- [MDX-NET Colab](https://colab.research.google.com/github/NaJeongMo/Colab-for-MDX_B/blob/main/MDX-Net_Colab.ipynb)"
-                    ],
-                    "footer": "More commands: -colab, -uvr, -karafan, -overtrain, -help"
-                }
-            ]
-        }
-    },
     "colab_notice": {
         "en": {
             "embeds": [

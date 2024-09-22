@@ -409,6 +409,9 @@ export function resourcesToUnorderedList(resources: IResource[]): string {
             else if (category === CloudPlatform.Lightning) {
                 category = "Lightning AI";
             }
+            else {
+                category = "Link";
+            }
 
             currentLine.push(hyperlink(category, resource.url));
         }
@@ -418,6 +421,36 @@ export function resourcesToUnorderedList(resources: IResource[]): string {
 
         processedResources.push(currentLine.join(''));
     })
+
+    return unorderedList(processedResources);
+}
+
+/**
+ * Alternative version of `resourcesToUnorderedList()`
+ */
+export function resourcesToUnorderedListAlt(resources: IResource[]): string {
+    const processedResources: string[] = [];
+
+    resources.forEach(resource => {
+        const currentLine: string[] = [];
+
+        if (resource.emoji) {
+            currentLine.push(`${resource.emoji} `);
+        }
+
+        if (resource.displayTitle) {
+            currentLine.push(hyperlink(resource.displayTitle, resource.url));
+        }
+        else {
+            currentLine.push(resource.url);
+        }
+
+        if (resource.authors) {
+            currentLine.push(`, by ${bold(resource.authors)}`);
+        }
+
+        processedResources.push(currentLine.join(''));
+    });
 
     return unorderedList(processedResources);
 }

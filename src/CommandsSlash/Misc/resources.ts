@@ -37,6 +37,7 @@ const Resources: SlashCommand = {
                             'pt-BR': 'Categoria do recurso'
                         })
                         .addChoices(
+                            { name: 'audio', value: 'audio' },
                             { name: 'colab', value: 'colab' },
                             { name: 'huggingface', value: 'hf' },
                             { name: 'kaggle', value: 'kaggle' },
@@ -117,6 +118,7 @@ const Resources: SlashCommand = {
                             'pt-BR': 'Categoria do recurso'
                         })
                         .addChoices(
+                            { name: 'audio', value: 'audio' },
                             { name: 'colab', value: 'colab' },
                             { name: 'huggingface', value: 'hf' },
                             { name: 'kaggle', value: 'kaggle' },
@@ -208,6 +210,7 @@ const Resources: SlashCommand = {
                             'pt-BR': 'Categoria do recurso'
                         })
                         .addChoices(
+                            { name: 'audio', value: 'audio' },
                             { name: 'colab', value: 'colab' },
                             { name: 'huggingface', value: 'hf' },
                             { name: 'kaggle', value: 'kaggle' },

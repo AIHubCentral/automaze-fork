@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getResourceData = exports.resourcesToUnorderedList = exports.CloudPlatform = exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
+exports.getResourceData = exports.resourcesToUnorderedListAlt = exports.resourcesToUnorderedList = exports.CloudPlatform = exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
 const userService_1 = __importDefault(require("../Services/userService"));
@@ -312,6 +312,9 @@ function resourcesToUnorderedList(resources) {
             else if (category === CloudPlatform.Lightning) {
                 category = "Lightning AI";
             }
+            else {
+                category = "Link";
+            }
             currentLine.push((0, discord_js_1.hyperlink)(category, resource.url));
         }
         else {
@@ -322,6 +325,30 @@ function resourcesToUnorderedList(resources) {
     return (0, discord_js_1.unorderedList)(processedResources);
 }
 exports.resourcesToUnorderedList = resourcesToUnorderedList;
+/**
+ * Alternative version of `resourcesToUnorderedList()`
+ */
+function resourcesToUnorderedListAlt(resources) {
+    const processedResources = [];
+    resources.forEach(resource => {
+        const currentLine = [];
+        if (resource.emoji) {
+            currentLine.push(`${resource.emoji} `);
+        }
+        if (resource.displayTitle) {
+            currentLine.push((0, discord_js_1.hyperlink)(resource.displayTitle, resource.url));
+        }
+        else {
+            currentLine.push(resource.url);
+        }
+        if (resource.authors) {
+            currentLine.push(`, by ${(0, discord_js_1.bold)(resource.authors)}`);
+        }
+        processedResources.push(currentLine.join(''));
+    });
+    return (0, discord_js_1.unorderedList)(processedResources);
+}
+exports.resourcesToUnorderedListAlt = resourcesToUnorderedListAlt;
 async function getResourceData(queryKey, cache, logger) {
     //const now = Date.now();
     // try to get from cache first

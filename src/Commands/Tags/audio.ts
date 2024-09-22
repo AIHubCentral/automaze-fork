@@ -1,5 +1,7 @@
+import { ColorResolvable } from 'discord.js';
+import { EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
-import { TagResponseSender } from '../../Utils/botUtilities';
+import { getResourceData, resourcesToUnorderedList, resourcesToUnorderedListAlt, TagResponseSender } from '../../Utils/botUtilities';
 
 const Audio: PrefixCommand = {
 	name: 'audio',
@@ -8,14 +10,23 @@ const Audio: PrefixCommand = {
 	aliases: ['dataset'],
 	syntax: 'audio [member]',
 	async run(client, message) {
-		const { botData } = client;
-		if (!botData.embeds.audio.en.embeds) {
-			client.logger.error(`Missing embed data for -${this.name}`);
+		const { botCache, logger } = client;
+
+		const resources = await getResourceData("audio", botCache, logger);
+
+		if (resources.length === 0) {
+			await message.reply({ content: "Currently unavailable." });
 			return;
 		}
 
+		let content: EmbedData[] = [{
+			title: "📚 Audio Guides & Tools",
+			description: [resourcesToUnorderedListAlt(resources)],
+			footer: "More commands: -colab, -uvr, -karafan, -overtrain, -help"
+		}];
+
 		const sender = new TagResponseSender(client);
-		sender.setEmbeds(botData.embeds.audio.en.embeds);
+		sender.setEmbeds(content);
 		sender.config(message);
 		await sender.send();
 	},

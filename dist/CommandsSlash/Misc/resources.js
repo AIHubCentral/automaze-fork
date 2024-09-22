@@ -36,7 +36,7 @@ const Resources = {
         .setDescriptionLocalizations({
         'pt-BR': 'Categoria do recurso'
     })
-        .addChoices({ name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' }, { name: 'lightning', value: 'lightning_ai' })
+        .addChoices({ name: 'audio', value: 'audio' }, { name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' }, { name: 'lightning', value: 'lightning_ai' })
         .setRequired(true))
         .addStringOption(option => option
         .setName('url')
@@ -97,7 +97,7 @@ const Resources = {
         .setDescriptionLocalizations({
         'pt-BR': 'Categoria do recurso'
     })
-        .addChoices({ name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' }, { name: 'lightning', value: 'lightning_ai' })
+        .addChoices({ name: 'audio', value: 'audio' }, { name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' }, { name: 'lightning', value: 'lightning_ai' })
         .setRequired(true))
         .addStringOption(option => option
         .setName('url')
@@ -167,7 +167,7 @@ const Resources = {
         .setDescriptionLocalizations({
         'pt-BR': 'Categoria do recurso'
     })
-        .addChoices({ name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' }, { name: 'lightning', value: 'lightning_ai' })
+        .addChoices({ name: 'audio', value: 'audio' }, { name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' }, { name: 'lightning', value: 'lightning_ai' })
         .setRequired(true)))
         .addSubcommand(subcommand => subcommand
         .setName('refresh')

@@ -8,13 +8,19 @@ const Audio = {
     aliases: ['dataset'],
     syntax: 'audio [member]',
     async run(client, message) {
-        const { botData } = client;
-        if (!botData.embeds.audio.en.embeds) {
-            client.logger.error(`Missing embed data for -${this.name}`);
+        const { botCache, logger } = client;
+        const resources = await (0, botUtilities_1.getResourceData)("audio", botCache, logger);
+        if (resources.length === 0) {
+            await message.reply({ content: "Currently unavailable." });
             return;
         }
+        let content = [{
+                title: "📚 Audio Guides & Tools",
+                description: [(0, botUtilities_1.resourcesToUnorderedListAlt)(resources)],
+                footer: "More commands: -colab, -uvr, -karafan, -overtrain, -help"
+            }];
         const sender = new botUtilities_1.TagResponseSender(client);
-        sender.setEmbeds(botData.embeds.audio.en.embeds);
+        sender.setEmbeds(content);
         sender.config(message);
         await sender.send();
     },
