@@ -1,14 +1,34 @@
-import { ActionRowBuilder, bold, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, Collection, ColorResolvable, EmbedBuilder, GuildBasedChannel, GuildMember, hyperlink, Message, TextBasedChannel, unorderedList, User, UserContextMenuCommandInteraction } from "discord.js";
-import IBotConfigs from "../Interfaces/BotConfigs";
-import ExtendedClient from "../Core/extendedClient";
-import { ButtonData, EmbedData } from "../Interfaces/BotData";
-import { createEmbed, createEmbeds, getChannelById, getGuildById } from "./discordUtilities";
-import UserService, { UserModel } from "../Services/userService";
-import path from "path";
-import fs from "fs";
-import { getAllFiles } from "./fileUtilities";
-import ResourceService, { IResource } from "../Services/resourcesService";
-import winston from "winston";
+/* eslint-disable */
+// @ts-nocheck
+
+import {
+    ActionRowBuilder,
+    bold,
+    ButtonBuilder,
+    ButtonStyle,
+    ChatInputCommandInteraction,
+    Collection,
+    ColorResolvable,
+    EmbedBuilder,
+    GuildBasedChannel,
+    GuildMember,
+    hyperlink,
+    Message,
+    TextBasedChannel,
+    unorderedList,
+    User,
+    UserContextMenuCommandInteraction,
+} from 'discord.js';
+import IBotConfigs from '../Interfaces/BotConfigs';
+import ExtendedClient from '../Core/extendedClient';
+import { ButtonData, EmbedData } from '../Interfaces/BotData';
+import { createEmbed, createEmbeds, getChannelById, getGuildById } from './discordUtilities';
+import UserService, { UserModel } from '../Services/userService';
+import path from 'path';
+import fs from 'fs';
+import { getAllFiles } from './fileUtilities';
+import ResourceService, { IResource } from '../Services/resourcesService';
+import winston from 'winston';
 
 export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
     const colors = [
@@ -22,8 +42,8 @@ export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
 export function getThemes() {
     const themes: { [key: string]: string } = {};
     const themesDirectory = path.join(process.cwd(), 'JSON', 'themes');
-    const themeFiles = getAllFiles(themesDirectory).filter(file => path.extname(file) === '.json');
-    themeFiles.forEach(filePath => {
+    const themeFiles = getAllFiles(themesDirectory).filter((file) => path.extname(file) === '.json');
+    themeFiles.forEach((filePath) => {
         const themeData = fs.readFileSync(filePath).toString();
         // remove .json extension from file name
         const themeName = path.parse(filePath).name;
@@ -65,7 +85,7 @@ export class TagResponseSender {
             this.actionRow = new ActionRowBuilder();
         }
 
-        const buttons = buttonsData.map(btnData => {
+        const buttons = buttonsData.map((btnData) => {
             return new ButtonBuilder().setLabel(btnData.label).setURL(btnData.url).setStyle(ButtonStyle.Link);
         });
 
@@ -96,11 +116,10 @@ export class TagResponseSender {
 
         if (this.sendAsReply) {
             await this.message.reply(this.botResponse);
-        }
-        else {
+        } else {
             await this.channel.send(this.botResponse);
         }
-    };
+    }
 
     /*
     constructor() {
@@ -252,20 +271,26 @@ build() {
 }
 */
 
-export async function banan(interaction: ChatInputCommandInteraction | UserContextMenuCommandInteraction, targetUser: User, guildMember: GuildMember): Promise<any> {
+export async function banan(
+    interaction: ChatInputCommandInteraction | UserContextMenuCommandInteraction,
+    targetUser: User,
+    guildMember: GuildMember
+): Promise<any> {
     const user = interaction.user;
     const client = interaction.client as ExtendedClient;
 
-    client.logger.debug("executing banan", {
-        "more": {
+    client.logger.debug('executing banan', {
+        more: {
             guildId: interaction.guildId,
             channelId: interaction.channelId,
-        }
+        },
     });
 
     // check if user is on cooldown
     if (Date.now() <= client.cooldowns.banana.get(user.id)) {
-        return interaction.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${client.cooldowns.banana.get(interaction.user.id) - Date.now()} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`);
+        return interaction.reply(
+            `dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${client.cooldowns.banana.get(interaction.user.id) - Date.now()} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`
+        );
     }
 
     let member = targetUser;
@@ -308,7 +333,9 @@ export async function banan(interaction: ChatInputCommandInteraction | UserConte
     // check if display name changed
     if (guildMember.displayName != null && guildMember.displayName !== userModel.displayName) {
         await userService.update(member.id, { display_name: guildMember.nickname ?? member.displayName });
-        client.logger.debug(`Added ${guildMember.nickname ?? member.displayName} display name for ${member.username}`);
+        client.logger.debug(
+            `Added ${guildMember.nickname ?? member.displayName} display name for ${member.username}`
+        );
     }
 
     /* increment banana count */
@@ -320,7 +347,10 @@ export async function banan(interaction: ChatInputCommandInteraction | UserConte
     }
 
     const embedData = JSON.parse(JSON.stringify(client.botData.embeds.banana));
-    embedData.title = embedData.title.replace('$username', guildMember.nickname ?? member.displayName ?? member.username);
+    embedData.title = embedData.title.replace(
+        '$username',
+        guildMember.nickname ?? member.displayName ?? member.username
+    );
     embedData.description[0] = embedData.description[0].replaceAll('$member', member);
     embedData.footer = embedData.footer.replace('$quantity', userModel.bananas);
 
@@ -331,7 +361,7 @@ export async function banan(interaction: ChatInputCommandInteraction | UserConte
     const embed = createEmbed(embedData, 'Yellow');
 
     // cooldown expires in 1 minute
-    client.cooldowns.banana.set(interaction.user.id, Date.now() + (1 * 60 * 1000));
+    client.cooldowns.banana.set(interaction.user.id, Date.now() + 1 * 60 * 1000);
 
     if (botRevenge) {
         await interaction.reply(selectedResponse);
@@ -342,11 +372,15 @@ export async function banan(interaction: ChatInputCommandInteraction | UserConte
 
     client.logger.debug('Banan', {
         more: {
-            targetUserId: targetUser.id
+            targetUserId: targetUser.id,
         },
     });
 
-    if (client.botConfigs.sendLogs && (client.botConfigs.debugGuild.id && client.botConfigs.debugGuild.channelId)) {
+    if (
+        client.botConfigs.sendLogs &&
+        client.botConfigs.debugGuild.id &&
+        client.botConfigs.debugGuild.channelId
+    ) {
         const embedDescription = [
             `- **Guild**: ${interaction.guildId} (${interaction.guild?.name})`,
             `- **Channel**: ${interaction.channelId}`,
@@ -359,7 +393,10 @@ export async function banan(interaction: ChatInputCommandInteraction | UserConte
         const guild = await getGuildById(client.botConfigs.debugGuild.id, client);
         if (!guild) return;
 
-        let channel: GuildBasedChannel | TextBasedChannel | null = await getChannelById(client.botConfigs.debugGuild.channelId, guild);
+        let channel: GuildBasedChannel | TextBasedChannel | null = await getChannelById(
+            client.botConfigs.debugGuild.channelId,
+            guild
+        );
         if (!channel) return;
 
         channel = <TextBasedChannel>channel;
@@ -372,13 +409,13 @@ export enum CloudPlatform {
     Colab = 'colab',
     Huggingface = 'hf',
     Kaggle = 'kaggle',
-    Lightning = 'lightning_ai'
+    Lightning = 'lightning_ai',
 }
 
 export function resourcesToUnorderedList(resources: IResource[]): string {
     const processedResources: string[] = [];
 
-    resources.forEach(resource => {
+    resources.forEach((resource) => {
         const currentLine: string[] = [];
 
         if (resource.emoji) {
@@ -387,7 +424,7 @@ export function resourcesToUnorderedList(resources: IResource[]): string {
 
         if (resource.displayTitle) {
             currentLine.push(bold(resource.displayTitle));
-            currentLine.push(", ");
+            currentLine.push(', ');
         }
 
         if (resource.authors) {
@@ -398,29 +435,24 @@ export function resourcesToUnorderedList(resources: IResource[]): string {
             let category = resource.category;
 
             if (category === CloudPlatform.Colab) {
-                category = "Google Colab"
-            }
-            else if (category === CloudPlatform.Huggingface) {
-                category = "Huggingface Spaces";
-            }
-            else if (category === CloudPlatform.Kaggle) {
-                category = "Kaggle";
-            }
-            else if (category === CloudPlatform.Lightning) {
-                category = "Lightning AI";
-            }
-            else {
-                category = "Link";
+                category = 'Google Colab';
+            } else if (category === CloudPlatform.Huggingface) {
+                category = 'Huggingface Spaces';
+            } else if (category === CloudPlatform.Kaggle) {
+                category = 'Kaggle';
+            } else if (category === CloudPlatform.Lightning) {
+                category = 'Lightning AI';
+            } else {
+                category = 'Link';
             }
 
             currentLine.push(hyperlink(category, resource.url));
-        }
-        else {
+        } else {
             currentLine.push(resource.url);
         }
 
         processedResources.push(currentLine.join(''));
-    })
+    });
 
     return unorderedList(processedResources);
 }
@@ -431,7 +463,7 @@ export function resourcesToUnorderedList(resources: IResource[]): string {
 export function resourcesToUnorderedListAlt(resources: IResource[]): string {
     const processedResources: string[] = [];
 
-    resources.forEach(resource => {
+    resources.forEach((resource) => {
         const currentLine: string[] = [];
 
         if (resource.emoji) {
@@ -440,8 +472,7 @@ export function resourcesToUnorderedListAlt(resources: IResource[]): string {
 
         if (resource.displayTitle) {
             currentLine.push(hyperlink(resource.displayTitle, resource.url));
-        }
-        else {
+        } else {
             currentLine.push(resource.url);
         }
 
@@ -455,7 +486,11 @@ export function resourcesToUnorderedListAlt(resources: IResource[]): string {
     return unorderedList(processedResources);
 }
 
-export async function getResourceData(queryKey: string, cache: Collection<string, IResource[]>, logger: winston.Logger): Promise<IResource[]> {
+export async function getResourceData(
+    queryKey: string,
+    cache: Collection<string, IResource[]>,
+    logger: winston.Logger
+): Promise<IResource[]> {
     //const now = Date.now();
 
     // try to get from cache first

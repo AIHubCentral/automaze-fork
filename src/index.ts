@@ -8,9 +8,7 @@ import registerCommands from './Handlers/commandHandler';
 import registerProcesses from './Handlers/processHandler';
 
 // Exports
-const {
-    getAvailableColors, getRandomNumber, getRandomFromArray
-} = require('./utils');
+const { getAvailableColors, getRandomNumber, getRandomFromArray } = require('./utils');
 
 // JSONs
 const DiscordIDs = {
@@ -19,7 +17,7 @@ const DiscordIDs = {
 };
 
 const botConfigs = require('../JSON/botConfigs.json');
-const botResponses = require('../JSON/botResponses.json')
+const botResponses = require('../JSON/botResponses.json');
 
 // set dev=true in .env to use the development guild ids
 const devMode = process.env.dev;
@@ -34,8 +32,10 @@ const extendedOptions: ExtendedClientOptions = {
     botResponses: botResponses,
     botAdminIds: process.env.developerIds ? process.env.developerIds.split(',') : [],
     botUtils: {
-        getAvailableColors, getRandomNumber, getRandomFromArray
-    }
+        getAvailableColors,
+        getRandomNumber,
+        getRandomFromArray,
+    },
 };
 
 if (!devMode) {
@@ -55,7 +55,9 @@ const client = new ExtendedClient(
         allowedMentions: {
             parse: ['users'],
         },
-    }, extendedOptions);
+    },
+    extendedOptions
+);
 
 registerCommands(client);
 registerEvents(client);

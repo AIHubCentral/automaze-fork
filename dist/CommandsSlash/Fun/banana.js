@@ -7,7 +7,7 @@ const Banana = {
     data: new discord_js_1.SlashCommandBuilder()
         .setName('banana')
         .setDescription('BANAN SOMEOME!!!!11!111!11')
-        .addUserOption(option => option.setName('user').setDescription('User to banan')),
+        .addUserOption((option) => option.setName('user').setDescription('User to banan')),
     async execute(interaction) {
         const client = interaction.client;
         const targetUser = interaction.options.getUser('user');
@@ -16,7 +16,7 @@ const Banana = {
                 more: {
                     guildId: interaction.guildId,
                     channelId: interaction.channelId,
-                }
+                },
             });
             return interaction.reply({ content: 'You forgot to select the user!', ephemeral: true });
         }
@@ -27,9 +27,9 @@ const Banana = {
         }
         if (!guildMember) {
             client.logger.debug(`Failed to get guild member ${targetUser.id}`);
-            return interaction.reply({ content: "Failed to banan user.", ephemeral: true });
+            return interaction.reply({ content: 'Failed to banan user.', ephemeral: true });
         }
         await (0, botUtilities_js_1.banan)(interaction, targetUser, guildMember);
-    }
+    },
 };
 exports.default = Banana;

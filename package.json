@@ -3,10 +3,11 @@
   "version": "2.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "npx tsc && node dist/index.js",
+    "build": "tsc",
+    "dev": "tsc && node dist/index.js",
     "dbInit": "node ./database/dbInit.js",
-    "build": "npx tsc",
-    "deploy": "node ./dist/deployInteractive.js"
+    "deploy": "node ./dist/deployInteractive.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "FungusDesu and RayTracerGC",
@@ -15,7 +16,7 @@
     "axios": "^1.6.7",
     "chance": "^1.1.11",
     "cheerio": "^1.0.0-rc.12",
-    "discord.js": "^14.13.0",
+    "discord.js": "^14.16.3",
     "knex": "^3.0.1",
     "minisearch": "^6.1.0",
     "node-cache": "^5.1.2",
@@ -31,11 +32,22 @@
     "winston": "^3.12.0"
   },
   "devDependencies": {
-    "@types/node": "^20.12.12",
+    "@eslint/js": "^9.12.0",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/jest": "^29.5.13",
+    "@types/node": "^20.16.11",
     "dotenv": "^16.3.1",
-    "eslint": "^8.53.0",
+    "eslint": "^9.12.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^28.8.3",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.10.0",
+    "jest": "^29.7.0",
+    "prettier": "3.3.3",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.8.1"
   },
   "description": ""
 }

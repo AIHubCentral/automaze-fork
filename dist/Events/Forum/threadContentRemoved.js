@@ -9,7 +9,7 @@ const ThreadUpdate = {
         const { discordIDs } = client;
         if (newThread.parentId != discordIDs.Forum.VoiceModel)
             return;
-        if (!(newThread.name.toLowerCase().includes('deleted')))
+        if (!newThread.name.toLowerCase().includes('deleted'))
             return;
         const logData = {
             more: {

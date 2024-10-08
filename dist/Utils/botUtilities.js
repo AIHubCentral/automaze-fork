@@ -1,9 +1,17 @@
 "use strict";
+/* eslint-disable */
+// @ts-nocheck
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getResourceData = exports.resourcesToUnorderedListAlt = exports.resourcesToUnorderedList = exports.CloudPlatform = exports.banan = exports.TagResponseSender = exports.getThemes = exports.getThemeColors = void 0;
+exports.CloudPlatform = exports.TagResponseSender = void 0;
+exports.getThemeColors = getThemeColors;
+exports.getThemes = getThemes;
+exports.banan = banan;
+exports.resourcesToUnorderedList = resourcesToUnorderedList;
+exports.resourcesToUnorderedListAlt = resourcesToUnorderedListAlt;
+exports.getResourceData = getResourceData;
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
 const userService_1 = __importDefault(require("../Services/userService"));
@@ -19,12 +27,11 @@ function getThemeColors(botConfigs) {
     ];
     return colors;
 }
-exports.getThemeColors = getThemeColors;
 function getThemes() {
     const themes = {};
     const themesDirectory = path_1.default.join(process.cwd(), 'JSON', 'themes');
-    const themeFiles = (0, fileUtilities_1.getAllFiles)(themesDirectory).filter(file => path_1.default.extname(file) === '.json');
-    themeFiles.forEach(filePath => {
+    const themeFiles = (0, fileUtilities_1.getAllFiles)(themesDirectory).filter((file) => path_1.default.extname(file) === '.json');
+    themeFiles.forEach((filePath) => {
         const themeData = fs_1.default.readFileSync(filePath).toString();
         // remove .json extension from file name
         const themeName = path_1.default.parse(filePath).name;
@@ -32,8 +39,17 @@ function getThemes() {
     });
     return themes;
 }
-exports.getThemes = getThemes;
 class TagResponseSender {
+    /* utility class for sending tags responses like -rvc */
+    //channel: null | TextBasedChannel;
+    client;
+    embeds;
+    buttons;
+    actionRow;
+    channel;
+    message;
+    botResponse;
+    sendAsReply;
     constructor(client) {
         this.client = client;
         this.embeds = [];
@@ -51,7 +67,7 @@ class TagResponseSender {
         if (!this.actionRow) {
             this.actionRow = new discord_js_1.ActionRowBuilder();
         }
-        const buttons = buttonsData.map(btnData => {
+        const buttons = buttonsData.map((btnData) => {
             return new discord_js_1.ButtonBuilder().setLabel(btnData.label).setURL(btnData.url).setStyle(discord_js_1.ButtonStyle.Link);
         });
         this.actionRow.addComponents(buttons);
@@ -80,7 +96,6 @@ class TagResponseSender {
             await this.channel.send(this.botResponse);
         }
     }
-    ;
     /*
     constructor() {
         this.channel = null;
@@ -185,11 +200,11 @@ build() {
 async function banan(interaction, targetUser, guildMember) {
     const user = interaction.user;
     const client = interaction.client;
-    client.logger.debug("executing banan", {
-        "more": {
+    client.logger.debug('executing banan', {
+        more: {
             guildId: interaction.guildId,
             channelId: interaction.channelId,
-        }
+        },
     });
     // check if user is on cooldown
     if (Date.now() <= client.cooldowns.banana.get(user.id)) {
@@ -246,7 +261,7 @@ async function banan(interaction, targetUser, guildMember) {
     }
     const embed = (0, discordUtilities_1.createEmbed)(embedData, 'Yellow');
     // cooldown expires in 1 minute
-    client.cooldowns.banana.set(interaction.user.id, Date.now() + (1 * 60 * 1000));
+    client.cooldowns.banana.set(interaction.user.id, Date.now() + 1 * 60 * 1000);
     if (botRevenge) {
         await interaction.reply(selectedResponse);
         return await interaction.followUp({ embeds: [embed] });
@@ -254,10 +269,12 @@ async function banan(interaction, targetUser, guildMember) {
     await interaction.reply({ embeds: [embed] });
     client.logger.debug('Banan', {
         more: {
-            targetUserId: targetUser.id
+            targetUserId: targetUser.id,
         },
     });
-    if (client.botConfigs.sendLogs && (client.botConfigs.debugGuild.id && client.botConfigs.debugGuild.channelId)) {
+    if (client.botConfigs.sendLogs &&
+        client.botConfigs.debugGuild.id &&
+        client.botConfigs.debugGuild.channelId) {
         const embedDescription = [
             `- **Guild**: ${interaction.guildId} (${interaction.guild?.name})`,
             `- **Channel**: ${interaction.channelId}`,
@@ -276,7 +293,6 @@ async function banan(interaction, targetUser, guildMember) {
         await channel.send({ embeds: [debugEmbed] });
     }
 }
-exports.banan = banan;
 var CloudPlatform;
 (function (CloudPlatform) {
     CloudPlatform["Colab"] = "colab";
@@ -286,14 +302,14 @@ var CloudPlatform;
 })(CloudPlatform || (exports.CloudPlatform = CloudPlatform = {}));
 function resourcesToUnorderedList(resources) {
     const processedResources = [];
-    resources.forEach(resource => {
+    resources.forEach((resource) => {
         const currentLine = [];
         if (resource.emoji) {
             currentLine.push(`${resource.emoji} `);
         }
         if (resource.displayTitle) {
             currentLine.push((0, discord_js_1.bold)(resource.displayTitle));
-            currentLine.push(", ");
+            currentLine.push(', ');
         }
         if (resource.authors) {
             currentLine.push(`by ${resource.authors} `);
@@ -301,19 +317,19 @@ function resourcesToUnorderedList(resources) {
         if (resource.displayTitle) {
             let category = resource.category;
             if (category === CloudPlatform.Colab) {
-                category = "Google Colab";
+                category = 'Google Colab';
             }
             else if (category === CloudPlatform.Huggingface) {
-                category = "Huggingface Spaces";
+                category = 'Huggingface Spaces';
             }
             else if (category === CloudPlatform.Kaggle) {
-                category = "Kaggle";
+                category = 'Kaggle';
             }
             else if (category === CloudPlatform.Lightning) {
-                category = "Lightning AI";
+                category = 'Lightning AI';
             }
             else {
-                category = "Link";
+                category = 'Link';
             }
             currentLine.push((0, discord_js_1.hyperlink)(category, resource.url));
         }
@@ -324,13 +340,12 @@ function resourcesToUnorderedList(resources) {
     });
     return (0, discord_js_1.unorderedList)(processedResources);
 }
-exports.resourcesToUnorderedList = resourcesToUnorderedList;
 /**
  * Alternative version of `resourcesToUnorderedList()`
  */
 function resourcesToUnorderedListAlt(resources) {
     const processedResources = [];
-    resources.forEach(resource => {
+    resources.forEach((resource) => {
         const currentLine = [];
         if (resource.emoji) {
             currentLine.push(`${resource.emoji} `);
@@ -348,7 +363,6 @@ function resourcesToUnorderedListAlt(resources) {
     });
     return (0, discord_js_1.unorderedList)(processedResources);
 }
-exports.resourcesToUnorderedListAlt = resourcesToUnorderedListAlt;
 async function getResourceData(queryKey, cache, logger) {
     //const now = Date.now();
     // try to get from cache first
@@ -362,4 +376,3 @@ async function getResourceData(queryKey, cache, logger) {
     cache.set(queryKey, resources);
     return resources;
 }
-exports.getResourceData = getResourceData;

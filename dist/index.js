@@ -53,8 +53,10 @@ const extendedOptions = {
     botResponses: botResponses,
     botAdminIds: process.env.developerIds ? process.env.developerIds.split(',') : [],
     botUtils: {
-        getAvailableColors, getRandomNumber, getRandomFromArray
-    }
+        getAvailableColors,
+        getRandomNumber,
+        getRandomFromArray,
+    },
 };
 if (!devMode) {
     extendedOptions.botConfigs.messageOnStartup = true;

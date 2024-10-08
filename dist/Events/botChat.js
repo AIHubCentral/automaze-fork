@@ -43,10 +43,10 @@ const BotChat = {
                         channelId: message.channel.id,
                         guildId: message.guild?.id,
                         reply: selectedAnswer,
-                    }
+                    },
                 });
             }
         }
-    }
+    },
 };
 exports.default = BotChat;

@@ -1,6 +1,6 @@
-import { inlineCode, heading, HeadingLevel, bold, unorderedList } from "discord.js";
-import { PrefixCommand } from "../../Interfaces/Command";
-import { createEmbed } from "../../Utils/discordUtilities";
+import { inlineCode, heading, HeadingLevel, bold, unorderedList } from 'discord.js';
+import { PrefixCommand } from '../../Interfaces/Command';
+import { createEmbed } from '../../Utils/discordUtilities';
 
 const CommandInfo: PrefixCommand = {
     name: 'commandinfo',
@@ -14,14 +14,18 @@ const CommandInfo: PrefixCommand = {
         if (!prefix) return;
 
         if (args.length === 0) {
-            return message.reply(`Specify a command you want to look up.\n\n> Example: ${inlineCode('-commandinfo')} rvc`);
-        };
+            return message.reply(
+                `Specify a command you want to look up.\n\n> Example: ${inlineCode('-commandinfo')} rvc`
+            );
+        }
 
         const commandName = args[0];
-        const command: PrefixCommand | undefined = client.commands.get(commandName) || client.commands.find(c => c.aliases && c.aliases.includes(commandName));
+        const command: PrefixCommand | undefined =
+            client.commands.get(commandName) ||
+            client.commands.find((c) => c.aliases && c.aliases.includes(commandName));
 
         if (!command) {
-            return message.reply('That command doesn\'t exist.');
+            return message.reply("That command doesn't exist.");
         }
 
         const embed = createEmbed({
@@ -38,7 +42,7 @@ const CommandInfo: PrefixCommand = {
         });
 
         await message.reply({ embeds: [embed] });
-    }
-}
+    },
+};
 
 export default CommandInfo;

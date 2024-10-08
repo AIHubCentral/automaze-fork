@@ -1,7 +1,7 @@
-import { ColorResolvable } from "discord.js";
-import { EmbedData } from "../../Interfaces/BotData";
-import { PrefixCommand } from "../../Interfaces/Command";
-import { getResourceData, resourcesToUnorderedList, TagResponseSender } from "../../Utils/botUtilities";
+import { ColorResolvable } from 'discord.js';
+import { EmbedData } from '../../Interfaces/BotData';
+import { PrefixCommand } from '../../Interfaces/Command';
+import { getResourceData, resourcesToUnorderedList, TagResponseSender } from '../../Utils/botUtilities';
 
 const Lightning: PrefixCommand = {
     name: 'light',
@@ -12,19 +12,21 @@ const Lightning: PrefixCommand = {
     async run(client, message) {
         const { botCache, logger } = client;
 
-        const resources = await getResourceData("lightning_ai", botCache, logger);
+        const resources = await getResourceData('lightning_ai', botCache, logger);
 
         if (resources.length === 0) {
-            await message.reply({ content: "⚡" });
+            await message.reply({ content: '⚡' });
             return;
         }
 
-        let content: EmbedData[] = [{
-            title: "⚡ Lightning AI",
-            color: "b45aff" as ColorResolvable,
-            description: [resourcesToUnorderedList(resources)],
-            footer: "More commands: -colabs, -kaggle, -hf, -realtime, -rvc, -help"
-        }];
+        let content: EmbedData[] = [
+            {
+                title: '⚡ Lightning AI',
+                color: 'b45aff' as ColorResolvable,
+                description: [resourcesToUnorderedList(resources)],
+                footer: 'More commands: -colabs, -kaggle, -hf, -realtime, -rvc, -help',
+            },
+        ];
 
         const sender = new TagResponseSender(client);
         sender.setEmbeds(content);

@@ -1,22 +1,22 @@
 {
+    "extends": "@tsconfig/node20/tsconfig.json",
     "compilerOptions": {
-        "target": "ES2020",
-        "module": "commonjs",
         "outDir": "./dist",
         "rootDir": "./src",
-        "strict": true,
-        "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "allowJs": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true
     },
     "include": [
         "src/**/*",
     ],
     "exclude": [
-        "./node_modules",
-        "./Archive",
-        "./dist"
+        "node_modules",
+        "dist",
+        "Archive",
+        "src/Commands/",
+        "src/CommandsContext/",
+        "src/CommandsSlash/",
+        "src/Core/",
+        "src/Events/",
+        "src/Utils/"
     ]
 }

@@ -6,11 +6,12 @@ const interactionCreateEvent = {
     once: false,
     async run(client, interaction) {
         // don't allow commands in these channels
-        const disallowedChannelIds = [
-            client.discordIDs.Channel.Weights,
-        ];
+        const disallowedChannelIds = [client.discordIDs.Channel.Weights];
         if (disallowedChannelIds.includes(interaction.channelId)) {
-            await interaction.reply({ content: `This command is not available here. Visit ${(0, discord_js_1.channelMention)(client.discordIDs.Channel.BotSpam)} if you wish to use this command.`, ephemeral: true });
+            await interaction.reply({
+                content: `This command is not available here. Visit ${(0, discord_js_1.channelMention)(client.discordIDs.Channel.BotSpam)} if you wish to use this command.`,
+                ephemeral: true,
+            });
             return;
         }
         if (interaction.isChatInputCommand()) {
@@ -25,7 +26,7 @@ const interactionCreateEvent = {
                     commandName: command.data.name,
                     guildId: interaction.guildId,
                     type: command.type,
-                }
+                },
             });
             // handle cooldowns if command exists
             const { cooldowns } = client;
@@ -42,7 +43,10 @@ const interactionCreateEvent = {
                 const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
                 if (now < expirationTime) {
                     const expiredTimestamp = Math.round(expirationTime / 1000);
-                    return interaction.reply({ content: `Please wait, you are on a cooldown for \`/${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>`, ephemeral: true });
+                    return interaction.reply({
+                        content: `Please wait, you are on a cooldown for \`/${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>`,
+                        ephemeral: true,
+                    });
                 }
             }
             timestamps.set(interaction.user.id, now);
@@ -53,10 +57,16 @@ const interactionCreateEvent = {
             catch (error) {
                 client.logger.error(`Failed to execute command ${command.data.name}`, error);
                 if (interaction.replied || interaction.deferred) {
-                    await interaction.followUp({ content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``, ephemeral: true });
+                    await interaction.followUp({
+                        content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``,
+                        ephemeral: true,
+                    });
                 }
                 else {
-                    await interaction.reply({ content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``, ephemeral: true });
+                    await interaction.reply({
+                        content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``,
+                        ephemeral: true,
+                    });
                 }
             }
         }
@@ -85,7 +95,7 @@ const interactionCreateEvent = {
                     commandName: command.data.name,
                     guildId: interaction.guildId,
                     type: command.type,
-                }
+                },
             });
             try {
                 await command.execute(interaction);

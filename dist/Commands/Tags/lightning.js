@@ -9,17 +9,19 @@ const Lightning = {
     syntax: 'lightning [member]',
     async run(client, message) {
         const { botCache, logger } = client;
-        const resources = await (0, botUtilities_1.getResourceData)("lightning_ai", botCache, logger);
+        const resources = await (0, botUtilities_1.getResourceData)('lightning_ai', botCache, logger);
         if (resources.length === 0) {
-            await message.reply({ content: "⚡" });
+            await message.reply({ content: '⚡' });
             return;
         }
-        let content = [{
-                title: "⚡ Lightning AI",
-                color: "b45aff",
+        let content = [
+            {
+                title: '⚡ Lightning AI',
+                color: 'b45aff',
                 description: [(0, botUtilities_1.resourcesToUnorderedList)(resources)],
-                footer: "More commands: -colabs, -kaggle, -hf, -realtime, -rvc, -help"
-            }];
+                footer: 'More commands: -colabs, -kaggle, -hf, -realtime, -rvc, -help',
+            },
+        ];
         const sender = new botUtilities_1.TagResponseSender(client);
         sender.setEmbeds(content);
         sender.config(message);

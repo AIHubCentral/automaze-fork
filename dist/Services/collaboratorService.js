@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const dbManager_1 = require("../Database/dbManager");
 class CollaboratorService {
+    logger;
     constructor(logger) {
         this.logger = logger;
     }

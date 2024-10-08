@@ -30,17 +30,17 @@ const reactionAddEvent = {
                 user: {
                     id: reactionAuthor.id,
                     displayName: reactionAuthor.displayName,
-                    userName: reactionAuthor.username
+                    userName: reactionAuthor.username,
                 },
                 expiresIn: expirationDate,
-            }
+            },
         });
         client.logger.info('Added emoji reaction', {
             more: {
                 user: {
                     id: reactionAuthor.id,
                     displayName: reactionAuthor.displayName,
-                    userName: reactionAuthor.username
+                    userName: reactionAuthor.username,
                 },
                 channelId: reaction.message.channel.id,
                 guildId: reaction.message.guild?.id,

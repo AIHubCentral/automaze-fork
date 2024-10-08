@@ -33,13 +33,13 @@ async function deployCommands(credentials, commands) {
     const rest = new discord_js_1.REST({ version: '10' }).setToken(credentials.token);
     // merge slash and context commands into an array
     const mergedCommands = [];
-    commands.slashCommands.forEach(command => mergedCommands.push(command.data.toJSON()));
-    commands.contextCommands.forEach(command => mergedCommands.push(command.data.toJSON()));
+    commands.slashCommands.forEach((command) => mergedCommands.push(command.data.toJSON()));
+    commands.contextCommands.forEach((command) => mergedCommands.push(command.data.toJSON()));
     try {
         console.log(`\nStarted refreshing ${commands.slashCommands.length} application (/) commands and ${commands.contextCommands.length} context commands.`);
-        mergedCommands.forEach(cmd => console.log(`- ${cmd.name}`));
+        mergedCommands.forEach((cmd) => console.log(`- ${cmd.name}`));
         // The put method is used to fully refresh all commands in the guild with the current set
-        const data = await rest.put(discord_js_1.Routes.applicationGuildCommands(credentials.clientId, credentials.guildId), { body: mergedCommands });
+        const data = (await rest.put(discord_js_1.Routes.applicationGuildCommands(credentials.clientId, credentials.guildId), { body: mergedCommands }));
         console.log(`\nSuccessfully reloaded ${data.length} commands in ${credentials.guildId}.`);
     }
     catch (error) {
@@ -50,11 +50,13 @@ async function clearDeployedCommands(credentials) {
     const rest = new discord_js_1.REST({ version: '10' }).setToken(credentials.token);
     console.log(`\nClearing deployed commands in guild: ${credentials.guildId}`);
     try {
-        await rest.put(discord_js_1.Routes.applicationGuildCommands(credentials.clientId, credentials.guildId), { body: [] });
-        console.log("Successfully removed all commands.");
+        await rest.put(discord_js_1.Routes.applicationGuildCommands(credentials.clientId, credentials.guildId), {
+            body: [],
+        });
+        console.log('Successfully removed all commands.');
     }
     catch (error) {
-        console.error("Failed to clear deployed commands.", error);
+        console.error('Failed to clear deployed commands.', error);
     }
 }
 // dotenv
@@ -62,36 +64,36 @@ async function clearDeployedCommands(credentials) {
 (async () => {
     try {
         console.log('Leave the options blank to read the values from .env\n');
-        let token = await promptWithDefault("Token: ", process.env.token ?? '');
-        let clientId = await promptWithDefault("Client ID: ", process.env.clientId ?? '');
-        let guildId = await promptWithDefault("Guild ID: ", process.env.guildId ?? '');
-        let mode = await promptWithDefault("Mode (debug, dev, prod): ", 'prod');
+        let token = await promptWithDefault('Token: ', process.env.token ?? '');
+        let clientId = await promptWithDefault('Client ID: ', process.env.clientId ?? '');
+        let guildId = await promptWithDefault('Guild ID: ', process.env.guildId ?? '');
+        let mode = await promptWithDefault('Mode (debug, dev, prod): ', 'prod');
         if (!token || !clientId || !guildId) {
-            console.log("Missing token, client id or guild id");
+            console.log('Missing token, client id or guild id');
             rl.close();
             return;
         }
-        let clearAll = await promptWithDefault("Clear all commands? (y/n): ", "n");
-        let shouldClearDeployedCommands = clearAll.trim().toLowerCase() === "y";
+        let clearAll = await promptWithDefault('Clear all commands? (y/n): ', 'n');
+        let shouldClearDeployedCommands = clearAll.trim().toLowerCase() === 'y';
         if (shouldClearDeployedCommands) {
             await clearDeployedCommands({ token, clientId, guildId });
         }
         else {
-            const contextCommandFiles = (0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsContext"));
+            const contextCommandFiles = (0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, 'CommandsContext'));
             let slashCommandFiles = [
-                ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Fun")),
-                ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Info")),
+                ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, 'CommandsSlash', 'Fun')),
+                ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, 'CommandsSlash', 'Info')),
             ];
             switch (mode.trim().toLocaleLowerCase()) {
-                case "debug":
-                    console.log("Deploying in debug mode");
+                case 'debug':
+                    console.log('Deploying in debug mode');
                     slashCommandFiles = slashCommandFiles
-                        .concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Utilities")))
-                        .concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Misc")));
+                        .concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, 'CommandsSlash', 'Utilities')))
+                        .concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, 'CommandsSlash', 'Misc')));
                     break;
-                case "dev":
-                    console.log("Deploying in dev mode");
-                    slashCommandFiles = slashCommandFiles.concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, "CommandsSlash", "Misc")));
+                case 'dev':
+                    console.log('Deploying in dev mode');
+                    slashCommandFiles = slashCommandFiles.concat((0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, 'CommandsSlash', 'Misc')));
                     break;
             }
             const slashCommands = [];
@@ -101,7 +103,8 @@ async function clearDeployedCommands(credentials) {
                 slashCommands.push(command);
             });
             contextCommandFiles.forEach((commandFile) => {
-                const command = require(commandFile).default || require(commandFile);
+                const command = require(commandFile).default ||
+                    require(commandFile);
                 contextCommands.push(command);
             });
             await deployCommands({ token, clientId, guildId }, { slashCommands, contextCommands });

@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const discordUtilities_1 = require("../../Utils/discordUtilities");
-const { StringSelectMenuBuilder, ActionRowBuilder } = require("discord.js");
+const { StringSelectMenuBuilder, ActionRowBuilder } = require('discord.js');
 const help = require(`../../../JSON/help.json`);
 function createCommandList(commands, prefix) {
     const commandList = [];
-    commands.forEach(command => {
+    commands.forEach((command) => {
         const aliases = command.aliases.length ? ` || \`${command.aliases.join(', ')}\`` : '';
         commandList.push(`**‣ \`${prefix}${command.syntax}\`${aliases}** - ${command.description}`);
     });
@@ -45,7 +45,7 @@ const Help = {
         // shows the help message for 5 minutes (300 seconds), multiply by 1000 to convert to milliseconds
         const collector = reply.createMessageComponentCollector({ filter, time: 300 * 1000 });
         collector.on('collect', (i) => {
-            const commandsInCategory = client.commands.filter(command => command.category === i.values[0]);
+            const commandsInCategory = client.commands.filter((command) => command.category === i.values[0]);
             const commandList = createCommandList(commandsInCategory, prefix);
             i.update({
                 embeds: [
@@ -55,12 +55,15 @@ const Help = {
                         description: commandList,
                         footer: `Parameters in <...> are required, whereas [...] is optional`,
                     }),
-                ]
+                ],
             });
         });
         collector.on(`end`, () => {
-            reply.edit({ embeds: [(0, discordUtilities_1.createEmbed)({ title: 'Command has expired', color: 'Red' })], components: [] });
+            reply.edit({
+                embeds: [(0, discordUtilities_1.createEmbed)({ title: 'Command has expired', color: 'Red' })],
+                components: [],
+            });
         });
-    }
+    },
 };
 exports.default = Help;

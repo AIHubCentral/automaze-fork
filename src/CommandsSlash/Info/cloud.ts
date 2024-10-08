@@ -1,9 +1,9 @@
-import { ColorResolvable, Colors, EmbedBuilder, SlashCommandBuilder } from "discord.js";
-import { SlashCommand } from "../../Interfaces/Command";
-import ExtendedClient from "../../Core/extendedClient";
-import { CloudPlatform, getResourceData, resourcesToUnorderedList } from "../../Utils/botUtilities";
+import { ColorResolvable, Colors, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { SlashCommand } from '../../Interfaces/Command';
+import ExtendedClient from '../../Core/extendedClient';
+import { CloudPlatform, getResourceData, resourcesToUnorderedList } from '../../Utils/botUtilities';
 
-import slashCommandData from "../../../JSON/slashCommandData.json";
+import slashCommandData from '../../../JSON/slashCommandData.json';
 
 const cloudCommandData = slashCommandData.cloud;
 
@@ -14,7 +14,7 @@ const Cloud: SlashCommand = {
         .setName(cloudCommandData.name)
         .setDescription(cloudCommandData.description)
         .setDescriptionLocalizations(cloudCommandData.descriptionLocalizations)
-        .addStringOption(option =>
+        .addStringOption((option) =>
             option
                 .setName(cloudCommandData.options.platform.name)
                 .setNameLocalizations(cloudCommandData.options.platform.nameLocalizations)
@@ -24,7 +24,7 @@ const Cloud: SlashCommand = {
                     { name: 'colab', value: CloudPlatform.Colab },
                     { name: 'huggingface', value: CloudPlatform.Huggingface },
                     { name: 'kaggle', value: CloudPlatform.Kaggle },
-                    { name: 'lightning', value: CloudPlatform.Lightning },
+                    { name: 'lightning', value: CloudPlatform.Lightning }
                 )
                 .setRequired(true)
         ),
@@ -36,7 +36,7 @@ const Cloud: SlashCommand = {
             channelId: interaction.channelId,
             userId: interaction.user.id,
             userName: interaction.user.username,
-        }
+        };
 
         client.logger.debug('/cloud', logData);
         const { botCache, logger } = client;
@@ -45,9 +45,9 @@ const Cloud: SlashCommand = {
         const resources = await getResourceData(platform, botCache, logger);
 
         const embed = new EmbedBuilder()
-            .setTitle("Not available yet")
+            .setTitle('Not available yet')
             .setColor(Colors.Grey)
-            .setDescription("Stay tuned!");
+            .setDescription('Stay tuned!');
 
         if (resources.length === 0) {
             await interaction.reply({ embeds: [embed], ephemeral: true });
@@ -56,31 +56,28 @@ const Cloud: SlashCommand = {
 
         if (platform === CloudPlatform.Colab) {
             embed
-                .setTitle("☁️ Google Colabs")
-                .setColor("f9ab00" as ColorResolvable)
+                .setTitle('☁️ Google Colabs')
+                .setColor('f9ab00' as ColorResolvable)
                 .setDescription(resourcesToUnorderedList(resources));
-        }
-        else if (platform === CloudPlatform.Huggingface) {
+        } else if (platform === CloudPlatform.Huggingface) {
             embed
-                .setTitle("<:huggingface:1179800228946268270> Hugginface Spaces")
-                .setColor("ffcc4d" as ColorResolvable)
+                .setTitle('<:huggingface:1179800228946268270> Hugginface Spaces')
+                .setColor('ffcc4d' as ColorResolvable)
                 .setDescription(resourcesToUnorderedList(resources));
-        }
-        else if (platform === CloudPlatform.Kaggle) {
+        } else if (platform === CloudPlatform.Kaggle) {
             embed
-                .setTitle("📘 Kaggle Notebooks")
+                .setTitle('📘 Kaggle Notebooks')
                 .setColor(Colors.Blue)
                 .setDescription(resourcesToUnorderedList(resources));
-        }
-        else if (platform === CloudPlatform.Lightning) {
+        } else if (platform === CloudPlatform.Lightning) {
             embed
-                .setTitle("⚡ Lightning AI")
-                .setColor("b45aff" as ColorResolvable)
+                .setTitle('⚡ Lightning AI')
+                .setColor('b45aff' as ColorResolvable)
                 .setDescription(resourcesToUnorderedList(resources));
         }
 
         await interaction.reply({ embeds: [embed] });
-    }
-}
+    },
+};
 
 export default Cloud;

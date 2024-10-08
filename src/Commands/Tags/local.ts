@@ -1,6 +1,6 @@
-import { EmbedData } from "../../Interfaces/BotData";
-import { PrefixCommand } from "../../Interfaces/Command";
-import { TagResponseSender } from "../../Utils/botUtilities";
+import { EmbedData } from '../../Interfaces/BotData';
+import { PrefixCommand } from '../../Interfaces/Command';
+import { TagResponseSender } from '../../Utils/botUtilities';
 
 function getLastArrayIndex(array: Array<any>): number {
     return array.length - 1;
@@ -36,7 +36,7 @@ const Local: PrefixCommand = {
         sender.setEmbeds(content.embeds);
         sender.config(message);
         await sender.send();
-    }
-}
+    },
+};
 
 export default Local;

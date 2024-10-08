@@ -1,5 +1,5 @@
-import { PrefixCommand } from "../../Interfaces/Command";
-import { TagResponseSender } from "../../Utils/botUtilities";
+import { PrefixCommand } from '../../Interfaces/Command';
+import { TagResponseSender } from '../../Utils/botUtilities';
 
 const Tracker: PrefixCommand = {
     name: 'tracker',
@@ -20,7 +20,7 @@ const Tracker: PrefixCommand = {
         sender.setEmbeds(content.embeds);
         sender.config(message);
         await sender.send();
-    }
-}
+    },
+};
 
 export default Tracker;

@@ -5,7 +5,8 @@ const {
     ButtonBuilder,
     ButtonStyle,
     ActionRowBuilder,
-    ComponentType } = require('discord.js');
+    ComponentType,
+} = require('discord.js');
 const { byValue, byNumber } = require('sort-es');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const delay = require('node:timers/promises').setTimeout;
@@ -15,96 +16,79 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('database')
         .setDescription('Manages bot database data')
-        .addSubcommandGroup(subcommandGroup =>
+        .addSubcommandGroup((subcommandGroup) =>
             subcommandGroup
                 .setName('manage')
                 .setDescription('Import/Export data')
-                .addSubcommand(subcommand =>
+                .addSubcommand((subcommand) =>
                     subcommand
                         .setName('import')
                         .setDescription('Imports data to database')
-                        .addAttachmentOption(option =>
+                        .addAttachmentOption((option) =>
                             option
                                 .setName('file')
                                 .setDescription('The JSON file containing the data')
-                                .setRequired(true),
-                        ),
+                                .setRequired(true)
+                        )
                 )
-                .addSubcommand(subcommand =>
-                    subcommand
-                        .setName('export')
-                        .setDescription('Downloads the bot data as a JSON file'),
-                ),
+                .addSubcommand((subcommand) =>
+                    subcommand.setName('export').setDescription('Downloads the bot data as a JSON file')
+                )
         )
-        .addSubcommandGroup(subcommandGroup =>
+        .addSubcommandGroup((subcommandGroup) =>
             subcommandGroup
                 .setName('users')
                 .setDescription('CRUD operations for user database')
-                .addSubcommand(subcommand =>
+                .addSubcommand((subcommand) =>
                     subcommand
                         .setName('create')
                         .setDescription('Create a new user in database')
-                        .addStringOption(option =>
+                        .addStringOption((option) =>
                             option
                                 .setName('user_id')
                                 .setDescription('Discord ID')
                                 .setMaxLength(20)
                                 .setMinLength(16)
-                                .setRequired(true))
-                        .addStringOption(option =>
-                            option
-                                .setName('user_name')
-                                .setDescription('Username')
-                                .setRequired(true)),
+                                .setRequired(true)
+                        )
+                        .addStringOption((option) =>
+                            option.setName('user_name').setDescription('Username').setRequired(true)
+                        )
                 )
-                .addSubcommand(subcommand =>
+                .addSubcommand((subcommand) =>
                     subcommand
                         .setName('read')
                         .setDescription('Retrieve a user from database')
-                        .addStringOption(option =>
-                            option
-                                .setName('user_id')
-                                .setDescription('Discord ID')
-                                .setRequired(true)),
+                        .addStringOption((option) =>
+                            option.setName('user_id').setDescription('Discord ID').setRequired(true)
+                        )
                 )
-                .addSubcommand(subcommand =>
+                .addSubcommand((subcommand) =>
                     subcommand
                         .setName('update')
                         .setDescription('Update a user in database')
-                        .addStringOption(option =>
-                            option
-                                .setName('user_id')
-                                .setDescription('Discord ID')
-                                .setRequired(true))
-                        .addStringOption(option =>
-                            option
-                                .setName('username')
-                                .setDescription('Username'))
-                        .addStringOption(option =>
-                            option
-                                .setName('display_name')
-                                .setDescription('Display name'))
-                        .addIntegerOption(option =>
-                            option
-                                .setName('bananas')
-                                .setDescription('Banana count')
-                                .setMinValue(0)),
+                        .addStringOption((option) =>
+                            option.setName('user_id').setDescription('Discord ID').setRequired(true)
+                        )
+                        .addStringOption((option) => option.setName('username').setDescription('Username'))
+                        .addStringOption((option) =>
+                            option.setName('display_name').setDescription('Display name')
+                        )
+                        .addIntegerOption((option) =>
+                            option.setName('bananas').setDescription('Banana count').setMinValue(0)
+                        )
                 )
-                .addSubcommand(subcommand =>
+                .addSubcommand((subcommand) =>
                     subcommand
                         .setName('delete')
                         .setDescription('Delete a user from database')
-                        .addStringOption(option =>
-                            option
-                                .setName('user_id')
-                                .setDescription('Discord ID')
-                                .setRequired(true)),
+                        .addStringOption((option) =>
+                            option.setName('user_id').setDescription('Discord ID').setRequired(true)
+                        )
                 )
-                .addSubcommand(subcommand =>
-                    subcommand
-                        .setName('get_all')
-                        .setDescription('Retrieve all users from database'),
-                ),
+                .addSubcommand((subcommand) =>
+                    subcommand.setName('get_all').setDescription('Retrieve all users from database')
+                )
         ),
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
@@ -132,7 +116,6 @@ module.exports = {
                                     id: record.user_id,
                                     username: record.userName,
                                     bananas: record.bananaCount,
-
                                 };
                                 client.logger.debug(dataToInsert);
                                 await client.knexInstance('user').insert(dataToInsert);
@@ -140,20 +123,16 @@ module.exports = {
 
                             client.logger.info('Records inserted!');
                             await interaction.editReply({ content: 'JSON data updated!' });
-                        }
-                        else {
+                        } else {
                             await interaction.editReply({ content: 'Failed to fetch JSON' });
                         }
-                    }
-                    catch (error) {
+                    } catch (error) {
                         await interaction.editReply({ content: `Invalid JSON:\n> ${error.message}` });
                     }
-                }
-                else {
+                } else {
                     await interaction.editReply({ content: 'Not a JSON file' });
                 }
-            }
-            else if (subcommand === 'export') {
+            } else if (subcommand === 'export') {
                 const jsonData = [];
                 const users = await client.knexInstance('user').orderBy('bananas', 'desc');
 
@@ -174,9 +153,7 @@ module.exports = {
                 const attachment = new AttachmentBuilder(buffer, { name: 'database.json' });
                 await interaction.editReply({ files: [attachment] });
             }
-
-        }
-        else if (subcommandGroup === 'users') {
+        } else if (subcommandGroup === 'users') {
             const userId = interaction.options.getString('user_id');
             let User;
 
@@ -193,8 +170,7 @@ module.exports = {
                     return await interaction.editReply({ content: `User ${userId} added.` });
                 }
                 await interaction.editReply({ content: 'That user is already in database.' });
-            }
-            else if (subcommand === 'read') {
+            } else if (subcommand === 'read') {
                 client.logger.debug(`/database users read user_id: ${userId}`);
                 User = await client.knexInstance('user').where('id', userId).first();
 
@@ -214,13 +190,14 @@ module.exports = {
                     .setDescription(embedDescription.join('\n'))
                     .setColor('Blurple');
                 await interaction.editReply({ embeds: [embed] });
-            }
-            else if (subcommand === 'update') {
+            } else if (subcommand === 'update') {
                 const userName = interaction.options.getString('username');
                 const displayName = interaction.options.getString('display_name');
                 const bananas = interaction.options.getInteger('bananas');
 
-                client.logger.debug(`/database users update user_id: ${userId} username:${userName} display_name: ${displayName} bananas: ${bananas}`);
+                client.logger.debug(
+                    `/database users update user_id: ${userId} username:${userName} display_name: ${displayName} bananas: ${bananas}`
+                );
 
                 User = await client.knexInstance('user').where('id', userId).first();
 
@@ -248,8 +225,7 @@ module.exports = {
 
                 await client.knexInstance('user').where('id', userId).update(dataToUpdate);
                 await interaction.editReply({ content: `User ${userId} updated.` });
-            }
-            else if (subcommand === 'delete') {
+            } else if (subcommand === 'delete') {
                 client.logger.debug(`/database users delete user_id: ${userId}`);
                 User = await client.knexInstance('user').where('id', userId).first();
 
@@ -260,8 +236,7 @@ module.exports = {
                 await client.knexInstance('user').where('id', userId).del();
 
                 await interaction.editReply({ content: `User ${userId} deleted.` });
-            }
-            else if (subcommand === 'get_all') {
+            } else if (subcommand === 'get_all') {
                 client.logger.debug('/database users get_all');
                 const users = await client.knexInstance.select('*').from('user');
 
@@ -293,7 +268,7 @@ module.exports = {
                             .setCustomId('previous')
                             .setLabel('Previous')
                             .setStyle(ButtonStyle.Primary)
-                            .setDisabled(currentPage === 1),
+                            .setDisabled(currentPage === 1)
                     );
 
                     row.addComponents(
@@ -301,7 +276,7 @@ module.exports = {
                             .setCustomId('next')
                             .setLabel('Next')
                             .setStyle(ButtonStyle.Primary)
-                            .setDisabled(currentPage === pages),
+                            .setDisabled(currentPage === pages)
                     );
 
                     return { embeds: [embed], components: [row] };
@@ -321,8 +296,7 @@ module.exports = {
 
                     if (buttonInteraction.customId === 'previous') {
                         currentPage--;
-                    }
-                    else if (buttonInteraction.customId === 'next') {
+                    } else if (buttonInteraction.customId === 'next') {
                         currentPage++;
                     }
 

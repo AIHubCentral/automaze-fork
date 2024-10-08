@@ -1,15 +1,16 @@
 /* context menu version of /banana */
-import { ApplicationCommandType, ContextMenuCommandBuilder, UserContextMenuCommandInteraction } from "discord.js";
-import { ContextCommand } from "../../Interfaces/Command";
-import ExtendedClient from "../../Core/extendedClient";
-import { banan } from "../../Utils/botUtilities";
+import {
+    ApplicationCommandType,
+    ContextMenuCommandBuilder,
+    UserContextMenuCommandInteraction,
+} from 'discord.js';
+import { ContextCommand } from '../../Interfaces/Command';
+import ExtendedClient from '../../Core/extendedClient';
+import { banan } from '../../Utils/botUtilities';
 
 const Banan: ContextCommand = {
     category: 'Fun',
-    data: new ContextMenuCommandBuilder()
-        .setName('banan')
-        .setType(ApplicationCommandType.User)
-    ,
+    data: new ContextMenuCommandBuilder().setName('banan').setType(ApplicationCommandType.User),
     async execute(interaction) {
         const client = <ExtendedClient>interaction.client;
         const targetUser = interaction.targetUser;
@@ -22,11 +23,11 @@ const Banan: ContextCommand = {
 
         if (!guildMember) {
             client.logger.debug(`Failed to get guild member ${targetUser.id}`);
-            return interaction.reply({ content: "Failed to banan user.", ephemeral: true });
+            return interaction.reply({ content: 'Failed to banan user.', ephemeral: true });
         }
 
         await banan(interaction, targetUser, guildMember);
-    }
-}
+    },
+};
 
 export default Banan;

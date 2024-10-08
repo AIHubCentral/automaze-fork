@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getChannelById = exports.getGuildById = exports.getAvailableColors = exports.createEmbeds = exports.createEmbed = void 0;
+exports.createEmbed = createEmbed;
+exports.createEmbeds = createEmbeds;
+exports.getAvailableColors = getAvailableColors;
+exports.getGuildById = getGuildById;
+exports.getChannelById = getChannelById;
 const discord_js_1 = require("discord.js");
 function createEmbed(data, color) {
     /**
@@ -35,11 +39,10 @@ function createEmbed(data, color) {
     }
     return embed;
 }
-exports.createEmbed = createEmbed;
 function createEmbeds(contents, colors) {
     /* create embeds from an array of objects and assign colors */
     let colorIndex = 0;
-    const embeds = contents.map(item => {
+    const embeds = contents.map((item) => {
         if (colorIndex >= colors.length) {
             // goes back to the start of the array after reaching the end
             colorIndex = 0;
@@ -49,11 +52,9 @@ function createEmbeds(contents, colors) {
     });
     return embeds;
 }
-exports.createEmbeds = createEmbeds;
 function getAvailableColors(configs) {
     return Object.values(configs.colors.theme);
 }
-exports.getAvailableColors = getAvailableColors;
 async function getGuildById(guildId, client) {
     /* attempts to get a guid from cache, fetch if not found */
     let guild = client.guilds.cache.get(guildId);
@@ -63,7 +64,6 @@ async function getGuildById(guildId, client) {
     }
     return guild;
 }
-exports.getGuildById = getGuildById;
 async function getChannelById(channelId, guild) {
     /* attempts to get a channel from cache, fetch if not found */
     let channel = guild.channels.cache.get(channelId) ?? null;
@@ -72,4 +72,3 @@ async function getChannelById(channelId, guild) {
     }
     return channel;
 }
-exports.getChannelById = getChannelById;

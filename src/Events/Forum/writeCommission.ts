@@ -1,9 +1,9 @@
-import { Message } from "discord.js";
-import IEventData from "../../Interfaces/Events";
+import { Message } from 'discord.js';
+import IEventData from '../../Interfaces/Events';
 
 /* Checks when a non model master sends a message in a model request thread */
 const WriteComission: IEventData = {
-    name: "messageCreate",
+    name: 'messageCreate',
     once: false,
     async run(client, message: Message) {
         if (message.guildId != client.discordIDs.Guild) return;
@@ -17,7 +17,8 @@ const WriteComission: IEventData = {
             const channel = message.channel;
             if (!channel.isThread()) return;
             if (channel.parentId != client.discordIDs.Forum.RequestModel.ID) return;
-            if (!(channel.appliedTags.find(tag => tag == client.discordIDs.Forum.RequestModel.Tags.Paid))) return;
+            if (!channel.appliedTags.find((tag) => tag == client.discordIDs.Forum.RequestModel.Tags.Paid))
+                return;
             if (channel.ownerId == message.author.id) return;
 
             // Check if user has permission to write
@@ -30,7 +31,7 @@ const WriteComission: IEventData = {
 
             let allowedRoleIDs = client.discordIDs.Forum.RequestModel.ComissionAllow;
             for (let roleId of allowedRoleIDs) {
-                if (userRoles.find(role => role.id == client.discordIDs.Roles[roleId])) {
+                if (userRoles.find((role) => role.id == client.discordIDs.Roles[roleId])) {
                     isAllowedToWrite = true;
                     break;
                 }
@@ -43,18 +44,17 @@ const WriteComission: IEventData = {
                 more: {
                     guildId: message.guildId,
                     channelId: message.channelId,
-                }
-            })
-
+                },
+            });
         } catch (error) {
             client.logger.error('Error checking message on comission', error, {
                 more: {
                     guildId: message.guildId,
                     channelId: message.channelId,
-                }
+                },
             });
         }
-    }
-}
+    },
+};
 
 export default WriteComission;

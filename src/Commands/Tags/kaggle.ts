@@ -1,8 +1,8 @@
-import { bold, EmbedBuilder, hyperlink, quote } from "discord.js";
-import { EmbedData } from "../../Interfaces/BotData";
-import { PrefixCommand } from "../../Interfaces/Command";
-import ResourceService from "../../Services/resourcesService";
-import { getResourceData, resourcesToUnorderedList, TagResponseSender } from "../../Utils/botUtilities";
+import { bold, EmbedBuilder, hyperlink, quote } from 'discord.js';
+import { EmbedData } from '../../Interfaces/BotData';
+import { PrefixCommand } from '../../Interfaces/Command';
+import ResourceService from '../../Services/resourcesService';
+import { getResourceData, resourcesToUnorderedList, TagResponseSender } from '../../Utils/botUtilities';
 
 const Kaggle: PrefixCommand = {
     name: 'kaggle',
@@ -22,7 +22,7 @@ const Kaggle: PrefixCommand = {
             return;
         }
 
-        const resources = await getResourceData("kaggle", botCache, logger);
+        const resources = await getResourceData('kaggle', botCache, logger);
 
         const embedData: EmbedData = {
             title: content[0].title,

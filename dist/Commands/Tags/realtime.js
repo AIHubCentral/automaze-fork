@@ -37,7 +37,7 @@ const Realtime = {
         const realtimeActionRow = new discord_js_1.ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
         let botResponse = {
             embeds: (0, discordUtilities_1.createEmbeds)(selectedGuide.embeds, availableColors),
-            components: [realtimeActionRow]
+            components: [realtimeActionRow],
         };
         let selectMenuDisplayMinutes = 15; // allow interaction with the select menu for 15 minutes
         let targetUser = message.mentions.members?.first();
@@ -48,7 +48,7 @@ const Realtime = {
         const botReply = await message.reply(botResponse);
         const collector = botReply.createMessageComponentCollector({
             componentType: discord_js_1.ComponentType.StringSelect,
-            time: selectMenuDisplayMinutes * 60 * 1000
+            time: selectMenuDisplayMinutes * 60 * 1000,
         });
         collector.on('collect', (i) => {
             let allowedToInteract = i.user.id === mainUser.id;
@@ -75,15 +75,19 @@ const Realtime = {
                 i.update(botResponse);
             }
             else {
-                i.reply({ content: 'You didn\'t start this interaction, use `/guides realtime` if you wish to choose an option.', ephemeral: true });
+                i.reply({
+                    content: "You didn't start this interaction, use `/guides realtime` if you wish to choose an option.",
+                    ephemeral: true,
+                });
             }
         });
         collector.on('end', () => {
-            botResponse.content = '> This interaction has expired, use the command `/guides realtime` if you wish to see it again.';
+            botResponse.content =
+                '> This interaction has expired, use the command `/guides realtime` if you wish to see it again.';
             botResponse.embeds = [];
             botResponse.components = [];
             botReply.edit(botResponse);
         });
-    }
+    },
 };
 exports.default = Realtime;

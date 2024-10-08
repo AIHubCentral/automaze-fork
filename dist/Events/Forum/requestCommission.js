@@ -8,8 +8,8 @@ async function handleFreeRequest(client, thread) {
         (0, discordUtilities_1.createEmbed)({
             color: client.botConfigs.colors.theme.accent_1,
             description: [
-                `💡 ${(0, discord_js_1.bold)("Tip")}: You can try using the ${(0, discord_js_1.inlineCode)("/search")} or ${(0, discord_js_1.inlineCode)("/find")} command from ${(0, discord_js_1.userMention)("1156937396517081169")} or ${(0, discord_js_1.userMention)("1138318590760718416")} to check if someone already made this model. Alternatively, you can check the ${(0, discord_js_1.channelMention)("1175430844685484042")} channel or use ${(0, discord_js_1.hyperlink)("weights.gg", "https://weights.gg/")}, ` +
-                    'but keep in mind that weights receive the models after us, so if something new comes out, you\'ll find it on our server first.',
+                `💡 ${(0, discord_js_1.bold)('Tip')}: You can try using the ${(0, discord_js_1.inlineCode)('/search')} or ${(0, discord_js_1.inlineCode)('/find')} command from ${(0, discord_js_1.userMention)('1156937396517081169')} or ${(0, discord_js_1.userMention)('1138318590760718416')} to check if someone already made this model. Alternatively, you can check the ${(0, discord_js_1.channelMention)('1175430844685484042')} channel or use ${(0, discord_js_1.hyperlink)('weights.gg', 'https://weights.gg/')}, ` +
+                    "but keep in mind that weights receive the models after us, so if something new comes out, you'll find it on our server first.",
             ],
         }),
     ];
@@ -31,7 +31,7 @@ async function handlePaidRequest(client, thread) {
         color: client.botConfigs.colors.theme.secondary,
         description: [
             '\n**Some general recommendations regarding commissions:**',
-            '- Don\'t rush! You\'ll receive many requests, so take your time to review the best offer. The first person who contacts you may not always be the best option.',
+            "- Don't rush! You'll receive many requests, so take your time to review the best offer. The first person who contacts you may not always be the best option.",
             `- We recommend exclusively accepting commission from people holding the ${(0, discord_js_1.roleMention)(modelMasterRoleId)} role, regardless of any role above it when accepting commissions to ensure a secure and qualified working relationship.`,
             '- If you encounter any issues with a member related to a commission (scam, failure to fulfill terms, etc.), please report it to the administrative team to assess whether sanctions should be applied.',
         ],
@@ -40,7 +40,9 @@ async function handlePaidRequest(client, thread) {
         embeds.push((0, discordUtilities_1.createEmbed)({
             title: '⚠️ Warning to model makers',
             color: discord_js_1.Colors.Yellow,
-            description: ['> Make sure you have the **model master** role, or your response might be deleted.'],
+            description: [
+                '> Make sure you have the **model master** role, or your response might be deleted.',
+            ],
         }));
     }
     await thread.send({ embeds: embeds });
@@ -57,7 +59,7 @@ const RequestComission = {
         if (thread.parentId != client.discordIDs.Forum.RequestModel.ID)
             return;
         // check if the thread was created successfully
-        await (0, generalUtilities_1.delay)(3000);
+        await (0, generalUtilities_1.delay)(3_000);
         if (!thread.guild.channels.cache.get(thread.id))
             return;
         const { botConfigs } = client;
@@ -71,8 +73,8 @@ const RequestComission = {
         };
         try {
             // check if it's a free or paid request
-            const isPaidRequest = Boolean(thread.appliedTags.find(tag => tag == client.discordIDs.Forum.RequestModel.Tags.Paid));
-            const isFreeRequest = Boolean(thread.appliedTags.find(tag => tag == client.discordIDs.Forum.RequestModel.Tags.Free));
+            const isPaidRequest = Boolean(thread.appliedTags.find((tag) => tag == client.discordIDs.Forum.RequestModel.Tags.Paid));
+            const isFreeRequest = Boolean(thread.appliedTags.find((tag) => tag == client.discordIDs.Forum.RequestModel.Tags.Free));
             if (isPaidRequest && isFreeRequest) {
                 client.logger.debug('Both free and paid request tags applied to this thread', logData);
                 await handlePaidRequest(client, thread);
@@ -87,7 +89,7 @@ const RequestComission = {
                 client.logger.debug('New model request', {
                     more: {
                         guildId: thread.guild.id,
-                    }
+                    },
                 });
             }
         }

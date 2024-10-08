@@ -9,7 +9,7 @@ function createInstance(sqliteFilePath: string) {
             filename: sqliteFilePath,
         },
         useNullAsDefault: true,
-    }
+    };
     const knex = Knex(knexConfig);
     return knex;
 }

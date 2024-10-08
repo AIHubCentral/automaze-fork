@@ -18,6 +18,6 @@ const Overtrain = {
         sender.setEmbeds(content.embeds);
         sender.config(message);
         await sender.send();
-    }
+    },
 };
 exports.default = Overtrain;

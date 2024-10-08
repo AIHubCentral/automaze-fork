@@ -9,16 +9,18 @@ const Audio = {
     syntax: 'audio [member]',
     async run(client, message) {
         const { botCache, logger } = client;
-        const resources = await (0, botUtilities_1.getResourceData)("audio", botCache, logger);
+        const resources = await (0, botUtilities_1.getResourceData)('audio', botCache, logger);
         if (resources.length === 0) {
-            await message.reply({ content: "Currently unavailable." });
+            await message.reply({ content: 'Currently unavailable.' });
             return;
         }
-        let content = [{
-                title: "📚 Audio Guides & Tools",
+        let content = [
+            {
+                title: '📚 Audio Guides & Tools',
                 description: [(0, botUtilities_1.resourcesToUnorderedListAlt)(resources)],
-                footer: "More commands: -colab, -uvr, -karafan, -overtrain, -help"
-            }];
+                footer: 'More commands: -colab, -uvr, -karafan, -overtrain, -help',
+            },
+        ];
         const sender = new botUtilities_1.TagResponseSender(client);
         sender.setEmbeds(content);
         sender.config(message);

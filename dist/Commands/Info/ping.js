@@ -19,6 +19,6 @@ const Ping = {
             .setDescription(`- **Client's average ping**: ${client.ws.ping}ms\n- **Time passed since last ready**: ${(0, pretty_ms_1.default)(client.uptime, { verbose: true })}`)
             .setColor(client.botConfigs.colors.theme.primary);
         message?.reply({ embeds: [pingEmbed] });
-    }
+    },
 };
 exports.default = Ping;

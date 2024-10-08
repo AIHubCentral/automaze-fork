@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable indent */
 const Chance = require('chance');
-const chance = new Chance;
+const chance = new Chance();
 const discord_js_1 = require("discord.js");
 const Doxx = {
     category: 'Fun',
@@ -10,10 +10,7 @@ const Doxx = {
     data: new discord_js_1.SlashCommandBuilder()
         .setName('doxx')
         .setDescription('NOT ACTUAL DOXXING. creates random ip and house address')
-        .addUserOption(option => option
-        .setName('user')
-        .setDescription('User to doxx')
-        .setRequired(true)),
+        .addUserOption((option) => option.setName('user').setDescription('User to doxx').setRequired(true)),
     async execute(interaction) {
         const client = interaction.client;
         const targetUser = interaction.options.getUser('user');
@@ -23,7 +20,7 @@ const Doxx = {
                 more: {
                     guild: guild,
                     targetUser: targetUser,
-                }
+                },
             });
             return;
         }
@@ -33,19 +30,22 @@ const Doxx = {
             guildMember = await guild.members.fetch(targetUser.id);
         }
         const bot = interaction.client.user;
-        const [ip, ipv6, mac, address] = client.doxx.ensure(targetUser.id, () => [chance.ip(), chance.ipv6(), chance.mac_address(), chance.address()]);
-        const fetchingEmbed = new discord_js_1.EmbedBuilder()
-            .setTitle('⏳ Fetching...')
-            .setColor('Yellow');
+        const [ip, ipv6, mac, address] = client.doxx.ensure(targetUser.id, () => [
+            chance.ip(),
+            chance.ipv6(),
+            chance.mac_address(),
+            chance.address(),
+        ]);
+        const fetchingEmbed = new discord_js_1.EmbedBuilder().setTitle('⏳ Fetching...').setColor('Yellow');
         const reply = await interaction.reply({ embeds: [fetchingEmbed] });
         const doxxData = {
-            'title': '❌ Failed to retrieve information!',
-            'IP': 'N/A',
-            'IPv6': 'N/A',
-            'MAC': 'N/A',
-            'address': 'Not found',
-            'embedColor': 'Red',
-            'duration': 6000,
+            title: '❌ Failed to retrieve information!',
+            IP: 'N/A',
+            IPv6: 'N/A',
+            MAC: 'N/A',
+            address: 'Not found',
+            embedColor: 'Red',
+            duration: 6000,
         };
         if (!targetUser.bot) {
             doxxData.title = `✅ We found you **${guildMember.nickname ?? targetUser.displayName ?? targetUser.username}**!`;

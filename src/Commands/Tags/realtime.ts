@@ -1,10 +1,12 @@
 import {
-    StringSelectMenuBuilder, StringSelectMenuOptionBuilder,
-    ActionRowBuilder, ComponentType,
+    StringSelectMenuBuilder,
+    StringSelectMenuOptionBuilder,
+    ActionRowBuilder,
+    ComponentType,
     Message,
     MessageReplyOptions,
     InteractionUpdateOptions,
-    MessageEditOptions
+    MessageEditOptions,
 } from 'discord.js';
 
 import ExtendedClient from '../../Core/extendedClient';
@@ -52,14 +54,16 @@ const Realtime: PrefixCommand = {
             .setPlaceholder('Select a guide')
             .addOptions(menuOptions);
 
-        const realtimeActionRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(realtimeGuidesSelectMenu);
+        const realtimeActionRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+            realtimeGuidesSelectMenu
+        );
 
         let botResponse: MessageReplyOptions = {
             embeds: createEmbeds(selectedGuide!.embeds, availableColors),
-            components: [realtimeActionRow]
+            components: [realtimeActionRow],
         };
 
-        let selectMenuDisplayMinutes = 15;  // allow interaction with the select menu for 15 minutes
+        let selectMenuDisplayMinutes = 15; // allow interaction with the select menu for 15 minutes
         let targetUser = message.mentions.members?.first();
         let mainUser = message.author;
 
@@ -71,7 +75,7 @@ const Realtime: PrefixCommand = {
 
         const collector = botReply.createMessageComponentCollector({
             componentType: ComponentType.StringSelect,
-            time: selectMenuDisplayMinutes * 60 * 1000
+            time: selectMenuDisplayMinutes * 60 * 1000,
         });
 
         collector.on('collect', (i) => {
@@ -88,14 +92,11 @@ const Realtime: PrefixCommand = {
                 let guide;
 
                 if (selectMenuResult === 'realtime_local') {
-                    guide = realtimeGuides.local
-                }
-                else if (selectMenuResult === 'realtime_online') {
-                    guide = realtimeGuides.online
-                }
-                else if (selectMenuResult === 'realtime_faq') {
-                    guide = realtimeGuides.faq
-
+                    guide = realtimeGuides.local;
+                } else if (selectMenuResult === 'realtime_online') {
+                    guide = realtimeGuides.online;
+                } else if (selectMenuResult === 'realtime_faq') {
+                    guide = realtimeGuides.faq;
                 }
 
                 if (targetUser) {
@@ -106,17 +107,22 @@ const Realtime: PrefixCommand = {
 
                 i.update(<InteractionUpdateOptions>botResponse);
             } else {
-                i.reply({ content: 'You didn\'t start this interaction, use `/guides realtime` if you wish to choose an option.', ephemeral: true });
+                i.reply({
+                    content:
+                        "You didn't start this interaction, use `/guides realtime` if you wish to choose an option.",
+                    ephemeral: true,
+                });
             }
         });
 
         collector.on('end', () => {
-            botResponse.content = '> This interaction has expired, use the command `/guides realtime` if you wish to see it again.';
+            botResponse.content =
+                '> This interaction has expired, use the command `/guides realtime` if you wish to see it again.';
             botResponse.embeds = [];
             botResponse.components = [];
             botReply.edit(<MessageEditOptions>botResponse);
         });
-    }
-}
+    },
+};
 
 export default Realtime;

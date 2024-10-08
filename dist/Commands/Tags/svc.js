@@ -12,7 +12,8 @@ const SVC = {
         const botResponse = {};
         const randomNumber = (0, generalUtilities_1.getRandomNumber)(0, 9);
         if (randomNumber !== 0) {
-            botResponse.content = 'https://cdn.discordapp.com/attachments/1159822429137412177/1194008385113301003/svc.gif?ex=65c13ef6&is=65aec9f6&hm=ce1f57bc316793f641c80f9b359ba9db7d1312af6918b1aed9c8468c74035bac&';
+            botResponse.content =
+                'https://cdn.discordapp.com/attachments/1159822429137412177/1194008385113301003/svc.gif?ex=65c13ef6&is=65aec9f6&hm=ce1f57bc316793f641c80f9b359ba9db7d1312af6918b1aed9c8468c74035bac&';
             return message.reply(botResponse);
         }
         const selectedMessage = (0, generalUtilities_1.getRandomFromArray)(botResponses.responses.svc);

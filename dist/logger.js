@@ -22,7 +22,7 @@ const Logger = winston_1.default.createLogger({
         }),
         new winston_1.default.transports.File({
             filename: node_path_1.default.join(logsDir, 'combined.log'),
-            maxsize: 10485760,
+            maxsize: 10_485_760,
         }),
     ],
 });

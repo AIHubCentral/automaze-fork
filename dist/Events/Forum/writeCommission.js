@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /* Checks when a non model master sends a message in a model request thread */
 const WriteComission = {
-    name: "messageCreate",
+    name: 'messageCreate',
     once: false,
     async run(client, message) {
         if (message.guildId != client.discordIDs.Guild)
@@ -20,7 +20,7 @@ const WriteComission = {
                 return;
             if (channel.parentId != client.discordIDs.Forum.RequestModel.ID)
                 return;
-            if (!(channel.appliedTags.find(tag => tag == client.discordIDs.Forum.RequestModel.Tags.Paid)))
+            if (!channel.appliedTags.find((tag) => tag == client.discordIDs.Forum.RequestModel.Tags.Paid))
                 return;
             if (channel.ownerId == message.author.id)
                 return;
@@ -32,7 +32,7 @@ const WriteComission = {
             let userRoles = user.roles.cache;
             let allowedRoleIDs = client.discordIDs.Forum.RequestModel.ComissionAllow;
             for (let roleId of allowedRoleIDs) {
-                if (userRoles.find(role => role.id == client.discordIDs.Roles[roleId])) {
+                if (userRoles.find((role) => role.id == client.discordIDs.Roles[roleId])) {
                     isAllowedToWrite = true;
                     break;
                 }
@@ -44,7 +44,7 @@ const WriteComission = {
                 more: {
                     guildId: message.guildId,
                     channelId: message.channelId,
-                }
+                },
             });
         }
         catch (error) {
@@ -52,9 +52,9 @@ const WriteComission = {
                 more: {
                     guildId: message.guildId,
                     channelId: message.channelId,
-                }
+                },
             });
         }
-    }
+    },
 };
 exports.default = WriteComission;

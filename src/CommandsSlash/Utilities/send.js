@@ -6,8 +6,7 @@ const {
     ModalBuilder,
     SlashCommandBuilder,
     TextInputBuilder,
-    TextInputStyle
-
+    TextInputStyle,
 } = require('discord.js');
 
 const delay = require('node:timers/promises').setTimeout;
@@ -18,7 +17,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('send')
         .setDescription('Send something to a guild channel')
-        .addStringOption(option =>
+        .addStringOption((option) =>
             option
                 .setName('options')
                 .setDescription('Choose an option to send')
@@ -28,37 +27,25 @@ module.exports = {
                     { name: 'reply', value: 'reply' },
                     { name: 'emoji', value: 'emoji' },
                     { name: 'embed', value: 'embed' },
-                    { name: 'sticker', value: 'sticker' },
+                    { name: 'sticker', value: 'sticker' }
                 )
         )
-        .addStringOption(option => option
-            .setName('guild_id')
-            .setDescription('Guild ID (Defaults to guild in config)')
+        .addStringOption((option) =>
+            option.setName('guild_id').setDescription('Guild ID (Defaults to guild in config)')
         )
-        .addStringOption(option => option
-            .setName('channel_id')
-            .setDescription('Channel ID (Defaults to bot-spam)')
+        .addStringOption((option) =>
+            option.setName('channel_id').setDescription('Channel ID (Defaults to bot-spam)')
         )
-        .addStringOption(option => option
-            .setName('message_id')
-            .setDescription('Message ID')
-        )
-        .addStringOption(option => option
-            .setName('text')
-            .setDescription('Text to send')
-        )
-        .addStringOption(option => option
-            .setName('icon_id')
-            .setDescription('Emoji or sticker ID')
-        )
-    ,
+        .addStringOption((option) => option.setName('message_id').setDescription('Message ID'))
+        .addStringOption((option) => option.setName('text').setDescription('Text to send'))
+        .addStringOption((option) => option.setName('icon_id').setDescription('Emoji or sticker ID')),
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
 
         const client = interaction.client;
 
         if (!client.botAdminIds || !client.botAdminIds.includes(interaction.user.id)) {
-            return await editReply.reply({ content: 'You can\'t use this command', ephemeral: true });
+            return await editReply.reply({ content: "You can't use this command", ephemeral: true });
         }
 
         const guildId = interaction.options.getString('guild_id') ?? client.discordIDs.Guild;
@@ -90,21 +77,20 @@ module.exports = {
                 if (!text) {
                     botResponse.content = 'Empty text...Skipped';
                     return interaction.editReply(botResponse);
-                };
+                }
 
                 botResponse.content = [
                     '### Text sent:',
                     `> Guild: ${guildId} (${guild.name})`,
                     `> Channel: ${channelId} (${channel.name})`,
-                    `> Text: ${text}`
+                    `> Text: ${text}`,
                 ].join('\n');
 
                 await channel.sendTyping();
                 await delay(text.length * typingDuration);
                 await channel.send(text);
                 return interaction.editReply(botResponse);
-            }
-            else if (selectedOption === 'reply') {
+            } else if (selectedOption === 'reply') {
                 if (!text || !messageId) {
                     botResponse.content = 'Empty text or message id...Skipped';
                     return interaction.editReply(botResponse);
@@ -122,15 +108,14 @@ module.exports = {
                     `> Guild: ${guildId} (${guild.name})`,
                     `> Channel: ${channelId} (${channel.name})`,
                     `> Message ID: ${messageId}`,
-                    `> Text: ${text}`
+                    `> Text: ${text}`,
                 ].join('\n');
 
                 await channel.sendTyping();
                 await delay(text.length * typingDuration);
-                await message.reply({ content:text, allowedMentions: { repliedUser: true } });
+                await message.reply({ content: text, allowedMentions: { repliedUser: true } });
                 return interaction.editReply(botResponse);
-            }
-            else if (selectedOption == 'embed') {
+            } else if (selectedOption == 'embed') {
                 // button to show modal
                 const openModalButton = new ButtonBuilder()
                     .setCustomId('open_modal')
@@ -143,12 +128,12 @@ module.exports = {
 
                 const botReply = await interaction.followUp({ components: [buttonActionRow] });
 
-                const buttonFilter = i => i.user.id === interaction.user.id;
+                const buttonFilter = (i) => i.user.id === interaction.user.id;
 
                 const collector = botReply.createMessageComponentCollector({
                     componentType: ComponentType.Button,
                     filter: buttonFilter,
-                    time: 15_000
+                    time: 15_000,
                 });
 
                 collector.on('collect', async (i) => {
@@ -187,16 +172,17 @@ module.exports = {
 
                     await i.showModal(modal);
 
-                    const filter = i => i.customId === 'embed_modal' && i.user.id === interaction.user.id;
+                    const filter = (i) => i.customId === 'embed_modal' && i.user.id === interaction.user.id;
 
-                    interaction.awaitModalSubmit({ filter: filter, time: 30_000 })
-                        .then(modalInteraction => {
+                    interaction
+                        .awaitModalSubmit({ filter: filter, time: 30_000 })
+                        .then((modalInteraction) => {
                             if (modalInteraction.fields.getTextInputValue('embed_title')) {
                                 embedData.title = modalInteraction.fields.getTextInputValue('embed_title');
                             }
 
                             embedData.description = [
-                                modalInteraction.fields.getTextInputValue('embed_description')
+                                modalInteraction.fields.getTextInputValue('embed_description'),
                             ];
 
                             botResponse.embeds = client.botUtils.createEmbeds(
@@ -209,17 +195,15 @@ module.exports = {
                                 botResponse.ephemeral = true;
                                 botResponse.embeds = [];
                                 modalInteraction.reply(botResponse);
-                            })
+                            });
                         });
                 });
-
 
                 collector.on('end', async (i) => {
                     openModalButton.setDisabled(true);
                     await botReply.edit({ components: [buttonActionRow] });
                 });
-            }
-            else if (selectedOption === 'emoji' || selectedOption === 'sticker') {
+            } else if (selectedOption === 'emoji' || selectedOption === 'sticker') {
                 if (!iconId || !messageId) {
                     botResponse.content = 'Emoji, sticker or message ID not provided';
                     return interaction.editReply(botResponse);
@@ -240,12 +224,11 @@ module.exports = {
                         `> Guild: ${guildId} (${guild.name})`,
                         `> Channel: ${channelId} (${channel.name})`,
                         `> Message ID: ${messageId}`,
-                        `> Emoji: ${iconId}`
+                        `> Emoji: ${iconId}`,
                     ].join('\n');
 
                     return interaction.editReply(botResponse);
-                }
-                else if (selectedOption === 'sticker') {
+                } else if (selectedOption === 'sticker') {
                     let sticker = guild.stickers.cache.get(iconId);
 
                     if (!sticker) {
@@ -259,19 +242,18 @@ module.exports = {
                         `Channel: ${channelId}`,
                         '\nSticker:',
                         `> ID: ${sticker.id}`,
-                        `> Name: ${sticker.name}`
+                        `> Name: ${sticker.name}`,
                     ].join('\n');
                     return interaction.editReply(botResponse);
                 }
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
             botResponse.content = '**Errored:**\n';
-            botResponse.content += '\`\`\`yaml\n';
+            botResponse.content += '```yaml\n';
             botResponse.content += error;
-            botResponse.content += '\`\`\`';
+            botResponse.content += '```';
             await interaction.editReply(botResponse);
         }
-    }
+    },
 };

@@ -14,7 +14,7 @@ const Cloud = {
         .setName(cloudCommandData.name)
         .setDescription(cloudCommandData.description)
         .setDescriptionLocalizations(cloudCommandData.descriptionLocalizations)
-        .addStringOption(option => option
+        .addStringOption((option) => option
         .setName(cloudCommandData.options.platform.name)
         .setNameLocalizations(cloudCommandData.options.platform.nameLocalizations)
         .setDescription(cloudCommandData.options.platform.description)
@@ -34,38 +34,38 @@ const Cloud = {
         const platform = interaction.options.getString('platform', true);
         const resources = await (0, botUtilities_1.getResourceData)(platform, botCache, logger);
         const embed = new discord_js_1.EmbedBuilder()
-            .setTitle("Not available yet")
+            .setTitle('Not available yet')
             .setColor(discord_js_1.Colors.Grey)
-            .setDescription("Stay tuned!");
+            .setDescription('Stay tuned!');
         if (resources.length === 0) {
             await interaction.reply({ embeds: [embed], ephemeral: true });
             return;
         }
         if (platform === botUtilities_1.CloudPlatform.Colab) {
             embed
-                .setTitle("☁️ Google Colabs")
-                .setColor("f9ab00")
+                .setTitle('☁️ Google Colabs')
+                .setColor('f9ab00')
                 .setDescription((0, botUtilities_1.resourcesToUnorderedList)(resources));
         }
         else if (platform === botUtilities_1.CloudPlatform.Huggingface) {
             embed
-                .setTitle("<:huggingface:1179800228946268270> Hugginface Spaces")
-                .setColor("ffcc4d")
+                .setTitle('<:huggingface:1179800228946268270> Hugginface Spaces')
+                .setColor('ffcc4d')
                 .setDescription((0, botUtilities_1.resourcesToUnorderedList)(resources));
         }
         else if (platform === botUtilities_1.CloudPlatform.Kaggle) {
             embed
-                .setTitle("📘 Kaggle Notebooks")
+                .setTitle('📘 Kaggle Notebooks')
                 .setColor(discord_js_1.Colors.Blue)
                 .setDescription((0, botUtilities_1.resourcesToUnorderedList)(resources));
         }
         else if (platform === botUtilities_1.CloudPlatform.Lightning) {
             embed
-                .setTitle("⚡ Lightning AI")
-                .setColor("b45aff")
+                .setTitle('⚡ Lightning AI')
+                .setColor('b45aff')
                 .setDescription((0, botUtilities_1.resourcesToUnorderedList)(resources));
         }
         await interaction.reply({ embeds: [embed] });
-    }
+    },
 };
 exports.default = Cloud;

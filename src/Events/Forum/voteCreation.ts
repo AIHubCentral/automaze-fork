@@ -1,7 +1,7 @@
-import { Events, ThreadChannel } from "discord.js";
-import IEventData from "../../Interfaces/Events";
-import { delay } from "../../Utils/generalUtilities";
-import { createEmbed } from "../../Utils/discordUtilities";
+import { Events, ThreadChannel } from 'discord.js';
+import IEventData from '../../Interfaces/Events';
+import { delay } from '../../Utils/generalUtilities';
+import { createEmbed } from '../../Utils/discordUtilities';
 
 const VoteCreation: IEventData = {
     name: Events.ThreadCreate,
@@ -12,14 +12,14 @@ const VoteCreation: IEventData = {
                 threadId: thread.id,
                 parentId: thread.parentId,
                 guildId: thread.guildId,
-            }
+            },
         };
 
         try {
             let embedMessages = {
                 //[client.discordIDs.Forum.Suggestions]: "Vote for this suggestion!",
-                [client.discordIDs.Forum.TaskSTAFF]: "Vote for this task!",
-            }
+                [client.discordIDs.Forum.TaskSTAFF]: 'Vote for this task!',
+            };
 
             if (!newlyCreated) return;
             if (thread.guildId != client.discordIDs.Guild) return;
@@ -33,21 +33,17 @@ const VoteCreation: IEventData = {
 
             // Check if the thread was created successfully
             await delay(2_000);
-            if (!(thread.guild.channels.cache.get(thread.id))) return;
+            if (!thread.guild.channels.cache.get(thread.id)) return;
 
             // Create reactions
-            const message = await thread.send({ embeds: [voteEmbed] })
-            await Promise.all([
-                message.react(`🔼`),
-                message.react(`🔽`),
-            ]);
+            const message = await thread.send({ embeds: [voteEmbed] });
+            await Promise.all([message.react(`🔼`), message.react(`🔽`)]);
 
             client.logger.debug('Added voting embed', logData);
-
         } catch (error) {
             client.logger.error('Failed to add voting embed', error, logData);
         }
-    }
-}
+    },
+};
 
 export default VoteCreation;

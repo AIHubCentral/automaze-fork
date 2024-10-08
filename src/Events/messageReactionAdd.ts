@@ -1,5 +1,5 @@
-import { MessageReaction, User } from "discord.js";
-import IEventData from "../Interfaces/Events";
+import { MessageReaction, User } from 'discord.js';
+import IEventData from '../Interfaces/Events';
 
 const reactionAddEvent: IEventData = {
     name: 'messageReactionAdd',
@@ -32,10 +32,10 @@ const reactionAddEvent: IEventData = {
                 user: {
                     id: reactionAuthor.id,
                     displayName: reactionAuthor.displayName,
-                    userName: reactionAuthor.username
+                    userName: reactionAuthor.username,
                 },
                 expiresIn: expirationDate,
-            }
+            },
         });
 
         client.logger.info('Added emoji reaction', {
@@ -43,7 +43,7 @@ const reactionAddEvent: IEventData = {
                 user: {
                     id: reactionAuthor.id,
                     displayName: reactionAuthor.displayName,
-                    userName: reactionAuthor.username
+                    userName: reactionAuthor.username,
                 },
                 channelId: reaction.message.channel.id,
                 guildId: reaction.message.guild?.id,

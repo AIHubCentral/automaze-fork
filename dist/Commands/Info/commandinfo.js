@@ -18,11 +18,11 @@ const CommandInfo = {
         if (args.length === 0) {
             return message.reply(`Specify a command you want to look up.\n\n> Example: ${(0, discord_js_1.inlineCode)('-commandinfo')} rvc`);
         }
-        ;
         const commandName = args[0];
-        const command = client.commands.get(commandName) || client.commands.find(c => c.aliases && c.aliases.includes(commandName));
+        const command = client.commands.get(commandName) ||
+            client.commands.find((c) => c.aliases && c.aliases.includes(commandName));
         if (!command) {
-            return message.reply('That command doesn\'t exist.');
+            return message.reply("That command doesn't exist.");
         }
         const embed = (0, discordUtilities_1.createEmbed)({
             description: [
@@ -37,6 +37,6 @@ const CommandInfo = {
             color: client.botConfigs.colors.theme.primary,
         });
         await message.reply({ embeds: [embed] });
-    }
+    },
 };
 exports.default = CommandInfo;

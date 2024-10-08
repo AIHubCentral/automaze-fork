@@ -6,7 +6,7 @@ const ModelCreation = {
     once: false,
     async run(client, thread) {
         const { botConfigs, discordIDs } = client;
-        if (botConfigs.logs.models && (thread.parentId == discordIDs.Forum.VoiceModel)) {
+        if (botConfigs.logs.models && thread.parentId == discordIDs.Forum.VoiceModel) {
             const logData = {
                 more: {
                     threadName: thread.name,

@@ -12,12 +12,12 @@ const VoteCreation = {
                 threadId: thread.id,
                 parentId: thread.parentId,
                 guildId: thread.guildId,
-            }
+            },
         };
         try {
             let embedMessages = {
                 //[client.discordIDs.Forum.Suggestions]: "Vote for this suggestion!",
-                [client.discordIDs.Forum.TaskSTAFF]: "Vote for this task!",
+                [client.discordIDs.Forum.TaskSTAFF]: 'Vote for this task!',
             };
             if (!newlyCreated)
                 return;
@@ -32,20 +32,17 @@ const VoteCreation = {
                 color: client.botConfigs.colors.theme.primary,
             });
             // Check if the thread was created successfully
-            await (0, generalUtilities_1.delay)(2000);
-            if (!(thread.guild.channels.cache.get(thread.id)))
+            await (0, generalUtilities_1.delay)(2_000);
+            if (!thread.guild.channels.cache.get(thread.id))
                 return;
             // Create reactions
             const message = await thread.send({ embeds: [voteEmbed] });
-            await Promise.all([
-                message.react(`🔼`),
-                message.react(`🔽`),
-            ]);
+            await Promise.all([message.react(`🔼`), message.react(`🔽`)]);
             client.logger.debug('Added voting embed', logData);
         }
         catch (error) {
             client.logger.error('Failed to add voting embed', error, logData);
         }
-    }
+    },
 };
 exports.default = VoteCreation;

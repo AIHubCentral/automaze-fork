@@ -1,22 +1,22 @@
 /* Resources: Documentation links */
 
-import fs from "fs/promises";
-import { RESOURCES_DATABASE_PATH, resourcesDatabase } from "../Database/dbManager";
-import winston from "winston";
+import fs from 'fs/promises';
+import { RESOURCES_DATABASE_PATH, resourcesDatabase } from '../Database/dbManager';
+import winston from 'winston';
 
 export interface IResource {
-    id?: number,
-    category: string,
-    url: string,
-    displayTitle?: string,
-    emoji?: string,
-    authors?: string,
+    id?: number;
+    category: string;
+    url: string;
+    displayTitle?: string;
+    emoji?: string;
+    authors?: string;
 }
 
 export interface ICollaborator {
-    discordId: string,
-    username: string,
-    displayName?: string,
+    discordId: string;
+    username: string;
+    displayName?: string;
 }
 
 export default class ResourceService {
@@ -28,7 +28,7 @@ export default class ResourceService {
 
     /**
      * Initializes the resources.sqlite database schema by creating the tables
-     * 
+     *
      * @returns boolean Whether the database was successfully created or not
      */
     async createDatabase(): Promise<boolean> {
@@ -45,7 +45,7 @@ export default class ResourceService {
             await resourcesDatabase.schema.createTable('collaborators', (table) => {
                 table.string('discordId').primary();
                 table.string('username').notNullable();
-                table.string('displayName')
+                table.string('displayName');
             });
 
             await resourcesDatabase.schema.createTable('settings', (table) => {
@@ -57,8 +57,7 @@ export default class ResourceService {
             });
 
             return true;
-        }
-        catch (error) {
+        } catch (error) {
             return false;
         }
     }
@@ -72,8 +71,7 @@ export default class ResourceService {
             await resourcesDatabase.destroy();
             await fs.unlink(RESOURCES_DATABASE_PATH);
             return true;
-        }
-        catch (error) {
+        } catch (error) {
             return false;
         }
     }
@@ -88,8 +86,7 @@ export default class ResourceService {
             const [id] = await resourcesDatabase('resources').insert(resource);
             this.logger.info(`Resource created with ID: ${id}`);
             return id;
-        }
-        catch (error) {
+        } catch (error) {
             this.logger.error('Error creating resource: ', error);
             return -1;
         }
@@ -109,8 +106,7 @@ export default class ResourceService {
             const resource = await resourcesDatabase('resources').where({ id }).first();
             this.logger.info('Resource fetched:', resource);
             return resource;
-        }
-        catch (error) {
+        } catch (error) {
             this.logger.error(`Error fetching resource with id ${id}`, error);
         }
     }
@@ -127,14 +123,13 @@ export default class ResourceService {
             this.logger.debug(`${resources.length} resources fetched for ${category}`);
 
             return resources;
-        }
-        catch (error) {
+        } catch (error) {
             this.logger.error(`Error fetching resource with category ${category}`, error);
             return [];
         }
     }
 
-    async getPaginatedResult(offset: number, recordsPerPage: number,): Promise<any> {
+    async getPaginatedResult(offset: number, recordsPerPage: number): Promise<any> {
         this.logger.debug('Requesting paginated resources', { offset, recordsPerPage });
 
         const data = await resourcesDatabase('resources').select('*').limit(recordsPerPage).offset(offset);
@@ -143,7 +138,7 @@ export default class ResourceService {
     }
 
     /**
-     * 
+     *
      * @param id Resource ID
      * @param resource Object
      * @returns boolean Whether the operation succeeded
@@ -153,8 +148,7 @@ export default class ResourceService {
             await resourcesDatabase('resources').where({ id }).update(resource);
             this.logger.info(`Resouce with id ${id} updated`);
             return true;
-        }
-        catch (error) {
+        } catch (error) {
             this.logger.error(`Failed updating resource with id ${id}`, error);
             return false;
         }
@@ -169,8 +163,7 @@ export default class ResourceService {
             await resourcesDatabase('resources').where({ id }).del();
             this.logger.info(`Deleted resource with id ${id}`);
             return true;
-        }
-        catch (error) {
+        } catch (error) {
             this.logger.error(`Failed to delete resource with id ${id}`, error);
             return false;
         }
@@ -183,8 +176,7 @@ export default class ResourceService {
         try {
             await resourcesDatabase('resources').del();
             this.logger.info(`All resources cleared.`);
-        }
-        catch (error) {
+        } catch (error) {
             this.logger.error(`Failed to delete resources`, error);
         }
     }
@@ -199,8 +191,7 @@ export default class ResourceService {
             const result = await resourcesDatabase('resources').insert(resources);
             this.logger.info(`Resource data imported`);
             return result.length > 0;
-        }
-        catch (error) {
+        } catch (error) {
             this.logger.error('Error inserting multiple resources: ', error);
             return false;
         }

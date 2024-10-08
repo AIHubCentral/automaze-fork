@@ -3,7 +3,8 @@ const {
     EmbedBuilder,
     ActionRowBuilder,
     ComponentType,
-    ButtonBuilder, ButtonStyle,
+    ButtonBuilder,
+    ButtonStyle,
 } = require('discord.js');
 
 const delay = require('node:timers/promises').setTimeout;
@@ -18,8 +19,7 @@ async function getFileNames(targetDirectory, logger) {
 
     try {
         fileNames = await fs.readdir(targetDirectory);
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(`Failed reading ${targetDirectory}`, error);
     }
 
@@ -28,13 +28,15 @@ async function getFileNames(targetDirectory, logger) {
 
 async function createDirectoryIfNotExist(directoryPath, logger) {
     try {
-        const directoryExists = await fs.access(directoryPath).then(() => true).catch(() => false);
+        const directoryExists = await fs
+            .access(directoryPath)
+            .then(() => true)
+            .catch(() => false);
         if (!directoryExists) {
             await fs.mkdir(directoryPath);
             logger.info(`Directory created: ${directoryPath}`);
         }
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(`Failed to create ${directoryPath}`, error);
     }
 }
@@ -46,8 +48,7 @@ async function checkFileExists(filePath, logger) {
         await fs.stat(filePath);
         logger.info(`Found ${filePath}`);
         return true;
-    }
-    catch (error) {
+    } catch (error) {
         if (error.code === 'ENOENT') {
             logger.error(`${filePath} does not exist.`, error);
             return false;
@@ -61,8 +62,7 @@ async function deleteFile(filePath, logger) {
     try {
         await fs.unlink(filePath);
         logger.info(`Deleted ${filePath}`);
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(`Error deleting ${filePath}`, error);
     }
 }
@@ -73,54 +73,45 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('logs')
         .setDescription('Manage bot logs')
-        .addSubcommand(subcommand =>
+        .addSubcommand((subcommand) =>
             subcommand
                 .setName('list')
                 .setDescription('List all log files')
-                .addStringOption(option =>
+                .addStringOption((option) =>
                     option
                         .setName('folder')
                         .setDescription('Where to look for the log files')
                         .setRequired(true)
-                        .addChoices(
-                            { name: 'Logs', value: 'logs' },
-                            { name: 'Debug', value: 'debug' },
-                        ))
-                .addStringOption(option =>
-                    option
-                        .setName('date')
-                        .setDescription('Filter logs by date in the yyyy-mm-dd format'),
-                ),
+                        .addChoices({ name: 'Logs', value: 'logs' }, { name: 'Debug', value: 'debug' })
+                )
+                .addStringOption((option) =>
+                    option.setName('date').setDescription('Filter logs by date in the yyyy-mm-dd format')
+                )
         )
-        .addSubcommand(subcommand =>
+        .addSubcommand((subcommand) =>
             subcommand
                 .setName('manage')
                 .setDescription('Manages a log file')
-                .addStringOption(option =>
+                .addStringOption((option) =>
                     option
                         .setName('folder')
                         .setDescription('Where to look for the log files')
                         .setRequired(true)
-                        .addChoices(
-                            { name: 'Logs', value: 'logs' },
-                            { name: 'Debug', value: 'debug' },
-                        ))
-                .addStringOption(option =>
+                        .addChoices({ name: 'Logs', value: 'logs' }, { name: 'Debug', value: 'debug' })
+                )
+                .addStringOption((option) =>
                     option
                         .setName('action')
                         .setDescription('Choose an action to do on a log file')
                         .setRequired(true)
                         .addChoices(
                             { name: 'download', value: 'download' },
-                            { name: 'delete', value: 'delete' },
-                        ),
+                            { name: 'delete', value: 'delete' }
+                        )
                 )
-                .addStringOption(option =>
-                    option
-                        .setName('filename')
-                        .setDescription('Name of the log file')
-                        .setRequired(true),
-                ),
+                .addStringOption((option) =>
+                    option.setName('filename').setDescription('Name of the log file').setRequired(true)
+                )
         ),
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
@@ -165,7 +156,7 @@ module.exports = {
                             .setCustomId('previous')
                             .setLabel('Previous')
                             .setStyle(ButtonStyle.Primary)
-                            .setDisabled(currentPage === 1),
+                            .setDisabled(currentPage === 1)
                     );
 
                     row.addComponents(
@@ -173,7 +164,7 @@ module.exports = {
                             .setCustomId('next')
                             .setLabel('Next')
                             .setStyle(ButtonStyle.Primary)
-                            .setDisabled(currentPage === pages),
+                            .setDisabled(currentPage === pages)
                     );
 
                     return { embeds: [embed], components: [row] };
@@ -193,8 +184,7 @@ module.exports = {
 
                     if (buttonInteraction.customId === 'previous') {
                         currentPage--;
-                    }
-                    else if (buttonInteraction.customId === 'next') {
+                    } else if (buttonInteraction.customId === 'next') {
                         currentPage++;
                     }
 
@@ -211,12 +201,10 @@ module.exports = {
                         .setColor('Red');
                     await interaction.editReply({ embeds: [embed], components: [] });
                 });
-            }
-            catch (error) {
+            } catch (error) {
                 return await interaction.editReply('```javascript\n' + error + '\n```');
             }
-        }
-        else if (interaction.options.getSubcommand() === 'manage') {
+        } else if (interaction.options.getSubcommand() === 'manage') {
             client.logger.info(`Managing log files in ${targetFolder}`);
 
             const action = interaction.options.getString('action');
@@ -233,13 +221,11 @@ module.exports = {
                 if (action === 'download') {
                     botResponse.content = `Downloading ${filename}...`;
                     botResponse.files = [filePath];
-                }
-                else if (action === 'delete') {
+                } else if (action === 'delete') {
                     await deleteFile(filePath, client.logger);
                     botResponse.content = `"${filename}" deleted!`;
                 }
-            }
-            catch (error) {
+            } catch (error) {
                 botResponse.content = '```javascript\n' + error + '\n```';
                 client.logger.error('Errored', error);
             }

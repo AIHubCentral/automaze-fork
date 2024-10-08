@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class UserService {
+    database;
     constructor(database) {
         this.database = database;
     }
@@ -10,8 +11,10 @@ class UserService {
         if (!result)
             return;
         const foundUser = {
-            id: result.id, userName: result.username,
-            displayName: result.display_name, bananas: result.bananas
+            id: result.id,
+            userName: result.username,
+            displayName: result.display_name,
+            bananas: result.bananas,
         };
         return foundUser;
     }

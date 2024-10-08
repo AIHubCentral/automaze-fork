@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+
 import * as Discord from 'discord.js';
 import winston from 'winston';
 import ICooldowns from '../Interfaces/Cooldowns';

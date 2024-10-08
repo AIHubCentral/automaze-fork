@@ -1,10 +1,10 @@
-import knex from "knex";
+import knex from 'knex';
 
 export interface UserModel {
-    id: string,
-    userName: string,
-    displayName: string,
-    bananas: number
+    id: string;
+    userName: string;
+    displayName: string;
+    bananas: number;
 }
 
 interface IUserService {
@@ -28,8 +28,10 @@ class UserService implements IUserService {
         const result = await query.where('id', id).first();
         if (!result) return;
         const foundUser: UserModel = {
-            id: result.id, userName: result.username,
-            displayName: result.display_name, bananas: result.bananas
+            id: result.id,
+            userName: result.username,
+            displayName: result.display_name,
+            bananas: result.bananas,
         };
         return foundUser;
     }
@@ -82,7 +84,6 @@ class UserService implements IUserService {
         const updatedUser = await this.getById(userId);
         return updatedUser;
     }
-
 }
 
 export default UserService;

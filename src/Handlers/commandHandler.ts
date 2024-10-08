@@ -10,18 +10,23 @@ function setCommands(commandsDir: string, commandsCollection: Collection<string,
     const categoryFolders = fs.readdirSync(commandsDir);
 
     for (const folder of categoryFolders) {
-        const commandFiles = fs.readdirSync(path.join(commandsDir, folder)).filter(file => file.endsWith(`.js`));
+        const commandFiles = fs
+            .readdirSync(path.join(commandsDir, folder))
+            .filter((file) => file.endsWith(`.js`));
 
         for (const file of commandFiles) {
             const filePath = path.join(commandsDir, folder, file);
-            const isInteractionCommand: boolean = commandsDir.includes('Context') || commandsDir.includes('Slash');
+            const isInteractionCommand: boolean =
+                commandsDir.includes('Context') || commandsDir.includes('Slash');
 
             if (isInteractionCommand) {
-                const command = require(filePath).default as interactionCommand || require(filePath) as interactionCommand;
+                const command =
+                    (require(filePath).default as interactionCommand) ||
+                    (require(filePath) as interactionCommand);
                 commandsCollection.set(command.data.name, command);
-            }
-            else {
-                const command = require(filePath).default as PrefixCommand || require(filePath) as PrefixCommand;
+            } else {
+                const command =
+                    (require(filePath).default as PrefixCommand) || (require(filePath) as PrefixCommand);
                 commandsCollection.set(command.name, command);
             }
         }

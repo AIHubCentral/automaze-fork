@@ -11,82 +11,46 @@ const Botdata = {
     data: new discord_js_1.SlashCommandBuilder()
         .setName('botdata')
         .setDescription('Configure resources (links / docs)')
-        .addSubcommand(subcommand => subcommand
-        .setName('create')
-        .setDescription('Creates the database'))
-        .addSubcommand(subcommand => subcommand
-        .setName('drop')
-        .setDescription('Drops the database'))
-        .addSubcommand(subcommand => subcommand
+        .addSubcommand((subcommand) => subcommand.setName('create').setDescription('Creates the database'))
+        .addSubcommand((subcommand) => subcommand.setName('drop').setDescription('Drops the database'))
+        .addSubcommand((subcommand) => subcommand
         .setName('insert')
         .setDescription('Create a new record in the database')
-        .addStringOption(option => option
-        .setName('category')
-        .setDescription('Resource category')
-        .setRequired(true))
-        .addStringOption(option => option
-        .setName('url')
-        .setDescription('Resource URL')
-        .setRequired(true))
-        .addStringOption(option => option
+        .addStringOption((option) => option.setName('category').setDescription('Resource category').setRequired(true))
+        .addStringOption((option) => option.setName('url').setDescription('Resource URL').setRequired(true))
+        .addStringOption((option) => option
         .setName('display_title')
         .setDescription('Friendly title for the URL')
         .setRequired(false))
-        .addStringOption(option => option
-        .setName('emoji')
-        .setDescription('Emoji for the the URL title')
-        .setRequired(false))
-        .addStringOption(option => option
-        .setName('authors')
-        .setDescription('Resource authors')
-        .setRequired(false)))
-        .addSubcommand(subcommand => subcommand
-        .setName('find_all')
-        .setDescription('Returns all the resources'))
-        .addSubcommand(subcommand => subcommand
+        .addStringOption((option) => option.setName('emoji').setDescription('Emoji for the the URL title').setRequired(false))
+        .addStringOption((option) => option.setName('authors').setDescription('Resource authors').setRequired(false)))
+        .addSubcommand((subcommand) => subcommand.setName('find_all').setDescription('Returns all the resources'))
+        .addSubcommand((subcommand) => subcommand
         .setName('find_by_category')
         .setDescription('Gets a resource')
-        .addStringOption(option => option.setName('category').setDescription('Resource category').setRequired(true)))
-        .addSubcommand(subcommand => subcommand
+        .addStringOption((option) => option.setName('category').setDescription('Resource category').setRequired(true)))
+        .addSubcommand((subcommand) => subcommand
         .setName('update')
         .setDescription('Update a record in the database')
-        .addIntegerOption(option => option.setName('id').setDescription('Resource ID').setRequired(true))
-        .addStringOption(option => option
-        .setName('category')
-        .setDescription('Resource category')
-        .setRequired(false))
-        .addStringOption(option => option
-        .setName('url')
-        .setDescription('Resource URL')
-        .setRequired(false))
-        .addStringOption(option => option
+        .addIntegerOption((option) => option.setName('id').setDescription('Resource ID').setRequired(true))
+        .addStringOption((option) => option.setName('category').setDescription('Resource category').setRequired(false))
+        .addStringOption((option) => option.setName('url').setDescription('Resource URL').setRequired(false))
+        .addStringOption((option) => option
         .setName('display_title')
         .setDescription('Friendly title for the URL')
         .setRequired(false))
-        .addStringOption(option => option
-        .setName('emoji')
-        .setDescription('Emoji for the the URL title')
-        .setRequired(false))
-        .addStringOption(option => option
-        .setName('authors')
-        .setDescription('Resource authors')
-        .setRequired(false)))
-        .addSubcommand(subcommand => subcommand
+        .addStringOption((option) => option.setName('emoji').setDescription('Emoji for the the URL title').setRequired(false))
+        .addStringOption((option) => option.setName('authors').setDescription('Resource authors').setRequired(false)))
+        .addSubcommand((subcommand) => subcommand
         .setName('delete')
         .setDescription('Delete a resource')
-        .addIntegerOption(option => option.setName('id').setDescription('Resource ID').setRequired(true)))
-        .addSubcommand(subcommand => subcommand
-        .setName('clear')
-        .setDescription('Deletes all the resources'))
-        .addSubcommand(subcommand => subcommand
+        .addIntegerOption((option) => option.setName('id').setDescription('Resource ID').setRequired(true)))
+        .addSubcommand((subcommand) => subcommand.setName('clear').setDescription('Deletes all the resources'))
+        .addSubcommand((subcommand) => subcommand
         .setName('import_data')
         .setDescription('Imports data from a JSON file to the database')
-        .addAttachmentOption(option => option.setName('file')
-        .setDescription('Upload a JSON file')
-        .setRequired(true)))
-        .addSubcommand(subcommand => subcommand
-        .setName('export_data')
-        .setDescription('Exports data from database to a JSON file')),
+        .addAttachmentOption((option) => option.setName('file').setDescription('Upload a JSON file').setRequired(true)))
+        .addSubcommand((subcommand) => subcommand.setName('export_data').setDescription('Exports data from database to a JSON file')),
     async execute(interaction) {
         const client = interaction.client;
         const service = new resourcesService_1.default(client.logger);
@@ -117,27 +81,29 @@ const Botdata = {
                 return;
             }
             const embed = createPaginatedEmbed(data, pageNumber, totalPages);
-            const row = new discord_js_1.ActionRowBuilder()
-                .addComponents(new discord_js_1.ButtonBuilder()
+            const row = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
                 .setCustomId(`prev_0`)
-                .setLabel("Previous")
+                .setLabel('Previous')
                 .setStyle(discord_js_1.ButtonStyle.Primary)
                 .setDisabled(true), new discord_js_1.ButtonBuilder()
                 .setCustomId(`next_2`)
-                .setLabel("Next")
+                .setLabel('Next')
                 .setStyle(discord_js_1.ButtonStyle.Primary)
                 .setDisabled(totalPages === 1));
-            const sentMessage = await interaction.reply({ embeds: [embed], components: [row], fetchReply: true });
+            const sentMessage = await interaction.reply({
+                embeds: [embed],
+                components: [row],
+                fetchReply: true,
+            });
             // show for 5 minutes (300k ms)
-            const collector = sentMessage.createMessageComponentCollector({ time: 300000 });
+            const collector = sentMessage.createMessageComponentCollector({ time: 300_000 });
             collector.on('collect', async (i) => {
                 if (!i.isButton())
                     return;
                 const currentPage = parseInt(i.customId.split('_')[1]);
                 const { data, totalPages } = await getPaginatedData(currentPage, service);
                 const embed = createPaginatedEmbed(data, currentPage, totalPages);
-                const row = new discord_js_1.ActionRowBuilder()
-                    .addComponents(new discord_js_1.ButtonBuilder()
+                const row = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
                     .setCustomId(`prev_${currentPage - 1}`)
                     .setLabel('Previous')
                     .setStyle(discord_js_1.ButtonStyle.Primary)
@@ -149,8 +115,7 @@ const Botdata = {
                 await i.update({ embeds: [embed], components: [row] });
             });
             collector.on('end', async () => {
-                const disabledRow = new discord_js_1.ActionRowBuilder()
-                    .addComponents(new discord_js_1.ButtonBuilder()
+                const disabledRow = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
                     .setCustomId('prev_0')
                     .setLabel('Previous')
                     .setStyle(discord_js_1.ButtonStyle.Primary)
@@ -169,7 +134,9 @@ const Botdata = {
                 await interaction.reply({ content: 'No resource was found.' });
             }
             else {
-                await interaction.reply({ content: (0, discord_js_1.codeBlock)('javascript', JSON.stringify(resource, null, 4)) });
+                await interaction.reply({
+                    content: (0, discord_js_1.codeBlock)('javascript', JSON.stringify(resource, null, 4)),
+                });
             }
         }
         else if (interaction.options.getSubcommand() === 'delete') {
@@ -191,14 +158,17 @@ const Botdata = {
                 url,
                 displayTitle,
                 emoji,
-                authors
+                authors,
             };
             const resourceId = await service.insert(result);
             if (resourceId == -1) {
                 await interaction.reply({ content: 'Failed to insert data', ephemeral: true });
             }
             else {
-                await interaction.reply({ content: `Inserted new resource with id ${resourceId}`, ephemeral: true });
+                await interaction.reply({
+                    content: `Inserted new resource with id ${resourceId}`,
+                    ephemeral: true,
+                });
             }
         }
         else if (interaction.options.getSubcommand() === 'update') {
@@ -241,12 +211,12 @@ const Botdata = {
                 return;
             }
             const response = await fetch(file.url);
-            const jsonResult = await response.json();
+            const jsonResult = (await response.json());
             const insertedValues = await service.importData(jsonResult);
             const replyMessage = insertedValues ? `Data imported` : 'No data provided';
             await interaction.reply({ content: replyMessage, ephemeral: true });
         }
-    }
+    },
 };
 exports.default = Botdata;
 async function getPaginatedData(page, resourceService) {
@@ -260,9 +230,13 @@ function createPaginatedEmbed(data, currentPage, totalPages) {
     return new discord_js_1.EmbedBuilder()
         .setTitle(`All Resources`)
         .setColor(discord_js_1.Colors.Greyple)
-        .setDescription(data.map((record) => {
+        .setDescription(data
+        .map((record) => {
         const result = [
-            '- ', record.id, `. **URL**: ${record.url}`, ` | **Category**: ${record.category}`
+            '- ',
+            record.id,
+            `. **URL**: ${record.url}`,
+            ` | **Category**: ${record.category}`,
         ];
         if (record.displayTitle) {
             result.push(` | **Title**: ${record.displayTitle}`);
@@ -271,6 +245,7 @@ function createPaginatedEmbed(data, currentPage, totalPages) {
             result.push(` | **Authors**: ${record.authors}`);
         }
         return result.join('');
-    }).join('\n'))
+    })
+        .join('\n'))
         .setFooter({ text: `Page ${currentPage} of ${totalPages}` });
 }

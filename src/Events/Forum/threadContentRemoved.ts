@@ -9,7 +9,7 @@ const ThreadUpdate: IEventData = {
     async run(client, oldThread: ThreadChannel, newThread: ThreadChannel) {
         const { discordIDs } = client;
         if (newThread.parentId != discordIDs.Forum.VoiceModel) return;
-        if (!(newThread.name.toLowerCase().includes('deleted'))) return;
+        if (!newThread.name.toLowerCase().includes('deleted')) return;
 
         const logData = {
             more: {
@@ -26,8 +26,7 @@ const ThreadUpdate: IEventData = {
             if (starterMessage) {
                 logData.more.updatedMessage = starterMessage.content;
             }
-        }
-        catch (error) {
+        } catch (error) {
             logData.more.updatedMessage = 'Original message was deleted';
         }
 

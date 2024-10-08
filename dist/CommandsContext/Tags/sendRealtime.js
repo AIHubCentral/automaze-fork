@@ -35,6 +35,6 @@ const SendRealtimeGuides = {
             guides.push(embedData.faq);
         }
         interaction.reply({ content: `Suggestions for ${targetUser}`, embeds: createEmbeds(guides) });
-    }
+    },
 };
 exports.default = SendRealtimeGuides;

@@ -6,14 +6,14 @@ const interactionCreateEvent: IEventData = {
     name: 'interactionCreate',
     once: false,
     async run(client: ExtendedClient, interaction: CommandInteraction) {
-
         // don't allow commands in these channels
-        const disallowedChannelIds = [
-            client.discordIDs.Channel.Weights,
-        ];
+        const disallowedChannelIds = [client.discordIDs.Channel.Weights];
 
         if (disallowedChannelIds.includes(interaction.channelId)) {
-            await interaction.reply({ content: `This command is not available here. Visit ${channelMention(client.discordIDs.Channel.BotSpam)} if you wish to use this command.`, ephemeral: true });
+            await interaction.reply({
+                content: `This command is not available here. Visit ${channelMention(client.discordIDs.Channel.BotSpam)} if you wish to use this command.`,
+                ephemeral: true,
+            });
             return;
         }
 
@@ -31,7 +31,7 @@ const interactionCreateEvent: IEventData = {
                     commandName: command.data.name,
                     guildId: interaction.guildId,
                     type: command.type,
-                }
+                },
             });
 
             // handle cooldowns if command exists
@@ -53,7 +53,10 @@ const interactionCreateEvent: IEventData = {
 
                 if (now < expirationTime) {
                     const expiredTimestamp = Math.round(expirationTime / 1000);
-                    return interaction.reply({ content: `Please wait, you are on a cooldown for \`/${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>`, ephemeral: true });
+                    return interaction.reply({
+                        content: `Please wait, you are on a cooldown for \`/${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>`,
+                        ephemeral: true,
+                    });
                 }
             }
 
@@ -62,34 +65,37 @@ const interactionCreateEvent: IEventData = {
 
             try {
                 await command.execute(interaction);
-            }
-            catch (error: any) {
+            } catch (error: any) {
                 client.logger.error(`Failed to execute command ${command.data.name}`, error);
 
                 if (interaction.replied || interaction.deferred) {
-                    await interaction.followUp({ content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``, ephemeral: true });
-                }
-                else {
-                    await interaction.reply({ content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``, ephemeral: true });
+                    await interaction.followUp({
+                        content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``,
+                        ephemeral: true,
+                    });
+                } else {
+                    await interaction.reply({
+                        content: `There was an error while executing this command!\n\`\`\`\n${error.toString()}\n\`\`\``,
+                        ephemeral: true,
+                    });
                 }
             }
-        }
-        else if (interaction.isAutocomplete()) {
+        } else if (interaction.isAutocomplete()) {
             const command = client.slashCommands.get((interaction as AutocompleteInteraction).commandName);
 
             if (!command) {
-                client.logger.error(`No command matching ${(interaction as AutocompleteInteraction).commandName} was found.`);
+                client.logger.error(
+                    `No command matching ${(interaction as AutocompleteInteraction).commandName} was found.`
+                );
                 return;
             }
 
             try {
                 await command.autocomplete(client, interaction);
-            }
-            catch (error) {
+            } catch (error) {
                 client.logger.error(error);
             }
-        }
-        else if (interaction.isUserContextMenuCommand()) {
+        } else if (interaction.isUserContextMenuCommand()) {
             const command = client.contextMenuCommands.get(interaction.commandName);
 
             if (!command) {
@@ -103,17 +109,16 @@ const interactionCreateEvent: IEventData = {
                     commandName: command.data.name,
                     guildId: interaction.guildId,
                     type: command.type,
-                }
+                },
             });
 
             try {
                 await command.execute(interaction);
-            }
-            catch (error) {
+            } catch (error) {
                 client.logger.error(error);
             }
         }
     },
-}
+};
 
 export default interactionCreateEvent;

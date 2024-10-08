@@ -16,7 +16,7 @@ const Kaggle = {
             await message.reply({ content: 'Failed to retrieve data...Try again later.' });
             return;
         }
-        const resources = await (0, botUtilities_1.getResourceData)("kaggle", botCache, logger);
+        const resources = await (0, botUtilities_1.getResourceData)('kaggle', botCache, logger);
         const embedData = {
             title: content[0].title,
             color: content[0].color,

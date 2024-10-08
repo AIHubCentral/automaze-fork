@@ -102,7 +102,7 @@ const KeyWordCheck = {
                         switch (item.kind) {
                             case 'sticker':
                                 botResponse.stickers = [item.stickerId];
-                                await (0, generalUtilities_2.delay)(3000);
+                                await (0, generalUtilities_2.delay)(3_000);
                                 try {
                                     client.logger.debug(`Attempting to add sticker ${item.stickerId}`, messageInfo);
                                     await message.reply(botResponse);
@@ -128,7 +128,9 @@ const KeyWordCheck = {
                                     const typingDuration = 350;
                                     await (0, generalUtilities_2.delay)(botResponse.content.length * typingDuration);
                                     await message.channel.sendTyping();
-                                    client.logger.info(`Sendind text: ${botResponse.content}`, { more: messageInfo });
+                                    client.logger.info(`Sendind text: ${botResponse.content}`, {
+                                        more: messageInfo,
+                                    });
                                     await message.reply(botResponse);
                                 }
                                 catch (error) {

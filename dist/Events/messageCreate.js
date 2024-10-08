@@ -12,7 +12,8 @@ function handlePrefixCommand(prefix, message, client) {
         args: commandArguments,
     });
     // Use the command alias if there's any, if there's none use the real command name instead
-    const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+    const command = client.commands.get(commandName) ||
+        client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
     if (!command)
         return;
     client.logger.info('Executing prefix command', {
@@ -21,7 +22,7 @@ function handlePrefixCommand(prefix, message, client) {
             guildId: message.guild?.id,
             channelId: message.channel.id,
             type: 'prefix',
-        }
+        },
     });
     command.run(client, message, commandArguments, prefix);
 }
@@ -30,12 +31,12 @@ async function handleBotMentioned(prefix, message, client) {
     if (!message.content.includes(mention))
         return;
     const embedData = {
-        title: 'Wassup I\'m Automaze!',
+        title: "Wassup I'm Automaze!",
         color: client.botConfigs.colors.theme.primary,
         description: [],
     };
     embedData.description?.push(`\n- My prefix in this server is \`${prefix}\``);
-    embedData.description?.push('- Interested in how I\'m built? [I\'m actually open source!](https://github.com/DeprecatedTable/automaze)');
+    embedData.description?.push("- Interested in how I'm built? [I'm actually open source!](https://github.com/DeprecatedTable/automaze)");
     embedData.description?.push('- Forgot a specific command? Try `/help` or `-help`');
     const embed = (0, discordUtilities_1.createEmbed)(embedData);
     await message.reply({ embeds: [embed] });

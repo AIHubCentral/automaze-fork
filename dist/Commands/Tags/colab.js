@@ -9,12 +9,12 @@ const Colab = {
     syntax: 'colab [member]',
     async run(client, message) {
         const { botCache, botData, logger } = client;
-        const resources = await (0, botUtilities_1.getResourceData)("colab", botCache, logger);
+        const resources = await (0, botUtilities_1.getResourceData)('colab', botCache, logger);
         let content = [];
         if (resources.length > 0) {
             content.push({
-                title: "☁️ Google Colabs",
-                color: "f9ab00",
+                title: '☁️ Google Colabs',
+                color: 'f9ab00',
                 description: [(0, botUtilities_1.resourcesToUnorderedList)(resources)],
             });
         }

@@ -1,11 +1,11 @@
-import fs from "fs/promises";
-import { RESOURCES_DATABASE_PATH, resourcesDatabase } from "../Database/dbManager";
-import winston from "winston";
+import fs from 'fs/promises';
+import { RESOURCES_DATABASE_PATH, resourcesDatabase } from '../Database/dbManager';
+import winston from 'winston';
 
 export interface ICollaborator {
-    discordId: string,
-    username: string,
-    displayName?: string,
+    discordId: string;
+    username: string;
+    displayName?: string;
 }
 
 export default class CollaboratorService {
@@ -20,8 +20,7 @@ export default class CollaboratorService {
             const [discord_id] = await resourcesDatabase('collaborators').insert(resource);
             this.logger.info(`Collaborator ${discord_id} added`);
             return discord_id;
-        }
-        catch (error) {
+        } catch (error) {
             this.logger.error('Error adding collaborator: ', error);
             return -1;
         }
@@ -37,8 +36,7 @@ export default class CollaboratorService {
             const resource = await resourcesDatabase('collaborators').where({ discordId: id }).first();
             this.logger.info('Collaborator fetched:', resource);
             return resource;
-        }
-        catch (error) {
+        } catch (error) {
             this.logger.error(`Error fetching collaborator with id ${id}`, error);
         }
     }
@@ -65,8 +63,7 @@ export default class CollaboratorService {
             await resourcesDatabase('collaborators').where({ discordId: id }).del();
             this.logger.info(`Deleted collaborator with id ${id}`);
             return true;
-        }
-        catch (error) {
+        } catch (error) {
             this.logger.error(`Failed to delete collaborator with id ${id}`, error);
             return false;
         }

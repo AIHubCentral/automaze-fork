@@ -1,4 +1,4 @@
-import ExtendedClient from "../Core/extendedClient";
+import ExtendedClient from '../Core/extendedClient';
 
 export default interface IEventData {
     name: string;

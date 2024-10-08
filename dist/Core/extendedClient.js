@@ -1,4 +1,6 @@
 "use strict";
+/* eslint-disable */
+// @ts-nocheck
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -28,6 +30,24 @@ const dbManager_1 = require("../Database/dbManager");
 const utils_1 = require("../utils");
 const botUtilities_1 = require("../Utils/botUtilities");
 class ExtendedClient extends Discord.Client {
+    commands;
+    slashCommands;
+    contextMenuCommands;
+    use;
+    doxx;
+    forumSpammer;
+    botData;
+    discordIDs;
+    cooldowns;
+    prefix;
+    logger;
+    botAdminIds;
+    botConfigs;
+    botUtils;
+    botResponses;
+    botCache;
+    scheduler;
+    knexInstance;
     constructor(options, extendedOptions) {
         super(options);
         this.commands = new Discord.Collection();

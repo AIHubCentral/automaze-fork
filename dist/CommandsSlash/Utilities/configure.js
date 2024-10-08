@@ -13,103 +13,82 @@ const Configure = {
     data: new discord_js_1.SlashCommandBuilder()
         .setName('configure')
         .setDescription('Configure bot settings')
-        .addSubcommand(subcommand => subcommand
+        .addSubcommand((subcommand) => subcommand
         .setName('comission')
         .setDescription('Configure bot behavior in paid model requests')
-        .addBooleanOption(option => option
+        .addBooleanOption((option) => option
         .setName('bot_responses')
         .setDescription('Whether the bot should send messages')
         .setRequired(true))
-        .addBooleanOption(option => option
+        .addBooleanOption((option) => option
         .setName('delete_messages')
         .setDescription('Whether the bot should delete messages from users that doesnt have appropriate roles')
         .setRequired(true)))
-        .addSubcommand(subcommand => subcommand
-        .setName('theme')
-        .setDescription('Configure color theme'))
-        .addSubcommand(subcommand => subcommand
+        .addSubcommand((subcommand) => subcommand.setName('theme').setDescription('Configure color theme'))
+        .addSubcommand((subcommand) => subcommand
         .setName('status')
         .setDescription('Configure bot status')
-        .addStringOption(option => option
+        .addStringOption((option) => option
         .setName('statuses')
         .setDescription('Choose a status')
         .setRequired(true)
         .addChoices({ name: 'Online', value: 'online' }, { name: 'Idle', value: 'idle' }, { name: 'Do Not Disturb', value: 'dnd' }, { name: 'Invisible', value: 'invisible' })))
-        .addSubcommand(subcommand => subcommand
+        .addSubcommand((subcommand) => subcommand
         .setName('activity')
         .setDescription('Configure bot activity')
-        .addStringOption(option => option
+        .addStringOption((option) => option
         .setName('activity_type')
         .setDescription('Choose an activity')
         .setRequired(true)
         .addChoices({ name: 'Watching', value: 'watching' }, { name: 'Listening', value: 'listening' }, { name: 'Reset', value: 'reset' }))
-        .addStringOption(option => option
-        .setName('activity_name')
-        .setDescription('Choose a name for the activity')))
-        .addSubcommand(subcommand => subcommand
+        .addStringOption((option) => option.setName('activity_name').setDescription('Choose a name for the activity')))
+        .addSubcommand((subcommand) => subcommand
         .setName('general')
         .setDescription('General bot configs')
-        .addBooleanOption(option => option
-        .setName('bot_reactions')
-        .setDescription('Whether the bot should add reactions'))
-        .addBooleanOption(option => option
+        .addBooleanOption((option) => option.setName('bot_reactions').setDescription('Whether the bot should add reactions'))
+        .addBooleanOption((option) => option
         .setName('send_logs')
         .setDescription('Whether the bot should send logs to development server')))
-        .addSubcommand(subcommand => subcommand
+        .addSubcommand((subcommand) => subcommand
         .setName('cooldown_immune')
         .setDescription('Makes a user immune to cooldowns')
-        .addStringOption(option => option
-        .setName('user_id')
-        .setDescription('The target user')
-        .setRequired(true))
-        .addBooleanOption(option => option
+        .addStringOption((option) => option.setName('user_id').setDescription('The target user').setRequired(true))
+        .addBooleanOption((option) => option
         .setName('immune')
         .setDescription('Whether this user is immune to cooldowns')
         .setRequired(true)))
-        .addSubcommand(subcommand => subcommand
+        .addSubcommand((subcommand) => subcommand
         .setName('automated_messages')
         .setDescription('Send automate messages')
-        .addBooleanOption(option => option
+        .addBooleanOption((option) => option
         .setName('send_messages')
         .setDescription('If the bot should send automated messages')
         .setRequired(true)))
-        .addSubcommand(subcommand => subcommand
+        .addSubcommand((subcommand) => subcommand
         .setName('debug_guild')
         .setDescription('Guild to send debug logs')
-        .addStringOption(option => option
-        .setName('guild_id')
-        .setDescription('The guild ID'))
-        .addStringOption(option => option
-        .setName('channel_id')
-        .setDescription('Channel to send the logs')))
-        .addSubcommand(subcommand => subcommand
+        .addStringOption((option) => option.setName('guild_id').setDescription('The guild ID'))
+        .addStringOption((option) => option.setName('channel_id').setDescription('Channel to send the logs')))
+        .addSubcommand((subcommand) => subcommand
         .setName('logs')
         .setDescription('Configure logs')
-        .addStringOption(option => option
+        .addStringOption((option) => option
         .setName('category')
         .setDescription('Which log to configure')
         .setRequired(true)
         .addChoices({ name: 'Emojis', value: 'emojis' }, { name: 'Stickers', value: 'stickers' }, { name: 'Models', value: 'models' }, { name: 'ModelRequests', value: 'modelRequests' }))
-        .addBooleanOption(option => option
-        .setName('enabled')
-        .setDescription('Enable or disable this log')))
-        .addSubcommand(subcommand => subcommand
+        .addBooleanOption((option) => option.setName('enabled').setDescription('Enable or disable this log')))
+        .addSubcommand((subcommand) => subcommand
         .setName('collaborators')
         .setDescription('Configure who can edit bot links')
-        .addStringOption(option => option
+        .addStringOption((option) => option
         .setName('task')
         .setDescription('Add or remove a collaborator')
         .setRequired(true)
         .addChoices({ name: 'Add', value: 'add' }, { name: 'Remove', value: 'remove' }, { name: 'List', value: 'showAll' }))
-        .addStringOption(option => option
-        .setName('discord_id')
-        .setDescription('Discord ID of the user')
-        .setRequired(true))
-        .addStringOption(option => option
-        .setName('discord_username')
-        .setDescription('Discord username')
-        .setRequired(true))
-        .addStringOption(option => option
+        .addStringOption((option) => option.setName('discord_id').setDescription('Discord ID of the user').setRequired(true))
+        .addStringOption((option) => option.setName('discord_username').setDescription('Discord username').setRequired(true))
+        .addStringOption((option) => option
         .setName('discord_displayname')
         .setDescription('Discord display name')
         .setRequired(false))),
@@ -157,7 +136,7 @@ async function configureCommision(interaction, configs) {
     configs.commissions.deleteMessages = deleteMessages;
     const responseLines = [
         (0, discord_js_1.heading)('Bot Configured', discord_js_1.HeadingLevel.Three),
-        (0, discord_js_1.codeBlock)('js', JSON.stringify({ sendMessages, deleteMessages }, null, 4))
+        (0, discord_js_1.codeBlock)('js', JSON.stringify({ sendMessages, deleteMessages }, null, 4)),
     ];
     await interaction.reply({ content: responseLines.join('\n'), ephemeral: true });
 }
@@ -189,7 +168,7 @@ async function configureTheme(interaction, configs) {
     const collector = botReply.createMessageComponentCollector({
         componentType: discord_js_1.ComponentType.StringSelect,
         filter: (i) => i.user.id === interaction.user.id && i.customId === interaction.id,
-        time: 60000,
+        time: 60_000,
     });
     collector.on('collect', (i) => {
         const themeName = i.values[0];
@@ -247,10 +226,10 @@ async function configureGeneral(interaction) {
     }
     const responseListing = (0, discord_js_1.unorderedList)([
         `Reactions: ${(0, discord_js_1.inlineCode)(String(client.botConfigs.general.reactions))}`,
-        `Send logs: ${(0, discord_js_1.inlineCode)(String(client.botConfigs.general.sendLogs))}`
+        `Send logs: ${(0, discord_js_1.inlineCode)(String(client.botConfigs.general.sendLogs))}`,
     ]);
     const embed = new discord_js_1.EmbedBuilder()
-        .setTitle("General configs")
+        .setTitle('General configs')
         .setDescription(responseListing)
         .setColor(discord_js_1.Colors.Aqua)
         .setTimestamp();
@@ -272,7 +251,7 @@ async function configureCooldownImmunity(interaction) {
         client.botData.cooldownImmuneUsers.delete(userId);
     }
     const embed = new discord_js_1.EmbedBuilder()
-        .setTitle("Cooldown Immunity")
+        .setTitle('Cooldown Immunity')
         .setDescription((0, discord_js_1.unorderedList)([
         `User: ${(0, discord_js_1.userMention)(userId)}`,
         `Immunity: ${(0, discord_js_1.inlineCode)(String(cooldownImmunity))}`,
@@ -309,8 +288,8 @@ async function configureDebugGuild(interaction) {
         .setTitle('Debug Guild')
         .setColor(discord_js_1.Colors.DarkBlue)
         .setDescription((0, discord_js_1.unorderedList)([
-        `${(0, discord_js_1.bold)("Guild ID")}: ${(0, discord_js_1.inlineCode)(client.botConfigs.debugGuild.id)}`,
-        `${(0, discord_js_1.bold)("Channel ID")}: ${(0, discord_js_1.inlineCode)(client.botConfigs.debugGuild.channelId)}`
+        `${(0, discord_js_1.bold)('Guild ID')}: ${(0, discord_js_1.inlineCode)(client.botConfigs.debugGuild.id)}`,
+        `${(0, discord_js_1.bold)('Channel ID')}: ${(0, discord_js_1.inlineCode)(client.botConfigs.debugGuild.channelId)}`,
     ]));
     await interaction.reply({ embeds: [embed] });
 }
@@ -340,13 +319,11 @@ async function configureCollaborators(interaction, service) {
     const username = interaction.options.getString('discord_username', true);
     const displayName = interaction.options.getString('discord_displayname') ?? '';
     const embedColor = taskName === 'remove' ? discord_js_1.Colors.DarkOrange : discord_js_1.Colors.DarkGreen;
-    const embed = new discord_js_1.EmbedBuilder()
-        .setTitle("Collaborators")
-        .setColor(embedColor);
+    const embed = new discord_js_1.EmbedBuilder().setTitle('Collaborators').setColor(embedColor);
     const collaborator = {
         discordId: userDiscordId,
         username,
-        displayName
+        displayName,
     };
     if (taskName === 'add') {
         const id = await service.insert(collaborator);
@@ -371,11 +348,11 @@ async function configureCollaborators(interaction, service) {
     else {
         const collaborators = await service.findAll();
         if (collaborators.length === 0) {
-            embed.setDescription("> No collaborator found");
+            embed.setDescription('> No collaborator found');
         }
         else {
             const embedDescriptionLines = [];
-            collaborators.forEach(collaborator => {
+            collaborators.forEach((collaborator) => {
                 embedDescriptionLines.push(`- ${collaborator.discordId}: ${collaborator.username} (${collaborator.displayName || 'No display name'})`);
             });
             embed.setDescription(embedDescriptionLines.join('\n'));

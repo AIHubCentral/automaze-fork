@@ -11,9 +11,8 @@ export function getAllFiles(directory: string): string[] {
     for (const directoryItem of fs.readdirSync(directory)) {
         const filePath = path.join(directory, directoryItem);
         if (fs.lstatSync(filePath).isDirectory()) {
-            getAllFiles(filePath).forEach(file => currentFiles.add(file));
-        }
-        else {
+            getAllFiles(filePath).forEach((file) => currentFiles.add(file));
+        } else {
             currentFiles.add(filePath);
         }
     }

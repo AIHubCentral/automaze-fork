@@ -1,5 +1,5 @@
-import { TextChannel } from "discord.js";
-import IEventData from "../Interfaces/Events";
+import { TextChannel } from 'discord.js';
+import IEventData from '../Interfaces/Events';
 
 interface GuildInfo {
     guildId: string;
@@ -36,14 +36,14 @@ const readyEvent: IEventData = {
             let botDebugChannel = devServerGuild.channels.cache.get(botConfigs.debugChannelId);
 
             if (!botDebugChannel) {
-                botDebugChannel = await devServerGuild.channels.fetch(botConfigs.debugChannelId) ?? undefined;
+                botDebugChannel =
+                    (await devServerGuild.channels.fetch(botConfigs.debugChannelId)) ?? undefined;
             }
 
             if (botDebugChannel) {
                 botDebugChannel = <TextChannel>botDebugChannel;
                 await botDebugChannel.send('🟢 Bot is online!');
-            }
-            else {
+            } else {
                 client.logger.error(`Failed to fetch ${botConfigs.debugChannelId}`);
             }
         }

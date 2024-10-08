@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const Chance = require(`chance`);
-const chance = new Chance;
+const chance = new Chance();
 const wait = require('node:timers/promises').setTimeout;
 const utils = require('../../utils.js');
 const EightBall = {
@@ -10,9 +10,7 @@ const EightBall = {
     data: new discord_js_1.SlashCommandBuilder()
         .setName('8ball')
         .setDescription('Answer questions of your life')
-        .addStringOption((option) => option.setName('question')
-        .setDescription('Ask questions about your life')
-        .setRequired(true)),
+        .addStringOption((option) => option.setName('question').setDescription('Ask questions about your life').setRequired(true)),
     async execute(interaction) {
         const client = interaction.client;
         const question = interaction.options.getString('question');
@@ -27,10 +25,16 @@ const EightBall = {
             const percent = chance.natural({ min: 1, max: 100 });
             let response;
             if (percent <= 50) {
-                response = [affirmativeResponses[Math.floor(Math.random() * affirmativeResponses.length)], `Green`];
+                response = [
+                    affirmativeResponses[Math.floor(Math.random() * affirmativeResponses.length)],
+                    `Green`,
+                ];
             }
             else if (percent > 50 && percent <= 75) {
-                response = [noncommittalResponses[Math.floor(Math.random() * noncommittalResponses.length)], `Yellow`];
+                response = [
+                    noncommittalResponses[Math.floor(Math.random() * noncommittalResponses.length)],
+                    `Yellow`,
+                ];
             }
             else {
                 response = [negativeResponses[Math.floor(Math.random() * negativeResponses.length)], `Red`];
@@ -52,6 +56,6 @@ const EightBall = {
                 .setDescription(`## ${response[0]}\n# ${percentToBar(100 - percent)} - ${100 - percent}% possible`);
             interaction.editReply({ embeds: [answerEmbed] });
         }
-    }
+    },
 };
 exports.default = EightBall;

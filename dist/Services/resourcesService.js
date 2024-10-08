@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const promises_1 = __importDefault(require("fs/promises"));
 const dbManager_1 = require("../Database/dbManager");
 class ResourceService {
+    logger;
     constructor(logger) {
         this.logger = logger;
     }

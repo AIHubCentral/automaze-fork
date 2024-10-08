@@ -2,27 +2,27 @@ import { Events, ThreadChannel } from 'discord.js';
 import IEventData from '../../Interfaces/Events';
 
 const ModelCreation: IEventData = {
-	name: Events.ThreadCreate,
-	once: false,
-	async run(client, thread: ThreadChannel) {
-		const { botConfigs, discordIDs } = client;
+    name: Events.ThreadCreate,
+    once: false,
+    async run(client, thread: ThreadChannel) {
+        const { botConfigs, discordIDs } = client;
 
-		if (botConfigs.logs.models && (thread.parentId == discordIDs.Forum.VoiceModel)) {
-			const logData = {
-				more: {
-					threadName: thread.name,
-					ownerId: thread.ownerId,
-					createdAt: '',
-					appliedTags: thread.appliedTags,
-					link: `https://discordapp.com/channels/${thread.guild.id}/${thread.parentId}/${thread.id}`,
-				},
-			};
-			if (thread.createdTimestamp) {
-				logData.more.createdAt = new Date(thread.createdTimestamp).toISOString();
-			}
-			client.logger.info('New model added', logData);
-		}
-	},
+        if (botConfigs.logs.models && thread.parentId == discordIDs.Forum.VoiceModel) {
+            const logData = {
+                more: {
+                    threadName: thread.name,
+                    ownerId: thread.ownerId,
+                    createdAt: '',
+                    appliedTags: thread.appliedTags,
+                    link: `https://discordapp.com/channels/${thread.guild.id}/${thread.parentId}/${thread.id}`,
+                },
+            };
+            if (thread.createdTimestamp) {
+                logData.more.createdAt = new Date(thread.createdTimestamp).toISOString();
+            }
+            client.logger.info('New model added', logData);
+        }
+    },
 };
 
 export default ModelCreation;

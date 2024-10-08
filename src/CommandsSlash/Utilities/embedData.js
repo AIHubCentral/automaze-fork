@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const fs = require('node:fs');
 
 module.exports = {
@@ -7,21 +7,19 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('embed_data')
         .setDescription('Manages embed data for tag commands')
-        .addSubcommand(subcommand =>
+        .addSubcommand((subcommand) =>
             subcommand
                 .setName('upload')
                 .setDescription('Uploads the JSON data')
-                .addAttachmentOption(option => 
+                .addAttachmentOption((option) =>
                     option
                         .setName('file')
                         .setDescription('The JSON file containing the embed data')
                         .setRequired(true)
                 )
         )
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('download')
-                .setDescription('Downloads the embed data as a JSON file')
+        .addSubcommand((subcommand) =>
+            subcommand.setName('download').setDescription('Downloads the embed data as a JSON file')
         ),
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
@@ -38,25 +36,21 @@ module.exports = {
                     if (response.ok) {
                         const data = await response.json();
                         client.botData.embeds = data;
-                        await interaction.editReply({ content: 'Embed data updated!'});
+                        await interaction.editReply({ content: 'Embed data updated!' });
+                    } else {
+                        await interaction.editReply({ content: 'Failed to fetch JSON' });
                     }
-                    else {
-                        await interaction.editReply({ content: 'Failed to fetch JSON'});
-                    }
+                } catch (error) {
+                    await interaction.editReply({ content: `Invalid JSON:\n> ${error.message}` });
                 }
-                catch (error) {
-                    await interaction.editReply({ content: `Invalid JSON:\n> ${error.message}`});
-                }
-            }
-            else {
+            } else {
                 await interaction.editReply({ content: 'Not a JSON file' });
             }
-
         } else if (interaction.options.getSubcommand() === 'download') {
             const data = JSON.stringify(client.botData.embeds);
             const buffer = Buffer.from(data, 'utf-8');
             const attachment = new AttachmentBuilder(buffer, { name: 'embeds.json' });
             await interaction.editReply({ files: [attachment] });
         }
-    }
+    },
 };

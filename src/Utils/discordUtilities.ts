@@ -1,7 +1,7 @@
-import { APIEmbed, ColorResolvable, Colors, EmbedBuilder, Guild, GuildBasedChannel } from "discord.js";
-import IBotConfigs from "../Interfaces/BotConfigs";
-import ExtendedClient from "../Core/extendedClient";
-import { EmbedData } from "../Interfaces/BotData";
+import { APIEmbed, ColorResolvable, Colors, EmbedBuilder, Guild, GuildBasedChannel } from 'discord.js';
+import IBotConfigs from '../Interfaces/BotConfigs';
+import ExtendedClient from '../Core/extendedClient';
+import { EmbedData } from '../Interfaces/BotData';
 
 export function createEmbed(data: EmbedData, color?: ColorResolvable): EmbedBuilder {
     /**
@@ -50,7 +50,7 @@ export function createEmbed(data: EmbedData, color?: ColorResolvable): EmbedBuil
 export function createEmbeds(contents: EmbedData[], colors: ColorResolvable[]): EmbedBuilder[] {
     /* create embeds from an array of objects and assign colors */
     let colorIndex = 0;
-    const embeds = contents.map(item => {
+    const embeds = contents.map((item) => {
         if (colorIndex >= colors.length) {
             // goes back to the start of the array after reaching the end
             colorIndex = 0;

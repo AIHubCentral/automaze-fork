@@ -7,17 +7,13 @@ const Debug = {
     data: new discord_js_1.SlashCommandBuilder()
         .setName('debug')
         .setDescription('Bot debug')
-        .addStringOption(option => option
+        .addStringOption((option) => option
         .setName('options')
         .setDescription('Choose an option')
         .setRequired(true)
         .addChoices({ name: 'emojis', value: 'emojis' }, { name: 'stickers', value: 'stickers' }, { name: 'channelInfo', value: 'channel_info' }, { name: 'voiceModels', value: 'voice_models' }))
-        .addStringOption(option => option
-        .setName('channel_id')
-        .setDescription('Channel ID'))
-        .addStringOption(option => option
-        .setName('guild_id')
-        .setDescription('Guild ID')),
+        .addStringOption((option) => option.setName('channel_id').setDescription('Channel ID'))
+        .addStringOption((option) => option.setName('guild_id').setDescription('Guild ID')),
     async execute(interaction) {
         const client = interaction.client;
         const userId = interaction.user.id;
