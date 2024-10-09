@@ -5,13 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CloudPlatform = exports.TagResponseSender = void 0;
+exports.TagResponseSender = exports.CloudPlatform = void 0;
+exports.resourcesToUnorderedList = resourcesToUnorderedList;
+exports.processResource = processResource;
+exports.resourcesToUnorderedListAlt = resourcesToUnorderedListAlt;
+exports.processResourceAlt = processResourceAlt;
+exports.getResourceData = getResourceData;
 exports.getThemeColors = getThemeColors;
 exports.getThemes = getThemes;
 exports.banan = banan;
-exports.resourcesToUnorderedList = resourcesToUnorderedList;
-exports.resourcesToUnorderedListAlt = resourcesToUnorderedListAlt;
-exports.getResourceData = getResourceData;
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
 const userService_1 = __importDefault(require("../Services/userService"));
@@ -19,6 +21,118 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const fileUtilities_1 = require("./fileUtilities");
 const resourcesService_1 = __importDefault(require("../Services/resourcesService"));
+/* Enums */
+var CloudPlatform;
+(function (CloudPlatform) {
+    CloudPlatform["Colab"] = "colab";
+    CloudPlatform["Huggingface"] = "hf";
+    CloudPlatform["Kaggle"] = "kaggle";
+    CloudPlatform["Lightning"] = "lightning_ai";
+})(CloudPlatform || (exports.CloudPlatform = CloudPlatform = {}));
+/* functions */
+/**
+ * Converts an array of resources into an unordered list in Markdown format.
+ *
+ * @param {IResource[]} resources - An array of resource objects to be processed.
+ * @returns {string} - A string representing the unordered list in Markdown format.
+ */
+function resourcesToUnorderedList(resources) {
+    const processedResources = [];
+    resources.forEach((resource) => {
+        const currentLine = processResource(resource);
+        processedResources.push(currentLine);
+    });
+    return (0, discord_js_1.unorderedList)(processedResources);
+}
+/**
+ * Processes a single resource into a formatted string for an unordered list.
+ *
+ * @param {IResource} resource - The resource object to be processed.
+ * @returns {string} - A formatted string representing the resource.
+ */
+function processResource(resource) {
+    const currentLine = [];
+    if (resource.emoji && resource.emoji.toLowerCase() != 'none') {
+        currentLine.push(`${resource.emoji} `);
+    }
+    if (resource.displayTitle) {
+        currentLine.push((0, discord_js_1.bold)(resource.displayTitle));
+        currentLine.push(', ');
+    }
+    if (resource.authors) {
+        currentLine.push(`by ${resource.authors} `);
+    }
+    if (resource.displayTitle) {
+        let category = resource.category;
+        if (category === CloudPlatform.Colab) {
+            category = 'Google Colab';
+        }
+        else if (category === CloudPlatform.Huggingface) {
+            category = 'Huggingface Spaces';
+        }
+        else if (category === CloudPlatform.Kaggle) {
+            category = 'Kaggle';
+        }
+        else if (category === CloudPlatform.Lightning) {
+            category = 'Lightning AI';
+        }
+        else {
+            category = 'Link';
+        }
+        currentLine.push((0, discord_js_1.hyperlink)(category, resource.url));
+    }
+    else {
+        currentLine.push(resource.url);
+    }
+    return currentLine.join('');
+}
+/**
+ * Alternative version of `resourcesToUnorderedList()`
+ */
+function resourcesToUnorderedListAlt(resources) {
+    const processedResources = [];
+    resources.forEach((resource) => {
+        const currentLine = processResourceAlt(resource);
+        processedResources.push(currentLine);
+    });
+    return (0, discord_js_1.unorderedList)(processedResources);
+}
+/**
+ * Processes a single resource into a formatted string for an unordered list.
+ * Alternative version of processResource()
+ *
+ * @param {IResource} resource - The resource object to be processed.
+ * @returns {string} - A formatted string representing the resource.
+ */
+function processResourceAlt(resource) {
+    const currentLine = [];
+    if (resource.emoji && resource.emoji.toLowerCase() != 'none') {
+        currentLine.push(`${resource.emoji} `);
+    }
+    if (resource.displayTitle) {
+        currentLine.push((0, discord_js_1.hyperlink)(resource.displayTitle, resource.url));
+    }
+    else {
+        currentLine.push(resource.url);
+    }
+    if (resource.authors) {
+        currentLine.push(`, by ${(0, discord_js_1.bold)(resource.authors)}`);
+    }
+    return currentLine.join('');
+}
+async function getResourceData(queryKey, cache, logger) {
+    //const now = Date.now();
+    // try to get from cache first
+    if (cache.has(queryKey)) {
+        const cachedData = cache.get(queryKey) || [];
+        return cachedData;
+    }
+    logger.debug(`Requesting ${queryKey} data from DB`);
+    const resourceService = new resourcesService_1.default(logger);
+    const resources = await resourceService.findByCategory(queryKey);
+    cache.set(queryKey, resources);
+    return resources;
+}
 function getThemeColors(botConfigs) {
     const colors = [
         botConfigs.colors.theme.primary,
@@ -39,6 +153,7 @@ function getThemes() {
     });
     return themes;
 }
+/* Classes */
 class TagResponseSender {
     /* utility class for sending tags responses like -rvc */
     //channel: null | TextBasedChannel;
@@ -292,87 +407,4 @@ async function banan(interaction, targetUser, guildMember) {
         channel = channel;
         await channel.send({ embeds: [debugEmbed] });
     }
-}
-var CloudPlatform;
-(function (CloudPlatform) {
-    CloudPlatform["Colab"] = "colab";
-    CloudPlatform["Huggingface"] = "hf";
-    CloudPlatform["Kaggle"] = "kaggle";
-    CloudPlatform["Lightning"] = "lightning_ai";
-})(CloudPlatform || (exports.CloudPlatform = CloudPlatform = {}));
-function resourcesToUnorderedList(resources) {
-    const processedResources = [];
-    resources.forEach((resource) => {
-        const currentLine = [];
-        if (resource.emoji) {
-            currentLine.push(`${resource.emoji} `);
-        }
-        if (resource.displayTitle) {
-            currentLine.push((0, discord_js_1.bold)(resource.displayTitle));
-            currentLine.push(', ');
-        }
-        if (resource.authors) {
-            currentLine.push(`by ${resource.authors} `);
-        }
-        if (resource.displayTitle) {
-            let category = resource.category;
-            if (category === CloudPlatform.Colab) {
-                category = 'Google Colab';
-            }
-            else if (category === CloudPlatform.Huggingface) {
-                category = 'Huggingface Spaces';
-            }
-            else if (category === CloudPlatform.Kaggle) {
-                category = 'Kaggle';
-            }
-            else if (category === CloudPlatform.Lightning) {
-                category = 'Lightning AI';
-            }
-            else {
-                category = 'Link';
-            }
-            currentLine.push((0, discord_js_1.hyperlink)(category, resource.url));
-        }
-        else {
-            currentLine.push(resource.url);
-        }
-        processedResources.push(currentLine.join(''));
-    });
-    return (0, discord_js_1.unorderedList)(processedResources);
-}
-/**
- * Alternative version of `resourcesToUnorderedList()`
- */
-function resourcesToUnorderedListAlt(resources) {
-    const processedResources = [];
-    resources.forEach((resource) => {
-        const currentLine = [];
-        if (resource.emoji) {
-            currentLine.push(`${resource.emoji} `);
-        }
-        if (resource.displayTitle) {
-            currentLine.push((0, discord_js_1.hyperlink)(resource.displayTitle, resource.url));
-        }
-        else {
-            currentLine.push(resource.url);
-        }
-        if (resource.authors) {
-            currentLine.push(`, by ${(0, discord_js_1.bold)(resource.authors)}`);
-        }
-        processedResources.push(currentLine.join(''));
-    });
-    return (0, discord_js_1.unorderedList)(processedResources);
-}
-async function getResourceData(queryKey, cache, logger) {
-    //const now = Date.now();
-    // try to get from cache first
-    if (cache.has(queryKey)) {
-        const cachedData = cache.get(queryKey) || [];
-        return cachedData;
-    }
-    logger.debug(`Requesting ${queryKey} data from DB`);
-    const resourceService = new resourcesService_1.default(logger);
-    const resources = await resourceService.findByCategory(queryKey);
-    cache.set(queryKey, resources);
-    return resources;
 }

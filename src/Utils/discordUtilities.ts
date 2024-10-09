@@ -1,4 +1,4 @@
-import { APIEmbed, ColorResolvable, Colors, EmbedBuilder, Guild, GuildBasedChannel } from 'discord.js';
+import { ColorResolvable, Colors, EmbedBuilder, Guild, GuildBasedChannel } from 'discord.js';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { EmbedData } from '../Interfaces/BotData';
@@ -65,25 +65,39 @@ export function getAvailableColors(configs: IBotConfigs): ColorResolvable[] {
     return Object.values(configs.colors.theme);
 }
 
+/**
+ * Retrieves a guild by its ID from the client's cache or fetches it if not found.
+ *
+ * @param {string} guildId - The ID of the guild to retrieve.
+ * @param {ExtendedClient} client - The client instance to use for fetching the guild.
+ * @returns {Promise<Guild | undefined>} - A promise that resolves to the guild if found, otherwise undefined.
+ */
 export async function getGuildById(guildId: string, client: ExtendedClient): Promise<Guild | undefined> {
-    /* attempts to get a guid from cache, fetch if not found */
-
     let guild = client.guilds.cache.get(guildId);
 
     if (!guild) {
+        // Log a debug message if the guild is not found in the cache
         client.logger.debug(`Guild ${guildId} not found in cache...Fetching`);
+        // Fetch the guild from the API
         guild = await client.guilds.fetch(guildId);
     }
 
     return guild;
 }
 
+/**
+ * Retrieves a channel by its ID from the guild's cache or fetches it if not found.
+ *
+ * @param {string} channelId - The ID of the channel to retrieve.
+ * @param {Guild} guild - The guild instance to use for fetching the channel.
+ * @returns {Promise<GuildBasedChannel | null>} - A promise that resolves to the channel if found, otherwise null.
+ */
 export async function getChannelById(channelId: string, guild: Guild): Promise<GuildBasedChannel | null> {
-    /* attempts to get a channel from cache, fetch if not found */
-
+    // Attempt to get the channel from the cache
     let channel = guild.channels.cache.get(channelId) ?? null;
 
     if (!channel) {
+        // Fetch the channel from the API if not found in the cache
         channel = await guild.channels.fetch(channelId);
     }
 

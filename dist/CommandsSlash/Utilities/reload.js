@@ -1,128 +1,142 @@
 "use strict";
-const { SlashCommandBuilder, Collection } = require('discord.js');
-const { exec } = require('node:child_process');
-const path = require('node:path');
-const delay = require('node:timers/promises').setTimeout;
-const pm2 = require('pm2');
-module.exports = {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const node_path_1 = __importDefault(require("node:path"));
+//import { exec } from 'node:child_process';
+const discord_js_1 = require("discord.js");
+const pm2_1 = __importDefault(require("pm2"));
+const discordUtilities_1 = require("../../Utils/discordUtilities");
+const generalUtilities_1 = require("../../Utils/generalUtilities");
+const Reload = {
     category: 'Utilities',
-    cooldown: 30,
-    data: new SlashCommandBuilder()
+    cooldown: 15,
+    data: new discord_js_1.SlashCommandBuilder()
         .setName('reload')
         .setDescription('Reloads bot data')
-        .addSubcommand(subcommand => subcommand
+        .addSubcommand((subcommand) => subcommand
         .setName('command')
         .setDescription('Reloads specific commands')
-        .addStringOption(option => option
-        .setName('name')
-        .setDescription('Name for the command')
-        .setRequired(true))
-        .addStringOption(option => option
-        .setName('category')
-        .setDescription('The command category')
-        .setRequired(true)))
-        .addSubcommand(subcommand => subcommand
+        .addStringOption((option) => option.setName('name').setDescription('Name for the command').setRequired(true))
+        .addStringOption((option) => option.setName('category').setDescription('The command category').setRequired(true)))
+        .addSubcommand((subcommand) => subcommand
         .setName('cooldowns')
         .setDescription('Reset cooldowns')
-        .addStringOption(option => option
-        .setName('user_id')
-        .setDescription('Resets the cooldowns for a specific user')))
-        .addSubcommand(subcommand => subcommand
-        .setName('embeds')
-        .setDescription('Reloads embed data'))
-        .addSubcommand(subcommand => subcommand
-        .setName('bot')
-        .setDescription('Restart the bot'))
-        .addSubcommand(subcommand => subcommand
-        .setName('repo')
-        .setDescription('Pulls the latest change from GitHub repo')),
+        .addStringOption((option) => option.setName('user_id').setDescription('Resets the cooldowns for a specific user')))
+        .addSubcommand((subcommand) => subcommand.setName('embeds').setDescription('Reloads embed data'))
+        .addSubcommand((subcommand) => subcommand.setName('bot').setDescription('Restart the bot'))
+        .addSubcommand((subcommand) => subcommand.setName('repo').setDescription('Pulls the latest change from GitHub repo')),
     async execute(interaction) {
-        const { client } = interaction;
-        const { botConfigs } = client;
-        const devServerGuild = client.guilds.cache.get(botConfigs.devServerId);
-        const botDebugChannel = devServerGuild.channels.cache.get(botConfigs.debugChannelId);
+        const client = interaction.client;
+        const { botConfigs, logger } = client;
+        const devServerGuild = await (0, discordUtilities_1.getGuildById)(botConfigs.devServerId, client);
+        let botDebugChannel = null;
+        if (devServerGuild) {
+            botDebugChannel = await (0, discordUtilities_1.getChannelById)(botConfigs.debugChannelId, devServerGuild);
+        }
         const baseDir = process.cwd();
         if (interaction.options.getSubcommand() === 'command') {
-            const commandName = interaction.options.getString('name');
-            const commandCategory = interaction.options.getString('category');
-            const command = interaction.client.slashCommands.get(commandName);
+            const commandName = interaction.options.getString('name', true);
+            const commandCategory = interaction.options.getString('category', true);
+            const command = client.slashCommands.get(commandName);
             if (!command) {
-                return interaction.reply(`There's no command with name \`${commandName}\`.`);
+                return interaction.reply(`There's no command with name ${(0, discord_js_1.inlineCode)(commandName)}.`);
             }
-            const commandPath = path.join(baseDir, 'CommandsSlash', commandCategory, command.data.name + '.js');
+            const commandPath = node_path_1.default.join(baseDir, 'dist', 'CommandsSlash', commandCategory, command.data.name + '.js');
             delete require.cache[require.resolve(commandPath)];
             try {
-                interaction.client.slashCommands.delete(command.data.name);
+                client.slashCommands.delete(command.data.name);
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
                 const newCommand = require(commandPath);
-                interaction.client.slashCommands.set(newCommand.data.name, newCommand);
-                await interaction.reply(`Command \`${newCommand.data.name}\` was reloaded!`);
+                client.slashCommands.set(newCommand.default.data.name, newCommand);
+                await interaction.reply(`Command ${(0, discord_js_1.inlineCode)(newCommand.default.data.name)} was reloaded!`);
             }
             catch (error) {
-                console.error(error);
-                await interaction.reply(`There was an error while reloading a command \`${command.data.name}\`:\n\`${error.message}\``);
+                logger.error(error);
+                await interaction.reply(`There was an error while reloading a command ${(0, discord_js_1.inlineCode)(command.data.name)}:\n${(0, discord_js_1.codeBlock)('json', error.message)}`);
             }
         }
         else if (interaction.options.getSubcommand() === 'cooldowns') {
             const targetUserId = interaction.options.getString('user_id');
-            const botResponse = { content: ['### Result'], ephemeral: true };
+            const responseBuilder = [(0, discord_js_1.heading)('Result', discord_js_1.HeadingLevel.Three)];
             if (targetUserId) {
                 client.cooldowns.reactions.delete(targetUserId);
-                botResponse.content.push(`- Reaction cooldown reseted for ${targetUserId}`);
+                responseBuilder.push(`- Reaction cooldown reseted for ${targetUserId}`);
                 client.cooldowns.slashCommands.delete(targetUserId);
-                botResponse.content.push(`- Slash commands cooldown reseted for ${targetUserId}`);
+                responseBuilder.push(`- Slash commands cooldown reseted for ${targetUserId}`);
                 client.cooldowns.banana.delete(targetUserId);
-                botResponse.content.push(`- Banan cooldown reseted for ${targetUserId}`);
+                responseBuilder.push(`- Banan cooldown reseted for ${targetUserId}`);
             }
             else {
-                client.cooldowns.reactions = new Collection();
-                botResponse.content.push('- Reseted reaction cooldowns for every user');
-                client.cooldowns.slashCommands = new Collection();
-                botResponse.content.push('- Reseted slash commands cooldowns for every user');
-                client.cooldowns.banan = new Collection();
-                botResponse.content.push('- Reseted banan cooldowns for every user');
+                client.cooldowns.reactions = new discord_js_1.Collection();
+                responseBuilder.push('- Reseted reaction cooldowns for every user');
+                client.cooldowns.slashCommands = new discord_js_1.Collection();
+                responseBuilder.push('- Reseted slash commands cooldowns for every user');
+                client.cooldowns.banan = new discord_js_1.Collection();
+                responseBuilder.push('- Reseted banan cooldowns for every user');
             }
-            botResponse.content = botResponse.content.join('\n');
-            return await interaction.reply(botResponse);
+            return await interaction.reply({ content: responseBuilder.join('\n'), ephemeral: true });
         }
         else if (interaction.options.getSubcommand() === 'embeds') {
-            const embedsJsonPath = path.join(baseDir, 'JSON', 'embeds.json');
+            const embedsJsonPath = node_path_1.default.join(baseDir, 'JSON', 'embeds.json');
             delete require.cache[require.resolve(embedsJsonPath)];
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             client.botData.embeds = require(embedsJsonPath);
             return await interaction.reply({ content: 'Embeds restored to default.', ephemeral: true });
         }
         else if (interaction.options.getSubcommand() === 'bot') {
             await interaction.deferReply();
             const botResponse = { content: 'Failed', ephemeral: true };
-            pm2.connect(async function (err) {
-                if (err) {
-                    console.error(err);
-                    interaction.editReply(botResponse);
-                    process.exit(2);
-                }
+            try {
+                await new Promise((resolve, reject) => {
+                    pm2_1.default.connect((err) => {
+                        if (err) {
+                            logger.error(err);
+                            interaction.editReply(botResponse);
+                            reject(err);
+                        }
+                        else {
+                            resolve();
+                        }
+                    });
+                });
                 botResponse.content = '🔃 Restarting bot...';
                 interaction.editReply(botResponse);
-                if (client.botConfigs.general.sendLogs) {
+                if (client.botConfigs.general.sendLogs && botDebugChannel) {
                     await botDebugChannel.send(botResponse.content);
                 }
                 // close DB connection
                 await client.knexInstance.destroy();
-                await delay(2000);
-                pm2.restart('Automaze', (error, apps) => {
-                    pm2.disconnect();
-                    if (error) {
-                        throw error;
-                    }
+                await (0, generalUtilities_1.delay)(2_000);
+                await new Promise((resolve, reject) => {
+                    pm2_1.default.restart('automaze-bot', (error) => {
+                        pm2_1.default.disconnect();
+                        if (error) {
+                            logger.error(error);
+                            reject(error);
+                        }
+                        else {
+                            resolve();
+                        }
+                    });
                 });
-            });
+            }
+            catch (error) {
+                logger.error(error);
+                await interaction.editReply(botResponse);
+            }
         }
         else if (interaction.options.getSubcommand() === 'repo') {
-            await interaction.deferReply();
+            /* await interaction.deferReply();
             const botResponse = { content: 'Failed', ephemeral: true };
+
             exec('git pull origin main', async (error, stdout, stderr) => {
                 if (error) {
                     botResponse.content = error;
                     return interaction.editReply(botResponse);
                 }
+
                 botResponse.content = [
                     '✅ Bot updated!',
                     '\n**stdout:**',
@@ -130,11 +144,14 @@ module.exports = {
                     '**stderr:**',
                     '```\n' + stderr + '\n```',
                 ].join('\n');
+
                 interaction.editReply(botResponse);
+
                 if (client.botConfigs.general.sendLogs) {
                     await botDebugChannel.send(botResponse.content);
                 }
-            });
+            }); */
         }
     },
 };
+exports.default = Reload;
