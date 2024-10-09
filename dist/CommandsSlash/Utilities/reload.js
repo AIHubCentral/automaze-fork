@@ -4,11 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_path_1 = __importDefault(require("node:path"));
-//import { exec } from 'node:child_process';
+const node_child_process_1 = require("node:child_process");
 const discord_js_1 = require("discord.js");
 const pm2_1 = __importDefault(require("pm2"));
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const generalUtilities_1 = require("../../Utils/generalUtilities");
+const node_util_1 = require("node:util");
 const Reload = {
     category: 'Utilities',
     cooldown: 15,
@@ -97,6 +98,7 @@ const Reload = {
                             reject(err);
                         }
                         else {
+                            logger.info('Connected to PM2');
                             resolve();
                         }
                     });
@@ -128,29 +130,30 @@ const Reload = {
             }
         }
         else if (interaction.options.getSubcommand() === 'repo') {
-            /* await interaction.deferReply();
-            const botResponse = { content: 'Failed', ephemeral: true };
-
-            exec('git pull origin main', async (error, stdout, stderr) => {
-                if (error) {
-                    botResponse.content = error;
-                    return interaction.editReply(botResponse);
+            await interaction.deferReply();
+            const responseEmbed = new discord_js_1.EmbedBuilder()
+                .setTitle('❌ Failed')
+                .setColor(discord_js_1.Colors.Red)
+                .setDescription('Failed to update.');
+            const execPromise = (0, node_util_1.promisify)(node_child_process_1.exec);
+            try {
+                const { stdout, stderr } = await execPromise('git pull origin main');
+                responseEmbed
+                    .setTitle('✅ Success')
+                    .setColor(discord_js_1.Colors.Green)
+                    .setDescription([
+                    `${(0, discord_js_1.bold)('stdout:')} ${(0, discord_js_1.codeBlock)('json', stdout)}`,
+                    `${(0, discord_js_1.bold)('stderr:')} ${(0, discord_js_1.codeBlock)('json', stderr)}`,
+                ].join('\n'));
+                await interaction.editReply({ embeds: [responseEmbed] });
+                if (client.botConfigs.general.sendLogs && botDebugChannel) {
+                    await botDebugChannel.send({ embeds: [responseEmbed] });
                 }
-
-                botResponse.content = [
-                    '✅ Bot updated!',
-                    '\n**stdout:**',
-                    '```\n' + stdout + '\n```',
-                    '**stderr:**',
-                    '```\n' + stderr + '\n```',
-                ].join('\n');
-
-                interaction.editReply(botResponse);
-
-                if (client.botConfigs.general.sendLogs) {
-                    await botDebugChannel.send(botResponse.content);
-                }
-            }); */
+            }
+            catch (error) {
+                logger.error(error);
+                await interaction.editReply({ embeds: [responseEmbed] });
+            }
         }
     },
 };
