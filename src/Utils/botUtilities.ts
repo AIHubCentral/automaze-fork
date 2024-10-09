@@ -30,6 +30,142 @@ import { getAllFiles } from './fileUtilities';
 import ResourceService, { IResource } from '../Services/resourcesService';
 import winston from 'winston';
 
+/* Enums */
+export enum CloudPlatform {
+    Colab = 'colab',
+    Huggingface = 'hf',
+    Kaggle = 'kaggle',
+    Lightning = 'lightning_ai',
+}
+
+/* functions */
+
+/**
+ * Converts an array of resources into an unordered list in Markdown format.
+ *
+ * @param {IResource[]} resources - An array of resource objects to be processed.
+ * @returns {string} - A string representing the unordered list in Markdown format.
+ */
+export function resourcesToUnorderedList(resources: IResource[]): string {
+    const processedResources: string[] = [];
+
+    resources.forEach((resource) => {
+        const currentLine = processResource(resource);
+        processedResources.push(currentLine);
+    });
+
+    return unorderedList(processedResources);
+}
+
+/**
+ * Processes a single resource into a formatted string for an unordered list.
+ *
+ * @param {IResource} resource - The resource object to be processed.
+ * @returns {string} - A formatted string representing the resource.
+ */
+export function processResource(resource: IResource): string {
+    const currentLine: string[] = [];
+
+    if (resource.emoji && resource.emoji.toLowerCase() != 'none') {
+        currentLine.push(`${resource.emoji} `);
+    }
+
+    if (resource.displayTitle) {
+        currentLine.push(bold(resource.displayTitle));
+        currentLine.push(', ');
+    }
+
+    if (resource.authors) {
+        currentLine.push(`by ${resource.authors} `);
+    }
+
+    if (resource.displayTitle) {
+        let category = resource.category;
+
+        if (category === CloudPlatform.Colab) {
+            category = 'Google Colab';
+        } else if (category === CloudPlatform.Huggingface) {
+            category = 'Huggingface Spaces';
+        } else if (category === CloudPlatform.Kaggle) {
+            category = 'Kaggle';
+        } else if (category === CloudPlatform.Lightning) {
+            category = 'Lightning AI';
+        } else {
+            category = 'Link';
+        }
+
+        currentLine.push(hyperlink(category, resource.url));
+    } else {
+        currentLine.push(resource.url);
+    }
+
+    return currentLine.join('');
+}
+
+/**
+ * Alternative version of `resourcesToUnorderedList()`
+ */
+export function resourcesToUnorderedListAlt(resources: IResource[]): string {
+    const processedResources: string[] = [];
+
+    resources.forEach((resource) => {
+        const currentLine = processResourceAlt(resource);
+        processedResources.push(currentLine);
+    });
+
+    return unorderedList(processedResources);
+}
+
+/**
+ * Processes a single resource into a formatted string for an unordered list.
+ * Alternative version of processResource()
+ * 
+ * @param {IResource} resource - The resource object to be processed.
+ * @returns {string} - A formatted string representing the resource.
+ */
+export function processResourceAlt(resource: IResource): string {
+    const currentLine: string[] = [];
+
+    if (resource.emoji && resource.emoji.toLowerCase() != 'none') {
+        currentLine.push(`${resource.emoji} `);
+    }
+
+    if (resource.displayTitle) {
+        currentLine.push(hyperlink(resource.displayTitle, resource.url));
+    } else {
+        currentLine.push(resource.url);
+    }
+
+    if (resource.authors) {
+        currentLine.push(`, by ${bold(resource.authors)}`);
+    }
+
+    return currentLine.join('');
+}
+
+export async function getResourceData(
+    queryKey: string,
+    cache: Collection<string, IResource[]>,
+    logger: winston.Logger
+): Promise<IResource[]> {
+    //const now = Date.now();
+
+    // try to get from cache first
+    if (cache.has(queryKey)) {
+        const cachedData = cache.get(queryKey) || [];
+        return cachedData;
+    }
+
+    logger.debug(`Requesting ${queryKey} data from DB`);
+
+    const resourceService = new ResourceService(logger);
+
+    const resources = await resourceService.findByCategory(queryKey);
+    cache.set(queryKey, resources);
+
+    return resources;
+}
+
 export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
     const colors = [
         botConfigs.colors.theme.primary,
@@ -51,6 +187,8 @@ export function getThemes() {
     });
     return themes;
 }
+
+/* Classes */
 
 export class TagResponseSender {
     /* utility class for sending tags responses like -rvc */
@@ -403,108 +541,4 @@ export async function banan(
 
         await channel.send({ embeds: [debugEmbed] });
     }
-}
-
-export enum CloudPlatform {
-    Colab = 'colab',
-    Huggingface = 'hf',
-    Kaggle = 'kaggle',
-    Lightning = 'lightning_ai',
-}
-
-export function resourcesToUnorderedList(resources: IResource[]): string {
-    const processedResources: string[] = [];
-
-    resources.forEach((resource) => {
-        const currentLine: string[] = [];
-
-        if (resource.emoji) {
-            currentLine.push(`${resource.emoji} `);
-        }
-
-        if (resource.displayTitle) {
-            currentLine.push(bold(resource.displayTitle));
-            currentLine.push(', ');
-        }
-
-        if (resource.authors) {
-            currentLine.push(`by ${resource.authors} `);
-        }
-
-        if (resource.displayTitle) {
-            let category = resource.category;
-
-            if (category === CloudPlatform.Colab) {
-                category = 'Google Colab';
-            } else if (category === CloudPlatform.Huggingface) {
-                category = 'Huggingface Spaces';
-            } else if (category === CloudPlatform.Kaggle) {
-                category = 'Kaggle';
-            } else if (category === CloudPlatform.Lightning) {
-                category = 'Lightning AI';
-            } else {
-                category = 'Link';
-            }
-
-            currentLine.push(hyperlink(category, resource.url));
-        } else {
-            currentLine.push(resource.url);
-        }
-
-        processedResources.push(currentLine.join(''));
-    });
-
-    return unorderedList(processedResources);
-}
-
-/**
- * Alternative version of `resourcesToUnorderedList()`
- */
-export function resourcesToUnorderedListAlt(resources: IResource[]): string {
-    const processedResources: string[] = [];
-
-    resources.forEach((resource) => {
-        const currentLine: string[] = [];
-
-        if (resource.emoji) {
-            currentLine.push(`${resource.emoji} `);
-        }
-
-        if (resource.displayTitle) {
-            currentLine.push(hyperlink(resource.displayTitle, resource.url));
-        } else {
-            currentLine.push(resource.url);
-        }
-
-        if (resource.authors) {
-            currentLine.push(`, by ${bold(resource.authors)}`);
-        }
-
-        processedResources.push(currentLine.join(''));
-    });
-
-    return unorderedList(processedResources);
-}
-
-export async function getResourceData(
-    queryKey: string,
-    cache: Collection<string, IResource[]>,
-    logger: winston.Logger
-): Promise<IResource[]> {
-    //const now = Date.now();
-
-    // try to get from cache first
-    if (cache.has(queryKey)) {
-        const cachedData = cache.get(queryKey) || [];
-        return cachedData;
-    }
-
-    logger.debug(`Requesting ${queryKey} data from DB`);
-
-    const resourceService = new ResourceService(logger);
-
-    const resources = await resourceService.findByCategory(queryKey);
-    cache.set(queryKey, resources);
-
-    return resources;
 }
