@@ -4,6 +4,7 @@ data/
 Commands/Dev/
 Debug/
 logs/
+coverage/
 .replit
 replit.nix
 result.json
