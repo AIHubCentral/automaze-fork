@@ -112,6 +112,7 @@ const Reload = {
                 await client.knexInstance.destroy();
                 await (0, generalUtilities_1.delay)(2_000);
                 await new Promise((resolve, reject) => {
+                    logger.info('Restarting bot...');
                     pm2_1.default.restart('automaze-bot', (error) => {
                         pm2_1.default.disconnect();
                         if (error) {

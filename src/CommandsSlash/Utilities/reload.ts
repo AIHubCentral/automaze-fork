@@ -164,6 +164,7 @@ const Reload: SlashCommand = {
                 await delay(2_000);
 
                 await new Promise<void>((resolve, reject) => {
+                    logger.info('Restarting bot...');
                     pm2.restart('automaze-bot', (error) => {
                         pm2.disconnect();
                         if (error) {
