@@ -1,4 +1,4 @@
-import { MessageReplyOptions } from 'discord.js';
+import { MessageReplyOptions, TextChannel } from 'discord.js';
 import { PrefixCommand } from '../../Interfaces/Command';
 import { delay } from '../../Utils/generalUtilities';
 
@@ -34,12 +34,12 @@ const GUI: PrefixCommand = {
                 return message.reply(botResponse);
             }
 
-            await message.channel.sendTyping();
+            await (message.channel as TextChannel).sendTyping();
             await delay(selectedMessage.length * 350);
-            return message.channel.send(botResponse);
+            return (message.channel as TextChannel).send(botResponse);
         }
 
-        await message.channel.sendTyping();
+        await (message.channel as TextChannel).sendTyping();
         await delay(selectedMessage.length * 350);
         return message.reply(botResponse);
     },

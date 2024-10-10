@@ -12,7 +12,7 @@
         "node_modules",
         "dist",
         "Archive",
-        "src/Commands/",
+        "src/Commands/Utilities",
         "src/CommandsContext/",
         "src/CommandsSlash/Fun/",
         "src/CommandsSlash/Info/",
