@@ -20,7 +20,6 @@
         "src/CommandsSlash/Utilities/database.js",
         "src/CommandsSlash/Utilities/embedData.js",
         "src/CommandsSlash/Utilities/logs.js",
-        "src/CommandsSlash/Utilities/send.js",
         "src/Core/",
         "src/Events/",
         "src/Utils/"
