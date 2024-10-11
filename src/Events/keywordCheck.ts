@@ -1,9 +1,8 @@
-import { Message, MessageReplyOptions, StickerResolvable } from 'discord.js';
+import { Message, MessageReplyOptions, StickerResolvable, ChannelType, TextChannel } from 'discord.js';
 import ExtendedClient from '../Core/extendedClient';
 import IEventData from '../Interfaces/Events';
 import { getRandomFromArray, getRandomNumber } from '../Utils/generalUtilities';
 
-const { ChannelType } = require('discord.js');
 import { delay } from '../Utils/generalUtilities';
 
 function isUserOnCooldown(client: ExtendedClient, userId: string): boolean {
@@ -144,11 +143,12 @@ const KeyWordCheck: IEventData = {
                                     botResponse.content = getRandomFromArray(item.responses);
                                     const typingDuration = 350;
                                     await delay(botResponse.content!.length * typingDuration);
-                                    await message.channel.sendTyping();
+                                    await (message.channel as TextChannel).sendTyping();
                                     client.logger.info(`Sendind text: ${botResponse.content}`, {
                                         more: messageInfo,
                                     });
                                     await message.reply(botResponse);
+                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                 } catch (error) {
                                     client.logger.error('failed to add text reaction', { more: messageInfo });
                                 }

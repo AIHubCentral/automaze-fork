@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
 const generalUtilities_1 = require("../Utils/generalUtilities");
-const { ChannelType } = require('discord.js');
 const generalUtilities_2 = require("../Utils/generalUtilities");
 function isUserOnCooldown(client, userId) {
     let result = false;
@@ -42,7 +42,7 @@ const KeyWordCheck = {
         if (message.author.bot)
             return;
         // don't react to threads
-        if (message.channel.type === ChannelType.PublicThread)
+        if (message.channel.type === discord_js_1.ChannelType.PublicThread)
             return;
         // skip prefix commands
         if (message.content.startsWith(client.prefix))
@@ -132,6 +132,7 @@ const KeyWordCheck = {
                                         more: messageInfo,
                                     });
                                     await message.reply(botResponse);
+                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                 }
                                 catch (error) {
                                     client.logger.error('failed to add text reaction', { more: messageInfo });

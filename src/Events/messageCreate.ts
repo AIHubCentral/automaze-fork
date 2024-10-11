@@ -1,8 +1,12 @@
-import { ChannelType, Message, PublicThreadChannel, TextChannel, ThreadChannel } from 'discord.js';
+import { ChannelType, Message, PublicThreadChannel, TextChannel } from 'discord.js';
 import IEventData from '../Interfaces/Events';
 import ExtendedClient from '../Core/extendedClient';
 import { EmbedData } from '../Interfaces/BotData';
 import { createEmbed } from '../Utils/discordUtilities';
+import { tokenizer } from '../Database/nlpClassifier';
+import { containsKeyword, containsQuestionPattern, getFaqKeywords } from '../Utils/botUtilities';
+import { delay } from '../Utils/generalUtilities';
+import winston from 'winston';
 
 function handlePrefixCommand(prefix: string, message: Message, client: ExtendedClient): void {
     const commandArguments = message.content.slice(prefix.length).trim().split(/ +/);
@@ -60,6 +64,55 @@ async function handleBotMentioned(prefix: string, message: Message, client: Exte
     });
 }
 
+async function handleFaqQuestions(message: Message, logger: winston.Logger): Promise<void> {
+    const userInput = message.content.toLowerCase().trim();
+    const tokens = tokenizer.tokenize(userInput);
+    const keywords = getFaqKeywords();
+
+    const matchedKeyword = containsKeyword(tokens, keywords);
+
+    if (matchedKeyword && containsQuestionPattern(userInput)) {
+        const messageChannel = message.channel as TextChannel;
+        let response = null;
+
+        switch (matchedKeyword) {
+            case 'epoch':
+            case 'epochs':
+                response =
+                    'Epoch is the number of iterations performed to complete one full cycle of the dataset during training. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
+                break;
+            case 'dataset':
+            case 'datasets':
+                response = `Datasets are a set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)`;
+                break;
+            case 'model':
+            case 'models':
+                response =
+                    'A model is the result of training on a dataset. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
+                break;
+            case 'inference':
+                response =
+                    'Inference is the process where an audio is transformed by the voice model. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
+                break;
+            case 'overtraining':
+                response =
+                    'A solid way to detect overtraining is checking if the **TensorBoard** graph starts rising and never comes back down, leading to robotic, muffled output with poor articulation. You can learn more about it in the [Applio Docs](https://docs.applio.org/getting-started/tensorboard)';
+                break;
+        }
+
+        if (response != null) {
+            messageChannel.sendTyping();
+            await delay(50 * response.length);
+            await message.reply({ content: response, allowedMentions: { repliedUser: true } });
+            logger.info('Sent FAQ reply', {
+                guildId: messageChannel.guildId,
+                channelId: messageChannel.id,
+                keyword: matchedKeyword,
+            });
+        }
+    }
+}
+
 const messageCreateEvent: IEventData = {
     name: 'messageCreate',
     once: false,
@@ -73,6 +126,9 @@ const messageCreateEvent: IEventData = {
             handlePrefixCommand(prefix, message, client);
         } else {
             await handleBotMentioned(prefix, message, client);
+
+            // tries to answer FAQs
+            handleFaqQuestions(message, client.logger);
 
             // triggered on comission channel
             if (message.channel.type !== ChannelType.PublicThread) return;

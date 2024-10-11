@@ -10,6 +10,9 @@ exports.resourcesToUnorderedList = resourcesToUnorderedList;
 exports.processResource = processResource;
 exports.resourcesToUnorderedListAlt = resourcesToUnorderedListAlt;
 exports.processResourceAlt = processResourceAlt;
+exports.getFaqKeywords = getFaqKeywords;
+exports.containsKeyword = containsKeyword;
+exports.containsQuestionPattern = containsQuestionPattern;
 exports.getResourceData = getResourceData;
 exports.getThemeColors = getThemeColors;
 exports.getThemes = getThemes;
@@ -119,6 +122,40 @@ function processResourceAlt(resource) {
         currentLine.push(`, by ${(0, discord_js_1.bold)(resource.authors)}`);
     }
     return currentLine.join('');
+}
+function getFaqKeywords() {
+    return ['epoch', 'epochs', 'dataset', 'datasets', 'model', 'models', 'inference', 'overtraining'];
+}
+/**
+ * Checks if a keyword was found in the tokens and returns the matched keyword if found
+ * @param tokens - array of tokens
+ * @param keywords - array of keywords
+ * @returns the matched keyword if found or null
+ */
+function containsKeyword(tokens, keywords) {
+    for (const keyword of keywords) {
+        if (tokens.includes(keyword.toLowerCase())) {
+            return keyword;
+        }
+    }
+    return null;
+}
+/**
+ * Checks for the patterns to check if user is asking a faq question
+ *
+ * @param text {string} - the text to look for the pattern
+ * @returns {boolean} - whether it matches the question pattern
+ */
+function containsQuestionPattern(text) {
+    const patterns = [
+        /what (?:is|are)(?:\s)?(?:a|an)? \b\w+\b/i,
+        /not sure what \b\w+\b (?:is|are)/i,
+        /(?:can)?(?:\s)?(?:you|anyone|someone) (?:explain|tell|teach) (?:to )?(?:me )?(?:what )?\b\w+\b (?:is|are|means)/i,
+        /anyone knows what \b\w+\b (?:is|are)/i,
+        /i(?:dk|\sdon't)(?:\s)?(?:know)? what \b\w+\b (?:is|are|means)/i,
+        /is that what \b\w+\b is/i
+    ];
+    return patterns.some(pattern => pattern.test(text));
 }
 async function getResourceData(queryKey, cache, logger) {
     //const now = Date.now();

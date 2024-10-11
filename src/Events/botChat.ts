@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 import IEventData from '../Interfaces/Events';
 import { delay } from '../Utils/generalUtilities';
 
@@ -41,7 +41,7 @@ const BotChat: IEventData = {
 
                 const answerLength = selectedAnswer.length;
                 const typingDurationMs = 500;
-                await message.channel.sendTyping();
+                await (message.channel as TextChannel).sendTyping();
                 await delay(answerLength * typingDurationMs);
                 await message.reply(selectedAnswer);
                 client.logger.info('Bot chat', {

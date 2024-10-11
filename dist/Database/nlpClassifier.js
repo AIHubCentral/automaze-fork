@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.tokenizer = void 0;
 exports.trainClassifier = trainClassifier;
 exports.loadClassifier = loadClassifier;
 exports.getClassifier = getClassifier;
@@ -67,3 +68,4 @@ function getClassifier() {
     loadClassifier(classifierPath, classifier);
     return classifier;
 }
+exports.tokenizer = new natural_1.WordTokenizer();

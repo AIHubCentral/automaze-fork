@@ -1,4 +1,4 @@
-import { BayesClassifier } from 'natural';
+import { BayesClassifier, WordTokenizer } from 'natural';
 import path from 'node:path';
 
 export function trainClassifier(classifier: BayesClassifier, filePath: string): void {
@@ -66,3 +66,5 @@ export function getClassifier(): BayesClassifier {
     loadClassifier(classifierPath, classifier);
     return classifier;
 }
+
+export const tokenizer = new WordTokenizer();
