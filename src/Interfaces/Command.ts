@@ -1,4 +1,5 @@
 import {
+    AutocompleteInteraction,
     ChatInputCommandInteraction,
     ContextMenuCommandBuilder,
     Message,
@@ -11,6 +12,7 @@ export interface SlashCommand {
     data: any;
     cooldown?: number;
     execute: (interaction: ChatInputCommandInteraction) => Promise<any>;
+    autocomplete?: (interaction: AutocompleteInteraction) => Promise<any>;
 }
 
 export interface ContextCommand {

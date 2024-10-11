@@ -3,6 +3,7 @@
     "compilerOptions": {
         "outDir": "./dist",
         "rootDir": "./src",
+        "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true,
     },
     "include": [
@@ -15,7 +16,6 @@
         "src/Commands/Utilities",
         "src/CommandsContext/",
         "src/CommandsSlash/Fun/",
-        "src/CommandsSlash/Info/",
         "src/CommandsSlash/Misc/",
         "src/CommandsSlash/Utilities/database.js",
         "src/CommandsSlash/Utilities/embedData.js",

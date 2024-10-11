@@ -17,5 +17,44 @@
                 }
             }
         }
+    },
+    "faq": {
+        "name": "faq",
+        "description": "Frequently Asked Questions",
+        "descriptionLocalizations": {
+            "pt-BR": "Perguntas Frequentes"
+        },
+        "options": {
+            "topic": {
+                "name": "topic",
+                "nameLocalizations": {
+                    "pt-BR": "assunto"
+                },
+                "description": "Select a topic",
+                "descriptionLocalizations": {
+                    "pt-BR": "selecione o tópico"
+                }
+            },
+            "language": {
+                "name": "language",
+                "nameLocalizations": {
+                    "pt-BR": "idioma"
+                },
+                "description": "Response Language (optional)",
+                "descriptionLocalizations": {
+                    "pt-BR": "Idioma da resposta (opcional)"
+                }
+            },
+            "private": {
+                "name": "private",
+                "nameLocalizations": {
+                    "pt-BR": "privado"
+                },
+                "description": "Only you can see the response (optional)",
+                "descriptionLocalizations": {
+                    "pt-BR": "Apenas você vê a resposta (opcional)"
+                }
+            }
+        }
     }
 }

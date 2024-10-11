@@ -77,7 +77,7 @@ const interactionCreateEvent = {
                 return;
             }
             try {
-                await command.autocomplete(client, interaction);
+                await command.autocomplete(interaction);
             }
             catch (error) {
                 client.logger.error(error);
