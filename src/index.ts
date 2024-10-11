@@ -6,6 +6,7 @@ import ExtendedClient, { ExtendedClientOptions } from './Core/extendedClient';
 import registerEvents from './Handlers/eventHandler';
 import registerCommands from './Handlers/commandHandler';
 import registerProcesses from './Handlers/processHandler';
+import { initI18n } from './i18n';
 
 // Exports
 const { getAvailableColors, getRandomNumber, getRandomFromArray } = require('./utils');
@@ -59,8 +60,12 @@ const client = new ExtendedClient(
     extendedOptions
 );
 
-registerCommands(client);
-registerEvents(client);
-registerProcesses(client);
+(async () => {
+    registerCommands(client);
+    registerEvents(client);
+    registerProcesses(client);
 
-client.login(process.env.token);
+    await initI18n();
+
+    client.login(process.env.token);
+})();

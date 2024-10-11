@@ -1,0 +1,6 @@
+{
+    "greeting": "Hello!",
+    "faq": {
+        "epoch": "Epoch is the number of iterations performed to complete one full cycle of the dataset during training. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)"
+    }
+}

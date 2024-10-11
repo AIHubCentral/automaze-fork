@@ -33,6 +33,7 @@ const extendedClient_1 = __importDefault(require("./Core/extendedClient"));
 const eventHandler_1 = __importDefault(require("./Handlers/eventHandler"));
 const commandHandler_1 = __importDefault(require("./Handlers/commandHandler"));
 const processHandler_1 = __importDefault(require("./Handlers/processHandler"));
+const i18n_1 = require("./i18n");
 // Exports
 const { getAvailableColors, getRandomNumber, getRandomFromArray } = require('./utils');
 // JSONs
@@ -74,7 +75,10 @@ const client = new extendedClient_1.default({
         parse: ['users'],
     },
 }, extendedOptions);
-(0, commandHandler_1.default)(client);
-(0, eventHandler_1.default)(client);
-(0, processHandler_1.default)(client);
-client.login(process.env.token);
+(async () => {
+    (0, commandHandler_1.default)(client);
+    (0, eventHandler_1.default)(client);
+    (0, processHandler_1.default)(client);
+    await (0, i18n_1.initI18n)();
+    client.login(process.env.token);
+})();
