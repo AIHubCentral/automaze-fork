@@ -1,10 +1,10 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { SlashCommand } from '../../Interfaces/Command';
-//import ExtendedClient from '../../Core/extendedClient';
-
-import slashCommandData from '../../../JSON/slashCommandData.json';
+import { bold, channelMention, Colors, EmbedBuilder, SlashCommandBuilder, unorderedList } from 'discord.js';
 import ExtendedClient from '../../Core/extendedClient';
+import slashCommandData from '../../../JSON/slashCommandData.json';
+import { SlashCommand } from '../../Interfaces/Command';
+
 import i18next from 'i18next';
+import { delay } from '../../Utils/generalUtilities';
 
 const commandData = slashCommandData.faq;
 
@@ -46,8 +46,6 @@ const Faq: SlashCommand = {
         const suggestions = allTopics.filter((topicItem) =>
             topicItem.toLowerCase().includes(topic.toLowerCase().trim())
         );
-        console.log(topic);
-        console.log(suggestions);
         await interaction.respond(suggestions.map((suggestion) => ({ name: suggestion, value: suggestion })));
     },
     async execute(interaction) {
@@ -60,48 +58,47 @@ const Faq: SlashCommand = {
         const client = interaction.client as ExtendedClient;
         const { logger } = client;
 
-        let response = null;
-
         // TODO: get the language from the user locale if it's an empty string
-        console.log(language);
 
-        switch (topic) {
-            case 'epoch':
-                response = i18next.t('faq.epoch', {
-                    lng: language,
-                });
-                break;
-            case 'dataset':
-                response = `Datasets are a set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)`;
-                break;
-            case 'model':
-                response =
-                    'A model is the result of training on a dataset. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
-                break;
-            case 'inference':
-                response =
-                    'Inference is the process where an audio is transformed by the voice model. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
-                break;
-            case 'overtraining':
-                response =
-                    'A solid way to detect overtraining is checking if the **TensorBoard** graph starts rising and never comes back down, leading to robotic, muffled output with poor articulation. You can learn more about it in the [Applio Docs](https://docs.applio.org/getting-started/tensorboard)';
-                break;
-            default:
-                response = '';
-        }
+        const response = i18next.t(`faq.${topic}`, { lng: language });
 
-        if (!response) {
-            await interaction.reply({
-                content:
-                    "I'm sorry, display name.I couldn't find the topic you were looking for 😭.You can try the following: ",
-                embeds: [new EmbedBuilder().setDescription('Look for channel')],
+        if (response.startsWith('faq.')) {
+            await interaction.deferReply({ ephemeral: ephemeral });
+            await delay(3_000);
+
+            const textResponse = i18next.t('faq.unknown.message', {
+                user: bold(interaction.user.username),
+                lng: language,
             });
+
+            const embedTitle = i18next.t('faq.unknown.embedData.title', {
+                lng: language,
+            });
+
+            const channelIds = client.discordIDs.Channel;
+
+            const embedDescription = i18next.t('faq.unknown.embedData.description', {
+                lng: language,
+                returnObjects: true,
+                okadaChannel: channelMention(channelIds.HelpWOkada),
+                helpChannel: channelMention(channelIds.HelpRVC),
+                helpAiArtChannel: channelMention(channelIds.HelpAiArt),
+            }) as Array<string>;
+
+            await interaction.editReply({
+                content: textResponse + ' 😭' + '\n',
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle(`✍ ${embedTitle}`)
+                        .setColor(Colors.DarkAqua)
+                        .setDescription(unorderedList(embedDescription)),
+                ],
+            });
+
             return;
         }
 
         await interaction.reply({ content: response, ephemeral });
-
-        console.log(i18next.t('greeting'));
 
         const logData = {
             guildId: interaction.guildId || '',

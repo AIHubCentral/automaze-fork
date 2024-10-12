@@ -1,6 +1,25 @@
 {
-    "greeting": "Hello!",
+    "website": {
+        "aihub": "https://docs.aihub.wtf/",
+        "applio": "https://docs.applio.org/faq"
+    },
     "faq": {
-        "epoch": "Epoch is the number of iterations performed to complete one full cycle of the dataset during training. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)"
+        "epoch": "Epoch is the number of iterations performed to complete one full cycle of the dataset during training. You can learn more about creating datasets with the command `-dataset`",
+        "dataset": "Datasets are a set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs](https://docs.applio.org/guides/create-datasets/create-datasets)",
+        "model": "A model is the result of training on a dataset. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)",
+        "inference": "Inference is the process where an audio is transformed by the voice model. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)",
+        "overtraining": "A solid way to detect overtraining is checking if the [TensorBoard Graph](https://docs.applio.org/getting-started/tensorboard) starts rising and never comes back down, leading to robotic, muffled output with poor articulation",
+        "unknown": {
+            "message": "I'm sorry, {{user}}. I couldn't find the topic you were looking for",
+            "embedData": {
+                "title": "You can try the following",
+                "description": [
+                    "Search for it in [AI HUB Docs](https://docs.aihub.wtf/) or [Applio Docs](https://docs.applio.org/faq). You will probably find your answer there 📚",
+                    "Ask for help in {{-okadaChannel}} if it's related to real time voice changing",
+                    "Ask for help in {{-helpChannel}} for general help, but use the command `!howtoask` first to learn how to structure your question properly and increase your chances of getting a reply",
+                    "Last but not least, ask for help in {{-helpAiArtChannel}} if it's related to AI images"
+                ]
+            }
+        }
     }
 }

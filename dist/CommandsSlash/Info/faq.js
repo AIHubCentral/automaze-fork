@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-//import ExtendedClient from '../../Core/extendedClient';
 const slashCommandData_json_1 = __importDefault(require("../../../JSON/slashCommandData.json"));
 const i18next_1 = __importDefault(require("i18next"));
+const generalUtilities_1 = require("../../Utils/generalUtilities");
 const commandData = slashCommandData_json_1.default.faq;
 const Faq = {
     category: 'Info',
@@ -38,8 +38,6 @@ const Faq = {
         const topic = interaction.options.getString('topic', true);
         const allTopics = ['epoch', 'dataset', 'model', 'inference', 'overtraining'];
         const suggestions = allTopics.filter((topicItem) => topicItem.toLowerCase().includes(topic.toLowerCase().trim()));
-        console.log(topic);
-        console.log(suggestions);
         await interaction.respond(suggestions.map((suggestion) => ({ name: suggestion, value: suggestion })));
     },
     async execute(interaction) {
@@ -49,42 +47,38 @@ const Faq = {
         const ephemeral = interaction.options.getBoolean('private') || false;
         const client = interaction.client;
         const { logger } = client;
-        let response = null;
         // TODO: get the language from the user locale if it's an empty string
-        console.log(language);
-        switch (topic) {
-            case 'epoch':
-                response = i18next_1.default.t('faq.epoch', {
-                    lng: language,
-                });
-                break;
-            case 'dataset':
-                response = `Datasets are a set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)`;
-                break;
-            case 'model':
-                response =
-                    'A model is the result of training on a dataset. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
-                break;
-            case 'inference':
-                response =
-                    'Inference is the process where an audio is transformed by the voice model. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
-                break;
-            case 'overtraining':
-                response =
-                    'A solid way to detect overtraining is checking if the **TensorBoard** graph starts rising and never comes back down, leading to robotic, muffled output with poor articulation. You can learn more about it in the [Applio Docs](https://docs.applio.org/getting-started/tensorboard)';
-                break;
-            default:
-                response = '';
-        }
-        if (!response) {
-            await interaction.reply({
-                content: "I'm sorry, display name.I couldn't find the topic you were looking for 😭.You can try the following: ",
-                embeds: [new discord_js_1.EmbedBuilder().setDescription('Look for channel')],
+        const response = i18next_1.default.t(`faq.${topic}`, { lng: language });
+        if (response.startsWith('faq.')) {
+            await interaction.deferReply({ ephemeral: ephemeral });
+            await (0, generalUtilities_1.delay)(3_000);
+            const textResponse = i18next_1.default.t('faq.unknown.message', {
+                user: (0, discord_js_1.bold)(interaction.user.username),
+                lng: language,
+            });
+            const embedTitle = i18next_1.default.t('faq.unknown.embedData.title', {
+                lng: language,
+            });
+            const channelIds = client.discordIDs.Channel;
+            const embedDescription = i18next_1.default.t('faq.unknown.embedData.description', {
+                lng: language,
+                returnObjects: true,
+                okadaChannel: (0, discord_js_1.channelMention)(channelIds.HelpWOkada),
+                helpChannel: (0, discord_js_1.channelMention)(channelIds.HelpRVC),
+                helpAiArtChannel: (0, discord_js_1.channelMention)(channelIds.HelpAiArt),
+            });
+            await interaction.editReply({
+                content: textResponse + ' 😭' + '\n',
+                embeds: [
+                    new discord_js_1.EmbedBuilder()
+                        .setTitle(`✍ ${embedTitle}`)
+                        .setColor(discord_js_1.Colors.DarkAqua)
+                        .setDescription((0, discord_js_1.unorderedList)(embedDescription)),
+                ],
             });
             return;
         }
         await interaction.reply({ content: response, ephemeral });
-        console.log(i18next_1.default.t('greeting'));
         const logData = {
             guildId: interaction.guildId || '',
             channelId: interaction.channelId,
