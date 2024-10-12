@@ -3,17 +3,23 @@
         "name": "cloud",
         "description": "Links to useful resources available on the cloud",
         "descriptionLocalizations": {
-            "pt-BR": "Links para recursos úteis disponíveis na nuvem"
+            "es-ES": "Enlaces a recursos útiles disponibles en la nube",
+            "pt-BR": "Links para recursos úteis disponíveis na nuvem",
+            "it-IT": "Collegamenti a risorse utili disponibili sul cloud"
         },
         "options": {
             "platform": {
                 "name": "platform",
                 "nameLocalizations": {
-                    "pt-BR": "plataforma"
+                    "es-ES": "plataforma",
+                    "pt-BR": "plataforma",
+                    "it-IT": "piattaforma"
                 },
                 "description": "Select a platform",
                 "descriptionLocalizations": {
-                    "pt-BR": "selecione a plataforma"
+                    "es-ES": "Seleccione una plataforma",
+                    "pt-BR": "selecione a plataforma",
+                    "it-IT": "Seleziona una piattaforma"
                 }
             }
         }
@@ -22,37 +28,57 @@
         "name": "faq",
         "description": "Frequently Asked Questions",
         "descriptionLocalizations": {
-            "pt-BR": "Perguntas Frequentes"
+            "es-ES": "Preguntas frecuentes",
+            "pt-BR": "Perguntas Frequentes",
+            "it-IT": "Domande frequenti"
         },
         "options": {
             "topic": {
                 "name": "topic",
                 "nameLocalizations": {
-                    "pt-BR": "assunto"
+                    "en-ES": "tema",
+                    "pt-BR": "tema",
+                    "it-IT": "argomento"
                 },
                 "description": "Select a topic",
                 "descriptionLocalizations": {
-                    "pt-BR": "selecione o tópico"
+                    "en-ES": "Seleccione un tema",
+                    "pt-BR": "selecione o tópico",
+                    "it-IT": "Seleziona un argomento"
                 }
             },
             "language": {
                 "name": "language",
                 "nameLocalizations": {
-                    "pt-BR": "idioma"
+                    "en-ES": "idioma",
+                    "pt-BR": "idioma",
+                    "it-IT": "lingua"
                 },
                 "description": "Response Language (optional)",
                 "descriptionLocalizations": {
-                    "pt-BR": "Idioma da resposta (opcional)"
-                }
+                    "en-ES": "Idioma de respuesta (opcional)",
+                    "pt-BR": "Idioma da resposta (opcional)",
+                    "it-IT": "Lingua di risposta (opzionale)"
+                },
+                "choices": [
+                    {"name": "en", "value": "en"},
+                    {"name": "es", "value": "es"},
+                    {"name": "it", "value": "it"},
+                    {"name": "pt", "value": "pt"}
+                ]
             },
             "private": {
                 "name": "private",
                 "nameLocalizations": {
-                    "pt-BR": "privado"
+                    "en-ES": "privado",
+                    "pt-BR": "privado",
+                    "it-IT": "silenzioso"
                 },
                 "description": "Only you can see the response (optional)",
                 "descriptionLocalizations": {
-                    "pt-BR": "Apenas você vê a resposta (opcional)"
+                    "en-ES": "Solo tú puedes ver la respuesta (opcional)",
+                    "pt-BR": "Apenas você vê a resposta (opcional)",
+                    "it-IT": "Solo tu puoi vedere la risposta (opzionale)"
                 }
             }
         }

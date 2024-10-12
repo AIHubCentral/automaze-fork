@@ -30,6 +30,7 @@ const Faq: SlashCommand = {
                 .setNameLocalizations(commandData.options.language.nameLocalizations)
                 .setDescription(commandData.options.language.description)
                 .setDescriptionLocalizations(commandData.options.language.descriptionLocalizations)
+                .addChoices(commandData.options.language.choices)
                 .setRequired(false)
         )
         .addBooleanOption((option) =>
