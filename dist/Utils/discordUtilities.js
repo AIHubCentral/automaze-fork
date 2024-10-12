@@ -5,6 +5,7 @@ exports.createEmbeds = createEmbeds;
 exports.getAvailableColors = getAvailableColors;
 exports.getGuildById = getGuildById;
 exports.getChannelById = getChannelById;
+exports.getDisplayName = getDisplayName;
 const discord_js_1 = require("discord.js");
 function createEmbed(data, color) {
     /**
@@ -87,4 +88,22 @@ async function getChannelById(channelId, guild) {
         channel = await guild.channels.fetch(channelId);
     }
     return channel;
+}
+/**
+ * Get the display name of a Discord user.
+ * @param user - The Discord User object.
+ * @param guild - The Discord Guild object.
+ * @returns The display name of the user or username if displau name not available.
+ */
+async function getDisplayName(user, guild) {
+    if (!guild)
+        return user.username;
+    try {
+        const member = await guild.members.fetch(user.id);
+        return member.displayName;
+    }
+    catch (error) {
+        // Fallback to username if member is not found
+        return user.username;
+    }
 }

@@ -5,6 +5,7 @@ import { SlashCommand } from '../../Interfaces/Command';
 
 import i18next from 'i18next';
 import { delay } from '../../Utils/generalUtilities';
+import { getDisplayName } from '../../Utils/discordUtilities';
 
 const commandData = slashCommandData.faq;
 
@@ -50,14 +51,29 @@ const Faq: SlashCommand = {
         await interaction.respond(suggestions.map((suggestion) => ({ name: suggestion, value: suggestion })));
     },
     async execute(interaction) {
-        const startTime = Date.now();
-
         const topic = interaction.options.getString('topic', true);
         const language = interaction.options.getString('language') || '';
         const ephemeral = interaction.options.getBoolean('private') || false;
 
+        if (language !== '' && language !== 'en') {
+            return await interaction.reply({
+                content: i18next.t('faq.translation_not_available', { lng: language }),
+                ephemeral: true,
+            });
+        }
+
         const client = interaction.client as ExtendedClient;
         const { logger } = client;
+
+        const logData = {
+            guildId: interaction.guildId || '',
+            channelId: interaction.channelId,
+            commandParams: {
+                topic,
+                language,
+                ephemeral,
+            },
+        };
 
         // TODO: get the language from the user locale if it's an empty string
 
@@ -67,8 +83,10 @@ const Faq: SlashCommand = {
             await interaction.deferReply({ ephemeral: ephemeral });
             await delay(3_000);
 
+            const displayName = await getDisplayName(interaction.user, interaction.guild);
+
             const textResponse = i18next.t('faq.unknown.message', {
-                user: bold(interaction.user.username),
+                user: bold(displayName),
                 lng: language,
             });
 
@@ -96,16 +114,13 @@ const Faq: SlashCommand = {
                 ],
             });
 
+            logger.warn("Couldn't find topic", logData);
+
             return;
         }
 
         await interaction.reply({ content: response, ephemeral });
 
-        const logData = {
-            guildId: interaction.guildId || '',
-            channelId: interaction.channelId,
-            executionTime: (Date.now() - startTime) / 1000,
-        };
         logger.info('FAQ sent by slash command', logData);
     },
 };

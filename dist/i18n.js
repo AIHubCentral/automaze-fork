@@ -9,9 +9,12 @@ const i18next_fs_backend_1 = __importDefault(require("i18next-fs-backend"));
 const initI18n = async () => {
     await i18next_1.default.use(i18next_fs_backend_1.default).init({
         fallbackLng: 'en',
-        preload: ['en', 'pt'],
+        preload: ['en', 'es', 'it', 'pt'],
         backend: {
             loadPath: './locales/{{lng}}/translation.json',
+        },
+        interpolation: {
+            escapeValue: false,
         },
     });
     return i18next_1.default;

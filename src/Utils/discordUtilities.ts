@@ -1,4 +1,4 @@
-import { ColorResolvable, Colors, EmbedBuilder, Guild, GuildBasedChannel } from 'discord.js';
+import { ColorResolvable, Colors, EmbedBuilder, Guild, GuildBasedChannel, User } from 'discord.js';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { EmbedData } from '../Interfaces/BotData';
@@ -102,4 +102,22 @@ export async function getChannelById(channelId: string, guild: Guild): Promise<G
     }
 
     return channel;
+}
+
+/**
+ * Get the display name of a Discord user.
+ * @param user - The Discord User object.
+ * @param guild - The Discord Guild object.
+ * @returns The display name of the user or username if displau name not available.
+ */
+export async function getDisplayName(user: User, guild: Guild | null): Promise<string> {
+    if (!guild) return user.username;
+
+    try {
+        const member = await guild.members.fetch(user.id);
+        return member.displayName;
+    } catch (error) {
+        // Fallback to username if member is not found
+        return user.username;
+    }
 }

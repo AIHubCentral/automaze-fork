@@ -7,6 +7,7 @@ const discord_js_1 = require("discord.js");
 const slashCommandData_json_1 = __importDefault(require("../../../JSON/slashCommandData.json"));
 const i18next_1 = __importDefault(require("i18next"));
 const generalUtilities_1 = require("../../Utils/generalUtilities");
+const discordUtilities_1 = require("../../Utils/discordUtilities");
 const commandData = slashCommandData_json_1.default.faq;
 const Faq = {
     category: 'Info',
@@ -42,19 +43,34 @@ const Faq = {
         await interaction.respond(suggestions.map((suggestion) => ({ name: suggestion, value: suggestion })));
     },
     async execute(interaction) {
-        const startTime = Date.now();
         const topic = interaction.options.getString('topic', true);
         const language = interaction.options.getString('language') || '';
         const ephemeral = interaction.options.getBoolean('private') || false;
+        if (language !== '' && language !== 'en') {
+            return await interaction.reply({
+                content: i18next_1.default.t('faq.translation_not_available', { lng: language }),
+                ephemeral: true,
+            });
+        }
         const client = interaction.client;
         const { logger } = client;
+        const logData = {
+            guildId: interaction.guildId || '',
+            channelId: interaction.channelId,
+            commandParams: {
+                topic,
+                language,
+                ephemeral,
+            },
+        };
         // TODO: get the language from the user locale if it's an empty string
         const response = i18next_1.default.t(`faq.${topic}`, { lng: language });
         if (response.startsWith('faq.')) {
             await interaction.deferReply({ ephemeral: ephemeral });
             await (0, generalUtilities_1.delay)(3_000);
+            const displayName = await (0, discordUtilities_1.getDisplayName)(interaction.user, interaction.guild);
             const textResponse = i18next_1.default.t('faq.unknown.message', {
-                user: (0, discord_js_1.bold)(interaction.user.username),
+                user: (0, discord_js_1.bold)(displayName),
                 lng: language,
             });
             const embedTitle = i18next_1.default.t('faq.unknown.embedData.title', {
@@ -77,14 +93,10 @@ const Faq = {
                         .setDescription((0, discord_js_1.unorderedList)(embedDescription)),
                 ],
             });
+            logger.warn("Couldn't find topic", logData);
             return;
         }
         await interaction.reply({ content: response, ephemeral });
-        const logData = {
-            guildId: interaction.guildId || '',
-            channelId: interaction.channelId,
-            executionTime: (Date.now() - startTime) / 1000,
-        };
         logger.info('FAQ sent by slash command', logData);
     },
 };
