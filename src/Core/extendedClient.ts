@@ -21,6 +21,7 @@ export interface ExtendedClientOptions {
     botConfigs: IBotConfigs;
     botResponses: any;
     botUtils: IBotUtils;
+    repliedUsers: Discord.Collection<string, number>;
 }
 
 class ExtendedClient extends Discord.Client {
@@ -44,6 +45,7 @@ class ExtendedClient extends Discord.Client {
     botCache: Discord.Collection<string, any>;
     scheduler: any;
     knexInstance;
+    repliedUsers: Discord.Collection<string, number>;
 
     constructor(options: Discord.ClientOptions, extendedOptions: ExtendedClientOptions) {
         super(options);
@@ -78,6 +80,7 @@ class ExtendedClient extends Discord.Client {
         this.botResponses = extendedOptions.botResponses;
         this.botUtils = extendedOptions.botUtils;
         this.botCache = new Discord.Collection<string, any>();
+        this.repliedUsers = extendedOptions.repliedUsers;
 
         // cron job
         this.scheduler = new Scheduler(this);

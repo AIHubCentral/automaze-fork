@@ -48,7 +48,10 @@ const Configure = {
         .addBooleanOption((option) => option.setName('bot_reactions').setDescription('Whether the bot should add reactions'))
         .addBooleanOption((option) => option
         .setName('send_logs')
-        .setDescription('Whether the bot should send logs to development server')))
+        .setDescription('Whether the bot should send logs to development server'))
+        .addBooleanOption((option) => option
+        .setName('automated_replies')
+        .setDescription('Whether the bot should send replies to detected questions')))
         .addSubcommand((subcommand) => subcommand
         .setName('cooldown_immune')
         .setDescription('Makes a user immune to cooldowns')
@@ -189,7 +192,7 @@ async function configureStatus(interaction) {
 }
 async function configureActivity(interaction) {
     await interaction.deferReply({ ephemeral: true });
-    let activityTypeInput = interaction.options.getString('activity_type');
+    const activityTypeInput = interaction.options.getString('activity_type');
     const activityName = interaction.options.getString('activity_name') ?? 'AI HUB';
     let activityType = undefined;
     if (activityTypeInput === 'reset') {
@@ -217,6 +220,7 @@ async function configureActivity(interaction) {
 async function configureGeneral(interaction) {
     const botReactions = interaction.options.getBoolean('bot_reactions');
     const sendLogs = interaction.options.getBoolean('send_logs');
+    const automatedReplies = interaction.options.getBoolean('automated_replies');
     const client = interaction.client;
     if (botReactions != null) {
         client.botConfigs.general.reactions = botReactions;
@@ -224,9 +228,13 @@ async function configureGeneral(interaction) {
     if (sendLogs != null) {
         client.botConfigs.general.sendLogs = sendLogs;
     }
+    if (automatedReplies != null) {
+        client.botConfigs.general.automatedReplies = automatedReplies;
+    }
     const responseListing = (0, discord_js_1.unorderedList)([
         `Reactions: ${(0, discord_js_1.inlineCode)(String(client.botConfigs.general.reactions))}`,
         `Send logs: ${(0, discord_js_1.inlineCode)(String(client.botConfigs.general.sendLogs))}`,
+        `Automated replies: ${(0, discord_js_1.inlineCode)(String(client.botConfigs.general.automatedReplies))}`,
     ]);
     const embed = new discord_js_1.EmbedBuilder()
         .setTitle('General configs')

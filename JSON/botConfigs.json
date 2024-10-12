@@ -6,7 +6,8 @@
     "general": {
         "reactions": true,
         "chat": true,
-        "sendLogs": false
+        "sendLogs": false,
+        "autoReplies": false
     },
     "trackModels": false,
     "colors": {

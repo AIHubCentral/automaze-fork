@@ -1,4 +1,4 @@
-import { ChannelType, Message, PublicThreadChannel, TextChannel } from 'discord.js';
+import { ChannelType, Collection, Message, PublicThreadChannel, TextChannel } from 'discord.js';
 import IEventData from '../Interfaces/Events';
 import ExtendedClient from '../Core/extendedClient';
 import { EmbedData } from '../Interfaces/BotData';
@@ -64,7 +64,12 @@ async function handleBotMentioned(prefix: string, message: Message, client: Exte
     });
 }
 
-async function handleFaqQuestions(message: Message, logger: winston.Logger): Promise<void> {
+async function handleFaqQuestions(
+    userId: string,
+    message: Message,
+    repliedUsers: Collection<string, number>,
+    logger: winston.Logger
+): Promise<void> {
     const userInput = message.content.toLowerCase().trim();
     const tokens = tokenizer.tokenize(userInput);
     const keywords = getFaqKeywords();
@@ -72,6 +77,9 @@ async function handleFaqQuestions(message: Message, logger: winston.Logger): Pro
     const matchedKeyword = containsKeyword(tokens, keywords);
 
     if (matchedKeyword && containsQuestionPattern(userInput)) {
+        // check if already replied to user
+        if (repliedUsers.has(userId)) return;
+
         const messageChannel = message.channel as TextChannel;
         let response = null;
 
@@ -104,6 +112,9 @@ async function handleFaqQuestions(message: Message, logger: winston.Logger): Pro
             messageChannel.sendTyping();
             await delay(50 * response.length);
             await message.reply({ content: response, allowedMentions: { repliedUser: true } });
+
+            repliedUsers.set(userId, Date.now());
+
             logger.info('Sent FAQ reply', {
                 guildId: messageChannel.guildId,
                 channelId: messageChannel.id,
@@ -128,7 +139,9 @@ const messageCreateEvent: IEventData = {
             await handleBotMentioned(prefix, message, client);
 
             // tries to answer FAQs
-            handleFaqQuestions(message, client.logger);
+            if (client.botConfigs.general.automatedReplies) {
+                handleFaqQuestions(message.author.id, message, client.repliedUsers, client.logger);
+            }
 
             // triggered on comission channel
             if (message.channel.type !== ChannelType.PublicThread) return;

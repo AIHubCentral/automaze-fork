@@ -48,6 +48,7 @@ class ExtendedClient extends Discord.Client {
     botCache;
     scheduler;
     knexInstance;
+    repliedUsers;
     constructor(options, extendedOptions) {
         super(options);
         this.commands = new Discord.Collection();
@@ -76,6 +77,7 @@ class ExtendedClient extends Discord.Client {
         this.botResponses = extendedOptions.botResponses;
         this.botUtils = extendedOptions.botUtils;
         this.botCache = new Discord.Collection();
+        this.repliedUsers = extendedOptions.repliedUsers;
         // cron job
         this.scheduler = new utils_1.Scheduler(this);
         // finish setup

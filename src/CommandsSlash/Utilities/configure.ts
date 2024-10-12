@@ -24,8 +24,6 @@ import { SlashCommand } from '../../Interfaces/Command.js';
 import ExtendedClient from '../../Core/extendedClient.js';
 import IBotConfigs from '../../Interfaces/BotConfigs.js';
 import { getThemes } from '../../Utils/botUtilities.js';
-import { createEmbed } from '../../Utils/discordUtilities.js';
-import ResourceService from '../../Services/resourcesService.js';
 import CollaboratorService, { ICollaborator } from '../../Services/collaboratorService.js';
 
 const Configure: SlashCommand = {
@@ -101,6 +99,11 @@ const Configure: SlashCommand = {
                     option
                         .setName('send_logs')
                         .setDescription('Whether the bot should send logs to development server')
+                )
+                .addBooleanOption((option) =>
+                    option
+                        .setName('automated_replies')
+                        .setDescription('Whether the bot should send replies to detected questions')
                 )
         )
         .addSubcommand((subcommand) =>
@@ -295,7 +298,7 @@ async function configureStatus(interaction: ChatInputCommandInteraction): Promis
 
 async function configureActivity(interaction: ChatInputCommandInteraction): Promise<void> {
     await interaction.deferReply({ ephemeral: true });
-    let activityTypeInput: string | null = interaction.options.getString('activity_type');
+    const activityTypeInput: string | null = interaction.options.getString('activity_type');
     const activityName: string = interaction.options.getString('activity_name') ?? 'AI HUB';
 
     let activityType: ActivityType | undefined = undefined;
@@ -325,6 +328,7 @@ async function configureActivity(interaction: ChatInputCommandInteraction): Prom
 async function configureGeneral(interaction: ChatInputCommandInteraction): Promise<void> {
     const botReactions = interaction.options.getBoolean('bot_reactions');
     const sendLogs = interaction.options.getBoolean('send_logs');
+    const automatedReplies = interaction.options.getBoolean('automated_replies');
 
     const client = interaction.client as ExtendedClient;
 
@@ -336,9 +340,14 @@ async function configureGeneral(interaction: ChatInputCommandInteraction): Promi
         client.botConfigs.general.sendLogs = sendLogs;
     }
 
+    if (automatedReplies != null) {
+        client.botConfigs.general.automatedReplies = automatedReplies;
+    }
+
     const responseListing = unorderedList([
         `Reactions: ${inlineCode(String(client.botConfigs.general.reactions))}`,
         `Send logs: ${inlineCode(String(client.botConfigs.general.sendLogs))}`,
+        `Automated replies: ${inlineCode(String(client.botConfigs.general.automatedReplies))}`,
     ]);
 
     const embed = new EmbedBuilder()

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 require('dotenv').config();
 
 import * as Discord from 'discord.js';
@@ -37,6 +39,7 @@ const extendedOptions: ExtendedClientOptions = {
         getRandomNumber,
         getRandomFromArray,
     },
+    repliedUsers: new Discord.Collection<string, number>(),
 };
 
 if (!devMode) {

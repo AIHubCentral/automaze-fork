@@ -50,12 +50,15 @@ async function handleBotMentioned(prefix, message, client) {
         },
     });
 }
-async function handleFaqQuestions(message, logger) {
+async function handleFaqQuestions(userId, message, repliedUsers, logger) {
     const userInput = message.content.toLowerCase().trim();
     const tokens = nlpClassifier_1.tokenizer.tokenize(userInput);
     const keywords = (0, botUtilities_1.getFaqKeywords)();
     const matchedKeyword = (0, botUtilities_1.containsKeyword)(tokens, keywords);
     if (matchedKeyword && (0, botUtilities_1.containsQuestionPattern)(userInput)) {
+        // check if already replied to user
+        if (repliedUsers.has(userId))
+            return;
         const messageChannel = message.channel;
         let response = null;
         switch (matchedKeyword) {
@@ -86,6 +89,7 @@ async function handleFaqQuestions(message, logger) {
             messageChannel.sendTyping();
             await (0, generalUtilities_1.delay)(50 * response.length);
             await message.reply({ content: response, allowedMentions: { repliedUser: true } });
+            repliedUsers.set(userId, Date.now());
             logger.info('Sent FAQ reply', {
                 guildId: messageChannel.guildId,
                 channelId: messageChannel.id,
@@ -108,7 +112,9 @@ const messageCreateEvent = {
         else {
             await handleBotMentioned(prefix, message, client);
             // tries to answer FAQs
-            handleFaqQuestions(message, client.logger);
+            if (client.botConfigs.general.automatedReplies) {
+                handleFaqQuestions(message.author.id, message, client.repliedUsers, client.logger);
+            }
             // triggered on comission channel
             if (message.channel.type !== discord_js_1.ChannelType.PublicThread)
                 return;
