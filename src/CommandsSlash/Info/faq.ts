@@ -44,8 +44,8 @@ const Faq: SlashCommand = {
         ),
     async autocomplete(interaction) {
         const topic = interaction.options.getString('topic', true);
-        const allTopics = ['epoch', 'dataset', 'model', 'inference', 'overtraining'];
-        const suggestions = allTopics.filter((topicItem) =>
+        const allTopics = i18next.t('faq.topics', { returnObjects: true });
+        const suggestions = Object.keys(allTopics).filter((topicItem) =>
             topicItem.toLowerCase().includes(topic.toLowerCase().trim())
         );
         await interaction.respond(suggestions.map((suggestion) => ({ name: suggestion, value: suggestion })));
@@ -77,7 +77,7 @@ const Faq: SlashCommand = {
 
         // TODO: get the language from the user locale if it's an empty string
 
-        const response = i18next.t(`faq.${topic}`, { lng: language });
+        const response = i18next.t(`faq.topics.${topic}`, { lng: language });
 
         if (response.startsWith('faq.')) {
             await interaction.deferReply({ ephemeral: ephemeral });
@@ -119,7 +119,10 @@ const Faq: SlashCommand = {
             return;
         }
 
-        await interaction.reply({ content: response, ephemeral });
+        await interaction.reply({
+            embeds: [new EmbedBuilder().setDescription(response).setColor(Colors.Blurple)],
+            ephemeral,
+        });
 
         logger.info('FAQ sent by slash command', logData);
     },

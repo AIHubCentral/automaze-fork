@@ -38,8 +38,8 @@ const Faq = {
         .setRequired(false)),
     async autocomplete(interaction) {
         const topic = interaction.options.getString('topic', true);
-        const allTopics = ['epoch', 'dataset', 'model', 'inference', 'overtraining'];
-        const suggestions = allTopics.filter((topicItem) => topicItem.toLowerCase().includes(topic.toLowerCase().trim()));
+        const allTopics = i18next_1.default.t('faq.topics', { returnObjects: true });
+        const suggestions = Object.keys(allTopics).filter((topicItem) => topicItem.toLowerCase().includes(topic.toLowerCase().trim()));
         await interaction.respond(suggestions.map((suggestion) => ({ name: suggestion, value: suggestion })));
     },
     async execute(interaction) {
@@ -64,7 +64,7 @@ const Faq = {
             },
         };
         // TODO: get the language from the user locale if it's an empty string
-        const response = i18next_1.default.t(`faq.${topic}`, { lng: language });
+        const response = i18next_1.default.t(`faq.topics.${topic}`, { lng: language });
         if (response.startsWith('faq.')) {
             await interaction.deferReply({ ephemeral: ephemeral });
             await (0, generalUtilities_1.delay)(3_000);
@@ -96,7 +96,10 @@ const Faq = {
             logger.warn("Couldn't find topic", logData);
             return;
         }
-        await interaction.reply({ content: response, ephemeral });
+        await interaction.reply({
+            embeds: [new discord_js_1.EmbedBuilder().setDescription(response).setColor(discord_js_1.Colors.Blurple)],
+            ephemeral,
+        });
         logger.info('FAQ sent by slash command', logData);
     },
 };
