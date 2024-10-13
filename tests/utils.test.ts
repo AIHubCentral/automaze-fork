@@ -7,6 +7,8 @@ import {
     getFaqKeywords,
     containsQuestionPattern,
 } from '../src/Utils/botUtilities';
+import { processTranslation } from '../src/Utils/generalUtilities';
+import { EmbedData } from '../src/Interfaces/BotData';
 
 describe('Bot Utilities', () => {
     describe('Embed Formatting', () => {
@@ -245,6 +247,29 @@ describe('Bot Utilities', () => {
             expect(containsQuestionPattern('is that what overtraining is')).toBe(true);
 
             expect(containsQuestionPattern('I know what epochs are')).toBe(false);
+        });
+    });
+});
+
+describe('General Utilities', () => {
+    describe('Process translation', () => {
+        const sample1 = 'Hello world!';
+        const sample2 = '';
+        const sample3 = ['One', 'Two', 'Three'];
+        const sample4 = { description: ['Hello'] } as EmbedData;
+
+        it('should return the translation as string or object', () => {
+            expect(typeof processTranslation(sample1)).toBe('string');
+            expect(typeof processTranslation(sample2)).toBe('string');
+            expect(typeof processTranslation(sample3)).toBe('string');
+            expect(typeof processTranslation(sample4)).toBe('object');
+        });
+
+        it('should return appropriate values', () => {
+            expect(processTranslation(sample1)).toBe('Hello world!');
+            expect(processTranslation(sample2)).toBe('');
+            expect(processTranslation(sample3)).toBe('One\nTwo\nThree');
+            expect(processTranslation(sample4)).toBe(sample4);
         });
     });
 });

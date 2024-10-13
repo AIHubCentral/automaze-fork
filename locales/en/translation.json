@@ -21,6 +21,16 @@
             "inference": "Inference is the process where an audio is transformed by the voice model. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)",
             "overtraining": "A solid way to detect overtraining is checking if the [TensorBoard Graph](https://docs.applio.org/getting-started/tensorboard) starts rising and never comes back down, leading to robotic, muffled output with poor articulation",
             "pretrain": "**Pretrained**: A model trained on several sets of long-duration audios, used as a starting point for training in RVC. You can check a good list of pretrained models in <#1233407331405004954>",
+            "rmvpe": {
+                "title": "Different types of **RMVPE** Pitch Extraction",
+                "description": [
+                    "- **rmvpe**: A Robust Model for Vocal Pitch Estimation in Polyphonic Music, the normal version of the best pitch extraction, it's robust and not sensible to noise",
+                    "- **rmvpe+**: Inference ONLY, has a pitch threshold, it limits the max and minimum pitch possible, basically deleting f0 values below and above certain thresholds",
+                    "- **rmvpe-gpu**: *Training* ONLY, uses your gpu for the feature extraction process, using more gpu so making training faster",
+                    "- **rmvpe-onnx**: *Wokada* ONLY, its a must for AMD Users who use ONNX models"
+                ],
+                "footer": "Credits: Nick088"
+            },
             "rvc": "**RVC (Retrieval-based Voice Conversion)**: A voice cloning technique that retrieves and combines audio segments from a source speaker to synthesize the voice of a target speaker, without requiring large parallel datasets."
         },
         "unknown": {

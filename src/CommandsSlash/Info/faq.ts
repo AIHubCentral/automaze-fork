@@ -4,7 +4,7 @@ import slashCommandData from '../../../JSON/slashCommandData.json';
 import { SlashCommand } from '../../Interfaces/Command';
 
 import i18next from 'i18next';
-import { delay } from '../../Utils/generalUtilities';
+import { delay, processTranslation, TranslationResult } from '../../Utils/generalUtilities';
 import { getDisplayName } from '../../Utils/discordUtilities';
 
 const commandData = slashCommandData.faq;
@@ -77,9 +77,12 @@ const Faq: SlashCommand = {
 
         // TODO: get the language from the user locale if it's an empty string
 
-        const response = i18next.t(`faq.topics.${topic}`, { lng: language });
+        const response = i18next.t(`faq.topics.${topic}`, {
+            lng: language,
+            returnObjects: true,
+        }) as TranslationResult;
 
-        if (response.startsWith('faq.')) {
+        if (typeof response === 'string' && response.startsWith('faq.')) {
             await interaction.deferReply({ ephemeral: ephemeral });
             await delay(3_000);
 
@@ -119,8 +122,29 @@ const Faq: SlashCommand = {
             return;
         }
 
+        const processedTranslation = processTranslation(response);
+        const embed = new EmbedBuilder().setColor(Colors.Blurple);
+
+        console.log('processed', processedTranslation);
+
+        if (typeof processedTranslation === 'string') {
+            embed.setDescription(processedTranslation);
+        } else {
+            if (processedTranslation.title) {
+                embed.setTitle(processedTranslation.title);
+            }
+
+            if (processedTranslation.description) {
+                embed.setDescription(processedTranslation.description.join('\n'));
+            }
+
+            if (processedTranslation.footer) {
+                embed.setFooter({ text: processedTranslation.footer });
+            }
+        }
+
         await interaction.reply({
-            embeds: [new EmbedBuilder().setDescription(response).setColor(Colors.Blurple)],
+            embeds: [embed],
             ephemeral,
         });
 

@@ -2,6 +2,7 @@
 // @ts-nocheck
 
 import { setTimeout } from 'node:timers/promises';
+import { EmbedData } from '../Interfaces/BotData';
 
 export async function delay(durationMs: number): Promise<void> {
     await setTimeout(durationMs);
@@ -18,4 +19,22 @@ export function getRandomFromArray(arr: Array<any>): any {
     if (arr.length === 1) return arr[0];
     const randomIndex = getRandomNumber(0, arr.length - 1);
     return arr[randomIndex];
+}
+
+export type TranslationResult = EmbedData | Array<string> | string;
+
+/**
+ * Returns a string or object
+ * @param translation - Result from i18next.t()
+ */
+export function processTranslation(translation: TranslationResult): string | EmbedData {
+    if (typeof translation === 'string') {
+        return translation;
+    } else if (typeof translation === 'object' && translation !== null) {
+        if (Array.isArray(translation)) {
+            return translation.join('\n');
+        }
+        return translation;
+    }
+    throw new Error('translation should be of type TranslationResult');
 }

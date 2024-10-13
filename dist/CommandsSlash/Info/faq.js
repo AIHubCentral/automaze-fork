@@ -64,8 +64,11 @@ const Faq = {
             },
         };
         // TODO: get the language from the user locale if it's an empty string
-        const response = i18next_1.default.t(`faq.topics.${topic}`, { lng: language });
-        if (response.startsWith('faq.')) {
+        const response = i18next_1.default.t(`faq.topics.${topic}`, {
+            lng: language,
+            returnObjects: true,
+        });
+        if (typeof response === 'string' && response.startsWith('faq.')) {
             await interaction.deferReply({ ephemeral: ephemeral });
             await (0, generalUtilities_1.delay)(3_000);
             const displayName = await (0, discordUtilities_1.getDisplayName)(interaction.user, interaction.guild);
@@ -96,8 +99,25 @@ const Faq = {
             logger.warn("Couldn't find topic", logData);
             return;
         }
+        const processedTranslation = (0, generalUtilities_1.processTranslation)(response);
+        const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Blurple);
+        console.log('processed', processedTranslation);
+        if (typeof processedTranslation === 'string') {
+            embed.setDescription(processedTranslation);
+        }
+        else {
+            if (processedTranslation.title) {
+                embed.setTitle(processedTranslation.title);
+            }
+            if (processedTranslation.description) {
+                embed.setDescription(processedTranslation.description.join('\n'));
+            }
+            if (processedTranslation.footer) {
+                embed.setFooter({ text: processedTranslation.footer });
+            }
+        }
         await interaction.reply({
-            embeds: [new discord_js_1.EmbedBuilder().setDescription(response).setColor(discord_js_1.Colors.Blurple)],
+            embeds: [embed],
             ephemeral,
         });
         logger.info('FAQ sent by slash command', logData);
