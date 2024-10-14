@@ -1,5 +1,48 @@
 {
     "general": {
         "translation_not_available": "Questo comando non è ancora disponibile in questa lingua."
+    },
+    "faq": {
+        "topics": {
+            "artifacting": "**Artefatti**: quando l'output di inferenza suona robotico, distorto, con rumore di fondo e non riesce a modulare correttamente le parole.",
+            "architecture": "**Architettura del modello**: i modelli principali coinvolti in RVC sono HuBERT (per l'estrazione delle funzionalità) e Net_G (il modello del generatore).",
+            "batch size": "**Dimensioni batch**: la quantità di GPU usata per eseguire il training del modello, con dimensioni batch maggiori che in genere comportano una durata di training più breve. D'altra parte, una dimensione del batch inferiore può rendere il modello più accurato, tuttavia è più dispendioso in termini di risorse e più lento. **Nella maggior parte dei casi, una dimensione del lotto di 4 dà buoni risultati**.",
+            "epoch": "**Epoca**: numero di iterazioni eseguite per completare un ciclo completo del set di dati durante l'addestramento. Non è possibile dire con precisione di quante epoche hai bisogno per il tuo set di dati, devi monitorare il [TensorBoard Graph](https://docs.applio.org/getting-started/tensorboard) per sapere se il tuo modello è in overtraining.",
+            "dataset": "**Set di dati**: un set di file audio compressi in un file .zip, utilizzato da RVC per l'addestramento vocale. Puoi saperne di più su di esso in [Applio Docs](https://docs.applio.org/guides/create-datasets/create-datasets)",
+            "G and D": "**G e D**: modelli generativi (G) e discriminanti (D), rispettivamente, che memorizzano i dati di addestramento, con il modello generativo che impara a replicare risultati simili all'originale e il discriminatore che cerca di distinguere i dati reali dai dati generati.",
+            "hubert": "**HuBERT**: un modello basato su trasformatore che estrae testo dall'audio non elaborato, precedentemente addestrato su un'attività di previsione mascherata, che RVC utilizza per addestrare i modelli vocali. Esistono diversi tipi di Hubert, alcuni esempi sono ContentVec, il giapponese Hubert-Base e il cinese Hubert-Large. Per saperne di più, consultate [Applio Docs](https://docs.applio.org/faq)",
+            "index": "**Integrazione Faiss (file .index)**: la [libreria Faiss](https://github.com/facebookresearch/faiss) consente un'efficiente ricerca approssimativa del vicino più prossimo in RVC durante l'inferenza, il recupero e la combinazione di segmenti audio di addestramento con gli incorporamenti più vicini.",
+            "model": "**Modello**: risultato del training su un set di dati. I modelli RVC addestrati di solito hanno l'estensione [.pth](https://medium.com/@manasnandmohan/comprehending-pth-files-the-backbone-of-pytorch-models-ef9b232e092a), che è un formato di file utilizzato per salvare diversi stati del modello, inclusi pesi, distorsioni e altri parametri. Dai un'occhiata a questa [guida](https://docs.applio.org/getting-started/training) per imparare a creare il tuo primo modello vocale.",
+            "net_g": "**Net_G**: Il modello di generatore in RVC che accetta le funzionalità [HuBERT](https://arxiv.org/abs/2106.07447) e gli incorporamenti degli altoparlanti come input per generare la forma d'onda audio convertita.",
+            "f0 extraction": "**Metodi di estrazione F0**: tecniche come Crepe (full-tiny), RMVPE e FCPE utilizzate per estrarre informazioni sulla frequenza fondamentale (altezza) dall'audio.",
+            "pitch guidance": "**Guida all'intonazione**: Sfruttare la [frequenza fondamentale (f0)](https://en.wikipedia.org/wiki/Fundamental_frequency) della voce in ingresso durante la sintesi per mantenere meglio l'intonazione, l'intonazione e la melodia originali.",
+            "sample rate": "🔉 **La frequenza di campionamento** si riferisce al numero di volte al secondo in cui un segnale audio analogico viene convertito in digitale, misurato in Hertz (Hz). Frequenze di campionamento più elevate catturano più dettagli ma aumentano le dimensioni del file. Semplice ma fondamentale per la qualità audio.\n\n> 💡 **Suggerimento**: Controlla la frequenza di campionamento del tuo set di dati per scegliere meglio un modello pre-addestrato come 32k, 40k o 48k. Sfortunatamente non sono ancora disponibili pre-train a 44,1 Khz, quindi scegline uno che abbia una frequenza di campionamento più vicina al tuo set di dati e verifica se funziona bene.",
+            "inference": "**Inferenza**: il processo in cui un audio viene trasformato dal modello vocale. Per saperne di più, consultate [Applio Docs](https://docs.applio.org/faq)",
+            "overtraining": "**Overtraining**: un modo efficace per rilevare il sovrallenamento è controllare se il [TensorBoard Graph](https://docs.applio.org/getting-started/tensorboard) inizia a salire e non torna mai più giù, portando a un output robotico e ovattato con scarsa articolazione.",
+            "pretrain": "**Pre-training**: un modello sottoposto a training su diversi set di audio di lunga durata, utilizzato come punto di partenza per il training in RVC. Puoi controllare un buon elenco di modelli pre-addestrati in <#1233407331405004954>",
+            "rmvpe": {
+                "title": "Diversi tipi di estrazione della pece **RMVPE**",
+                "description": [
+                    "- **rmvpe**: Un modello robusto per la stima dell'altezza vocale nella musica polifonica, la versione normale della migliore estrazione dell'altezza, è robusto e non sensibile al rumore",
+                    "- **rmvpe+**: Solo inferenza, ha una soglia di passo, limita il passo massimo e minimo possibile, sostanzialmente cancellando i valori f0 al di sotto e al di sopra di determinate soglie",
+                    "- **rmvpe-gpu**: *Solo allenamento*, utilizza la tua gpu per il processo di estrazione delle funzioni, utilizzando più gpu in modo da rendere l'allenamento più veloce",
+                    "- **rmvpe-onnx**: *SOLO Wokada*, è un must per gli utenti AMD che utilizzano i modelli ONNX"
+                ],
+                "footer": "Crediti: Nick088"
+            },
+            "rvc": "**RVC (Retrieval-based Voice Conversion)**: Una tecnica di clonazione vocale che recupera e combina segmenti audio da un altoparlante di origine per sintetizzare la voce di un oratore di destinazione, senza richiedere grandi set di dati paralleli."
+        },
+        "unknown": {
+            "message": "Mi dispiace, {{user}}. Non sono riuscito a trovare l'argomento che stavi cercando",
+            "embedData": {
+                "title": "Suggerimenti",
+                "description": [
+                    "Cercalo in [AI HUB Docs](https://docs.aihub.wtf/) o [Applio Docs](https://docs.applio.org/faq). Probabilmente troverai la tua risposta lì 📚",
+                    "Chiedi aiuto in {{okadaChannel}} se è correlato al cambio di voce in tempo reale",
+                    "Chiedi aiuto in {{helpChannel}} per un aiuto generale, ma usa prima il comando `!howtoask` per imparare a strutturare correttamente la tua domanda e aumentare le tue possibilità di ottenere una risposta",
+                    "Ultimo ma non meno importante, chiedi aiuto in {{helpAiArtChannel}} se è correlato alle immagini AI"
+                ]
+            }
+        }
     }
 }
