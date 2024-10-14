@@ -13,6 +13,7 @@ exports.processResourceAlt = processResourceAlt;
 exports.getFaqKeywords = getFaqKeywords;
 exports.containsKeyword = containsKeyword;
 exports.containsQuestionPattern = containsQuestionPattern;
+exports.isAskingForAssistance = isAskingForAssistance;
 exports.getResourceData = getResourceData;
 exports.getThemeColors = getThemeColors;
 exports.getThemes = getThemes;
@@ -154,6 +155,14 @@ function containsQuestionPattern(text) {
         /anyone knows what \b\w+\b (?:is|are)/i,
         /i(?:dk|\sdon't)(?:\s)?(?:know)? what \b\w+\b (?:is|are|means)/i,
         /is that what \b\w+\b is/i
+    ];
+    return patterns.some(pattern => pattern.test(text));
+}
+function isAskingForAssistance(text) {
+    const patterns = [
+        /(?:can|please)?(?:\s)?(?:you|someone|anyone) help(?:\s)?(?:me)?/i,
+        /(?:i|it|its|it's)?(?:\s)?(?:got|givin|giving|showing)(?:\s)(?:a|an|some)?(?:\s)?error(?:s)?/i,
+        /can i ask(?:\s)?(?:you)? (?:something|somethin|somethin')/i,
     ];
     return patterns.some(pattern => pattern.test(text));
 }

@@ -93,6 +93,7 @@ async function handleFaqQuestions(userId, message, repliedUsers, logger) {
             logger.info('Sent FAQ reply', {
                 guildId: messageChannel.guildId,
                 channelId: messageChannel.id,
+                channelName: messageChannel.name,
                 keyword: matchedKeyword,
             });
         }
@@ -114,6 +115,45 @@ const messageCreateEvent = {
             // tries to answer FAQs
             if (client.botConfigs.general.automatedReplies) {
                 handleFaqQuestions(message.author.id, message, client.repliedUsers, client.logger);
+                // send !howtoask if user is asking for assistance
+                const helpChannels = [
+                    client.discordIDs.Channel.HelpRVC,
+                    client.discordIDs.Channel.HelpWOkada,
+                    client.discordIDs.Channel.HelpAiArt,
+                    client.discordIDs.Channel.Verified,
+                ];
+                if (helpChannels.includes(message.channelId) &&
+                    (0, botUtilities_1.isAskingForAssistance)(message.content.toLowerCase()) &&
+                    message.attachments.size === 0) {
+                    const startTime = Date.now();
+                    // check if already replied to user
+                    if (client.repliedUsers.has(message.author.id))
+                        return;
+                    const currentChannel = message.channel;
+                    const displayName = await (0, discordUtilities_1.getDisplayName)(message.author, message.guild);
+                    await currentChannel.sendTyping();
+                    await (0, generalUtilities_1.delay)(2_000);
+                    const embed = new discord_js_1.EmbedBuilder()
+                        .setColor(discord_js_1.Colors.White)
+                        .setDescription([
+                        `Hey, **${displayName}**! Please use the command ${(0, discord_js_1.inlineCode)('!howtoask')} to increase your chance of getting help by structuring your question in a way others can understand better. Also make sure you're asking in the right help channel:`,
+                        `- ${(0, discord_js_1.bold)('General RVC help')}: ${(0, discord_js_1.channelMention)(client.discordIDs.Channel.HelpRVC)}`,
+                        `- ${(0, discord_js_1.bold)('W-Okada / Realtime RVC')}: ${(0, discord_js_1.channelMention)(client.discordIDs.Channel.HelpWOkada)}`,
+                        `- ${(0, discord_js_1.bold)('AI image related')}: ${(0, discord_js_1.channelMention)(client.discordIDs.Channel.HelpAiArt)}`,
+                    ].join('\n'));
+                    await message.reply({
+                        embeds: [embed],
+                        allowedMentions: { repliedUser: true },
+                    });
+                    client.repliedUsers.set(message.author.id, Date.now());
+                    client.logger.info('Sent !howtoask reply', {
+                        guildId: currentChannel.guildId,
+                        channelId: currentChannel.id,
+                        channelName: currentChannel.name,
+                        keyword: message.content,
+                        executionTime: (Date.now() - startTime) / 1_000,
+                    });
+                }
             }
             // triggered on comission channel
             if (message.channel.type !== discord_js_1.ChannelType.PublicThread)

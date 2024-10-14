@@ -1,10 +1,26 @@
-import { ChannelType, Collection, Message, PublicThreadChannel, TextChannel } from 'discord.js';
+import {
+    bold,
+    channelMention,
+    ChannelType,
+    Collection,
+    Colors,
+    EmbedBuilder,
+    inlineCode,
+    Message,
+    PublicThreadChannel,
+    TextChannel,
+} from 'discord.js';
 import IEventData from '../Interfaces/Events';
 import ExtendedClient from '../Core/extendedClient';
 import { EmbedData } from '../Interfaces/BotData';
-import { createEmbed } from '../Utils/discordUtilities';
+import { createEmbed, getDisplayName } from '../Utils/discordUtilities';
 import { tokenizer } from '../Database/nlpClassifier';
-import { containsKeyword, containsQuestionPattern, getFaqKeywords } from '../Utils/botUtilities';
+import {
+    containsKeyword,
+    containsQuestionPattern,
+    getFaqKeywords,
+    isAskingForAssistance,
+} from '../Utils/botUtilities';
 import { delay } from '../Utils/generalUtilities';
 import winston from 'winston';
 
@@ -118,6 +134,7 @@ async function handleFaqQuestions(
             logger.info('Sent FAQ reply', {
                 guildId: messageChannel.guildId,
                 channelId: messageChannel.id,
+                channelName: messageChannel.name,
                 keyword: matchedKeyword,
             });
         }
@@ -141,6 +158,57 @@ const messageCreateEvent: IEventData = {
             // tries to answer FAQs
             if (client.botConfigs.general.automatedReplies) {
                 handleFaqQuestions(message.author.id, message, client.repliedUsers, client.logger);
+
+                // send !howtoask if user is asking for assistance
+                const helpChannels: string[] = [
+                    client.discordIDs.Channel.HelpRVC,
+                    client.discordIDs.Channel.HelpWOkada,
+                    client.discordIDs.Channel.HelpAiArt,
+                    client.discordIDs.Channel.Verified,
+                ];
+
+                if (
+                    helpChannels.includes(message.channelId) &&
+                    isAskingForAssistance(message.content.toLowerCase()) &&
+                    message.attachments.size === 0
+                ) {
+                    const startTime = Date.now();
+
+                    // check if already replied to user
+                    if (client.repliedUsers.has(message.author.id)) return;
+
+                    const currentChannel = message.channel as TextChannel;
+                    const displayName = await getDisplayName(message.author, message.guild);
+
+                    await currentChannel.sendTyping();
+                    await delay(2_000);
+
+                    const embed = new EmbedBuilder()
+                        .setColor(Colors.White)
+                        .setDescription(
+                            [
+                                `Hey, **${displayName}**! Please use the command ${inlineCode('!howtoask')} to increase your chance of getting help by structuring your question in a way others can understand better. Also make sure you're asking in the right help channel:`,
+                                `- ${bold('General RVC help')}: ${channelMention(client.discordIDs.Channel.HelpRVC)}`,
+                                `- ${bold('W-Okada / Realtime RVC')}: ${channelMention(client.discordIDs.Channel.HelpWOkada)}`,
+                                `- ${bold('AI image related')}: ${channelMention(client.discordIDs.Channel.HelpAiArt)}`,
+                            ].join('\n')
+                        );
+
+                    await message.reply({
+                        embeds: [embed],
+                        allowedMentions: { repliedUser: true },
+                    });
+
+                    client.repliedUsers.set(message.author.id, Date.now());
+
+                    client.logger.info('Sent !howtoask reply', {
+                        guildId: currentChannel.guildId,
+                        channelId: currentChannel.id,
+                        channelName: currentChannel.name,
+                        keyword: message.content,
+                        executionTime: (Date.now() - startTime) / 1_000,
+                    });
+                }
             }
 
             // triggered on comission channel

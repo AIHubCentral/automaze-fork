@@ -177,7 +177,15 @@ export function containsQuestionPattern(text: string): boolean {
         /i(?:dk|\sdon't)(?:\s)?(?:know)? what \b\w+\b (?:is|are|means)/i,
         /is that what \b\w+\b is/i
     ];
+    return patterns.some(pattern => pattern.test(text));
+}
 
+export function isAskingForAssistance(text: string): boolean {
+    const patterns = [
+        /(?:can|please)?(?:\s)?(?:you|someone|anyone) help(?:\s)?(?:me)?/i,
+        /(?:i|it|its|it's)?(?:\s)?(?:got|givin|giving|showing)(?:\s)(?:a|an|some)?(?:\s)?error(?:s)?/i,
+        /can i ask(?:\s)?(?:you)? (?:something|somethin|somethin')/i,
+    ];
     return patterns.some(pattern => pattern.test(text));
 }
 

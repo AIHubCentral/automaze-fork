@@ -6,6 +6,7 @@ import {
     containsKeyword,
     getFaqKeywords,
     containsQuestionPattern,
+    isAskingForAssistance,
 } from '../src/Utils/botUtilities';
 import { processTranslation } from '../src/Utils/generalUtilities';
 import { EmbedData } from '../src/Interfaces/BotData';
@@ -247,6 +248,22 @@ describe('Bot Utilities', () => {
             expect(containsQuestionPattern('is that what overtraining is')).toBe(true);
 
             expect(containsQuestionPattern('I know what epochs are')).toBe(false);
+        });
+
+        it('should detect if user is asking for assistance', () => {
+            expect(isAskingForAssistance('can you help me?')).toBe(true);
+            expect(isAskingForAssistance('can someone help me?')).toBe(true);
+            expect(isAskingForAssistance('can anyone help me?')).toBe(true);
+            expect(isAskingForAssistance('can someone help')).toBe(true);
+            expect(isAskingForAssistance('someone help pls')).toBe(true);
+            expect(isAskingForAssistance('please anyone help')).toBe(true);
+            expect(isAskingForAssistance('i got an error')).toBe(true);
+            expect(isAskingForAssistance('got an error')).toBe(true);
+            expect(isAskingForAssistance('givin error')).toBe(true);
+            expect(isAskingForAssistance("it's showing an error")).toBe(true);
+            expect(isAskingForAssistance('its showing some errors')).toBe(true);
+            expect(isAskingForAssistance('can i ask you somethin?')).toBe(true);
+            expect(isAskingForAssistance('can i ask something?')).toBe(true);
         });
     });
 });
