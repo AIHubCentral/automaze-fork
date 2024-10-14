@@ -52,12 +52,17 @@ const Faq: SlashCommand = {
     },
     async execute(interaction) {
         const topic = interaction.options.getString('topic', true);
-        const language = interaction.options.getString('language') || '';
+        let language = interaction.options.getString('language') || '';
         const ephemeral = interaction.options.getBoolean('private') || false;
 
-        if (language !== '' && language !== 'en') {
+        // try to get the language from the user locale if language input is an empty string
+        if (language === '') {
+            language = interaction.locale;
+        }
+
+        if (language !== '' && ['it', 'pt'].includes(language)) {
             return await interaction.reply({
-                content: i18next.t('faq.translation_not_available', { lng: language }),
+                content: i18next.t('general.translation_not_available', { lng: language }),
                 ephemeral: true,
             });
         }
@@ -74,8 +79,6 @@ const Faq: SlashCommand = {
                 ephemeral,
             },
         };
-
-        // TODO: get the language from the user locale if it's an empty string
 
         const response = i18next.t(`faq.topics.${topic}`, {
             lng: language,

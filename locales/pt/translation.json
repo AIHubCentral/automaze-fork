@@ -1,9 +1,8 @@
 {
-    "greeting": "Olá!",
+    "general": {"translation_not_available": "Esse comando ainda não está disponível em português."},
     "faq": {
         "topics": {
             "epoch": "Época (epoch) é o número de iterações que completam um ciclo inteiro do dataset durante o treino. Você pode aprender mais sobre isso na documentação do Applio em inglês [Applio Docs](https://docs.applio.org/faq)"
-        },
-        "translation_not_available": "Esse comando ainda não está disponível em português."
+        }
     }
 }
