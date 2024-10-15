@@ -50,12 +50,6 @@ const Faq = {
         if (language === '') {
             language = interaction.locale;
         }
-        if (language !== '' && ['pt'].includes(language)) {
-            return await interaction.reply({
-                content: i18next_1.default.t('general.translation_not_available', { lng: language }),
-                ephemeral: true,
-            });
-        }
         const client = interaction.client;
         const { logger } = client;
         const logData = {

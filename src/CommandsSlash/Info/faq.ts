@@ -60,13 +60,6 @@ const Faq: SlashCommand = {
             language = interaction.locale;
         }
 
-        if (language !== '' && ['pt'].includes(language)) {
-            return await interaction.reply({
-                content: i18next.t('general.translation_not_available', { lng: language }),
-                ephemeral: true,
-            });
-        }
-
         const client = interaction.client as ExtendedClient;
         const { logger } = client;
 

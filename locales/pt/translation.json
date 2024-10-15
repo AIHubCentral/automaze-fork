@@ -1,8 +1,48 @@
 {
-    "general": {"translation_not_available": "Esse comando ainda não está disponível em português."},
+    "general": {
+        "translation_not_available": "Esse comando ainda não está disponível em português."
+    },
     "faq": {
         "topics": {
-            "epoch": "Época (epoch) é o número de iterações que completam um ciclo inteiro do dataset durante o treino. Você pode aprender mais sobre isso na documentação do Applio em inglês [Applio Docs](https://docs.applio.org/faq)"
+            "artifacting": "**Artefatos**: Quando o resultado da inferência soa robótica, distorcida, com ruído de fundo e não consegue produzir as palavras corretamente.",
+            "architecture": "**Arquitetura do modelo**: Os principais modelos envolvidos no RVC são HuBERT (para extração de recursos) e Net_G (o modelo gerador).",
+            "batch size": "**Tamanho do lote**: Quantidade de GPU usada para treinar o modelo, tamanhos de lote maiores geralmente levam a uma duração de treinamento mais curta. Por outro lado, o tamanho menor do lote pode tornar o modelo mais preciso, no entanto, consome mais recursos e é mais lento. **Para a maioria dos casos, um tamanho de lote de 4 dá bons resultados**.",
+            "epoch": "**Época**: Se refere ao número de iterações executadas para concluir um ciclo completo do conjunto de dados (dataset) durante o treino. Não é possível dizer exatamente quantas épocas (epochs) você precisa para seu conjunto de dados, você precisa monitorar o [Gráfico do Tensorboard](https://docs.applio.org/getting-started/tensorboard) para saber se seu modelo está treinando demais (overtraining).",
+            "dataset": "**Conjunto de dados (dataset)**: Refere-se a um conjunto de arquivos de áudio compactados em um arquivo .zip, usado pelo RVC para treinamento do modelo de voz. Você pode aprender mais sobre o assunto na [Documentação do Applio](https://docs.applio.org/guides/create-datasets/create-datasets)",
+            "G and D": "**G e D**: Refere-se aos modelos generativos (G) e discriminadores (D), respectivamente, que armazenam os dados de treinamento, com o modelo generativo aprendendo a replicar resultados semelhantes ao original e o discriminador tentando distinguir dados reais dos dados gerados.",
+            "hubert": "HuBERT: É um modelo baseado em transformer que extrai texto de um áudio, previamente treinado em uma tarefa de previsão mascarada, que o RVC usa para treinar os modelos de voz. Existem vários tipos de Hubert, alguns exemplos são ContentVec, Hubert-Base japonês e Hubert-Large chinês. Você pode aprender mais sobre isso na [Documentação do Applio](https://docs.applio.org/faq)",
+            "index": "**Integração Faiss (arquivo .index)**: A [biblioteca Faiss](https://github.com/facebookresearch/faiss) permite a pesquisa eficiente do vizinho mais próximo (nearest neighbor) aproximado no RVC durante a inferência, recuperando e combinando segmentos de áudio de treinamento com incorporações mais próximas.",
+            "model": "**Modelo**: O resultado do treinamento em um conjunto de dados. Os modelos RVC treinados geralmente têm a [extensão de arquivo .pth](https://medium.com/@manasnandmohan/comprehending-pth-files-the-backbone-of-pytorch-models-ef9b232e092a), que é um formato de arquivo usado para salvar diferentes estados do modelo, incluindo pesos, desvios e outros parâmetros. Verifique este [guia](https://docs.applio.org/getting-started/training) para aprender a fazer seu primeiro modelo de voz.",
+            "net_g": "**Net_G**: O modelo gerador no RVC que usa recursos [HuBERT](https://arxiv.org/abs/2106.07447) e incorporações de 'speaker' como entrada para gerar a forma de onda de áudio convertida.",
+            "f0 extraction": "**Métodos de extração F0**: Técnicas como Crepe (full-tiny), RMVPE e FCPE usadas para extrair informações de [frequência fundamental (f0)](https://pt.wikipedia.org/wiki/Frequ%C3%AAncia_fundamental) do áudio.",
+            "pitch guidance": "**Orientação de tom**: Aproveita a [frequência fundamental (f0)](https://pt.wikipedia.org/wiki/Frequ%C3%AAncia_fundamental) da voz de entrada durante a síntese (inferência) para melhor manter o tom, a entonação e a melodia originais.",
+            "sample rate": "🔉 **Taxa de amostragem** refere-se ao número de vezes por segundo que um sinal de áudio analógico é convertido em digital, medido em Hertz (Hz). Taxas de amostragem mais altas capturam mais detalhes, mas aumentam o tamanho do arquivo. Simples, mas crucial para a qualidade do áudio.\n\n> 💡 **Dica**: Verifique a taxa de amostragem do seu conjunto de dados para escolher melhor um modelo pré-treinado, como 32k, 40k ou 48k. Infelizmente, ainda não há nenhum pretrain de 44,1 Khz disponível, então escolha um que tenha uma taxa de amostragem mais próxima do seu conjunto de dados e teste se funciona bem.",
+            "inference": "**Inferência**: Processo em que um áudio é transformado pelo modelo de voz. Você pode aprender mais sobre isso na [Documentação do Applio](https://docs.applio.org/faq)",
+            "overtraining": "**Overtraining**: Uma maneira eficaz de detectar o overtraining é verificar se o [Gráfico do TensorBoard](https://docs.applio.org/getting-started/tensorboard) começa a subir e nunca mais volta, levando a uma saída robótica e abafada com má articulação.",
+            "pretrain": "**Pretrained**: Um modelo treinado em vários conjuntos de áudios longos, usado como ponto de partida para o treino de modelos RVC. Você pode verificar uma boa lista de modelos pré-treinados em <#1233407331405004954>",
+            "rmvpe": {
+                "title": "Diferentes tipos de **RMVPE** para extração de altura (pitch)",
+                "description": [
+                    "- **rmvpe**: Um modelo robusto para estimativa de altura vocal em música polifônica, a versão normal da melhor extração de altura, é robusto e não é sensível ao ruído",
+                    "- **rmvpe+**: SOMENTE para Inferência, tem um limite de afinação, limita a inclinação máxima e mínima possível, basicamente excluindo valores de [f0](https://pt.wikipedia.org/wiki/Frequ%C3%AAncia_fundamental) abaixo e acima de certos limites",
+                    "- **rmvpe-gpu**: SOMENTE para *Treinamento*, usa sua gpu para o processo de extração de recursos, usando mais gpu para tornar o treinamento mais rápido",
+                    "- **rmvpe-onnx**: *Wokada* APENAS, é obrigatório para usuários AMD que usam modelos ONNX"
+                ],
+                "footer": "Créditos: Nick088"
+            },
+            "rvc": "**RVC (Retrieval-based Voice Conversion)**: Uma técnica de clonagem de voz que recupera e combina segmentos de áudio de um alto-falante de origem para sintetizar a voz de um alto-falante de destino, sem exigir grandes conjuntos de dados paralelos."
+        },
+        "unknown": {
+            "message": "Sinto muito, {{user}}. Não encontrei o assunto que você estava procurando",
+            "embedData": {
+                "title": "Sugestões",
+                "description": [
+                    "Procure na [Documentação do AI HUB](https://docs.aihub.wtf/) ou do [Applio](https://docs.applio.org/faq). Você provavelmente vai achar sua resposta lá 📚",
+                    "Peça ajuda em {{okadaChannel}} se é relacionado à transformação de voz em tempo real",
+                    "Peça ajuda em {{helpChannel}} para ajuda em geral, mas use o comando `!howtoask` primeiro para aprender estruturar sua pergunta adequadamente e aumentar sua chance de receber uma resposta",
+                    "Por último, mas não menos importante, peça ajuda em {{helpAiArtChannel}} se é relacionado à geração de imagens com IA"
+                ]
+            }
         }
     }
 }
