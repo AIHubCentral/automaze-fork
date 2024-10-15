@@ -189,6 +189,11 @@ export function isAskingForAssistance(text: string): boolean {
     return patterns.some(pattern => pattern.test(text));
 }
 
+export function isAskingForGirlModel(text: string): boolean {
+    const pattern = /(?=.*(girl|female))(?=.*(voice|model))/i;
+    return pattern.test(text);
+}
+
 export async function getResourceData(
     queryKey: string,
     cache: Collection<string, IResource[]>,

@@ -1,11 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DiscordErrorCodes = void 0;
 exports.createEmbed = createEmbed;
 exports.createEmbeds = createEmbeds;
 exports.getAvailableColors = getAvailableColors;
 exports.getGuildById = getGuildById;
 exports.getChannelById = getChannelById;
 exports.getDisplayName = getDisplayName;
+exports.handleDiscordError = handleDiscordError;
 const discord_js_1 = require("discord.js");
 function createEmbed(data, color) {
     /**
@@ -101,9 +103,46 @@ async function getDisplayName(user, guild) {
     try {
         const member = await guild.members.fetch(user.id);
         return member.displayName;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     }
     catch (error) {
         // Fallback to username if member is not found
         return user.username;
+    }
+}
+var DiscordErrorCodes;
+(function (DiscordErrorCodes) {
+    DiscordErrorCodes[DiscordErrorCodes["MissingAccess"] = 50001] = "MissingAccess";
+    DiscordErrorCodes[DiscordErrorCodes["MissingPermissions"] = 50013] = "MissingPermissions";
+    DiscordErrorCodes[DiscordErrorCodes["InvalidFormBody"] = 50035] = "InvalidFormBody";
+    DiscordErrorCodes[DiscordErrorCodes["CannotUseThisSticker"] = 50081] = "CannotUseThisSticker";
+    DiscordErrorCodes[DiscordErrorCodes["UnknownChannel"] = 10003] = "UnknownChannel";
+    DiscordErrorCodes[DiscordErrorCodes["UnknownMessage"] = 10008] = "UnknownMessage";
+    DiscordErrorCodes[DiscordErrorCodes["UnknownRole"] = 10011] = "UnknownRole";
+    DiscordErrorCodes[DiscordErrorCodes["UnknownMember"] = 10007] = "UnknownMember";
+    DiscordErrorCodes[DiscordErrorCodes["CannotSendEmptyMessage"] = 50006] = "CannotSendEmptyMessage";
+    DiscordErrorCodes[DiscordErrorCodes["InvalidToken"] = 40001] = "InvalidToken";
+    DiscordErrorCodes[DiscordErrorCodes["RateLimited"] = 429] = "RateLimited";
+})(DiscordErrorCodes || (exports.DiscordErrorCodes = DiscordErrorCodes = {}));
+function handleDiscordError(client, error) {
+    const { logger } = client;
+    switch (error.code) {
+        case DiscordErrorCodes.MissingAccess:
+            logger.error('Missing access to resource', error);
+            break;
+        case DiscordErrorCodes.MissingPermissions:
+            logger.error('Missing permissions to perform the action', error);
+            break;
+        case DiscordErrorCodes.InvalidFormBody:
+            logger.error('Invalid form body: Check if all fields are correct', error);
+            break;
+        case DiscordErrorCodes.UnknownChannel:
+            logger.error('Unknown channel: The channel might have been deleted', error);
+            break;
+        case DiscordErrorCodes.RateLimited:
+            logger.error('Rate limit exceeded. Slow down requests', error);
+            break;
+        default:
+            logger.error(`An unexpected error occurred: ${error.message}`, error);
     }
 }

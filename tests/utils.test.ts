@@ -7,6 +7,7 @@ import {
     getFaqKeywords,
     containsQuestionPattern,
     isAskingForAssistance,
+    isAskingForGirlModel,
 } from '../src/Utils/botUtilities';
 import { processTranslation } from '../src/Utils/generalUtilities';
 import { EmbedData } from '../src/Interfaces/BotData';
@@ -264,6 +265,13 @@ describe('Bot Utilities', () => {
             expect(isAskingForAssistance('its showing some errors')).toBe(true);
             expect(isAskingForAssistance('can i ask you somethin?')).toBe(true);
             expect(isAskingForAssistance('can i ask something?')).toBe(true);
+        });
+
+        it('should detect if is asking for girl voice model', () => {
+            expect(isAskingForGirlModel('can anyone make a GIRL voice model?')).toBe(true);
+            expect(isAskingForGirlModel('e-girl voice pls')).toBe(true);
+            expect(isAskingForGirlModel('what is a good female model')).toBe(true);
+            expect(isAskingForGirlModel('test')).toBe(false);
         });
     });
 });

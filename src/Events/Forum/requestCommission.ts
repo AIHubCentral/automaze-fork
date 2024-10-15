@@ -1,8 +1,10 @@
 import {
     ColorResolvable,
     Colors,
+    DiscordAPIError,
     EmbedBuilder,
     Events,
+    MessageCreateOptions,
     ThreadChannel,
     bold,
     channelMention,
@@ -13,20 +15,51 @@ import {
 } from 'discord.js';
 import IEventData from '../../Interfaces/Events';
 import ExtendedClient from '../../Core/extendedClient';
-import { createEmbed } from '../../Utils/discordUtilities';
+import { createEmbed, DiscordErrorCodes } from '../../Utils/discordUtilities';
 import { delay } from '../../Utils/generalUtilities';
+import { isAskingForGirlModel } from '../../Utils/botUtilities';
 
 async function handleFreeRequest(client: ExtendedClient, thread: ThreadChannel): Promise<void> {
-    const embeds = [
-        createEmbed({
-            color: client.botConfigs.colors.theme.accent_1,
-            description: [
-                `💡 ${bold('Tip')}: You can try using the ${inlineCode('/search')} or ${inlineCode('/find')} command from ${userMention('1156937396517081169')} or ${userMention('1138318590760718416')} to check if someone already made this model. Alternatively, you can check the ${channelMention('1175430844685484042')} channel or use ${hyperlink('weights.gg', 'https://weights.gg/')}, ` +
-                    "but keep in mind that weights receive the models after us, so if something new comes out, you'll find it on our server first.",
-            ],
-        }),
-    ];
-    await thread.send({ embeds: embeds });
+    // latina E-Girl
+    const stickerId = '1159469403843346443';
+
+    try {
+        const threadTitle = thread.name.toLowerCase();
+        const response: MessageCreateOptions = {};
+
+        if (isAskingForGirlModel(threadTitle)) {
+            response.stickers = [stickerId];
+        } else {
+            response.embeds = [
+                createEmbed({
+                    color: client.botConfigs.colors.theme.accent_1,
+                    description: [
+                        `💡 ${bold('Tip')}: You can try using the ${inlineCode('/search')} or ${inlineCode('/find')} command from ${userMention('1156937396517081169')} or ${userMention('1138318590760718416')} to check if someone already made this model. Alternatively, you can check the ${channelMention('1175430844685484042')} channel or use ${hyperlink('weights.gg', 'https://weights.gg/')}, but keep in mind that weights receive the models after us, so if something new comes out, you'll find it on our server first.`,
+                    ],
+                }),
+            ];
+        }
+
+        await thread.send(response);
+    } catch (error) {
+        if (error instanceof DiscordAPIError) {
+            if (
+                error.code === DiscordErrorCodes.CannotUseThisSticker ||
+                error.code === DiscordErrorCodes.InvalidFormBody
+            ) {
+                client.logger.warn(`Couldn't find sticker with id ${stickerId}`);
+            } else {
+                client.logger.error('Unexpected error handling free model request', error);
+            }
+        }
+    }
+
+    client.logger.info('free model request', {
+        guildId: thread.guildId,
+        threadId: thread.id,
+        threadName: thread.name,
+        parentChannelId: thread.parentId,
+    });
 }
 
 async function handlePaidRequest(client: ExtendedClient, thread: ThreadChannel): Promise<void> {

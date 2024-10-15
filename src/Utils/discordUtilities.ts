@@ -1,4 +1,12 @@
-import { ColorResolvable, Colors, EmbedBuilder, Guild, GuildBasedChannel, User } from 'discord.js';
+import {
+    ColorResolvable,
+    Colors,
+    EmbedBuilder,
+    Guild,
+    GuildBasedChannel,
+    User,
+    DiscordAPIError,
+} from 'discord.js';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { EmbedData } from '../Interfaces/BotData';
@@ -116,8 +124,47 @@ export async function getDisplayName(user: User, guild: Guild | null): Promise<s
     try {
         const member = await guild.members.fetch(user.id);
         return member.displayName;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         // Fallback to username if member is not found
         return user.username;
+    }
+}
+
+export enum DiscordErrorCodes {
+    MissingAccess = 50001,
+    MissingPermissions = 50013,
+    InvalidFormBody = 50035,
+    CannotUseThisSticker = 50081,
+    UnknownChannel = 10003,
+    UnknownMessage = 10008,
+    UnknownRole = 10011,
+    UnknownMember = 10007,
+    CannotSendEmptyMessage = 50006,
+    InvalidToken = 40001,
+    RateLimited = 429,
+}
+
+export function handleDiscordError(client: ExtendedClient, error: DiscordAPIError) {
+    const { logger } = client;
+
+    switch (error.code) {
+        case DiscordErrorCodes.MissingAccess:
+            logger.error('Missing access to resource', error);
+            break;
+        case DiscordErrorCodes.MissingPermissions:
+            logger.error('Missing permissions to perform the action', error);
+            break;
+        case DiscordErrorCodes.InvalidFormBody:
+            logger.error('Invalid form body: Check if all fields are correct', error);
+            break;
+        case DiscordErrorCodes.UnknownChannel:
+            logger.error('Unknown channel: The channel might have been deleted', error);
+            break;
+        case DiscordErrorCodes.RateLimited:
+            logger.error('Rate limit exceeded. Slow down requests', error);
+            break;
+        default:
+            logger.error(`An unexpected error occurred: ${error.message}`, error);
     }
 }

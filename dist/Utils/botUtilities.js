@@ -14,6 +14,7 @@ exports.getFaqKeywords = getFaqKeywords;
 exports.containsKeyword = containsKeyword;
 exports.containsQuestionPattern = containsQuestionPattern;
 exports.isAskingForAssistance = isAskingForAssistance;
+exports.isAskingForGirlModel = isAskingForGirlModel;
 exports.getResourceData = getResourceData;
 exports.getThemeColors = getThemeColors;
 exports.getThemes = getThemes;
@@ -165,6 +166,10 @@ function isAskingForAssistance(text) {
         /can i ask(?:\s)?(?:you)? (?:something|somethin|somethin')/i,
     ];
     return patterns.some(pattern => pattern.test(text));
+}
+function isAskingForGirlModel(text) {
+    const pattern = /(?=.*(girl|female))(?=.*(voice|model))/i;
+    return pattern.test(text);
 }
 async function getResourceData(queryKey, cache, logger) {
     //const now = Date.now();

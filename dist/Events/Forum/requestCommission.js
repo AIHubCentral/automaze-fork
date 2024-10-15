@@ -3,17 +3,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const generalUtilities_1 = require("../../Utils/generalUtilities");
+const botUtilities_1 = require("../../Utils/botUtilities");
 async function handleFreeRequest(client, thread) {
-    const embeds = [
-        (0, discordUtilities_1.createEmbed)({
-            color: client.botConfigs.colors.theme.accent_1,
-            description: [
-                `💡 ${(0, discord_js_1.bold)('Tip')}: You can try using the ${(0, discord_js_1.inlineCode)('/search')} or ${(0, discord_js_1.inlineCode)('/find')} command from ${(0, discord_js_1.userMention)('1156937396517081169')} or ${(0, discord_js_1.userMention)('1138318590760718416')} to check if someone already made this model. Alternatively, you can check the ${(0, discord_js_1.channelMention)('1175430844685484042')} channel or use ${(0, discord_js_1.hyperlink)('weights.gg', 'https://weights.gg/')}, ` +
-                    "but keep in mind that weights receive the models after us, so if something new comes out, you'll find it on our server first.",
-            ],
-        }),
-    ];
-    await thread.send({ embeds: embeds });
+    // latina E-Girl
+    const stickerId = '1159469403843346443';
+    try {
+        const threadTitle = thread.name.toLowerCase();
+        const response = {};
+        if ((0, botUtilities_1.isAskingForGirlModel)(threadTitle)) {
+            response.stickers = [stickerId];
+        }
+        else {
+            response.embeds = [
+                (0, discordUtilities_1.createEmbed)({
+                    color: client.botConfigs.colors.theme.accent_1,
+                    description: [
+                        `💡 ${(0, discord_js_1.bold)('Tip')}: You can try using the ${(0, discord_js_1.inlineCode)('/search')} or ${(0, discord_js_1.inlineCode)('/find')} command from ${(0, discord_js_1.userMention)('1156937396517081169')} or ${(0, discord_js_1.userMention)('1138318590760718416')} to check if someone already made this model. Alternatively, you can check the ${(0, discord_js_1.channelMention)('1175430844685484042')} channel or use ${(0, discord_js_1.hyperlink)('weights.gg', 'https://weights.gg/')}, but keep in mind that weights receive the models after us, so if something new comes out, you'll find it on our server first.`,
+                    ],
+                }),
+            ];
+        }
+        await thread.send(response);
+    }
+    catch (error) {
+        if (error instanceof discord_js_1.DiscordAPIError) {
+            if (error.code === discordUtilities_1.DiscordErrorCodes.CannotUseThisSticker ||
+                error.code === discordUtilities_1.DiscordErrorCodes.InvalidFormBody) {
+                client.logger.warn(`Couldn't find sticker with id ${stickerId}`);
+            }
+            else {
+                client.logger.error('Unexpected error handling free model request', error);
+            }
+        }
+    }
 }
 async function handlePaidRequest(client, thread) {
     const modelMasterRoleId = client.discordIDs.Roles['ModelMaster'];
