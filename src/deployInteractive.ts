@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /* Interactive console app to assist on command deployment */
 
 import readline from 'readline';
@@ -96,10 +97,10 @@ config();
     try {
         console.log('Leave the options blank to read the values from .env\n');
 
-        let token: string = await promptWithDefault('Token: ', process.env.token ?? '');
-        let clientId: string = await promptWithDefault('Client ID: ', process.env.clientId ?? '');
-        let guildId: string = await promptWithDefault('Guild ID: ', process.env.guildId ?? '');
-        let mode: string = await promptWithDefault('Mode (debug, dev, prod): ', 'prod');
+        const token: string = await promptWithDefault('Token: ', process.env.token ?? '');
+        const clientId: string = await promptWithDefault('Client ID: ', process.env.clientId ?? '');
+        const guildId: string = await promptWithDefault('Guild ID: ', process.env.guildId ?? '');
+        const mode: string = await promptWithDefault('Mode (debug, dev, prod): ', 'prod');
 
         if (!token || !clientId || !guildId) {
             console.log('Missing token, client id or guild id');
@@ -107,8 +108,8 @@ config();
             return;
         }
 
-        let clearAll: string = await promptWithDefault('Clear all commands? (y/n): ', 'n');
-        let shouldClearDeployedCommands: boolean = clearAll.trim().toLowerCase() === 'y';
+        const clearAll: string = await promptWithDefault('Clear all commands? (y/n): ', 'n');
+        const shouldClearDeployedCommands: boolean = clearAll.trim().toLowerCase() === 'y';
 
         if (shouldClearDeployedCommands) {
             await clearDeployedCommands({ token, clientId, guildId });
@@ -117,6 +118,7 @@ config();
 
             let slashCommandFiles = [
                 ...getAllFiles(path.join(__dirname, 'CommandsSlash', 'Fun')),
+                ...getAllFiles(path.join(__dirname, 'CommandsSlash', 'General')),
                 ...getAllFiles(path.join(__dirname, 'CommandsSlash', 'Info')),
             ];
 

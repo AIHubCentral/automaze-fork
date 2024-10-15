@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable @typescript-eslint/no-require-imports */
 /* Interactive console app to assist on command deployment */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -64,17 +65,17 @@ async function clearDeployedCommands(credentials) {
 (async () => {
     try {
         console.log('Leave the options blank to read the values from .env\n');
-        let token = await promptWithDefault('Token: ', process.env.token ?? '');
-        let clientId = await promptWithDefault('Client ID: ', process.env.clientId ?? '');
-        let guildId = await promptWithDefault('Guild ID: ', process.env.guildId ?? '');
-        let mode = await promptWithDefault('Mode (debug, dev, prod): ', 'prod');
+        const token = await promptWithDefault('Token: ', process.env.token ?? '');
+        const clientId = await promptWithDefault('Client ID: ', process.env.clientId ?? '');
+        const guildId = await promptWithDefault('Guild ID: ', process.env.guildId ?? '');
+        const mode = await promptWithDefault('Mode (debug, dev, prod): ', 'prod');
         if (!token || !clientId || !guildId) {
             console.log('Missing token, client id or guild id');
             rl.close();
             return;
         }
-        let clearAll = await promptWithDefault('Clear all commands? (y/n): ', 'n');
-        let shouldClearDeployedCommands = clearAll.trim().toLowerCase() === 'y';
+        const clearAll = await promptWithDefault('Clear all commands? (y/n): ', 'n');
+        const shouldClearDeployedCommands = clearAll.trim().toLowerCase() === 'y';
         if (shouldClearDeployedCommands) {
             await clearDeployedCommands({ token, clientId, guildId });
         }
@@ -82,6 +83,7 @@ async function clearDeployedCommands(credentials) {
             const contextCommandFiles = (0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, 'CommandsContext'));
             let slashCommandFiles = [
                 ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, 'CommandsSlash', 'Fun')),
+                ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, 'CommandsSlash', 'General')),
                 ...(0, fileUtilities_1.getAllFiles)(path_1.default.join(__dirname, 'CommandsSlash', 'Info')),
             ];
             switch (mode.trim().toLocaleLowerCase()) {
