@@ -18,6 +18,8 @@ exports.isAskingForGirlModel = isAskingForGirlModel;
 exports.getResourceData = getResourceData;
 exports.getThemeColors = getThemeColors;
 exports.getThemes = getThemes;
+exports.getPaginatedData = getPaginatedData;
+exports.createPaginatedEmbed = createPaginatedEmbed;
 exports.banan = banan;
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
@@ -203,6 +205,38 @@ function getThemes() {
         themes[themeName] = JSON.parse(themeData);
     });
     return themes;
+}
+async function getPaginatedData(page, resourceService, filter) {
+    const perPage = 10;
+    const offset = (page - 1) * perPage;
+    const { data, counter } = await resourceService.getPaginatedResult(offset, perPage, filter);
+    const totalPages = Math.ceil(counter.count / perPage);
+    return { data, totalPages };
+}
+function createPaginatedEmbed(data, currentPage, totalPages) {
+    return new discord_js_1.EmbedBuilder()
+        .setTitle(`All Resources`)
+        .setColor(discord_js_1.Colors.Greyple)
+        .setDescription(data
+        .map((record) => {
+        const result = [
+            `- **ID**: ${record.id} |`,
+            `. **URL**: [Link](${record.url})`,
+            ` | **Category**: ${record.category}`,
+        ];
+        if (record.displayTitle) {
+            result.push(` | **Title**: ${record.displayTitle}`);
+        }
+        if (record.authors) {
+            result.push(` | **Authors**: ${record.authors}`);
+        }
+        if (record.emoji && record.emoji != '' && record.emoji.toLowerCase() != 'none') {
+            result.push(` | **Emoji**: ${record.authors}`);
+        }
+        return result.join('');
+    })
+        .join('\n'))
+        .setFooter({ text: `Page ${currentPage} of ${totalPages}` });
 }
 /* Classes */
 class TagResponseSender {

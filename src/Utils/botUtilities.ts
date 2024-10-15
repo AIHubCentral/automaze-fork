@@ -9,6 +9,7 @@ import {
     ChatInputCommandInteraction,
     Collection,
     ColorResolvable,
+    Colors,
     EmbedBuilder,
     GuildBasedChannel,
     GuildMember,
@@ -237,6 +238,46 @@ export function getThemes() {
         themes[themeName] = JSON.parse(themeData);
     });
     return themes;
+}
+
+export async function getPaginatedData(page: number, resourceService: ResourceService, filter?: object): Promise<any> {
+    const perPage = 10;
+    const offset = (page - 1) * perPage;
+    const { data, counter } = await resourceService.getPaginatedResult(offset, perPage, filter);
+    const totalPages = Math.ceil(counter.count / perPage);
+    return { data, totalPages };
+}
+
+export function createPaginatedEmbed(data: any, currentPage: number, totalPages: number): EmbedBuilder {
+    return new EmbedBuilder()
+        .setTitle(`All Resources`)
+        .setColor(Colors.Greyple)
+        .setDescription(
+            data
+                .map((record: any) => {
+                    const result = [
+                        `- **ID**: ${record.id} |`,
+                        `. **URL**: [Link](${record.url})`,
+                        ` | **Category**: ${record.category}`,
+                    ];
+
+                    if (record.displayTitle) {
+                        result.push(` | **Title**: ${record.displayTitle}`);
+                    }
+
+                    if (record.authors) {
+                        result.push(` | **Authors**: ${record.authors}`);
+                    }
+
+                    if (record.emoji && record.emoji != '' && record.emoji.toLowerCase() != 'none') {
+                        result.push(` | **Emoji**: ${record.authors}`);
+                    }
+
+                    return result.join('');
+                })
+                .join('\n')
+        )
+        .setFooter({ text: `Page ${currentPage} of ${totalPages}` });
 }
 
 /* Classes */

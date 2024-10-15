@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const resourcesService_1 = __importDefault(require("../../Services/resourcesService"));
+const botUtilities_1 = require("../../Utils/botUtilities");
 const Botdata = {
     category: 'Utilities',
     cooldown: 5,
@@ -74,13 +75,13 @@ const Botdata = {
             }
         }
         else if (interaction.options.getSubcommand() === 'find_all') {
-            let pageNumber = 1;
-            const { data, totalPages } = await getPaginatedData(pageNumber, service);
+            const pageNumber = 1;
+            const { data, totalPages } = await (0, botUtilities_1.getPaginatedData)(pageNumber, service);
             if (!data || data.length === 0) {
                 await interaction.reply({ content: 'No resource was found.' });
                 return;
             }
-            const embed = createPaginatedEmbed(data, pageNumber, totalPages);
+            const embed = (0, botUtilities_1.createPaginatedEmbed)(data, pageNumber, totalPages);
             const row = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
                 .setCustomId(`prev_0`)
                 .setLabel('Previous')
@@ -101,8 +102,8 @@ const Botdata = {
                 if (!i.isButton())
                     return;
                 const currentPage = parseInt(i.customId.split('_')[1]);
-                const { data, totalPages } = await getPaginatedData(currentPage, service);
-                const embed = createPaginatedEmbed(data, currentPage, totalPages);
+                const { data, totalPages } = await (0, botUtilities_1.getPaginatedData)(currentPage, service);
+                const embed = (0, botUtilities_1.createPaginatedEmbed)(data, currentPage, totalPages);
                 const row = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
                     .setCustomId(`prev_${currentPage - 1}`)
                     .setLabel('Previous')
@@ -219,33 +220,3 @@ const Botdata = {
     },
 };
 exports.default = Botdata;
-async function getPaginatedData(page, resourceService) {
-    const perPage = 10;
-    const offset = (page - 1) * perPage;
-    const { data, counter } = await resourceService.getPaginatedResult(offset, perPage);
-    const totalPages = Math.ceil(counter.count / perPage);
-    return { data, totalPages };
-}
-function createPaginatedEmbed(data, currentPage, totalPages) {
-    return new discord_js_1.EmbedBuilder()
-        .setTitle(`All Resources`)
-        .setColor(discord_js_1.Colors.Greyple)
-        .setDescription(data
-        .map((record) => {
-        const result = [
-            '- ',
-            record.id,
-            `. **URL**: ${record.url}`,
-            ` | **Category**: ${record.category}`,
-        ];
-        if (record.displayTitle) {
-            result.push(` | **Title**: ${record.displayTitle}`);
-        }
-        if (record.authors) {
-            result.push(` | **Authors**: ${record.authors}`);
-        }
-        return result.join('');
-    })
-        .join('\n'))
-        .setFooter({ text: `Page ${currentPage} of ${totalPages}` });
-}

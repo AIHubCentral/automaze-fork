@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const resourcesService_1 = __importDefault(require("../../Services/resourcesService"));
 const collaboratorService_1 = __importDefault(require("../../Services/collaboratorService"));
+const botUtilities_1 = require("../../Utils/botUtilities");
 const Resources = {
     category: 'Misc',
     cooldown: 5,
@@ -242,21 +243,65 @@ const Resources = {
         }
         else if (interaction.options.getSubcommand() === 'show') {
             const category = interaction.options.getString('category', true);
-            const resources = await service.findByCategory(category);
-            const embed = new discord_js_1.EmbedBuilder().setTitle(`${category} resources`);
-            if (resources.length === 0) {
-                embed.setColor(discord_js_1.Colors.DarkRed);
-                embed.setDescription('> No resource found');
+            const pageNumber = 1;
+            const { data, totalPages } = await (0, botUtilities_1.getPaginatedData)(pageNumber, service, {
+                column: 'category',
+                value: category,
+            });
+            if (!data || data.length === 0) {
+                await interaction.reply({ content: 'No resource was found.' });
+                return;
             }
-            else {
-                embed.setColor(discord_js_1.Colors.DarkBlue);
-                const embedDescription = [];
-                resources.forEach((resource) => {
-                    embedDescription.push(`- ID: **${resource.id}** | Category: **${resource.category}** | URL: **${resource.url}** | title: **${resource.displayTitle || 'None'}** | authors: **${resource.authors || 'None'}** | emoji: **${resource.emoji || 'None'}**`);
+            const embed = (0, botUtilities_1.createPaginatedEmbed)(data, pageNumber, totalPages);
+            const row = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
+                .setCustomId(`prev_0`)
+                .setLabel('Previous')
+                .setStyle(discord_js_1.ButtonStyle.Primary)
+                .setDisabled(true), new discord_js_1.ButtonBuilder()
+                .setCustomId(`next_2`)
+                .setLabel('Next')
+                .setStyle(discord_js_1.ButtonStyle.Primary)
+                .setDisabled(pageNumber === totalPages));
+            const sentMessage = await interaction.reply({
+                embeds: [embed],
+                components: [row],
+                fetchReply: true,
+            });
+            // show for 5 minutes (300k ms)
+            const collector = sentMessage.createMessageComponentCollector({ time: 300_000 });
+            collector.on('collect', async (i) => {
+                if (!i.isButton())
+                    return;
+                const currentPage = parseInt(i.customId.split('_')[1]);
+                const { data, totalPages } = await (0, botUtilities_1.getPaginatedData)(currentPage, service, {
+                    column: 'category',
+                    value: category,
                 });
-                embed.setDescription(embedDescription.join('\n'));
-            }
-            await interaction.reply({ embeds: [embed] });
+                const embed = (0, botUtilities_1.createPaginatedEmbed)(data, currentPage, totalPages);
+                const row = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
+                    .setCustomId(`prev_${currentPage - 1}`)
+                    .setLabel('Previous')
+                    .setStyle(discord_js_1.ButtonStyle.Primary)
+                    .setDisabled(currentPage === 1), new discord_js_1.ButtonBuilder()
+                    .setCustomId(`next_${currentPage + 1}`)
+                    .setLabel('Next')
+                    .setStyle(discord_js_1.ButtonStyle.Primary)
+                    .setDisabled(currentPage === totalPages));
+                await i.update({ embeds: [embed], components: [row] });
+            });
+            collector.on('end', async () => {
+                const disabledRow = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
+                    .setCustomId('prev_0')
+                    .setLabel('Previous')
+                    .setStyle(discord_js_1.ButtonStyle.Primary)
+                    .setDisabled(true), new discord_js_1.ButtonBuilder()
+                    .setCustomId('next_2')
+                    .setLabel('Next')
+                    .setStyle(discord_js_1.ButtonStyle.Primary)
+                    .setDisabled(true));
+                await sentMessage.edit({ components: [disabledRow] });
+            });
+            // `- ID: **${resource.id}** | Category: **${resource.category}** | URL: **${resource.url}** | title: **${resource.displayTitle || 'None'}** | authors: **${resource.authors || 'None'}** | emoji: **${resource.emoji || 'None'}**`
         }
         else if (interaction.options.getSubcommand() === 'update') {
             const id = interaction.options.getInteger('id', true);

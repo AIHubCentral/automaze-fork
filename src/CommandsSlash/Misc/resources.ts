@@ -1,8 +1,16 @@
-import { Colors, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    Colors,
+    EmbedBuilder,
+    SlashCommandBuilder,
+} from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
 import ResourceService, { IResource } from '../../Services/resourcesService';
 import CollaboratorService from '../../Services/collaboratorService';
+import { createPaginatedEmbed, getPaginatedData } from '../../Utils/botUtilities';
 
 const Resources: SlashCommand = {
     category: 'Misc',
@@ -305,29 +313,87 @@ const Resources: SlashCommand = {
             await interaction.reply({ embeds: [embed] });
         } else if (interaction.options.getSubcommand() === 'show') {
             const category = interaction.options.getString('category', true);
+            const pageNumber = 1;
 
-            const resources = await service.findByCategory(category);
+            const { data, totalPages } = await getPaginatedData(pageNumber, service, {
+                column: 'category',
+                value: category,
+            });
 
-            const embed = new EmbedBuilder().setTitle(`${category} resources`);
-
-            if (resources.length === 0) {
-                embed.setColor(Colors.DarkRed);
-                embed.setDescription('> No resource found');
-            } else {
-                embed.setColor(Colors.DarkBlue);
-
-                const embedDescription: string[] = [];
-
-                resources.forEach((resource) => {
-                    embedDescription.push(
-                        `- ID: **${resource.id}** | Category: **${resource.category}** | URL: **${resource.url}** | title: **${resource.displayTitle || 'None'}** | authors: **${resource.authors || 'None'}** | emoji: **${resource.emoji || 'None'}**`
-                    );
-                });
-
-                embed.setDescription(embedDescription.join('\n'));
+            if (!data || data.length === 0) {
+                await interaction.reply({ content: 'No resource was found.' });
+                return;
             }
 
-            await interaction.reply({ embeds: [embed] });
+            const embed = createPaginatedEmbed(data, pageNumber, totalPages);
+
+            const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`prev_0`)
+                    .setLabel('Previous')
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(true),
+                new ButtonBuilder()
+                    .setCustomId(`next_2`)
+                    .setLabel('Next')
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(pageNumber === totalPages)
+            );
+
+            const sentMessage = await interaction.reply({
+                embeds: [embed],
+                components: [row],
+                fetchReply: true,
+            });
+
+            // show for 5 minutes (300k ms)
+            const collector = sentMessage.createMessageComponentCollector({ time: 300_000 });
+
+            collector.on('collect', async (i) => {
+                if (!i.isButton()) return;
+
+                const currentPage = parseInt(i.customId.split('_')[1]);
+                const { data, totalPages } = await getPaginatedData(currentPage, service, {
+                    column: 'category',
+                    value: category,
+                });
+
+                const embed = createPaginatedEmbed(data, currentPage, totalPages);
+
+                const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`prev_${currentPage - 1}`)
+                        .setLabel('Previous')
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(currentPage === 1),
+                    new ButtonBuilder()
+                        .setCustomId(`next_${currentPage + 1}`)
+                        .setLabel('Next')
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(currentPage === totalPages)
+                );
+
+                await i.update({ embeds: [embed], components: [row] });
+            });
+
+            collector.on('end', async () => {
+                const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('prev_0')
+                        .setLabel('Previous')
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(true),
+                    new ButtonBuilder()
+                        .setCustomId('next_2')
+                        .setLabel('Next')
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(true)
+                );
+
+                await sentMessage.edit({ components: [disabledRow] });
+            });
+
+            // `- ID: **${resource.id}** | Category: **${resource.category}** | URL: **${resource.url}** | title: **${resource.displayTitle || 'None'}** | authors: **${resource.authors || 'None'}** | emoji: **${resource.emoji || 'None'}**`
         } else if (interaction.options.getSubcommand() === 'update') {
             const id = interaction.options.getInteger('id', true);
 

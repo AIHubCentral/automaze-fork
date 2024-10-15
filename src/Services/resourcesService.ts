@@ -57,6 +57,7 @@ export default class ResourceService {
             });
 
             return true;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             return false;
         }
@@ -71,6 +72,7 @@ export default class ResourceService {
             await resourcesDatabase.destroy();
             await fs.unlink(RESOURCES_DATABASE_PATH);
             return true;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             return false;
         }
@@ -129,11 +131,30 @@ export default class ResourceService {
         }
     }
 
-    async getPaginatedResult(offset: number, recordsPerPage: number): Promise<any> {
+    async getPaginatedResult(
+        offset: number,
+        recordsPerPage: number,
+        filter?: { column: string; value: string }
+    ): Promise<unknown> {
         this.logger.debug('Requesting paginated resources', { offset, recordsPerPage });
 
-        const data = await resourcesDatabase('resources').select('*').limit(recordsPerPage).offset(offset);
-        const counter = await resourcesDatabase('resources').count('* as count').first();
+        let data = null;
+        let counter = undefined;
+
+        if (filter) {
+            data = await resourcesDatabase('resources')
+                .select('*')
+                .where(filter.column, filter.value)
+                .limit(recordsPerPage)
+                .offset(offset);
+            counter = await resourcesDatabase('resources')
+                .where(filter.column, filter.value)
+                .count('* as count')
+                .first();
+        } else {
+            data = await resourcesDatabase('resources').select('*').limit(recordsPerPage).offset(offset);
+            counter = await resourcesDatabase('resources').count('* as count').first();
+        }
         return { data, counter };
     }
 

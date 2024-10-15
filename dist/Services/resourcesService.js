@@ -39,6 +39,7 @@ class ResourceService {
                 table.boolean('send_automated_messages');
             });
             return true;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         }
         catch (error) {
             return false;
@@ -53,6 +54,7 @@ class ResourceService {
             await dbManager_1.resourcesDatabase.destroy();
             await promises_1.default.unlink(dbManager_1.RESOURCES_DATABASE_PATH);
             return true;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         }
         catch (error) {
             return false;
@@ -107,10 +109,25 @@ class ResourceService {
             return [];
         }
     }
-    async getPaginatedResult(offset, recordsPerPage) {
+    async getPaginatedResult(offset, recordsPerPage, filter) {
         this.logger.debug('Requesting paginated resources', { offset, recordsPerPage });
-        const data = await (0, dbManager_1.resourcesDatabase)('resources').select('*').limit(recordsPerPage).offset(offset);
-        const counter = await (0, dbManager_1.resourcesDatabase)('resources').count('* as count').first();
+        let data = null;
+        let counter = undefined;
+        if (filter) {
+            data = await (0, dbManager_1.resourcesDatabase)('resources')
+                .select('*')
+                .where(filter.column, filter.value)
+                .limit(recordsPerPage)
+                .offset(offset);
+            counter = await (0, dbManager_1.resourcesDatabase)('resources')
+                .where(filter.column, filter.value)
+                .count('* as count')
+                .first();
+        }
+        else {
+            data = await (0, dbManager_1.resourcesDatabase)('resources').select('*').limit(recordsPerPage).offset(offset);
+            counter = await (0, dbManager_1.resourcesDatabase)('resources').count('* as count').first();
+        }
         return { data, counter };
     }
     /**

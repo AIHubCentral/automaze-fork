@@ -4,13 +4,12 @@ import {
     ButtonBuilder,
     ButtonStyle,
     codeBlock,
-    Colors,
-    EmbedBuilder,
     SlashCommandBuilder,
 } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
 import ResourceService, { IResource } from '../../Services/resourcesService';
+import { createPaginatedEmbed, getPaginatedData } from '../../Utils/botUtilities';
 
 const Botdata: SlashCommand = {
     category: 'Utilities',
@@ -124,7 +123,7 @@ const Botdata: SlashCommand = {
                 await interaction.reply({ content: 'Failed to drop database.' });
             }
         } else if (interaction.options.getSubcommand() === 'find_all') {
-            let pageNumber = 1;
+            const pageNumber = 1;
 
             const { data, totalPages } = await getPaginatedData(pageNumber, service);
 
@@ -290,40 +289,3 @@ const Botdata: SlashCommand = {
 };
 
 export default Botdata;
-
-async function getPaginatedData(page: number, resourceService: ResourceService): Promise<any> {
-    const perPage = 10;
-    const offset = (page - 1) * perPage;
-    const { data, counter } = await resourceService.getPaginatedResult(offset, perPage);
-    const totalPages = Math.ceil(counter.count / perPage);
-    return { data, totalPages };
-}
-
-function createPaginatedEmbed(data: any, currentPage: number, totalPages: number): EmbedBuilder {
-    return new EmbedBuilder()
-        .setTitle(`All Resources`)
-        .setColor(Colors.Greyple)
-        .setDescription(
-            data
-                .map((record: any) => {
-                    const result = [
-                        '- ',
-                        record.id,
-                        `. **URL**: ${record.url}`,
-                        ` | **Category**: ${record.category}`,
-                    ];
-
-                    if (record.displayTitle) {
-                        result.push(` | **Title**: ${record.displayTitle}`);
-                    }
-
-                    if (record.authors) {
-                        result.push(` | **Authors**: ${record.authors}`);
-                    }
-
-                    return result.join('');
-                })
-                .join('\n')
-        )
-        .setFooter({ text: `Page ${currentPage} of ${totalPages}` });
-}
