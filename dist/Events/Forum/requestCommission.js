@@ -36,6 +36,12 @@ async function handleFreeRequest(client, thread) {
             }
         }
     }
+    client.logger.info('free model request', {
+        guildId: thread.guildId,
+        threadId: thread.id,
+        threadName: thread.name,
+        parentChannelId: thread.parentId,
+    });
 }
 async function handlePaidRequest(client, thread) {
     const modelMasterRoleId = client.discordIDs.Roles['ModelMaster'];

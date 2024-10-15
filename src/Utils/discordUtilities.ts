@@ -10,6 +10,7 @@ import {
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { EmbedData } from '../Interfaces/BotData';
+import winston from 'winston';
 
 export function createEmbed(data: EmbedData, color?: ColorResolvable): EmbedBuilder {
     /**
@@ -145,9 +146,7 @@ export enum DiscordErrorCodes {
     RateLimited = 429,
 }
 
-export function handleDiscordError(client: ExtendedClient, error: DiscordAPIError) {
-    const { logger } = client;
-
+export function handleDiscordError(logger: winston.Logger, error: DiscordAPIError) {
     switch (error.code) {
         case DiscordErrorCodes.MissingAccess:
             logger.error('Missing access to resource', error);

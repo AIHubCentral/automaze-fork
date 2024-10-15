@@ -124,8 +124,7 @@ var DiscordErrorCodes;
     DiscordErrorCodes[DiscordErrorCodes["InvalidToken"] = 40001] = "InvalidToken";
     DiscordErrorCodes[DiscordErrorCodes["RateLimited"] = 429] = "RateLimited";
 })(DiscordErrorCodes || (exports.DiscordErrorCodes = DiscordErrorCodes = {}));
-function handleDiscordError(client, error) {
-    const { logger } = client;
+function handleDiscordError(logger, error) {
     switch (error.code) {
         case DiscordErrorCodes.MissingAccess:
             logger.error('Missing access to resource', error);
