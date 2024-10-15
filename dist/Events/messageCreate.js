@@ -43,10 +43,12 @@ async function handleBotMentioned(prefix, message, client) {
     embedData.description?.push('- Forgot a specific command? Try `/help` or `-help`');
     const embed = (0, discordUtilities_1.createEmbed)(embedData);
     await message.reply({ embeds: [embed] });
+    const currentChannel = message.channel;
     client.logger.info('Bot mentioned', {
         more: {
             guildId: message.guild?.id,
-            channelId: message.channel.id,
+            channelId: currentChannel.id,
+            channelName: currentChannel.name,
         },
     });
 }

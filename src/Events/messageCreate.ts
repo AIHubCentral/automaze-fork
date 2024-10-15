@@ -72,10 +72,13 @@ async function handleBotMentioned(prefix: string, message: Message, client: Exte
     const embed = createEmbed(embedData);
     await message.reply({ embeds: [embed] });
 
+    const currentChannel = message.channel as TextChannel;
+
     client.logger.info('Bot mentioned', {
         more: {
             guildId: message.guild?.id,
-            channelId: message.channel.id,
+            channelId: currentChannel.id,
+            channelName: currentChannel.name,
         },
     });
 }
