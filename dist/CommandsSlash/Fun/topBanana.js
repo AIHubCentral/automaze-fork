@@ -11,7 +11,8 @@ const TopBanana = {
     cooldown: 15,
     data: new discord_js_1.SlashCommandBuilder()
         .setName('topbanana')
-        .setDescription('SEE HOW MUCH SOMEONE GOT BANAN!!!!11!111!11'),
+        .setDescription('SEE HOW MUCH SOMEONE GOT BANAN!!!!11!111!11')
+        .addIntegerOption((option) => option.setName('limit').setDescription('How many users to show (max 50)')),
     async execute(interaction) {
         const client = interaction.client;
         await interaction.deferReply();
@@ -22,7 +23,11 @@ const TopBanana = {
             description: [],
         };
         const userService = new userService_1.default(client.knexInstance);
-        const users = await userService.getAll('bananas', true, 15);
+        let totalToShow = interaction.options.getInteger('limit') ?? 15;
+        if (totalToShow > 50) {
+            totalToShow = 50;
+        }
+        const users = await userService.getAll('bananas', true, totalToShow);
         //client.knexInstance('user').orderBy('bananas', 'desc').limit(15);
         if (users.length === 0) {
             embedData.description?.push('> The leaderboard is empty, `/banana` someone to show results here!');

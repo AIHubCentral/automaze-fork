@@ -8,20 +8,10 @@ const Banana: SlashCommand = {
     data: new SlashCommandBuilder()
         .setName('banana')
         .setDescription('BANAN SOMEOME!!!!11!111!11')
-        .addUserOption((option) => option.setName('user').setDescription('User to banan')),
+        .addUserOption((option) => option.setName('user').setDescription('User to banan').setRequired(true)),
     async execute(interaction) {
         const client = <ExtendedClient>interaction.client;
-        const targetUser = interaction.options.getUser('user');
-
-        if (targetUser === null) {
-            client.logger.debug('No user specified for banan', {
-                more: {
-                    guildId: interaction.guildId,
-                    channelId: interaction.channelId,
-                },
-            });
-            return interaction.reply({ content: 'You forgot to select the user!', ephemeral: true });
-        }
+        const targetUser = interaction.options.getUser('user', true);
 
         let guildMember = interaction.guild?.members.cache.get(targetUser.id);
 

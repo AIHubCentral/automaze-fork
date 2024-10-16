@@ -4,7 +4,9 @@
         "applio": "https://docs.applio.org/faq"
     },
     "general": {
-        "translation_not_available": "This command is not available in this language yet."
+        "translation_not_available": "This command is not available in this language yet.",
+        "not_found": "Command not found",
+        "not_available": "Not available yet."
     },
     "faq": {
         "topics": {
@@ -45,6 +47,64 @@
                     "Ask for help in {{okadaChannel}} if it's related to real time voice changing",
                     "Ask for help in {{helpChannel}} for general help, but use the command `!howtoask` first to learn how to structure your question properly and increase your chances of getting a reply",
                     "Last but not least, ask for help in {{helpAiArtChannel}} if it's related to AI images"
+                ]
+            }
+        }
+    },
+    "help": {
+        "title": "📖 Command Help",
+        "placeholder": "Select an option",
+        "timeout": "Command timed out. Use `/help` to for a new interaction",
+        "doxx": {
+            "icon": "👨‍💻",
+            "label": "Doxx",
+            "description": "Creates random house and IP addresses to troll someone",
+            "embed": {
+                "description": [
+                    "Not actual doxxing, creates random house and IP addresses to troll someone.",
+                    "\nUsage: `/doxx user`",
+                    "\n**Options**:",
+                    "- `User`: Discord user to doxx"
+                ]
+            }
+        },
+        "8ball": {
+            "icon": "🎱",
+            "label": "8ball",
+            "description": "Answers closed-ended questions",
+            "embed": {
+                "description": [
+                    "Answers questions with a probability of that being possible or not of happening in a funny way, don't take the answers seriously as they are randomly generated.",
+                    "\nUsage: `/8ball options`",
+                    "\n**Options**:",
+                    "- `Question`: What do you want it to answer about"
+                ]
+            }
+        },
+        "banana": {
+            "icon": "🍌",
+            "label": "Banana",
+            "description": "Puts someone in /topbanana leaderboard",
+            "embed": {
+                "description": [
+                    "Gives a banana to someone in a fun and playful way, it's not supposed to offend anyone.",
+                    "\nUsage: `/banana user`",
+                    "\n**Options**:",
+                    "- `User`: Discord user to banan"
+                ],
+                "footer": "Note: It's also possible to use this command by right clicking (long press on mobile) on a user profile picture or name and then choose  Apps > banan."
+            }
+        },
+        "topbanana": {
+            "icon": "🎖️",
+            "label": "Top Banana (leaderboard)",
+            "description": "Shows the top banan'd users",
+            "embed": {
+                "description": [
+                    "Shows the top banan'd users. In other words, how much someone got `/banana` by other users.",
+                    "\nUsage: `/topbanana options`",
+                    "\n**Options**:",
+                    "- `Limit` (optional): How many users to show (max 50)"
                 ]
             }
         }

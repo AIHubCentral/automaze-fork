@@ -10,7 +10,10 @@ const TopBanana: SlashCommand = {
     cooldown: 15,
     data: new SlashCommandBuilder()
         .setName('topbanana')
-        .setDescription('SEE HOW MUCH SOMEONE GOT BANAN!!!!11!111!11'),
+        .setDescription('SEE HOW MUCH SOMEONE GOT BANAN!!!!11!111!11')
+        .addIntegerOption((option) =>
+            option.setName('limit').setDescription('How many users to show (max 50)')
+        ),
     async execute(interaction) {
         const client = <ExtendedClient>interaction.client;
 
@@ -25,7 +28,13 @@ const TopBanana: SlashCommand = {
 
         const userService = new UserService(client.knexInstance);
 
-        const users = await userService.getAll('bananas', true, 15);
+        let totalToShow = interaction.options.getInteger('limit') ?? 15;
+
+        if (totalToShow > 50) {
+            totalToShow = 50;
+        }
+
+        const users = await userService.getAll('bananas', true, totalToShow);
         //client.knexInstance('user').orderBy('bananas', 'desc').limit(15);
 
         if (users.length === 0) {

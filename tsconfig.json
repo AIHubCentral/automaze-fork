@@ -15,7 +15,6 @@
         "Archive",
         "src/Commands/Utilities",
         "src/CommandsContext/",
-        "src/CommandsSlash/Fun/",
         "src/CommandsSlash/Utilities/database.js",
         "src/CommandsSlash/Utilities/embedData.js",
         "src/CommandsSlash/Utilities/logs.js",

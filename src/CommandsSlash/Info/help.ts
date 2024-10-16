@@ -1,8 +1,20 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import {
+    ActionRowBuilder,
+    ChatInputCommandInteraction,
+    Colors,
+    EmbedBuilder,
+    Interaction,
+    StringSelectMenuInteraction,
+    SlashCommandBuilder,
+    StringSelectMenuBuilder,
+    TextChannel,
+} from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 import slashCommandData from '../../../JSON/slashCommandData.json';
 import ExtendedClient from '../../Core/extendedClient';
 import ms from 'pretty-ms';
+import i18next from 'i18next';
+import { EmbedData } from '../../Interfaces/BotData';
 
 const commandData = slashCommandData.help;
 
@@ -98,7 +110,7 @@ const Help: SlashCommand = {
         }
 
         if (interaction.options.getSubcommand() === 'commands') {
-            await handleCommandOption(interaction, commandType, language);
+            await handleCommandOption(interaction, commandType, language, ephemeral);
         } else if (interaction.options.getSubcommand() === 'general') {
             await handleGeneralOption(interaction, language);
         }
@@ -117,12 +129,100 @@ export default Help;
 async function handleCommandOption(
     interaction: ChatInputCommandInteraction,
     commandType: string | null,
-    language: string
+    language: string,
+    ephemeral: boolean
 ) {
     if (!commandType) return;
 
+    if (['es', 'pt'].includes(language)) {
+        return await interaction.reply({
+            content: i18next.t('general.translation_not_available', { lng: language }),
+            ephemeral: true,
+        });
+    }
+
+    const embed = new EmbedBuilder()
+        .setColor(Colors.Greyple)
+        .setTitle(i18next.t('help.title', { lng: language }));
+
     if (commandType === 'slash') {
-        await interaction.reply('slash');
+        const menuOptions = ['doxx', '8ball', 'banana', 'topbanana'];
+
+        const selectMenu = new StringSelectMenuBuilder()
+            .setCustomId('select_slash')
+            .setPlaceholder(i18next.t('help.placeholder', { lng: language }))
+            .addOptions(
+                menuOptions.map((key) => {
+                    return {
+                        label: i18next.t(`help.${key}.label`, { lng: language }),
+                        description: i18next.t(`help.${key}.description`, { lng: language }),
+                        emoji: i18next.t(`help.${key}.icon`, { lng: language }),
+                        value: key,
+                    };
+                })
+            );
+
+        const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
+
+        await interaction.reply({ embeds: [embed], components: [row], ephemeral });
+
+        const filter = (i: Interaction) =>
+            i.isStringSelectMenu() && i.customId === 'select_slash' && i.user.id === interaction.user.id;
+
+        const currentChannel = interaction.channel as TextChannel;
+
+        const collector = currentChannel.createMessageComponentCollector({ filter, time: 60_000 });
+
+        collector.on('collect', async (i: StringSelectMenuInteraction) => {
+            await i.deferUpdate();
+            const selectedValue = i.values[0];
+
+            const embedData = i18next.t(`help.${selectedValue}.embed`, {
+                lng: language,
+                returnObjects: true,
+            }) as EmbedData;
+
+            if (!embedData.description) return;
+
+            embed.setTitle(
+                `${i18next.t(`help.${selectedValue}.icon`, { lng: language })} ${i18next.t(`help.${selectedValue}.label`, { lng: language })}`
+            );
+            embed.setDescription(embedData.description.join('\n'));
+
+            if (embedData.footer) {
+                embed.setFooter({ text: embedData.footer });
+            }
+
+            await i.editReply({ embeds: [embed], components: [row] });
+            //await i.followUp({ content: `You selected: ${selectedValue}` });
+        });
+
+        collector.on('end', async (_collected, reason) => {
+            if (reason === 'time') {
+                const disabledSelectMenu = new StringSelectMenuBuilder()
+                    .setCustomId('select')
+                    .setPlaceholder(i18next.t('help.placeholder', { lng: language }))
+                    .addOptions([
+                        {
+                            label: 'N/A',
+                            value: 'not_available',
+                        },
+                    ])
+                    .setDisabled(true);
+
+                const disabledRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+                    disabledSelectMenu
+                );
+
+                embed.setColor(Colors.Red);
+
+                await interaction.editReply({
+                    content: i18next.t('help.timeout', { lng: language }),
+                    embeds: [embed],
+                    components: [disabledRow],
+                });
+            }
+        });
     } else if (commandType === 'prefix') {
         await interaction.reply('prefix');
     } else if (commandType === 'context') {

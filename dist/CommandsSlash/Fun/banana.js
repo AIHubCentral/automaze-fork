@@ -7,19 +7,10 @@ const Banana = {
     data: new discord_js_1.SlashCommandBuilder()
         .setName('banana')
         .setDescription('BANAN SOMEOME!!!!11!111!11')
-        .addUserOption((option) => option.setName('user').setDescription('User to banan')),
+        .addUserOption((option) => option.setName('user').setDescription('User to banan').setRequired(true)),
     async execute(interaction) {
         const client = interaction.client;
-        const targetUser = interaction.options.getUser('user');
-        if (targetUser === null) {
-            client.logger.debug('No user specified for banan', {
-                more: {
-                    guildId: interaction.guildId,
-                    channelId: interaction.channelId,
-                },
-            });
-            return interaction.reply({ content: 'You forgot to select the user!', ephemeral: true });
-        }
+        const targetUser = interaction.options.getUser('user', true);
         let guildMember = interaction.guild?.members.cache.get(targetUser.id);
         if (!guildMember) {
             client.logger.debug(`Guild member ${targetUser.id} not found in cache...Fetching`);
