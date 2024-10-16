@@ -61,10 +61,10 @@
                     "it": "Lingua di risposta (opzionale)"
                 },
                 "choices": [
-                    {"name": "en", "value": "en"},
-                    {"name": "es", "value": "es"},
-                    {"name": "it", "value": "it"},
-                    {"name": "pt", "value": "pt"}
+                    { "name": "en", "value": "en" },
+                    { "name": "es", "value": "es" },
+                    { "name": "it", "value": "it" },
+                    { "name": "pt", "value": "pt" }
                 ]
             },
             "private": {
@@ -79,6 +79,139 @@
                     "es-ES": "Solo tú puedes ver la respuesta (opcional)",
                     "pt-BR": "Apenas você vê a resposta (opcional)",
                     "it": "Solo tu puoi vedere la risposta (opzionale)"
+                }
+            }
+        }
+    },
+    "help": {
+        "name": "help",
+        "description": "Learn about commands or how to find help",
+        "descriptionLocalizations": {
+            "es-ES": "Más información sobre los comandos o cómo encontrar ayuda",
+            "pt-BR": "Aprenda usar os comands ou como conseguir ajuda"
+        },
+        "subcommands": {
+            "commands": {
+                "name": "commands",
+                "nameLocalizations": {
+                    "es-ES": "comandos",
+                    "pt-BR": "comandos"
+                },
+                "description": "Learn how to use the commands",
+                "descriptionLocalizations": {
+                    "es-ES": "Aprenda a usar los comandos",
+                    "pt-BR": "Learn how to use the commands"
+                },
+                "options": {
+                    "type": {
+                        "name": "type",
+                        "nameLocalizations": {
+                            "es-ES": "tipo",
+                            "pt-BR": "tipo"
+                        },
+                        "description": "Command type",
+                        "descriptionLocalizations": {
+                            "es-ES": "Tipo de comando",
+                            "pt-BR": "Tipo do comando"
+                        },
+                        "choices": [
+                            {
+                                "name": "slash",
+                                "value": "slash",
+                                "name_localizations": {
+                                    "es-ES": "barra",
+                                    "pt-BR": "barra"
+                                }
+                            },
+                            {
+                                "name": "prefix",
+                                "value": "prefix",
+                                "name_localizations": {
+                                    "es-ES": "prefijo",
+                                    "pt-BR": "prefixo"
+                                }
+                            },
+                            {
+                                "name": "context",
+                                "value": "context",
+                                "name_localizations": {
+                                    "es-ES": "contexto",
+                                    "pt-BR": "contexto"
+                                }
+                            }
+                        ]
+                    },
+                    "language": {
+                        "name": "language",
+                        "nameLocalizations": {
+                            "es-ES": "idioma",
+                            "pt-BR": "idioma"
+                        },
+                        "description": "Response Language (optional)",
+                        "descriptionLocalizations": {
+                            "es-ES": "Idioma de respuesta (opcional)",
+                            "pt-BR": "Idioma da resposta (opcional)"
+                        },
+                        "choices": [
+                            { "name": "en", "value": "en" },
+                            { "name": "es", "value": "es" },
+                            { "name": "pt", "value": "pt" }
+                        ]
+                    },
+                    "private": {
+                        "name": "private",
+                        "nameLocalizations": {
+                            "es-ES": "privado",
+                            "pt-BR": "privado"
+                        },
+                        "description": "Only you can see the response (optional)",
+                        "descriptionLocalizations": {
+                            "es-ES": "Solo tú puedes ver la respuesta (opcional)",
+                            "pt-BR": "Apenas você vê a resposta (opcional)"
+                        }
+                    }
+                }
+            },
+            "general": {
+                "name": "general",
+                "nameLocalizations": {
+                    "pt-BR": "geral"
+                },
+                "description": "Learn how to find help",
+                "descriptionLocalizations": {
+                    "es-ES": "Más información sobre cómo encontrar ayuda",
+                    "pt-BR": "Aprenda como conseguir ajuda"
+                },
+                "options": {
+                    "language": {
+                        "name": "language",
+                        "nameLocalizations": {
+                            "es-ES": "idioma",
+                            "pt-BR": "idioma"
+                        },
+                        "description": "Response Language (optional)",
+                        "descriptionLocalizations": {
+                            "es-ES": "Idioma de respuesta (opcional)",
+                            "pt-BR": "Idioma da resposta (opcional)"
+                        },
+                        "choices": [
+                            { "name": "en", "value": "en" },
+                            { "name": "es", "value": "es" },
+                            { "name": "pt", "value": "pt" }
+                        ]
+                    },
+                    "private": {
+                        "name": "private",
+                        "nameLocalizations": {
+                            "es-ES": "privado",
+                            "pt-BR": "privado"
+                        },
+                        "description": "Only you can see the response (optional)",
+                        "descriptionLocalizations": {
+                            "es-ES": "Solo tú puedes ver la respuesta (opcional)",
+                            "pt-BR": "Apenas você vê a resposta (opcional)"
+                        }
+                    }
                 }
             }
         }
