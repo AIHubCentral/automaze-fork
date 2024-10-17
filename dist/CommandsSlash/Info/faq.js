@@ -76,13 +76,9 @@ const Faq = {
             const embedTitle = i18next_1.default.t('faq.unknown.embedData.title', {
                 lng: language,
             });
-            const channelIds = client.discordIDs.Channel;
             const embedDescription = i18next_1.default.t('faq.unknown.embedData.description', {
                 lng: language,
                 returnObjects: true,
-                okadaChannel: (0, discord_js_1.channelMention)(channelIds.HelpWOkada),
-                helpChannel: (0, discord_js_1.channelMention)(channelIds.HelpRVC),
-                helpAiArtChannel: (0, discord_js_1.channelMention)(channelIds.HelpAiArt),
             });
             await interaction.editReply({
                 content: textResponse + ' 😭' + '\n',
@@ -98,7 +94,6 @@ const Faq = {
         }
         const processedTranslation = (0, generalUtilities_1.processTranslation)(response);
         const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Blurple);
-        console.log('processed', processedTranslation);
         if (typeof processedTranslation === 'string') {
             embed.setDescription(processedTranslation);
         }

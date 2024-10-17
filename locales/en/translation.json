@@ -1,7 +1,43 @@
 {
-    "website": {
-        "aihub": "https://docs.aihub.wtf/",
-        "applio": "https://docs.applio.org/faq"
+    "common": {
+        "websites": {
+            "aihub": {
+                "docs": "https://docs.aihub.wtf/"
+            },
+            "applio": {
+                "faq": "https://docs.applio.org/faq",
+                "tensorboard": "https://docs.applio.org/getting-started/tensorboard",
+                "dataset": "https://docs.applio.org/guides/create-datasets/create-datasets",
+                "training": "https://docs.applio.org/getting-started/training"
+            },
+            "medium": {
+                "pth": "https://medium.com/@manasnandmohan/comprehending-pth-files-the-backbone-of-pytorch-models-ef9b232e092a"
+            },
+            "github": {
+                "faiss": "https://github.com/facebookresearch/faiss"
+            },
+            "wikipedia": {
+                "fundamental_frequency": "https://en.wikipedia.org/wiki/Fundamental_frequency"
+            },
+            "hubert": "https://arxiv.org/abs/2106.07447"
+        },
+        "channels": {
+            "pretrain": "<#1233407331405004954>",
+            "okada": "<#1159290161683767298>",
+            "help": "<#1159290139609137264>",
+            "ai_art": "<#1185670409270607993>",
+            "voice_models": "<#1159289700490694666>",
+            "model_request": "<#1159289738314919936>"
+        },
+        "emojis": {
+            "audio": "🔊",
+            "tip": "💡",
+            "book": "📚",
+            "cloud": "☁️",
+            "question": "❔",
+            "mic": "🎤",
+            "help": "🆘"
+        }
     },
     "general": {
         "translation_not_available": "This command is not available in this language yet.",
@@ -14,19 +50,19 @@
             "artifacting": "**Artifacting**: When the inference output sounds robotic, distorted, with background noise, and fails to modulate words properly.",
             "architecture": "**Model Architecture**: The core models involved in RVC are HuBERT (for feature extraction) and Net_G (the generator model).",
             "batch size": "**Batch Size**: The amount of GPU used to train the model, with larger batch sizes generally leading to shorter training duration. On the other hand, lower batch size can make the model more accurate, however it's more resource intensive and slower. **For most cases a batch size of 4 gives good results**.",
-            "epoch": "**Epoch**: The number of iterations performed to complete one full cycle of the dataset during training. It's not possible to say precisely how many epochs you need for your dataset, you need to monitor the [TensorBoard Graph](https://docs.applio.org/getting-started/tensorboard) to know if your model is overtraining.",
-            "dataset": "**Dataset**: A set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs](https://docs.applio.org/guides/create-datasets/create-datasets)",
+            "epoch": "**Epoch**: The number of iterations performed to complete one full cycle of the dataset during training. It's not possible to say precisely how many epochs you need for your dataset, you need to monitor the [TensorBoard Graph]($t(common.websites.applio.tensorboard)) to know if your model is overtraining.",
+            "dataset": "**Dataset**: A set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs]($t(common.websites.applio.dataset))",
             "G and D": "**G and D**: Generative (G) and Discriminator (D) models, respectively, that store the training data, with the Generative model learning to replicate results similar to the original, and the Discriminator trying to distinguish real data from generated data.",
-            "hubert": "**HuBERT**: A transformer-based model that extracts text from raw audio, previously trained on a masked prediction task, which RVC uses to train the voice models. There are several types of Hubert, some of examples are ContentVec, Japanese Hubert-Base and Chinese Hubert-Large. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)",
-            "index": "**Faiss Integration (.index file)**: The [Faiss library](https://github.com/facebookresearch/faiss) enables efficient approximate nearest neighbor search in RVC during inference, retrieving and combining training audio segments with closest embeddings.",
-            "model": "**Model**: The result of training on a dataset. Trained RVC models usually have the [.pth file extension](https://medium.com/@manasnandmohan/comprehending-pth-files-the-backbone-of-pytorch-models-ef9b232e092a) which is is a file format used to save different states of model including it's weights, biases and other parameter. Check this [guide](https://docs.applio.org/getting-started/training) for learning how to make your first voice model.",
-            "net_g": "**Net_G**: The generator model in RVC that takes [HuBERT](https://arxiv.org/abs/2106.07447) features and speaker embeddings as input to generate the converted audio waveform.",
-            "f0 extraction": "**F0 Extraction Methods**: Techniques like Crepe (full-tiny), RMVPE, and FCPE used for extracting fundamental frequency (pitch) information from audio.",
-            "pitch guidance": "**Pitch Guidance**: Leveraging the [fundamental frequency (f0)](https://en.wikipedia.org/wiki/Fundamental_frequency) of the input voice during synthesis to better maintain the original pitch, intonation, and melody.",
-            "sample rate": "🔉 **Sample rate** refers to the number of times per second an analog audio signal is converted to digital, measured in Hertz (Hz). Higher sample rates capture more detail but increase file size. Simple yet crucial for audio quality.\n\n> 💡 **Tip**: Check the sample rate of your dataset for better choosing a pretrained model such as 32k, 40k or 48k. Unfortunately there aren't any 44.1Khz pretrain available yet, so choose one that has a sample rate closer to your dataset and test if it works well.",
-            "inference": "**Inference**: The process where an audio is transformed by the voice model. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)",
-            "overtraining": "**Overtraining**: An effective way to detect overtraining is checking if the [TensorBoard Graph](https://docs.applio.org/getting-started/tensorboard) starts rising and never comes back down, leading to robotic, muffled output with poor articulation.",
-            "pretrain": "**Pretrained**: A model trained on several sets of long-duration audios, used as a starting point for training in RVC. You can check a good list of pretrained models in <#1233407331405004954>",
+            "hubert": "**HuBERT**: A transformer-based model that extracts text from raw audio, previously trained on a masked prediction task, which RVC uses to train the voice models. There are several types of Hubert, some of examples are ContentVec, Japanese Hubert-Base and Chinese Hubert-Large. You can learn more about it in the [Applio Docs]($t(common.websites.applio.faq))",
+            "index": "**Faiss Integration (.index file)**: The [Faiss library]($t(common.websites.github.faiss)) enables efficient approximate nearest neighbor search in RVC during inference, retrieving and combining training audio segments with closest embeddings. For your final RVC model, include the one which the file name starts with **added**.\n\n> Example: `added_IVF157_Flat_nprobe_myModel.index`",
+            "model": "**Model**: The result of training on a dataset. Trained RVC models usually have the [.pth file extension]($t(common.websites.medium.pth)) which is is a file format used to save different states of model including it's weights, biases and other parameter. [Check this guide]($t(common.websites.applio.training)) for learning how to make your first voice model.",
+            "net_g": "**Net_G**: The generator model in RVC that takes [HuBERT]($t(common.websites.hubert)) features and speaker embeddings as input to generate the converted audio waveform.",
+            "f0 extraction": "**F0 Extraction Methods**: Techniques like Crepe (full-tiny), RMVPE, and FCPE used for extracting [fundamental frequency (pitch)]($t(common.websites.wikipedia.fundamental_frequency)) information from audio.",
+            "pitch guidance": "**Pitch Guidance**: Leverages the [fundamental frequency (f0)]($t(common.websites.wikipedia.fundamental_frequency)) of the input voice during synthesis to better maintain the original pitch, intonation, and melody.",
+            "sample rate": "$t(common.emojis.audio) **Sample rate** refers to the number of times per second an analog audio signal is converted to digital, measured in Hertz (Hz). Higher sample rates capture more detail but increase file size. Simple yet crucial for audio quality.\n\n> $t(common.emojis.tip) **Tip**: Check the sample rate of your dataset for better choosing a pretrained model such as 32k, 40k or 48k. Unfortunately there aren't any 44.1Khz pretrain available yet, so choose one that has a sample rate closer to your dataset and test if it works well.",
+            "inference": "**Inference** in machine learning is when a trained model uses what it has learned from data to make predictions or decisions on new, unseen information. In the context of RVC, it's when you use a voice model to produce an output audio.",
+            "overtraining": "**Overtraining**, or **overfitting**, in machine learning is when a model learns too much from the training data, including noise or irrelevant details. As a result, it performs well on the training data but struggles to make accurate predictions on new, unseen data.\n\n > $t(common.emojis.tip) **Tip**: An effective way to detect overtraining is checking if the [TensorBoard Graph]($t(common.websites.applio.tensorboard)) starts rising and never comes back down.",
+            "pretrain": "**Pretrained**: A model trained on several sets of long-duration audios, used as a starting point for training in RVC. You can check a good list of pretrained models in $t(common.channels.pretrain)",
             "rmvpe": {
                 "title": "Different types of **RMVPE** Pitch Extraction",
                 "description": [
@@ -44,10 +80,10 @@
             "embedData": {
                 "title": "Suggestions",
                 "description": [
-                    "Search for it in [AI HUB Docs](https://docs.aihub.wtf/) or [Applio Docs](https://docs.applio.org/faq). You will probably find your answer there 📚",
-                    "Ask for help in {{okadaChannel}} if it's related to real time voice changing",
-                    "Ask for help in {{helpChannel}} for general help, but use the command `!howtoask` first to learn how to structure your question properly and increase your chances of getting a reply",
-                    "Last but not least, ask for help in {{helpAiArtChannel}} if it's related to AI images"
+                    "Search for it in [AI HUB Docs]($t(common.websites.aihub.docs)) or [Applio Docs]($t(common.websites.applio.faq)). You will probably find your answer there $t(common.emojis.book)",
+                    "Ask for help in $t(common.channels.okada) if it's related to real time voice changing",
+                    "Ask for help in $t(common.channels.help) for general help, but use the command `!howtoask` first to learn how to structure your question properly and increase your chances of getting a reply",
+                    "Last but not least, ask for help in $t(common.channels.ai_art) if it's related to AI images."
                 ]
             }
         }
@@ -126,13 +162,13 @@
             "description": "Close your post",
             "embed": {
                 "description": [
-                    "Close your own post in <#1159289700490694666> or <#1159289738314919936>. Note that staff members can also close your post.",
+                    "Close your own post in $t(common.channels.voice_models) or $t(common.channels.model_request). Note that staff members can also close your post.",
                     "\nUsage: `/close`"
                 ]
             }
         },
         "guides": {
-            "icon": "📚",
+            "icon": "$t(common.emojis.book)",
             "label": "Guides",
             "description": "Shows guides for RVC and related things",
             "embed": {
@@ -147,7 +183,7 @@
             }
         },
         "cloud": {
-            "icon": "☁️",
+            "icon": "$t(common.emojis.cloud)",
             "label": "Cloud",
             "description": "Use these if you don't have a powerful computer to run things locally",
             "embed": {
@@ -160,7 +196,7 @@
             }
         },
         "faq": {
-            "icon": "❔",
+            "icon": "$t(common.emojis.question)",
             "label": "FAQ",
             "description": "Frequently asked questions about RVC or related technologies",
             "embed": {
@@ -175,7 +211,7 @@
             }
         },
         "help": {
-            "icon": "🆘",
+            "icon": "$t(common.emojis.help)",
             "label": "Help",
             "description": "Shows help for Automaze commands",
             "embed": {
@@ -201,7 +237,7 @@
             }
         },
         "context_colab": {
-            "icon": "☁",
+            "icon": "$t(common.emojis.cloud)",
             "label": "Send Colab Links",
             "description": "Sends the links for the working Google Colab notebooks",
             "embed": {
@@ -213,7 +249,7 @@
             }
         },
         "context_realtime": {
-            "icon": "🎤",
+            "icon": "$t(common.emojis.mic)",
             "label": "Send Realtime guides",
             "description": "Sends the links for the realtime RVC",
             "embed": {
@@ -225,7 +261,7 @@
             }
         },
         "context_rvc": {
-            "icon": "📚",
+            "icon": "$t(common.emojis.book)",
             "label": "Send RVC guides",
             "description": "Sends the links for RVC guides",
             "embed": {
@@ -237,7 +273,7 @@
             }
         },
         "context_help": {
-            "icon": "🆘",
+            "icon": "$t(common.emojis.help)",
             "label": "Send help",
             "description": "Sends the links for help channels",
             "embed": {

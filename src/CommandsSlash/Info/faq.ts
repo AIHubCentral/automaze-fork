@@ -1,4 +1,4 @@
-import { bold, channelMention, Colors, EmbedBuilder, SlashCommandBuilder, unorderedList } from 'discord.js';
+import { bold, Colors, EmbedBuilder, SlashCommandBuilder, unorderedList } from 'discord.js';
 import ExtendedClient from '../../Core/extendedClient';
 import slashCommandData from '../../../JSON/slashCommandData.json';
 import { SlashCommand } from '../../Interfaces/Command';
@@ -93,14 +93,9 @@ const Faq: SlashCommand = {
                 lng: language,
             });
 
-            const channelIds = client.discordIDs.Channel;
-
             const embedDescription = i18next.t('faq.unknown.embedData.description', {
                 lng: language,
                 returnObjects: true,
-                okadaChannel: channelMention(channelIds.HelpWOkada),
-                helpChannel: channelMention(channelIds.HelpRVC),
-                helpAiArtChannel: channelMention(channelIds.HelpAiArt),
             }) as Array<string>;
 
             await interaction.editReply({
@@ -120,8 +115,6 @@ const Faq: SlashCommand = {
 
         const processedTranslation = processTranslation(response);
         const embed = new EmbedBuilder().setColor(Colors.Blurple);
-
-        console.log('processed', processedTranslation);
 
         if (typeof processedTranslation === 'string') {
             embed.setDescription(processedTranslation);
