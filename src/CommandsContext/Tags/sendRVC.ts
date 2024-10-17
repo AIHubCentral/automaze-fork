@@ -1,11 +1,18 @@
-import { ApplicationCommandType, ContextMenuCommandBuilder, InteractionReplyOptions } from 'discord.js';
+import {
+    ApplicationCommandType,
+    ContextMenuCommandBuilder,
+    ContextMenuCommandType,
+    InteractionReplyOptions,
+} from 'discord.js';
 import { ContextCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
 import { createEmbeds, getAvailableColors } from '../../Utils/discordUtilities';
 
 const SendRVCGuides: ContextCommand = {
     category: 'Tags',
-    data: new ContextMenuCommandBuilder().setName('Send RVC guides').setType(ApplicationCommandType.User),
+    data: new ContextMenuCommandBuilder()
+        .setName('Send RVC guides')
+        .setType(ApplicationCommandType.User as ContextMenuCommandType),
     async execute(interaction) {
         const { targetUser } = interaction;
         if (targetUser.bot)
@@ -20,7 +27,7 @@ const SendRVCGuides: ContextCommand = {
 
         if (!guides.embeds) return;
 
-        let botResponse: InteractionReplyOptions = {
+        const botResponse: InteractionReplyOptions = {
             content: `Hello, ${targetUser}! Here are some recommended resources for you!`,
             embeds: createEmbeds(guides.embeds, availableColors),
         };

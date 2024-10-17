@@ -2,6 +2,7 @@ import {
     ApplicationCommandType,
     ColorResolvable,
     ContextMenuCommandBuilder,
+    ContextMenuCommandType,
     EmbedBuilder,
     InteractionReplyOptions,
 } from 'discord.js';
@@ -12,7 +13,9 @@ import { getResourceData, resourcesToUnorderedList } from '../../Utils/botUtilit
 
 const SendColabGuides: ContextCommand = {
     category: 'Tags',
-    data: new ContextMenuCommandBuilder().setName('Send Colab links').setType(ApplicationCommandType.User),
+    data: new ContextMenuCommandBuilder()
+        .setName('Send Colab links')
+        .setType(ApplicationCommandType.User as ContextMenuCommandType),
     async execute(interaction) {
         const { targetUser } = interaction;
         if (targetUser.bot)
@@ -35,7 +38,7 @@ const SendColabGuides: ContextCommand = {
             );
         }
 
-        let noticeEmbeds = botData.embeds.colab_notice.en.embeds;
+        const noticeEmbeds = botData.embeds.colab_notice.en.embeds;
 
         if (noticeEmbeds) {
             for (const embed of noticeEmbeds) {

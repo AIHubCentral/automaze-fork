@@ -4,7 +4,9 @@ const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const SendRVCGuides = {
     category: 'Tags',
-    data: new discord_js_1.ContextMenuCommandBuilder().setName('Send RVC guides').setType(discord_js_1.ApplicationCommandType.User),
+    data: new discord_js_1.ContextMenuCommandBuilder()
+        .setName('Send RVC guides')
+        .setType(discord_js_1.ApplicationCommandType.User),
     async execute(interaction) {
         const { targetUser } = interaction;
         if (targetUser.bot)
@@ -15,7 +17,7 @@ const SendRVCGuides = {
         const guides = botData.embeds.rvc.en;
         if (!guides.embeds)
             return;
-        let botResponse = {
+        const botResponse = {
             content: `Hello, ${targetUser}! Here are some recommended resources for you!`,
             embeds: (0, discordUtilities_1.createEmbeds)(guides.embeds, availableColors),
         };

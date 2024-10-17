@@ -5,7 +5,9 @@ const discordUtilities_1 = require("../../Utils/discordUtilities");
 const botUtilities_1 = require("../../Utils/botUtilities");
 const SendColabGuides = {
     category: 'Tags',
-    data: new discord_js_1.ContextMenuCommandBuilder().setName('Send Colab links').setType(discord_js_1.ApplicationCommandType.User),
+    data: new discord_js_1.ContextMenuCommandBuilder()
+        .setName('Send Colab links')
+        .setType(discord_js_1.ApplicationCommandType.User),
     async execute(interaction) {
         const { targetUser } = interaction;
         if (targetUser.bot)
@@ -21,7 +23,7 @@ const SendColabGuides = {
                 description: [(0, botUtilities_1.resourcesToUnorderedList)(resources)],
             }));
         }
-        let noticeEmbeds = botData.embeds.colab_notice.en.embeds;
+        const noticeEmbeds = botData.embeds.colab_notice.en.embeds;
         if (noticeEmbeds) {
             for (const embed of noticeEmbeds) {
                 embeds.push((0, discordUtilities_1.createEmbed)(embed));

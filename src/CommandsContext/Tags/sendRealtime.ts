@@ -1,4 +1,9 @@
-import { ApplicationCommandType, ContextMenuCommandBuilder, EmbedBuilder } from 'discord.js';
+import {
+    ApplicationCommandType,
+    ContextMenuCommandBuilder,
+    ContextMenuCommandType,
+    EmbedBuilder,
+} from 'discord.js';
 import { ContextCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
 import { SelectMenuData } from '../../Interfaces/BotData';
@@ -21,7 +26,7 @@ const SendRealtimeGuides: ContextCommand = {
     category: 'Tags',
     data: new ContextMenuCommandBuilder()
         .setName('Send Realtime guides')
-        .setType(ApplicationCommandType.User),
+        .setType(ApplicationCommandType.User as ContextMenuCommandType),
     async execute(interaction) {
         const { targetUser } = interaction;
         const client = interaction.client as ExtendedClient;

@@ -7,6 +7,7 @@ const discord_js_1 = require("discord.js");
 const slashCommandData_json_1 = __importDefault(require("../../../JSON/slashCommandData.json"));
 const pretty_ms_1 = __importDefault(require("pretty-ms"));
 const i18next_1 = __importDefault(require("i18next"));
+const generalUtilities_1 = require("../../Utils/generalUtilities");
 const commandData = slashCommandData_json_1.default.help;
 const Help = {
     category: 'Info',
@@ -59,10 +60,18 @@ const Help = {
         const { botConfigs, logger } = client;
         const commandType = interaction.options.getString('type');
         const ephemeral = interaction.options.getBoolean('private') ?? false;
-        let language = interaction.options.getString('language') ?? '';
+        const language = interaction.options.getString('language') ?? '';
+        if (['es', 'pt'].includes(language)) {
+            return await interaction.reply({
+                content: i18next_1.default.t('general.translation_not_available', { lng: language }),
+                ephemeral: true,
+            });
+        }
+        /*
         if (language === '') {
             language = interaction.locale;
         }
+        */
         if (interaction.options.getSubcommand() === 'commands') {
             await handleCommandOption(interaction, commandType, language, ephemeral);
         }
@@ -81,81 +90,93 @@ exports.default = Help;
 async function handleCommandOption(interaction, commandType, language, ephemeral) {
     if (!commandType)
         return;
-    if (['es', 'pt'].includes(language)) {
-        return await interaction.reply({
-            content: i18next_1.default.t('general.translation_not_available', { lng: language }),
-            ephemeral: true,
-        });
-    }
     const embed = new discord_js_1.EmbedBuilder()
         .setColor(discord_js_1.Colors.Greyple)
         .setTitle(i18next_1.default.t('help.title', { lng: language }));
+    let menuOptions = [];
     if (commandType === 'slash') {
-        const menuOptions = ['doxx', '8ball', 'banana', 'topbanana'];
-        const selectMenu = new discord_js_1.StringSelectMenuBuilder()
-            .setCustomId('select_slash')
-            .setPlaceholder(i18next_1.default.t('help.placeholder', { lng: language }))
-            .addOptions(menuOptions.map((key) => {
-            return {
-                label: i18next_1.default.t(`help.${key}.label`, { lng: language }),
-                description: i18next_1.default.t(`help.${key}.description`, { lng: language }),
-                emoji: i18next_1.default.t(`help.${key}.icon`, { lng: language }),
-                value: key,
-            };
-        }));
-        const row = new discord_js_1.ActionRowBuilder().addComponents(selectMenu);
-        await interaction.reply({ embeds: [embed], components: [row], ephemeral });
-        const filter = (i) => i.isStringSelectMenu() && i.customId === 'select_slash' && i.user.id === interaction.user.id;
-        const currentChannel = interaction.channel;
-        const collector = currentChannel.createMessageComponentCollector({ filter, time: 60_000 });
-        collector.on('collect', async (i) => {
-            await i.deferUpdate();
-            const selectedValue = i.values[0];
-            const embedData = i18next_1.default.t(`help.${selectedValue}.embed`, {
-                lng: language,
-                returnObjects: true,
-            });
-            if (!embedData.description)
-                return;
-            embed.setTitle(`${i18next_1.default.t(`help.${selectedValue}.icon`, { lng: language })} ${i18next_1.default.t(`help.${selectedValue}.label`, { lng: language })}`);
-            embed.setDescription(embedData.description.join('\n'));
-            if (embedData.footer) {
-                embed.setFooter({ text: embedData.footer });
-            }
-            await i.editReply({ embeds: [embed], components: [row] });
-            //await i.followUp({ content: `You selected: ${selectedValue}` });
-        });
-        collector.on('end', async (_collected, reason) => {
-            if (reason === 'time') {
-                const disabledSelectMenu = new discord_js_1.StringSelectMenuBuilder()
-                    .setCustomId('select')
-                    .setPlaceholder(i18next_1.default.t('help.placeholder', { lng: language }))
-                    .addOptions([
-                    {
-                        label: 'N/A',
-                        value: 'not_available',
-                    },
-                ])
-                    .setDisabled(true);
-                const disabledRow = new discord_js_1.ActionRowBuilder().addComponents(disabledSelectMenu);
-                embed.setColor(discord_js_1.Colors.Red);
-                await interaction.editReply({
-                    content: i18next_1.default.t('help.timeout', { lng: language }),
-                    embeds: [embed],
-                    components: [disabledRow],
-                });
-            }
-        });
+        menuOptions = [
+            'doxx',
+            '8ball',
+            'banana',
+            'topbanana',
+            'ping',
+            'close',
+            'guides',
+            'cloud',
+            'faq',
+            'help',
+        ];
     }
     else if (commandType === 'prefix') {
-        await interaction.reply('prefix');
+        return;
     }
     else if (commandType === 'context') {
-        await interaction.reply('context');
+        menuOptions = ['context_banan', 'context_colab', 'context_realtime', 'context_rvc', 'context_help'];
     }
     else {
         await interaction.reply({ content: 'Not available', ephemeral: true });
+        return;
     }
+    const menuId = `select_${(0, generalUtilities_1.generateRandomId)(6)}`;
+    const selectMenu = new discord_js_1.StringSelectMenuBuilder()
+        .setCustomId(menuId)
+        .setPlaceholder(i18next_1.default.t('help.placeholder', { lng: language }))
+        .addOptions(menuOptions.map((key) => {
+        return {
+            label: i18next_1.default.t(`help.${key}.label`, { lng: language }),
+            description: i18next_1.default.t(`help.${key}.description`, { lng: language }),
+            emoji: i18next_1.default.t(`help.${key}.icon`, { lng: language }),
+            value: key,
+        };
+    }));
+    const row = new discord_js_1.ActionRowBuilder().addComponents(selectMenu);
+    await interaction.reply({ embeds: [embed], components: [row], ephemeral });
+    const filter = (i) => i.isStringSelectMenu() && i.customId === menuId && i.user.id === interaction.user.id;
+    const currentChannel = interaction.channel;
+    // shows for 10 minutes
+    const collector = currentChannel.createMessageComponentCollector({ filter, time: 600_000 });
+    collector.on('collect', async (i) => {
+        await i.deferUpdate();
+        const selectedValue = i.values[0];
+        const embedData = i18next_1.default.t(`help.${selectedValue}.embed`, {
+            lng: language,
+            returnObjects: true,
+        });
+        if (!embedData.description)
+            return;
+        embed.setTitle(`${i18next_1.default.t(`help.${selectedValue}.icon`, { lng: language })} ${i18next_1.default.t(`help.${selectedValue}.label`, { lng: language })}`);
+        embed.setDescription(embedData.description.join('\n'));
+        if (embedData.footer) {
+            embed.setFooter({ text: embedData.footer });
+        }
+        else {
+            embed.setFooter(null);
+        }
+        await i.editReply({ embeds: [embed], components: [row] });
+        //await i.followUp({ content: `You selected: ${selectedValue}` });
+    });
+    collector.on('end', async (_collected, reason) => {
+        if (reason === 'time') {
+            const disabledSelectMenu = new discord_js_1.StringSelectMenuBuilder()
+                .setCustomId(menuId)
+                .setPlaceholder(i18next_1.default.t('help.placeholder', { lng: language }))
+                .addOptions([
+                {
+                    label: 'N/A',
+                    value: 'not_available',
+                },
+            ])
+                .setDisabled(true);
+            const disabledRow = new discord_js_1.ActionRowBuilder().addComponents(disabledSelectMenu);
+            embed.setColor(discord_js_1.Colors.Red);
+            await interaction.editReply({
+                content: i18next_1.default.t('help.timeout', { lng: language }),
+                embeds: [embed],
+                components: [disabledRow],
+            });
+        }
+    });
 }
 async function handleGeneralOption(interaction, language) {
     await interaction.reply('General');

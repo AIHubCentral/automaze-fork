@@ -82,7 +82,7 @@
             }
         },
         "banana": {
-            "icon": "🍌",
+            "icon": "🤣",
             "label": "Banana",
             "description": "Puts someone in /topbanana leaderboard",
             "embed": {
@@ -106,6 +106,145 @@
                     "\n**Options**:",
                     "- `Limit` (optional): How many users to show (max 50)"
                 ]
+            }
+        },
+        "ping": {
+            "icon": "🏓",
+            "label": "Ping",
+            "description": "Check the bot latency speed",
+            "embed": {
+                "description": [
+                    "Check the bot latency speed",
+                    "\nUsage: `/ping`"
+                ]
+            }
+        },
+        "close": {
+            "icon": "🔒",
+            "label": "Close",
+            "description": "Close your post",
+            "embed": {
+                "description": [
+                    "Close your own post in <#1159289700490694666> or <#1159289738314919936>. Note that staff members can also close your post.",
+                    "\nUsage: `/close`"
+                ]
+            }
+        },
+        "guides": {
+            "icon": "📚",
+            "label": "Guides",
+            "description": "Shows guides for RVC and related things",
+            "embed": {
+                "description": [
+                    "Shows guides for RVC and related things",
+                    "\nUsage: `/guides options`",
+                    "\n**Options**:",
+                    "- `(Required) category`: Choose a category such as RVC or Upload for instance",
+                    "- `(Optional) language`: Which language should be used on the response, defaults to english if not available",
+                    "- `(Optional) user`: Recommend the guide to an user, note that this will ping the user."
+                ]
+            }
+        },
+        "cloud": {
+            "icon": "☁️",
+            "label": "Cloud",
+            "description": "Use these if you don't have a powerful computer to run things locally",
+            "embed": {
+                "description": [
+                    "Use these if you don't have a powerful computer to run things locally",
+                    "\nUsage: `/cloud options`",
+                    "\n**Options**:",
+                    "- `platform`: Links to resources available in the selected cloud platform (colab, kaggle, lightning, etc...)"
+                ]
+            }
+        },
+        "faq": {
+            "icon": "❔",
+            "label": "FAQ",
+            "description": "Frequently asked questions about RVC or related technologies",
+            "embed": {
+                "description": [
+                    "Frequently asked questions about RVC or related technologies",
+                    "\nUsage: `/faq options`",
+                    "\n**Options**:",
+                    "- `Topic`: What do you want to know about",
+                    "- `(Optional) Language`: Which language the bot will use to respond",
+                    "- `(Optional) Private`: If set to `True` only you will be able to see the response"
+                ]
+            }
+        },
+        "help": {
+            "icon": "🆘",
+            "label": "Help",
+            "description": "Shows help for Automaze commands",
+            "embed": {
+                "description": [
+                    "Shows help for Automaze commands or the channels you can ask for help on RVC or related things.",
+                    "\nUsage: `/help options`",
+                    "\n**Options**:",
+                    "- `Commands`:  Choose a command to learn more about it",
+                    "- `General`: Discover which channels you can ask for help if you need help with RVC or related things"
+                ]
+            }
+        },
+        "context_banan": {
+            "icon": "🤣",
+            "label": "Banana",
+            "description": "Puts someone in /topbanana leaderboard",
+            "embed": {
+                "description": [
+                    "Gives a banana to someone in a fun and playful way, it's not supposed to offend anyone.",
+                    "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > banan`"
+                ],
+                "footer": "Note: It's also possible to use this command with /banana"
+            }
+        },
+        "context_colab": {
+            "icon": "☁",
+            "label": "Send Colab Links",
+            "description": "Sends the links for the working Google Colab notebooks",
+            "embed": {
+                "description": [
+                    "Sends the links for the working Google Colab notebooks",
+                    "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > Send Colab links`"
+                ],
+                "footer": "Note: It's also possible to access the colab links with /cloud"
+            }
+        },
+        "context_realtime": {
+            "icon": "🎤",
+            "label": "Send Realtime guides",
+            "description": "Sends the links for the realtime RVC",
+            "embed": {
+                "description": [
+                    "Sends the links for the realtime RVC and W-Okada guides",
+                    "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > Send Realtime links`"
+                ],
+                "footer": "Note: It's also possible to access the realtime guides with /guides realtime"
+            }
+        },
+        "context_rvc": {
+            "icon": "📚",
+            "label": "Send RVC guides",
+            "description": "Sends the links for RVC guides",
+            "embed": {
+                "description": [
+                    "Sends the links for RVC guides",
+                    "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > Send RVC guides`"
+                ],
+                "footer": "Note: It's also possible to access the RVC guides with /guides rvc"
+            }
+        },
+        "context_help": {
+            "icon": "🆘",
+            "label": "Send help",
+            "description": "Sends the links for help channels",
+            "embed": {
+                "description": [
+                    "Sends the links for help channels",
+                    "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > Send Help`"
+                ],
+                "footer": "Note: It's also possible to access the channel links with the command /help general"
             }
         }
     }

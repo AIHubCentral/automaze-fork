@@ -5,7 +5,9 @@ const discord_js_1 = require("discord.js");
 const botUtilities_1 = require("../../Utils/botUtilities");
 const Banan = {
     category: 'Fun',
-    data: new discord_js_1.ContextMenuCommandBuilder().setName('banan').setType(discord_js_1.ApplicationCommandType.User),
+    data: new discord_js_1.ContextMenuCommandBuilder()
+        .setName('banan')
+        .setType(discord_js_1.ApplicationCommandType.User),
     async execute(interaction) {
         const client = interaction.client;
         const targetUser = interaction.targetUser;

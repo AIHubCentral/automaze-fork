@@ -6,6 +6,7 @@ exports.delay = delay;
 exports.getRandomNumber = getRandomNumber;
 exports.getRandomFromArray = getRandomFromArray;
 exports.processTranslation = processTranslation;
+exports.generateRandomId = generateRandomId;
 const promises_1 = require("node:timers/promises");
 async function delay(durationMs) {
     await (0, promises_1.setTimeout)(durationMs);
@@ -38,4 +39,13 @@ function processTranslation(translation) {
         return translation;
     }
     throw new Error('translation should be of type TranslationResult');
+}
+function generateRandomId(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters[randomIndex];
+    }
+    return result;
 }
