@@ -6,7 +6,8 @@
     "general": {
         "translation_not_available": "This command is not available in this language yet.",
         "not_found": "Command not found",
-        "not_available": "Not available yet."
+        "not_available": "Not available yet.",
+        "not_interaction_author": "You didn't start this interaction. Use the command for interacting with it."
     },
     "faq": {
         "topics": {

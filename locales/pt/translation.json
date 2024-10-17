@@ -1,6 +1,7 @@
 {
     "general": {
-        "translation_not_available": "Esse comando ainda não está disponível em português."
+        "translation_not_available": "Esse comando ainda não está disponível em português.",
+        "not_interaction_author": "Você não iniciou essa interação. Use o comando para poder interagir."
     },
     "faq": {
         "topics": {

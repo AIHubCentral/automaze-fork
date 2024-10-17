@@ -192,8 +192,7 @@ async function handleCommandOption(
 
     await interaction.reply({ embeds: [embed], components: [row], ephemeral });
 
-    const filter = (i: Interaction) =>
-        i.isStringSelectMenu() && i.customId === menuId && i.user.id === interaction.user.id;
+    const filter = (i: Interaction) => i.isStringSelectMenu() && i.customId === menuId;
 
     const currentChannel = interaction.channel as TextChannel;
 
@@ -201,29 +200,35 @@ async function handleCommandOption(
     const collector = currentChannel.createMessageComponentCollector({ filter, time: 600_000 });
 
     collector.on('collect', async (i: StringSelectMenuInteraction) => {
-        await i.deferUpdate();
-        const selectedValue = i.values[0];
+        if (i.user.id === interaction.user.id) {
+            await i.deferUpdate();
+            const selectedValue = i.values[0];
 
-        const embedData = i18next.t(`help.${selectedValue}.embed`, {
-            lng: language,
-            returnObjects: true,
-        }) as EmbedData;
+            const embedData = i18next.t(`help.${selectedValue}.embed`, {
+                lng: language,
+                returnObjects: true,
+            }) as EmbedData;
 
-        if (!embedData.description) return;
+            if (!embedData.description) return;
 
-        embed.setTitle(
-            `${i18next.t(`help.${selectedValue}.icon`, { lng: language })} ${i18next.t(`help.${selectedValue}.label`, { lng: language })}`
-        );
-        embed.setDescription(embedData.description.join('\n'));
+            embed.setTitle(
+                `${i18next.t(`help.${selectedValue}.icon`, { lng: language })} ${i18next.t(`help.${selectedValue}.label`, { lng: language })}`
+            );
+            embed.setDescription(embedData.description.join('\n'));
 
-        if (embedData.footer) {
-            embed.setFooter({ text: embedData.footer });
+            if (embedData.footer) {
+                embed.setFooter({ text: embedData.footer });
+            } else {
+                embed.setFooter(null);
+            }
+
+            await i.editReply({ embeds: [embed], components: [row] });
         } else {
-            embed.setFooter(null);
+            await i.reply({
+                content: i18next.t('general.not_interaction_author', { lng: language }),
+                ephemeral: true,
+            });
         }
-
-        await i.editReply({ embeds: [embed], components: [row] });
-        //await i.followUp({ content: `You selected: ${selectedValue}` });
     });
 
     collector.on('end', async (_collected, reason) => {

@@ -132,29 +132,36 @@ async function handleCommandOption(interaction, commandType, language, ephemeral
     }));
     const row = new discord_js_1.ActionRowBuilder().addComponents(selectMenu);
     await interaction.reply({ embeds: [embed], components: [row], ephemeral });
-    const filter = (i) => i.isStringSelectMenu() && i.customId === menuId && i.user.id === interaction.user.id;
+    const filter = (i) => i.isStringSelectMenu() && i.customId === menuId;
     const currentChannel = interaction.channel;
     // shows for 10 minutes
     const collector = currentChannel.createMessageComponentCollector({ filter, time: 600_000 });
     collector.on('collect', async (i) => {
-        await i.deferUpdate();
-        const selectedValue = i.values[0];
-        const embedData = i18next_1.default.t(`help.${selectedValue}.embed`, {
-            lng: language,
-            returnObjects: true,
-        });
-        if (!embedData.description)
-            return;
-        embed.setTitle(`${i18next_1.default.t(`help.${selectedValue}.icon`, { lng: language })} ${i18next_1.default.t(`help.${selectedValue}.label`, { lng: language })}`);
-        embed.setDescription(embedData.description.join('\n'));
-        if (embedData.footer) {
-            embed.setFooter({ text: embedData.footer });
+        if (i.user.id === interaction.user.id) {
+            await i.deferUpdate();
+            const selectedValue = i.values[0];
+            const embedData = i18next_1.default.t(`help.${selectedValue}.embed`, {
+                lng: language,
+                returnObjects: true,
+            });
+            if (!embedData.description)
+                return;
+            embed.setTitle(`${i18next_1.default.t(`help.${selectedValue}.icon`, { lng: language })} ${i18next_1.default.t(`help.${selectedValue}.label`, { lng: language })}`);
+            embed.setDescription(embedData.description.join('\n'));
+            if (embedData.footer) {
+                embed.setFooter({ text: embedData.footer });
+            }
+            else {
+                embed.setFooter(null);
+            }
+            await i.editReply({ embeds: [embed], components: [row] });
         }
         else {
-            embed.setFooter(null);
+            await i.reply({
+                content: i18next_1.default.t('general.not_interaction_author', { lng: language }),
+                ephemeral: true,
+            });
         }
-        await i.editReply({ embeds: [embed], components: [row] });
-        //await i.followUp({ content: `You selected: ${selectedValue}` });
     });
     collector.on('end', async (_collected, reason) => {
         if (reason === 'time') {
