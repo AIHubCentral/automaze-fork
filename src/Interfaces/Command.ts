@@ -24,9 +24,7 @@ export interface ContextCommand {
 
 export interface PrefixCommand {
     name: string;
-    category?: string;
     description: string;
     aliases: string[];
-    syntax?: string;
     run: (client: ExtendedClient, message: Message, args?: string[], prefix?: string) => Promise<unknown>;
 }
