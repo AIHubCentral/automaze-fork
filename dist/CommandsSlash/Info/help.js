@@ -57,7 +57,7 @@ const Help = {
     async execute(interaction) {
         const executionStart = Date.now();
         const client = interaction.client;
-        const { botConfigs, logger } = client;
+        const { logger } = client;
         const commandType = interaction.options.getString('type');
         const ephemeral = interaction.options.getBoolean('private') ?? false;
         const language = interaction.options.getString('language') ?? '';
@@ -76,7 +76,7 @@ const Help = {
             await handleCommandOption(interaction, commandType, language, ephemeral);
         }
         else if (interaction.options.getSubcommand() === 'general') {
-            await handleGeneralOption(interaction, language);
+            await handleGeneralOption(interaction, language, ephemeral);
         }
         logger.info('Help sent', {
             guildId: interaction.guildId,
@@ -178,6 +178,21 @@ async function handleCommandOption(interaction, commandType, language, ephemeral
         }
     });
 }
-async function handleGeneralOption(interaction, language) {
-    await interaction.reply('General');
+async function handleGeneralOption(interaction, language, ephemeral) {
+    const embedTitle = `✍ ${i18next_1.default.t('faq.unknown.embedData.title', {
+        lng: language,
+    })}`;
+    const embedDescription = i18next_1.default.t('faq.unknown.embedData.description', {
+        lng: language,
+        returnObjects: true,
+    });
+    await interaction.reply({
+        embeds: [
+            new discord_js_1.EmbedBuilder()
+                .setTitle(embedTitle)
+                .setColor(discord_js_1.Colors.Greyple)
+                .setDescription((0, discord_js_1.unorderedList)(embedDescription)),
+        ],
+        ephemeral: ephemeral,
+    });
 }

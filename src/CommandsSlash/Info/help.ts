@@ -8,6 +8,7 @@ import {
     SlashCommandBuilder,
     StringSelectMenuBuilder,
     TextChannel,
+    unorderedList,
 } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 import slashCommandData from '../../../JSON/slashCommandData.json';
@@ -99,7 +100,7 @@ const Help: SlashCommand = {
     async execute(interaction) {
         const executionStart = Date.now();
         const client = interaction.client as ExtendedClient;
-        const { botConfigs, logger } = client;
+        const { logger } = client;
 
         const commandType = interaction.options.getString('type');
         const ephemeral = interaction.options.getBoolean('private') ?? false;
@@ -122,7 +123,7 @@ const Help: SlashCommand = {
         if (interaction.options.getSubcommand() === 'commands') {
             await handleCommandOption(interaction, commandType, language, ephemeral);
         } else if (interaction.options.getSubcommand() === 'general') {
-            await handleGeneralOption(interaction, language);
+            await handleGeneralOption(interaction, language, ephemeral);
         }
 
         logger.info('Help sent', {
@@ -252,6 +253,26 @@ async function handleCommandOption(
     });
 }
 
-async function handleGeneralOption(interaction: ChatInputCommandInteraction, language: string) {
-    await interaction.reply('General');
+async function handleGeneralOption(
+    interaction: ChatInputCommandInteraction,
+    language: string,
+    ephemeral: boolean
+) {
+    const embedTitle = `✍ ${i18next.t('faq.unknown.embedData.title', {
+        lng: language,
+    })}`;
+    const embedDescription = i18next.t('faq.unknown.embedData.description', {
+        lng: language,
+        returnObjects: true,
+    }) as Array<string>;
+
+    await interaction.reply({
+        embeds: [
+            new EmbedBuilder()
+                .setTitle(embedTitle)
+                .setColor(Colors.Greyple)
+                .setDescription(unorderedList(embedDescription)),
+        ],
+        ephemeral: ephemeral,
+    });
 }
