@@ -109,7 +109,14 @@ async function handleCommandOption(interaction, commandType, language, ephemeral
         ];
     }
     else if (commandType === 'prefix') {
-        return;
+        menuOptions = [
+            'prefix_audio',
+            'prefix_colab',
+            'prefix_gui',
+            'prefix_hf',
+            'prefix_hfstatus',
+            'prefix_java',
+        ];
     }
     else if (commandType === 'context') {
         menuOptions = ['context_banan', 'context_colab', 'context_realtime', 'context_rvc', 'context_help'];

@@ -2,28 +2,30 @@ import { ColorResolvable } from 'discord.js';
 import { EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
 import { getResourceData, resourcesToUnorderedList, TagResponseSender } from '../../Utils/botUtilities';
+import i18next from '../../i18n';
 
 const HF: PrefixCommand = {
     name: 'hf',
-    category: 'Tags',
     description: 'Links to all working huggingface spaces',
-    aliases: ['spaces', 'hugginface'],
-    syntax: 'hf [member]',
+    aliases: ['spaces', 'huggingface'],
     async run(client, message) {
         const { botCache, logger } = client;
 
         const resources = await getResourceData('hf', botCache, logger);
 
-        let content: EmbedData[] = [];
+        if (resources.length === 0) {
+            await message.reply({ content: i18next.t('general.not_available') });
+            return;
+        }
 
-        if (resources.length > 0) {
-            content.push({
-                title: '<:huggingface:1179800228946268270> Hugginface Spaces',
+        const content: EmbedData[] = [
+            {
+                title: i18next.t('tags.hf.embed.title'),
                 color: 'ffcc4d' as ColorResolvable,
                 description: [resourcesToUnorderedList(resources)],
-                footer: 'More commands: -audio, - colabs, -kaggle, -local, -overtraining, -realtime, -rvc, -help',
-            });
-        }
+                footer: i18next.t('tags.hf.embed.footer'),
+            },
+        ];
 
         const sender = new TagResponseSender(client);
         sender.setEmbeds(content);

@@ -19,7 +19,8 @@
             "wikipedia": {
                 "fundamental_frequency": "https://en.wikipedia.org/wiki/Fundamental_frequency"
             },
-            "hubert": "https://arxiv.org/abs/2106.07447"
+            "hubert": "https://arxiv.org/abs/2106.07447",
+            "colab": "[Google Colab](https://colab.research.google.com/)"
         },
         "channels": {
             "pretrain": "<#1233407331405004954>",
@@ -31,19 +32,26 @@
         },
         "emojis": {
             "audio": "🔊",
-            "tip": "💡",
             "book": "📚",
+            "colab": "📒",
             "cloud": "☁️",
-            "question": "❔",
+            "help": "🆘",
+            "hf": "🤗",
+            "info": "ℹ️",
+            "laptop": "💻",
             "mic": "🎤",
-            "help": "🆘"
+            "question": "❔",
+            "tip": "💡"
         }
     },
     "general": {
         "translation_not_available": "This command is not available in this language yet.",
         "not_found": "Command not found",
         "not_available": "Not available yet.",
-        "not_interaction_author": "You didn't start this interaction. Use the command for interacting with it."
+        "not_interaction_author": "You didn't start this interaction. Use the command for interacting with it.",
+        "options": "\n**Options**:",
+        "optional": "(Optional)",
+        "usage": "\nUsage:"
     },
     "faq": {
         "topics": {
@@ -282,6 +290,111 @@
                     "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > Send Help`"
                 ],
                 "footer": "Note: It's also possible to access the channel links with the command /help general"
+            }
+        },
+        "prefix_audio": {
+            "icon": "$t(common.emojis.audio)",
+            "label": "Audio",
+            "description": "Guides for making datasets",
+            "embed": {
+                "description": [
+                    "Learn how to process your dataset audio for creating high quality RVC models. Also available in `/guides audio` command.",
+                    "$t(general.usage) `-audio options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -dataset"
+            }
+        },
+        "prefix_colab": {
+            "icon": "$t(common.emojis.colab)",
+            "label": "Colab",
+            "description": "Google Colab Notebooks",
+            "embed": {
+                "description": [
+                    "Latest working links for $t(common.websites.colab) notebooks",
+                    "$t(general.usage) `-colab options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -colabs, -disconnected, -train, -training"
+            }
+        },
+        "prefix_gui": {
+            "icon": "$t(common.emojis.laptop)",
+            "label": "GUI",
+            "description": "RVC Easy GUI",
+            "embed": {
+                "description": [
+                    "Yeah, I still use RVC Easy GUI",
+                    "$t(general.usage) `-gui options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ]
+            }
+        },
+        "prefix_hf": {
+            "icon": "$t(common.emojis.hf)",
+            "label": "Huggingface",
+            "description": "Huggingface Spaces",
+            "embed": {
+                "description": [
+                    "List of up to date huggingface spaces. Also available with `/cloud` command.",
+                    "$t(general.usage) `-hf options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -spaces, -huggingface"
+            }
+        },
+        "prefix_hfstatus": {
+            "icon": "$t(common.emojis.hf)",
+            "label": "Huggingface Status",
+            "description": "Check status of the hugginface spaces",
+            "embed": {
+                "description": [
+                    "Check status of the hugginface spaces.",
+                    "$t(general.usage) `-hfstatus`"
+                ]
+            }
+        },
+        "prefix_java": {
+            "icon": "☕",
+            "label": "Java",
+            "description": "Java vs JavaScript",
+            "embed": {
+                "description": [
+                    "Difference of Java and JavaScript by **FungusDesu**",
+                    "$t(general.usage) `-java`"
+                ],
+                "footer": "Aliases: -js, -javascript"
+            }
+        }
+    },
+    "tags": {
+        "audio": {
+            "embed": {
+                "title": "$t(common.emojis.book) Audio Guides & Tools",
+                "footer": "More commands: -colab, -uvr, -karafan, -overtrain, /help"
+            }
+        },
+        "colab": {
+            "embed": {
+                "title": "$t(common.emojis.colab) Google Colab Notebooks",
+                "footer": "More commands: -colab, -uvr, -karafan, -overtrain, /help"
+            },
+            "notice": {
+                "embed": {
+                    "title": "$t(common.emojis.info) Note",
+                    "description": "While the Colab free plan provides up to 12 hours of daily usage, the GPU is typically available for only about 4 hours each day on average.",
+                    "footer": "More commands: -audio, -hf, -local, -kaggle, -overtraining, -realtime, -rvc, /help"
+                }
+            }
+        },
+        "hf": {
+            "embed": {
+                "title": "$t(common.emojis.hf) Huggingface Spaces",
+                "footer": "More commands: -audio, - colabs, -kaggle, -local, -rvc, /help"
             }
         }
     }

@@ -1,34 +1,27 @@
-import { ColorResolvable } from 'discord.js';
+import i18next from 'i18next';
 import { EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
-import {
-    getResourceData,
-    resourcesToUnorderedList,
-    resourcesToUnorderedListAlt,
-    TagResponseSender,
-} from '../../Utils/botUtilities';
+import { getResourceData, resourcesToUnorderedListAlt, TagResponseSender } from '../../Utils/botUtilities';
 
 const Audio: PrefixCommand = {
     name: 'audio',
-    category: 'Tags',
     description: 'Guides on how to isolate audio for making datasets',
     aliases: ['dataset'],
-    syntax: 'audio [member]',
     async run(client, message) {
         const { botCache, logger } = client;
 
         const resources = await getResourceData('audio', botCache, logger);
 
         if (resources.length === 0) {
-            await message.reply({ content: 'Currently unavailable.' });
+            await message.reply({ content: i18next.t('general.not_available') });
             return;
         }
 
-        let content: EmbedData[] = [
+        const content: EmbedData[] = [
             {
-                title: '📚 Audio Guides & Tools',
+                title: i18next.t('tags.audio.embed.title'),
                 description: [resourcesToUnorderedListAlt(resources)],
-                footer: 'More commands: -colab, -uvr, -karafan, -overtrain, -help',
+                footer: i18next.t('tags.audio.embed.footer'),
             },
         ];
 

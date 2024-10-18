@@ -7,10 +7,8 @@ import { EmbedBuilder, Colors } from 'discord.js';
 
 const HFStatus: PrefixCommand = {
     name: 'hfstatus',
-    category: 'Tags',
-    description: 'Checks hugginface status for the spaces',
-    aliases: ['hfstatus'],
-    syntax: 'hfstatus [member]',
+    description: 'Check hugginface status for the spaces',
+    aliases: [],
     async run(client, message) {
         const { botCache, logger } = client;
 

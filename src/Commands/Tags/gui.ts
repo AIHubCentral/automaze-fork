@@ -4,10 +4,8 @@ import { delay } from '../../Utils/generalUtilities';
 
 const GUI: PrefixCommand = {
     name: 'gui',
-    category: 'Tags',
     description: 'yeah i still use rvc easy gui',
     aliases: [],
-    syntax: 'gui',
     async run(client, message) {
         const { botUtils } = client;
         const botResponse: MessageReplyOptions = {};

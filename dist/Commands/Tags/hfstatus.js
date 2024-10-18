@@ -9,10 +9,8 @@ const generalUtilities_1 = require("../../Utils/generalUtilities");
 const discord_js_1 = require("discord.js");
 const HFStatus = {
     name: 'hfstatus',
-    category: 'Tags',
-    description: 'Checks hugginface status for the spaces',
-    aliases: ['hfstatus'],
-    syntax: 'hfstatus [member]',
+    description: 'Check hugginface status for the spaces',
+    aliases: [],
     async run(client, message) {
         const { botCache, logger } = client;
         const resources = await (0, botUtilities_1.getResourceData)('hf', botCache, logger);

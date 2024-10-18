@@ -3,10 +3,8 @@ import { PrefixCommand } from '../../Interfaces/Command';
 
 const Java: PrefixCommand = {
     name: 'java',
-    category: 'Tags',
     description: 'STOP CALLING JAVASCRIPT "JAVA" HERES THE FUCKING DIFFERENCE',
     aliases: ['js', 'javascript'],
-    syntax: `java`,
     async run(client, message) {
         if (message.content !== '-js' && !message.content.includes('script')) {
             await message.react('☕');

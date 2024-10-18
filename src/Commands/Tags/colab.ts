@@ -2,35 +2,34 @@ import { ColorResolvable } from 'discord.js';
 import { PrefixCommand } from '../../Interfaces/Command';
 import { getResourceData, resourcesToUnorderedList, TagResponseSender } from '../../Utils/botUtilities';
 import { EmbedData } from '../../Interfaces/BotData';
+import i18next from 'i18next';
 
 const Colab: PrefixCommand = {
     name: 'colab',
-    category: 'Tags',
     description: 'Links to all working colabs/spaces',
     aliases: ['colabs', 'disconnected', 'train', 'training'],
-    syntax: 'colab [member]',
     async run(client, message) {
-        const { botCache, botData, logger } = client;
+        const { botCache, logger } = client;
 
         const resources = await getResourceData('colab', botCache, logger);
 
-        let content: EmbedData[] = [];
+        if (resources.length === 0) {
+            await message.reply({ content: i18next.t('general.not_available') });
+            return;
+        }
 
-        if (resources.length > 0) {
-            content.push({
-                title: '☁️ Google Colabs',
+        const content: EmbedData[] = [
+            {
+                title: i18next.t('tags.colab.embed.title'),
                 color: 'f9ab00' as ColorResolvable,
                 description: [resourcesToUnorderedList(resources)],
-            });
-        }
-
-        let noticeEmbeds = botData.embeds.colab_notice.en.embeds;
-
-        if (noticeEmbeds) {
-            for (const embed of noticeEmbeds) {
-                content.push(embed);
-            }
-        }
+            },
+            {
+                title: i18next.t('tags.colab.notice.embed.title'),
+                description: [i18next.t('tags.colab.notice.embed.description')],
+                footer: i18next.t('tags.colab.embed.footer'),
+            },
+        ];
 
         const sender = new TagResponseSender(client);
         sender.setEmbeds(content);

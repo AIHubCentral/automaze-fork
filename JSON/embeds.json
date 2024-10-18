@@ -1,17 +1,4 @@
 {
-    "colab_notice": {
-        "en": {
-            "embeds": [
-                {
-                    "title": "ℹ️ Note",
-                    "description": [
-                        "While the Colab free plan provides up to 12 hours of daily usage, the GPU is typically available for only about 4 hours each day on average."
-                    ],
-                    "footer": "More commands: -audio, -hf, -local, -kaggle, -overtraining, -realtime, -rvc, -help"
-                }
-            ]
-        }
-    },
     "kaggle": {
         "en": {
             "embeds": [

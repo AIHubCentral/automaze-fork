@@ -3,10 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const generalUtilities_1 = require("../../Utils/generalUtilities");
 const GUI = {
     name: 'gui',
-    category: 'Tags',
     description: 'yeah i still use rvc easy gui',
     aliases: [],
-    syntax: 'gui',
     async run(client, message) {
         const { botUtils } = client;
         const botResponse = {};

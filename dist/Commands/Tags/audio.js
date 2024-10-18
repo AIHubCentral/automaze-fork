@@ -1,24 +1,26 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const i18next_1 = __importDefault(require("i18next"));
 const botUtilities_1 = require("../../Utils/botUtilities");
 const Audio = {
     name: 'audio',
-    category: 'Tags',
     description: 'Guides on how to isolate audio for making datasets',
     aliases: ['dataset'],
-    syntax: 'audio [member]',
     async run(client, message) {
         const { botCache, logger } = client;
         const resources = await (0, botUtilities_1.getResourceData)('audio', botCache, logger);
         if (resources.length === 0) {
-            await message.reply({ content: 'Currently unavailable.' });
+            await message.reply({ content: i18next_1.default.t('general.not_available') });
             return;
         }
-        let content = [
+        const content = [
             {
-                title: '📚 Audio Guides & Tools',
+                title: i18next_1.default.t('tags.audio.embed.title'),
                 description: [(0, botUtilities_1.resourcesToUnorderedListAlt)(resources)],
-                footer: 'More commands: -colab, -uvr, -karafan, -overtrain, -help',
+                footer: i18next_1.default.t('tags.audio.embed.footer'),
             },
         ];
         const sender = new botUtilities_1.TagResponseSender(client);

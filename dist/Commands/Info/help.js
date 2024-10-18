@@ -35,7 +35,6 @@ const Help = {
         for (const category of categories) {
             options.addOptions({
                 label: category,
-                description: help[category],
                 value: category,
             });
         }
