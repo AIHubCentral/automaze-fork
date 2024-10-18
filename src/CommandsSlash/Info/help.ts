@@ -171,6 +171,9 @@ async function handleCommandOption(
             'prefix_hf',
             'prefix_hfstatus',
             'prefix_java',
+            'prefix_kaggle',
+            'prefix_karafan',
+            'prefix_lightning',
         ];
     } else if (commandType === 'context') {
         menuOptions = ['context_banan', 'context_colab', 'context_realtime', 'context_rvc', 'context_help'];

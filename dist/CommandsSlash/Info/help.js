@@ -116,6 +116,9 @@ async function handleCommandOption(interaction, commandType, language, ephemeral
             'prefix_hf',
             'prefix_hfstatus',
             'prefix_java',
+            'prefix_kaggle',
+            'prefix_karafan',
+            'prefix_lightning',
         ];
     }
     else if (commandType === 'context') {

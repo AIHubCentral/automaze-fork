@@ -1,18 +1,4 @@
 {
-    "kaggle": {
-        "en": {
-            "embeds": [
-                {
-                    "title": "📘 Kaggle Notebooks",
-                    "description": [
-                        "- 📖 [How to use RVC Mainline Kaggle](https://rentry.co/RVC-Mainline-Kaggle) by **Cauthess**",
-                        "> Note: Kaggle limits GPU usage to 30 hours per week."
-                    ],
-                    "footer": "More commands: -colabs, -hf, -local, -rvc, -help"
-                }
-            ]
-        }
-    },
     "local": {
         "en": {
             "embeds": [
@@ -191,44 +177,6 @@
                 {
                     "label": "Guide",
                     "url": "https://docs.aihub.wtf/rvc/resources/vocal-isolation/"
-                }
-            ]
-        }
-    },
-    "karafan": {
-        "en": {
-            "embeds": [
-                {
-                    "title": "KaraFan (Improved Version)",
-                    "color": "8b1d90",
-                    "description": [
-                        "🥇 Awarded to **1st** place by the community as the Best software in the World, for having the less vocal residues in Music track!"
-                    ],
-                    "image": "https://raw.githubusercontent.com/Captain-FLAM/KaraFan/master/images/KaraFan_Banner.jpg",
-                    "footer": "Note: Improved by AI HUB Staff members. Eddy and Leo_Frixi."
-                }
-            ],
-            "buttons": [
-                {
-                    "label": "GitHub",
-                    "url": "https://github.com/Captain-FLAM/KaraFan"
-                },
-                {
-                    "label": "Google Colab",
-                    "url": "https://colab.research.google.com/github/Eddycrack864/KaraFan/blob/master/KaraFan_Improved_Version.ipynb"
-                }
-            ]
-        }
-    },
-    "hfstatus": {
-        "en": {
-            "embeds": [
-                {
-                    "title": "🤗 Hugginface Status",
-                    "color": "Yellow",
-                    "description": [
-                        "https://status.huggingface.co/"
-                    ]
                 }
             ]
         }

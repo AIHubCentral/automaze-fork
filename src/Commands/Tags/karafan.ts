@@ -1,23 +1,21 @@
+import i18next from '../../i18n';
+import { ButtonData, EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
 import { TagResponseSender } from '../../Utils/botUtilities';
 
+type response = { embed: EmbedData; buttons: ButtonData[] };
+
 const Karafan: PrefixCommand = {
     name: 'karafan',
-    category: 'Tags',
     description: 'KaraFan audio separation tool',
     aliases: [],
-    syntax: 'karafan [member]',
     async run(client, message) {
-        const { botData } = client;
-        const content = botData.embeds.karafan.en;
-
-        if (!content.embeds || !content.buttons) {
-            client.logger.error(`Missing embed data for -${this.name}`);
-            return;
-        }
+        const content = i18next.t('tags.karafan', {
+            returnObjects: true,
+        }) as response;
 
         const sender = new TagResponseSender(client);
-        sender.setEmbeds(content.embeds);
+        sender.setEmbeds([content.embed as EmbedData]);
         sender.setButtons(content.buttons);
         sender.config(message);
         await sender.send();

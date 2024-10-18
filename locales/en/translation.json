@@ -20,7 +20,9 @@
                 "fundamental_frequency": "https://en.wikipedia.org/wiki/Fundamental_frequency"
             },
             "hubert": "https://arxiv.org/abs/2106.07447",
-            "colab": "[Google Colab](https://colab.research.google.com/)"
+            "colab": "[Google Colab](https://colab.research.google.com/)",
+            "kaggle": "[Kaggle](https://www.kaggle.com/)",
+            "lightning": "[Lightning AI](https://lightning.ai/)"
         },
         "channels": {
             "pretrain": "<#1233407331405004954>",
@@ -38,7 +40,9 @@
             "help": "🆘",
             "hf": "🤗",
             "info": "ℹ️",
+            "kaggle": "📘",
             "laptop": "💻",
+            "lightning": "⚡",
             "mic": "🎤",
             "question": "❔",
             "tip": "💡"
@@ -369,6 +373,46 @@
                 ],
                 "footer": "Aliases: -js, -javascript"
             }
+        },
+        "prefix_kaggle": {
+            "icon": "$t(common.emojis.kaggle)",
+            "label": "Kaggle",
+            "description": "Kaggle Notebooks",
+            "embed": {
+                "description": [
+                    "List of up to date $t(common.websites.kaggle) notebooks. Also available with `/cloud` command.",
+                    "$t(general.usage) `-kaggle options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ]
+            }
+        },
+        "prefix_karafan": {
+            "icon": "$t(common.emojis.mic)",
+            "label": "Karafan",
+            "description": "Good vocal/instrumental separator",
+            "embed": {
+                "description": [
+                    "Good vocal/instrumental separator. Create acapella or instrumental from an audio source.",
+                    "$t(general.usage) `-karafan options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ]
+            }
+        },
+        "prefix_lightning": {
+            "icon": "$t(common.emojis.lightning)",
+            "label": "Lightning AI",
+            "description": "Links to relevant lightning.ai stuff!",
+            "embed": {
+                "description": [
+                    "List of up to date $t(common.websites.lightning) notebooks. Also available with `/cloud` command.",
+                    "$t(general.usage) `-lightning options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -light, -lightningai"
+            }
         }
     },
     "tags": {
@@ -395,6 +439,43 @@
             "embed": {
                 "title": "$t(common.emojis.hf) Huggingface Spaces",
                 "footer": "More commands: -audio, - colabs, -kaggle, -local, -rvc, /help"
+            }
+        },
+        "kaggle": {
+            "embed": {
+                "title": "$t(common.emojis.kaggle) Kaggle Notebooks",
+                "footer": "More commands: -colabs, -hf, -local, -rvc, /help"
+            },
+            "guide": "- 📖 [How to use RVC Mainline Kaggle](https://rentry.co/RVC-Mainline-Kaggle) by **Cauthess**",
+            "notice": "> Note: Kaggle limits GPU usage to 30 hours per week."
+        },
+        "karafan": {
+            "embed": 
+                {
+                    "title": "KaraFan (Improved Version)",
+                    "color": "8b1d90",
+                    "description": [
+                        "🥇 Awarded to **1st** place by the community as the Best software in the World, for having the less vocal residues in Music track!"
+                    ],
+                    "image": "https://raw.githubusercontent.com/Captain-FLAM/KaraFan/master/images/KaraFan_Banner.jpg",
+                    "footer": "Note: Improved by AI HUB Staff members. Eddy and Leo_Frixi."
+                }
+            ,
+            "buttons": [
+                {
+                    "label": "GitHub",
+                    "url": "https://github.com/Captain-FLAM/KaraFan"
+                },
+                {
+                    "label": "Google Colab",
+                    "url": "https://colab.research.google.com/github/Eddycrack864/KaraFan/blob/master/KaraFan_Improved_Version.ipynb"
+                }
+            ]
+        },
+        "lightning": {
+            "embed": {
+                "title": "$t(common.emojis.lightning) Lightning AI",
+                "footer": "'More commands: -colabs, -kaggle, -hf, -realtime, -rvc, /help'"
             }
         }
     }
