@@ -3,56 +3,78 @@ import {
     ColorResolvable,
     ContextMenuCommandBuilder,
     ContextMenuCommandType,
-    EmbedBuilder,
-    InteractionReplyOptions,
+    DiscordAPIError,
 } from 'discord.js';
 import { ContextCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
-import { createEmbed } from '../../Utils/discordUtilities';
+import { createEmbed, handleDiscordError } from '../../Utils/discordUtilities';
 import { getResourceData, resourcesToUnorderedList } from '../../Utils/botUtilities';
+import i18next from '../../i18n';
+import ms from 'pretty-ms';
 
-const SendColabGuides: ContextCommand = {
+const SendColabLinks: ContextCommand = {
     category: 'Tags',
     data: new ContextMenuCommandBuilder()
         .setName('Send Colab links')
         .setType(ApplicationCommandType.User as ContextMenuCommandType),
     async execute(interaction) {
-        const { targetUser } = interaction;
-        if (targetUser.bot)
-            return await interaction.reply({ content: 'That user is a bot.', ephemeral: true });
+        const logData = {
+            guildId: interaction.guildId,
+            channelId: interaction.channelId,
+            commandName: interaction.commandName,
+            executionTime: '',
+        };
 
         const client = interaction.client as ExtendedClient;
-        const { botCache, botData, logger } = client;
+
+        const { targetUser } = interaction;
+        const { botCache, logger } = client;
+
+        if (targetUser.bot) {
+            logger.warn(`tried sending ${interaction.commandName} to a bot user`);
+            return await interaction.reply({
+                content: i18next.t('general.bot_user', { lng: interaction.locale }),
+                ephemeral: true,
+            });
+        }
 
         const resources = await getResourceData('colab', botCache, logger);
 
-        const embeds: EmbedBuilder[] = [];
-
-        if (resources.length > 0) {
-            embeds.push(
-                createEmbed({
-                    title: '☁️ Google Colabs',
-                    color: 'f9ab00' as ColorResolvable,
-                    description: [resourcesToUnorderedList(resources)],
-                })
-            );
+        if (resources.length === 0) {
+            await interaction.reply({
+                content: i18next.t('general.not_available', { lng: interaction.locale }),
+                ephemeral: true,
+            });
+            return;
         }
 
-        const noticeEmbeds = botData.embeds.colab_notice.en.embeds;
-
-        if (noticeEmbeds) {
-            for (const embed of noticeEmbeds) {
-                embeds.push(createEmbed(embed));
+        const startTime = Date.now();
+        try {
+            await interaction.reply({
+                content: i18next.t('general.suggestions_for_user', { userId: targetUser.id }),
+                embeds: [
+                    createEmbed({
+                        title: i18next.t('tags.colab.embed.title'),
+                        color: 'f9ab00' as ColorResolvable,
+                        description: [resourcesToUnorderedList(resources)],
+                    }),
+                    createEmbed({
+                        title: i18next.t('tags.colab.notice.embed.title'),
+                        description: [i18next.t('tags.colab.notice.embed.description')],
+                        footer: i18next.t('tags.colab.embed.footer'),
+                    }),
+                ],
+            });
+        } catch (error) {
+            if (error instanceof DiscordAPIError) {
+                handleDiscordError(client.logger, error as DiscordAPIError);
             }
+        } finally {
+            const executionTime = Date.now() - startTime;
+            logData.executionTime = ms(executionTime);
+            client.logger.info('sent colab links', logData);
         }
-
-        const botResponse: InteractionReplyOptions = {
-            content: `Colab suggestions for ${targetUser.toString()}`,
-            embeds: embeds,
-        };
-
-        await interaction.reply(botResponse);
     },
 };
 
-export default SendColabGuides;
+export default SendColabLinks;

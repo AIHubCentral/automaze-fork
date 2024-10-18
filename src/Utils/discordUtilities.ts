@@ -8,6 +8,7 @@ import {
     DiscordAPIError,
     ApplicationCommandStringOptionData,
     SlashCommandStringOption,
+    TextChannel,
 } from 'discord.js';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
@@ -112,7 +113,7 @@ export async function getChannelById(channelId: string, guild: Guild): Promise<G
         channel = await guild.channels.fetch(channelId);
     }
 
-    return channel;
+    return channel as GuildBasedChannel;
 }
 
 /**

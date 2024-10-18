@@ -60,7 +60,9 @@
         "options": "\n**Options**:",
         "optional": "(Optional)",
         "usage": "\nUsage:",
-        "suggestions_for_user": "Suggestions for <@{{userId}}>"
+        "suggestions_for_user": "Suggestions for <@{{userId}}>",
+        "failed_retrieving_guild": "Failed to retrieve guild information. Try again later.",
+        "bot_user": "That user is a bot."
     },
     "faq": {
         "topics": {
@@ -720,5 +722,8 @@
                 }
             ]
         }
+    },
+    "banan": {
+        "failed_fetching_user": "Failed fetching user. Try again later."
     }
 }

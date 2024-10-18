@@ -1,6 +1,4 @@
-/* eslint-disable */
-// @ts-nocheck
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     ActionRowBuilder,
     bold,
@@ -11,18 +9,24 @@ import {
     ColorResolvable,
     Colors,
     EmbedBuilder,
-    GuildBasedChannel,
     GuildMember,
     hyperlink,
+    Interaction,
+    InteractionUpdateOptions,
     Message,
-    TextBasedChannel,
+    MessageEditOptions,
+    MessageReplyOptions,
+    StringSelectMenuBuilder,
+    StringSelectMenuInteraction,
+    StringSelectMenuOptionBuilder,
+    TextChannel,
     unorderedList,
     User,
     UserContextMenuCommandInteraction,
 } from 'discord.js';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
-import { ButtonData, EmbedData } from '../Interfaces/BotData';
+import { ButtonData, EmbedData, SelectMenuData, SelectMenuOption } from '../Interfaces/BotData';
 import { createEmbed, createEmbeds, getChannelById, getGuildById } from './discordUtilities';
 import UserService, { UserModel } from '../Services/userService';
 import path from 'path';
@@ -30,6 +34,8 @@ import fs from 'fs';
 import { getAllFiles } from './fileUtilities';
 import ResourceService, { IResource } from '../Services/resourcesService';
 import winston from 'winston';
+import i18next from '../i18n';
+import { generateRandomId } from './generalUtilities';
 
 /* Enums */
 export enum CloudPlatform {
@@ -120,7 +126,7 @@ export function resourcesToUnorderedListAlt(resources: IResource[]): string {
 /**
  * Processes a single resource into a formatted string for an unordered list.
  * Alternative version of processResource()
- * 
+ *
  * @param {IResource} resource - The resource object to be processed.
  * @returns {string} - A formatted string representing the resource.
  */
@@ -145,7 +151,7 @@ export function processResourceAlt(resource: IResource): string {
 }
 
 export function getFaqKeywords(): string[] {
-    return ['epoch', 'epochs', 'dataset', 'datasets', 'model', 'models', 'inference', 'overtraining']
+    return ['epoch', 'epochs', 'dataset', 'datasets', 'model', 'models', 'inference', 'overtraining'];
 }
 
 /**
@@ -165,7 +171,7 @@ export function containsKeyword(tokens: string[], keywords: string[]): string | 
 
 /**
  * Checks for the patterns to check if user is asking a faq question
- * 
+ *
  * @param text {string} - the text to look for the pattern
  * @returns {boolean} - whether it matches the question pattern
  */
@@ -176,9 +182,9 @@ export function containsQuestionPattern(text: string): boolean {
         /(?:can)?(?:\s)?(?:you|anyone|someone) (?:explain|tell|teach) (?:to )?(?:me )?(?:what )?\b\w+\b (?:is|are|means)/i,
         /anyone knows what \b\w+\b (?:is|are)/i,
         /i(?:dk|\sdon't)(?:\s)?(?:know)? what \b\w+\b (?:is|are|means)/i,
-        /is that what \b\w+\b is/i
+        /is that what \b\w+\b is/i,
     ];
-    return patterns.some(pattern => pattern.test(text));
+    return patterns.some((pattern) => pattern.test(text));
 }
 
 export function isAskingForAssistance(text: string): boolean {
@@ -187,7 +193,7 @@ export function isAskingForAssistance(text: string): boolean {
         /(?:i|it|its|it's)?(?:\s)?(?:got|givin|giving|showing)(?:\s)(?:a|an|some)?(?:\s)?error(?:s)?/i,
         /can i ask(?:\s)?(?:you)? (?:something|somethin|somethin')/i,
     ];
-    return patterns.some(pattern => pattern.test(text));
+    return patterns.some((pattern) => pattern.test(text));
 }
 
 export function isAskingForGirlModel(text: string): boolean {
@@ -240,10 +246,16 @@ export function getThemes() {
     return themes;
 }
 
-export async function getPaginatedData(page: number, resourceService: ResourceService, filter?: object): Promise<any> {
+export async function getPaginatedData(
+    page: number,
+    resourceService: ResourceService,
+    filter?: { column: string; value: string }
+): Promise<any> {
     const perPage = 10;
     const offset = (page - 1) * perPage;
     const { data, counter } = await resourceService.getPaginatedResult(offset, perPage, filter);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const totalPages = Math.ceil(counter.count / perPage);
     return { data, totalPages };
 }
@@ -289,10 +301,11 @@ export class TagResponseSender {
     client: ExtendedClient;
     embeds: EmbedBuilder[];
     buttons: ButtonBuilder[];
-    actionRow: ActionRowBuilder | null;
-    channel: TextBasedChannel | null;
+
+    actionRow: any;
+    channel: TextChannel | null;
     message: Message | null;
-    botResponse: any;
+    botResponse: MessageReplyOptions;
     sendAsReply: boolean;
 
     constructor(client: ExtendedClient) {
@@ -325,10 +338,10 @@ export class TagResponseSender {
 
     config(message: Message): void {
         this.message = message;
-        this.channel = message.channel;
+        this.channel = message.channel as TextChannel;
     }
 
-    async send(): Promise<any> {
+    async send(): Promise<unknown> {
         if (!this.channel || !this.message) {
             this.client.logger.error('Failed to send embed because the channel or message was not set');
             return;
@@ -623,14 +636,115 @@ export async function banan(
         const guild = await getGuildById(client.botConfigs.debugGuild.id, client);
         if (!guild) return;
 
-        let channel: GuildBasedChannel | TextBasedChannel | null = await getChannelById(
-            client.botConfigs.debugGuild.channelId,
-            guild
-        );
+        const channel = await getChannelById(client.botConfigs.debugGuild.channelId, guild);
         if (!channel) return;
 
-        channel = <TextBasedChannel>channel;
-
-        await channel.send({ embeds: [debugEmbed] });
+        await (channel as TextChannel).send({ embeds: [debugEmbed] });
     }
+}
+
+function createMenuOptions(availableOptions: SelectMenuOption[]): StringSelectMenuOptionBuilder[] {
+    const menuOptions: StringSelectMenuOptionBuilder[] = [];
+
+    for (const option of availableOptions ?? []) {
+        const optionBuilder = new StringSelectMenuOptionBuilder()
+            .setLabel(option.label)
+            .setDescription(option.description)
+            .setValue(option.value);
+        if (option.emoji) {
+            optionBuilder.setEmoji(option.emoji);
+        }
+        menuOptions.push(optionBuilder);
+    }
+
+    return menuOptions;
+}
+
+export async function handleSendRealtimeGuides(
+    message: Message | ChatInputCommandInteraction | UserContextMenuCommandInteraction,
+    targetUser: User | GuildMember | undefined,
+    author: User
+) {
+    const realtimeSelectOptions = i18next.t('tags.realtime.menuOptions', {
+        returnObjects: true,
+    }) as SelectMenuOption[];
+
+    // selects local RVC by default
+    const selectedGuide = i18next.t('tags.realtime.local', {
+        returnObjects: true,
+    }) as SelectMenuData;
+
+    const menuOptions = createMenuOptions(realtimeSelectOptions);
+
+    const menuId = `realtime_${generateRandomId(6)}`;
+
+    const realtimeGuidesSelectMenu = new StringSelectMenuBuilder()
+        .setCustomId(menuId)
+        .setPlaceholder(i18next.t('tags.realtime.placeholder'))
+        .addOptions(menuOptions);
+
+    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(realtimeGuidesSelectMenu);
+
+    const botResponse = {
+        embeds: createEmbeds(selectedGuide.embeds, [Colors.Blue, Colors.Aqua]),
+        components: [row],
+        content: '',
+    };
+
+    const selectMenuDisplayMinutes = 10; // allow interaction with the select menu for 10 minutes
+    const mainUser = author;
+
+    if (targetUser) {
+        botResponse.content = i18next.t('general.suggestions_for_user', { userId: targetUser.id });
+    }
+
+    const botReply = await message.reply(botResponse);
+    const currentChannel = message.channel as TextChannel;
+
+    const filter = (i: Interaction) => i.isStringSelectMenu() && i.customId === menuId;
+
+    const collector = currentChannel.createMessageComponentCollector({
+        filter,
+        time: selectMenuDisplayMinutes * 60 * 1000,
+    });
+
+    collector.on('collect', async (i: StringSelectMenuInteraction) => {
+        let allowedToInteract = i.user.id === mainUser.id;
+
+        if (targetUser) {
+            allowedToInteract = i.user.id === mainUser.id || i.user.id === targetUser.id;
+        }
+
+        if (allowedToInteract) {
+            await i.deferUpdate();
+
+            const selectMenuResult = i.values[0];
+
+            const guideEmbeds = i18next.t(`tags.realtime.${selectMenuResult}.embeds`, {
+                returnObjects: true,
+            }) as EmbedData[];
+
+            if (targetUser) {
+                botResponse.content = i18next.t('general.suggestions_for_user', {
+                    userId: targetUser.id,
+                });
+            }
+
+            botResponse.embeds = createEmbeds(guideEmbeds, [Colors.Blue, Colors.Aqua]);
+
+            i.editReply(<InteractionUpdateOptions>botResponse);
+        } else {
+            i.reply({
+                content: i18next.t('tags.realtime.not_allowed_to_interact'),
+                ephemeral: true,
+            });
+        }
+    });
+
+    collector.on('end', () => {
+        botResponse.content = i18next.t('tags.realtime.expired');
+        botResponse.embeds = [];
+        botResponse.components = [];
+        botReply.edit(<MessageEditOptions>botResponse);
+    });
 }

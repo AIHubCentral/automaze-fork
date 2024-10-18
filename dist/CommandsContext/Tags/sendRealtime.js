@@ -1,40 +1,28 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-const discordUtilities_1 = require("../../Utils/discordUtilities");
-function createEmbeds(guides) {
-    const embeds = [];
-    for (const guide of guides) {
-        for (const data of guide.embeds) {
-            const embed = (0, discordUtilities_1.createEmbed)(data);
-            embeds.push(embed);
-        }
-    }
-    return embeds;
-}
+const i18n_1 = __importDefault(require("../../i18n"));
+const botUtilities_1 = require("../../Utils/botUtilities");
 const SendRealtimeGuides = {
     category: 'Tags',
     data: new discord_js_1.ContextMenuCommandBuilder()
         .setName('Send Realtime guides')
         .setType(discord_js_1.ApplicationCommandType.User),
     async execute(interaction) {
-        const { targetUser } = interaction;
         const client = interaction.client;
-        if (targetUser.bot)
-            return await interaction.reply({ content: 'That user is a bot.', ephemeral: true });
-        const { botData } = client;
-        const embedData = botData.embeds.realtime.en;
-        const guides = [];
-        if (embedData.local) {
-            guides.push(embedData.local);
+        const { targetUser } = interaction;
+        const { logger } = client;
+        if (targetUser.bot) {
+            logger.warn(`tried sending ${interaction.commandName} to a bot user`);
+            return await interaction.reply({
+                content: i18n_1.default.t('general.bot_user', { lng: interaction.locale }),
+                ephemeral: true,
+            });
         }
-        if (embedData.online) {
-            guides.push(embedData.online);
-        }
-        if (embedData.faq) {
-            guides.push(embedData.faq);
-        }
-        interaction.reply({ content: `Suggestions for ${targetUser}`, embeds: createEmbeds(guides) });
+        await (0, botUtilities_1.handleSendRealtimeGuides)(interaction, targetUser, interaction.user);
     },
 };
 exports.default = SendRealtimeGuides;

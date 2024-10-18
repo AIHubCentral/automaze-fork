@@ -1,6 +1,4 @@
 "use strict";
-/* eslint-disable */
-// @ts-nocheck
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -21,6 +19,8 @@ exports.getThemes = getThemes;
 exports.getPaginatedData = getPaginatedData;
 exports.createPaginatedEmbed = createPaginatedEmbed;
 exports.banan = banan;
+exports.handleSendRealtimeGuides = handleSendRealtimeGuides;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
 const userService_1 = __importDefault(require("../Services/userService"));
@@ -28,6 +28,8 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const fileUtilities_1 = require("./fileUtilities");
 const resourcesService_1 = __importDefault(require("../Services/resourcesService"));
+const i18n_1 = __importDefault(require("../i18n"));
+const generalUtilities_1 = require("./generalUtilities");
 /* Enums */
 var CloudPlatform;
 (function (CloudPlatform) {
@@ -157,9 +159,9 @@ function containsQuestionPattern(text) {
         /(?:can)?(?:\s)?(?:you|anyone|someone) (?:explain|tell|teach) (?:to )?(?:me )?(?:what )?\b\w+\b (?:is|are|means)/i,
         /anyone knows what \b\w+\b (?:is|are)/i,
         /i(?:dk|\sdon't)(?:\s)?(?:know)? what \b\w+\b (?:is|are|means)/i,
-        /is that what \b\w+\b is/i
+        /is that what \b\w+\b is/i,
     ];
-    return patterns.some(pattern => pattern.test(text));
+    return patterns.some((pattern) => pattern.test(text));
 }
 function isAskingForAssistance(text) {
     const patterns = [
@@ -167,7 +169,7 @@ function isAskingForAssistance(text) {
         /(?:i|it|its|it's)?(?:\s)?(?:got|givin|giving|showing)(?:\s)(?:a|an|some)?(?:\s)?error(?:s)?/i,
         /can i ask(?:\s)?(?:you)? (?:something|somethin|somethin')/i,
     ];
-    return patterns.some(pattern => pattern.test(text));
+    return patterns.some((pattern) => pattern.test(text));
 }
 function isAskingForGirlModel(text) {
     const pattern = /(?=.*(girl|female))(?=.*(voice|model))/i;
@@ -210,6 +212,8 @@ async function getPaginatedData(page, resourceService, filter) {
     const perPage = 10;
     const offset = (page - 1) * perPage;
     const { data, counter } = await resourceService.getPaginatedResult(offset, perPage, filter);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const totalPages = Math.ceil(counter.count / perPage);
     return { data, totalPages };
 }
@@ -486,10 +490,88 @@ async function banan(interaction, targetUser, guildMember) {
         const guild = await (0, discordUtilities_1.getGuildById)(client.botConfigs.debugGuild.id, client);
         if (!guild)
             return;
-        let channel = await (0, discordUtilities_1.getChannelById)(client.botConfigs.debugGuild.channelId, guild);
+        const channel = await (0, discordUtilities_1.getChannelById)(client.botConfigs.debugGuild.channelId, guild);
         if (!channel)
             return;
-        channel = channel;
         await channel.send({ embeds: [debugEmbed] });
     }
+}
+function createMenuOptions(availableOptions) {
+    const menuOptions = [];
+    for (const option of availableOptions ?? []) {
+        const optionBuilder = new discord_js_1.StringSelectMenuOptionBuilder()
+            .setLabel(option.label)
+            .setDescription(option.description)
+            .setValue(option.value);
+        if (option.emoji) {
+            optionBuilder.setEmoji(option.emoji);
+        }
+        menuOptions.push(optionBuilder);
+    }
+    return menuOptions;
+}
+async function handleSendRealtimeGuides(message, targetUser, author) {
+    const realtimeSelectOptions = i18n_1.default.t('tags.realtime.menuOptions', {
+        returnObjects: true,
+    });
+    // selects local RVC by default
+    const selectedGuide = i18n_1.default.t('tags.realtime.local', {
+        returnObjects: true,
+    });
+    const menuOptions = createMenuOptions(realtimeSelectOptions);
+    const menuId = `realtime_${(0, generalUtilities_1.generateRandomId)(6)}`;
+    const realtimeGuidesSelectMenu = new discord_js_1.StringSelectMenuBuilder()
+        .setCustomId(menuId)
+        .setPlaceholder(i18n_1.default.t('tags.realtime.placeholder'))
+        .addOptions(menuOptions);
+    const row = new discord_js_1.ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
+    const botResponse = {
+        embeds: (0, discordUtilities_1.createEmbeds)(selectedGuide.embeds, [discord_js_1.Colors.Blue, discord_js_1.Colors.Aqua]),
+        components: [row],
+        content: '',
+    };
+    const selectMenuDisplayMinutes = 10; // allow interaction with the select menu for 10 minutes
+    const mainUser = author;
+    if (targetUser) {
+        botResponse.content = i18n_1.default.t('general.suggestions_for_user', { userId: targetUser.id });
+    }
+    const botReply = await message.reply(botResponse);
+    const currentChannel = message.channel;
+    const filter = (i) => i.isStringSelectMenu() && i.customId === menuId;
+    const collector = currentChannel.createMessageComponentCollector({
+        filter,
+        time: selectMenuDisplayMinutes * 60 * 1000,
+    });
+    collector.on('collect', async (i) => {
+        let allowedToInteract = i.user.id === mainUser.id;
+        if (targetUser) {
+            allowedToInteract = i.user.id === mainUser.id || i.user.id === targetUser.id;
+        }
+        if (allowedToInteract) {
+            await i.deferUpdate();
+            const selectMenuResult = i.values[0];
+            const guideEmbeds = i18n_1.default.t(`tags.realtime.${selectMenuResult}.embeds`, {
+                returnObjects: true,
+            });
+            if (targetUser) {
+                botResponse.content = i18n_1.default.t('general.suggestions_for_user', {
+                    userId: targetUser.id,
+                });
+            }
+            botResponse.embeds = (0, discordUtilities_1.createEmbeds)(guideEmbeds, [discord_js_1.Colors.Blue, discord_js_1.Colors.Aqua]);
+            i.editReply(botResponse);
+        }
+        else {
+            i.reply({
+                content: i18n_1.default.t('tags.realtime.not_allowed_to_interact'),
+                ephemeral: true,
+            });
+        }
+    });
+    collector.on('end', () => {
+        botResponse.content = i18n_1.default.t('tags.realtime.expired');
+        botResponse.embeds = [];
+        botResponse.components = [];
+        botReply.edit(botResponse);
+    });
 }

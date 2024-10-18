@@ -135,7 +135,7 @@ export default class ResourceService {
         offset: number,
         recordsPerPage: number,
         filter?: { column: string; value: string }
-    ): Promise<unknown> {
+    ) {
         this.logger.debug('Requesting paginated resources', { offset, recordsPerPage });
 
         let data = null;

@@ -18,6 +18,5 @@
         "src/CommandsSlash/Utilities/embedData.js",
         "src/CommandsSlash/Utilities/logs.js",
         "src/Core/",
-        "src/Utils/"
     ]
 }

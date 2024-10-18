@@ -1,26 +1,8 @@
-import {
-    ApplicationCommandType,
-    ContextMenuCommandBuilder,
-    ContextMenuCommandType,
-    EmbedBuilder,
-} from 'discord.js';
+import { ApplicationCommandType, ContextMenuCommandBuilder, ContextMenuCommandType } from 'discord.js';
 import { ContextCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
-import { SelectMenuData } from '../../Interfaces/BotData';
-import { createEmbed } from '../../Utils/discordUtilities';
-
-function createEmbeds(guides: SelectMenuData[]): EmbedBuilder[] {
-    const embeds: EmbedBuilder[] = [];
-
-    for (const guide of guides) {
-        for (const data of guide.embeds) {
-            const embed = createEmbed(data);
-            embeds.push(embed);
-        }
-    }
-
-    return embeds;
-}
+import i18next from '../../i18n';
+import { handleSendRealtimeGuides } from '../../Utils/botUtilities';
 
 const SendRealtimeGuides: ContextCommand = {
     category: 'Tags',
@@ -28,31 +10,20 @@ const SendRealtimeGuides: ContextCommand = {
         .setName('Send Realtime guides')
         .setType(ApplicationCommandType.User as ContextMenuCommandType),
     async execute(interaction) {
-        const { targetUser } = interaction;
         const client = interaction.client as ExtendedClient;
 
-        if (targetUser.bot)
-            return await interaction.reply({ content: 'That user is a bot.', ephemeral: true });
+        const { targetUser } = interaction;
+        const { logger } = client;
 
-        const { botData } = client as ExtendedClient;
-
-        const embedData = botData.embeds.realtime.en;
-
-        const guides: SelectMenuData[] = [];
-
-        if (embedData.local) {
-            guides.push(embedData.local);
+        if (targetUser.bot) {
+            logger.warn(`tried sending ${interaction.commandName} to a bot user`);
+            return await interaction.reply({
+                content: i18next.t('general.bot_user', { lng: interaction.locale }),
+                ephemeral: true,
+            });
         }
 
-        if (embedData.online) {
-            guides.push(embedData.online);
-        }
-
-        if (embedData.faq) {
-            guides.push(embedData.faq);
-        }
-
-        interaction.reply({ content: `Suggestions for ${targetUser}`, embeds: createEmbeds(guides) });
+        await handleSendRealtimeGuides(interaction, targetUser, interaction.user);
     },
 };
 
