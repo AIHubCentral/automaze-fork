@@ -3,10 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const generalUtilities_1 = require("../../Utils/generalUtilities");
 const SVC = {
     name: 'svc',
-    category: 'Tags',
     description: 'why do you still use svc',
     aliases: [],
-    syntax: 'svc',
     async run(client, message) {
         const { botResponses } = client;
         const botResponse = {};

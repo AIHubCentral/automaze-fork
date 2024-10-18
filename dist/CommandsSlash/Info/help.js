@@ -94,38 +94,21 @@ async function handleCommandOption(interaction, commandType, language, ephemeral
         .setColor(discord_js_1.Colors.Greyple)
         .setTitle(i18next_1.default.t('help.title', { lng: language }));
     let menuOptions = [];
+    const helpOptions = Object.keys(i18next_1.default.t('help', { lng: language, returnObjects: true }));
     if (commandType === 'slash') {
-        menuOptions = [
-            'doxx',
-            '8ball',
-            'banana',
-            'topbanana',
-            'ping',
-            'close',
-            'guides',
-            'cloud',
-            'faq',
-            'help',
-        ];
+        menuOptions = helpOptions.filter((key) => key.startsWith('slash_'));
     }
     else if (commandType === 'prefix') {
-        menuOptions = [
-            'prefix_audio',
-            'prefix_colab',
-            'prefix_gui',
-            'prefix_hf',
-            'prefix_hfstatus',
-            'prefix_java',
-            'prefix_kaggle',
-            'prefix_karafan',
-            'prefix_lightning',
-        ];
+        menuOptions = helpOptions.filter((key) => key.startsWith('prefix_'));
     }
     else if (commandType === 'context') {
-        menuOptions = ['context_banan', 'context_colab', 'context_realtime', 'context_rvc', 'context_help'];
+        menuOptions = helpOptions.filter((key) => key.startsWith('context_'));
     }
     else {
-        await interaction.reply({ content: 'Not available', ephemeral: true });
+        await interaction.reply({
+            content: i18next_1.default.t('general.not_available', { lng: language }),
+            ephemeral: true,
+        });
         return;
     }
     const menuId = `select_${(0, generalUtilities_1.generateRandomId)(6)}`;

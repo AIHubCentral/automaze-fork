@@ -1,25 +1,32 @@
+import i18next from '../../i18n';
+import { EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
-import { TagResponseSender } from '../../Utils/botUtilities';
+import { getResourceData, resourcesToUnorderedList, TagResponseSender } from '../../Utils/botUtilities';
 
 const Local: PrefixCommand = {
     name: 'local',
-    category: 'Tags',
     description: 'Links to all working local forks',
     aliases: ['applio', 'mangio', 'studio', 'links'],
-    syntax: `local [member]`,
     async run(client, message) {
-        const { botData } = client;
-        const content = botData.embeds.local.en;
+        const { botCache, logger } = client;
 
-        if (!content.embeds) {
-            client.logger.error(`Missing embed data for -${this.name}`);
+        const resources = await getResourceData('local', botCache, logger);
+
+        if (resources.length === 0) {
+            await message.reply({ content: i18next.t('general.not_available') });
             return;
         }
 
-        // editEmbedDescription(content.embeds[0]);
+        const content: EmbedData[] = [
+            {
+                title: i18next.t('tags.local.embed.title'),
+                description: [resourcesToUnorderedList(resources)],
+                footer: i18next.t('tags.local.embed.footer'),
+            },
+        ];
 
         const sender = new TagResponseSender(client);
-        sender.setEmbeds(content.embeds);
+        sender.setEmbeds(content);
         sender.config(message);
         await sender.send();
     },

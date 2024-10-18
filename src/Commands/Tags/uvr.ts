@@ -1,20 +1,18 @@
+import i18next from '../../i18n';
+import { ButtonData, EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
 import { TagResponseSender } from '../../Utils/botUtilities';
 
+type response = { embeds: EmbedData[]; buttons: ButtonData[] };
+
 const UVR: PrefixCommand = {
     name: 'uvr',
-    category: 'Tags',
     description: 'Ultimate Vocal Remover',
     aliases: [],
-    syntax: 'uvr [member]',
     async run(client, message) {
-        const { botData } = client;
-        const content = botData.embeds.uvr.en;
-
-        if (!content.embeds || !content.buttons) {
-            client.logger.error(`Missing embed data for -${this.name}`);
-            return;
-        }
+        const content = i18next.t('tags.uvr', {
+            returnObjects: true,
+        }) as response;
 
         const sender = new TagResponseSender(client);
         sender.setEmbeds(content.embeds);

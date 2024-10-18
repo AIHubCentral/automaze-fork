@@ -149,36 +149,19 @@ async function handleCommandOption(
         .setTitle(i18next.t('help.title', { lng: language }));
 
     let menuOptions: string[] = [];
+    const helpOptions = Object.keys(i18next.t('help', { lng: language, returnObjects: true }));
 
     if (commandType === 'slash') {
-        menuOptions = [
-            'doxx',
-            '8ball',
-            'banana',
-            'topbanana',
-            'ping',
-            'close',
-            'guides',
-            'cloud',
-            'faq',
-            'help',
-        ];
+        menuOptions = helpOptions.filter((key) => key.startsWith('slash_'));
     } else if (commandType === 'prefix') {
-        menuOptions = [
-            'prefix_audio',
-            'prefix_colab',
-            'prefix_gui',
-            'prefix_hf',
-            'prefix_hfstatus',
-            'prefix_java',
-            'prefix_kaggle',
-            'prefix_karafan',
-            'prefix_lightning',
-        ];
+        menuOptions = helpOptions.filter((key) => key.startsWith('prefix_'));
     } else if (commandType === 'context') {
-        menuOptions = ['context_banan', 'context_colab', 'context_realtime', 'context_rvc', 'context_help'];
+        menuOptions = helpOptions.filter((key) => key.startsWith('context_'));
     } else {
-        await interaction.reply({ content: 'Not available', ephemeral: true });
+        await interaction.reply({
+            content: i18next.t('general.not_available', { lng: language }),
+            ephemeral: true,
+        });
         return;
     }
 

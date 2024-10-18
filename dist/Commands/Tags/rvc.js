@@ -1,21 +1,18 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const i18n_1 = __importDefault(require("../../i18n"));
 const botUtilities_1 = require("../../Utils/botUtilities");
 const RVC = {
     name: 'rvc',
-    category: 'Tags',
     description: 'Retrieval-based Voice Conversion Documentation (a.k.a How to Make AI Cover)',
     aliases: ['guide', 'guides', 'docs', 'doc', 'documentation'],
-    syntax: 'rvc [member]',
     async run(client, message) {
-        const { botData } = client;
-        const content = botData.embeds.rvc.en;
-        if (!content.embeds) {
-            client.logger.error(`Missing embed data for -${this.name}`);
-            return;
-        }
+        const content = i18n_1.default.t('tags.rvc.embeds', { returnObjects: true });
         const sender = new botUtilities_1.TagResponseSender(client);
-        sender.setEmbeds(content.embeds);
+        sender.setEmbeds(content);
         sender.config(message);
         await sender.send();
     },

@@ -5,6 +5,7 @@
                 "docs": "https://docs.aihub.wtf/"
             },
             "applio": {
+                "docs": "https://docs.applio.org/",
                 "faq": "https://docs.applio.org/faq",
                 "tensorboard": "https://docs.applio.org/getting-started/tensorboard",
                 "dataset": "https://docs.applio.org/guides/create-datasets/create-datasets",
@@ -33,6 +34,8 @@
             "model_request": "<#1159289738314919936>"
         },
         "emojis": {
+            "aihub": "<:AIHUB:1181640583966629968>",
+            "applio": "🍏",
             "audio": "🔊",
             "book": "📚",
             "colab": "📒",
@@ -44,6 +47,7 @@
             "laptop": "💻",
             "lightning": "⚡",
             "mic": "🎤",
+            "nails": "<:nails:1159569314848972891>",
             "question": "❔",
             "tip": "💡"
         }
@@ -55,7 +59,8 @@
         "not_interaction_author": "You didn't start this interaction. Use the command for interacting with it.",
         "options": "\n**Options**:",
         "optional": "(Optional)",
-        "usage": "\nUsage:"
+        "usage": "\nUsage:",
+        "suggestions_for_user": "Suggestions for <@{{userId}}>"
     },
     "faq": {
         "topics": {
@@ -104,7 +109,7 @@
         "title": "📖 Command Help",
         "placeholder": "Select an option",
         "timeout": "Command timed out. Use `/help` to for a new interaction",
-        "doxx": {
+        "slash_doxx": {
             "icon": "👨‍💻",
             "label": "Doxx",
             "description": "Creates random house and IP addresses to troll someone",
@@ -117,7 +122,7 @@
                 ]
             }
         },
-        "8ball": {
+        "slash_8ball": {
             "icon": "🎱",
             "label": "8ball",
             "description": "Answers closed-ended questions",
@@ -130,7 +135,7 @@
                 ]
             }
         },
-        "banana": {
+        "slash_banana": {
             "icon": "🤣",
             "label": "Banana",
             "description": "Puts someone in /topbanana leaderboard",
@@ -144,7 +149,7 @@
                 "footer": "Note: It's also possible to use this command by right clicking (long press on mobile) on a user profile picture or name and then choose  Apps > banan."
             }
         },
-        "topbanana": {
+        "slash_topbanana": {
             "icon": "🎖️",
             "label": "Top Banana (leaderboard)",
             "description": "Shows the top banan'd users",
@@ -157,18 +162,15 @@
                 ]
             }
         },
-        "ping": {
+        "slash_ping": {
             "icon": "🏓",
             "label": "Ping",
             "description": "Check the bot latency speed",
             "embed": {
-                "description": [
-                    "Check the bot latency speed",
-                    "\nUsage: `/ping`"
-                ]
+                "description": ["Check the bot latency speed", "\nUsage: `/ping`"]
             }
         },
-        "close": {
+        "slash_close": {
             "icon": "🔒",
             "label": "Close",
             "description": "Close your post",
@@ -179,7 +181,7 @@
                 ]
             }
         },
-        "guides": {
+        "slash_guides": {
             "icon": "$t(common.emojis.book)",
             "label": "Guides",
             "description": "Shows guides for RVC and related things",
@@ -194,7 +196,7 @@
                 ]
             }
         },
-        "cloud": {
+        "slash_cloud": {
             "icon": "$t(common.emojis.cloud)",
             "label": "Cloud",
             "description": "Use these if you don't have a powerful computer to run things locally",
@@ -207,7 +209,7 @@
                 ]
             }
         },
-        "faq": {
+        "slash_faq": {
             "icon": "$t(common.emojis.question)",
             "label": "FAQ",
             "description": "Frequently asked questions about RVC or related technologies",
@@ -222,7 +224,7 @@
                 ]
             }
         },
-        "help": {
+        "slash_help": {
             "icon": "$t(common.emojis.help)",
             "label": "Help",
             "description": "Shows help for Automaze commands",
@@ -356,10 +358,7 @@
             "label": "Huggingface Status",
             "description": "Check status of the hugginface spaces",
             "embed": {
-                "description": [
-                    "Check status of the hugginface spaces.",
-                    "$t(general.usage) `-hfstatus`"
-                ]
+                "description": ["Check status of the hugginface spaces.", "$t(general.usage) `-hfstatus`"]
             }
         },
         "prefix_java": {
@@ -420,12 +419,108 @@
             "description": "Run RVC locally",
             "embed": {
                 "description": [
-                    "List of up to date guides for using RVC on a local machine. Also available in `/guides local` command.",
+                    "List of up to date guides for using RVC on a local machine. Also available in `/guides` command.",
                     "$t(general.usage) `-local options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)",
+                    "\n> Note: You need a good GPU to run these locally"
+                ],
+                "footer": "Aliases: -applio, -mangio, -studio, -links"
+            }
+        },
+        "prefix_overtraining": {
+            "icon": "📈",
+            "label": "Overtrain",
+            "description": "How to avoid it",
+            "embed": {
+                "description": [
+                    "Learn how to detect if your voice model is overtraining and how to avoid it.",
+                    "$t(general.usage) `-overtrain options`",
                     "$t(general.options)",
                     "- $t(general.optional) `User`: Send this to a user (will ping them)"
                 ],
-                "footer": "Note: You need a good GPU to run these locally."
+                "footer": "Alias: -overtraining"
+            }
+        },
+        "prefix_paperspace": {
+            "icon": "🧻",
+            "label": "Paperspace",
+            "description": "How to run RVC on paperspace",
+            "embed": {
+                "description": [
+                    "Paperspace guide by **LollenApe** (Possibly outdated $t(common.emojis.nails)). Also available in `/guides` command.",
+                    "$t(general.usage) `-paperspace options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ]
+            }
+        },
+        "prefix_realtime": {
+            "icon": "$t(common.emojis.mic)",
+            "label": "Realtime",
+            "description": "Realtime RVC",
+            "embed": {
+                "description": [
+                    "List of up to date guides for using realtime RVC. Also available in `/guides` command.",
+                    "$t(general.usage) `-realtime options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -rt, -tts"
+            }
+        },
+        "prefix_rvc": {
+            "icon": "$t(common.emojis.mic)",
+            "label": "RVC",
+            "description": "Retrieval-based Voice Conversion",
+            "embed": {
+                "description": [
+                    "Guides for using RVC to train voice models or create ai covers. Also available in `/guides` command.",
+                    "$t(general.usage) `-rvc options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -guide, -guides, -doc, -docs, -documentation"
+            }
+        },
+        "prefix_svc": {
+            "icon": "🗿",
+            "label": "SVC",
+            "description": "So-Vits-SVC",
+            "embed": {
+                "description": [
+                    "Yeah, I still use so-vits-svc!!!",
+                    "$t(general.usage) `-svc options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ]
+            }
+        },
+        "prefix_tracker": {
+            "icon": "📃",
+            "label": "Tracker",
+            "description": "Voice model tracker",
+            "embed": {
+                "description": [
+                    "Massive spreadsheet with RVC models (outdated).",
+                    "$t(general.usage) `-tracker options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -ss, -spreadsheet"
+            }
+        },
+        "prefix_uvr": {
+            "icon": "$t(common.emojis.laptop)",
+            "label": "UVR",
+            "description": "Ultimate Vocal Remover",
+            "embed": {
+                "description": [
+                    "**Ultimate Vocal Remover** is a fantastic option for audio stems separation. Learn how to use it with `/guides` command.",
+                    "$t(general.usage) `-uvr options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ]
             }
         }
     },
@@ -464,17 +559,15 @@
             "notice": "> Note: Kaggle limits GPU usage to 30 hours per week."
         },
         "karafan": {
-            "embed": 
-                {
-                    "title": "KaraFan (Improved Version)",
-                    "color": "8b1d90",
-                    "description": [
-                        "🥇 Awarded to **1st** place by the community as the Best software in the World, for having the less vocal residues in Music track!"
-                    ],
-                    "image": "https://raw.githubusercontent.com/Captain-FLAM/KaraFan/master/images/KaraFan_Banner.jpg",
-                    "footer": "Note: Improved by AI HUB Staff members. Eddy and Leo_Frixi."
-                }
-            ,
+            "embed": {
+                "title": "KaraFan (Improved Version)",
+                "color": "8b1d90",
+                "description": [
+                    "🥇 Awarded to **1st** place by the community as the Best software in the World, for having the less vocal residues in Music track!"
+                ],
+                "image": "https://raw.githubusercontent.com/Captain-FLAM/KaraFan/master/images/KaraFan_Banner.jpg",
+                "footer": "Note: Improved by AI HUB Staff members. Eddy and Leo_Frixi."
+            },
             "buttons": [
                 {
                     "label": "GitHub",
@@ -489,8 +582,143 @@
         "lightning": {
             "embed": {
                 "title": "$t(common.emojis.lightning) Lightning AI",
-                "footer": "'More commands: -colabs, -kaggle, -hf, -realtime, -rvc, /help'"
+                "footer": "More commands: -colabs, -kaggle, -hf, -realtime, -rvc, /help"
             }
+        },
+        "local": {
+            "embed": {
+                "title": "$t(common.emojis.laptop) Local Stuff",
+                "footer": "More commands: -audio, -colabs, -overtrain, -realtime, -rvc, /help"
+            }
+        },
+        "paperspace": {
+            "embed": {
+                "title": "🧻 Paperspace",
+                "description": [
+                    "RVC v2 [Tutorial for Paperspace](https://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing) by **LollenApe**"
+                ]
+            }
+        },
+        "realtime": {
+            "placeholder": "Select a guide",
+            "not_allowd_to_interact": "You didn't start this interaction, use `/guides` if you wish to choose an option.",
+            "expired": "> This interaction has expired, use the command `/guides` if you wish to see it again.",
+            "online": {
+                "embeds": [
+                    {
+                        "title": "☁ (Online) W-Okada - Colab Version",
+                        "color": "#077CF7",
+                        "description": [
+                            "- [How to use Original W-Okada's Voice Changer Google Colab](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)",
+                            "- [Modified W-Okada's Voice Changer Google Colab](https://colab.research.google.com/github/deiteris/voice-changer/blob/master-custom/Colab_RealtimeVoiceChanger.ipynb)",
+                            "- [Original W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/hinabl/public-w-okada-voice-changer)",
+                            "- [Modified W-Okada's Voice Changer Kaggle](https://www.kaggle.com/code/suneku/voice-changer-public)"
+                        ]
+                    },
+                    {
+                        "title": "⚠️ Notes",
+                        "color": "Yellow",
+                        "description": [
+                            "- Colab free plan GPUs tipically works for about 4 hours each day",
+                            "- Kaggle restricts GPU usage to 30 hours per week",
+                            "- These options may not work on mobile devices due to the lack of a Voice Audio Cable (VAC)"
+                        ]
+                    }
+                ]
+            },
+            "local": {
+                "embeds": [
+                    {
+                        "title": "$t(common.emojis.laptop) Local Realtime RVC",
+                        "description": [
+                            "- [Guide for deiteris' modified W-Okada's Voice Changer Client (Fork)](https://rentry.co/ForkVoiceChangerGuide)",
+                            "- [Guide for W-Okada's RealTimeVoiceChangerClient](https://rentry.co/VoiceChangerGuide)",
+                            "- [How to use real time conversion with RVC (voice changer)](https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs)",
+                            "- [RVC TTS](https://rentry.co/RVC-TTS-Guide)"
+                        ]
+                    }
+                ]
+            },
+            "faq": {
+                "embeds": [
+                    {
+                        "title": "❔ Russian FAQ for voice changer",
+                        "color": "#07F7D9",
+                        "description": [
+                            "- 🔗 [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
+                        ],
+                        "footer": "Credits: blackcat76it, elektroeban, redoverflow and tntmaxim"
+                    }
+                ]
+            },
+            "menuOptions": [
+                {
+                    "label": "Local options",
+                    "description": "If you have a decent GPU these can be a good option",
+                    "value": "local",
+                    "emoji": "$t(common.emojis.laptop)"
+                },
+                {
+                    "label": "Online options",
+                    "description": "If you DON'T have a decent GPU these can be a good option",
+                    "value": "online",
+                    "emoji": "$t(common.emojis.cloud)"
+                },
+                {
+                    "label": "Frequently Asked Questions (RU)",
+                    "description": "Russian FAQ for voice changer",
+                    "value": "faq",
+                    "emoji": "$t(common.emojis.question)"
+                }
+            ]
+        },
+        "rvc": {
+            "embeds": [
+                {
+                    "title": "$t(common.emojis.book) Documentation ",
+                    "description": [
+                        "### $t(common.emojis.aihub) AI HUB Docs",
+                        "**$t(common.websites.aihub.docs)**",
+                        "### $t(common.emojis.applio) Applio Docs",
+                        "**$t(common.websites.applio.docs)**"
+                    ]
+                },
+                {
+                    "title": "✨ More guides",
+                    "description": [
+                        "- [How to use RVC Mainline Colab](https://rentry.co/RVC-Mainline-Colab) by **Cauthess**",
+                        "- [AICoverGen Colab Guide](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub) by **Eddy (Spanish Helper)**",
+                        "- [Create a model with RVC disconnected (colab)](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk) by **Angetyde**",
+                        "- [Italian Guides](https://rentry.org/link-utili) by **Ilaria**"
+                    ]
+                }
+            ]
+        },
+        "uvr": {
+            "embeds": [
+                {
+                    "title": "Ultimate Vocal Remover",
+                    "description": [
+                        "One of the best free and open source vocal and instrumental isolation tool."
+                    ],
+                    "color": "05998c",
+                    "image": "https://img1.wsimg.com/isteam/ip/27b42b0b-4e5c-4246-8229-db96bd3bf24e/UVR_v5.6.png/:/"
+                }
+            ],
+            "buttons": [
+                {
+                    "label": "Website",
+                    "url": "https://ultimatevocalremover.com/"
+                },
+                {
+                    "label": "GitHub",
+                    "url": "https://github.com/Anjok07/ultimatevocalremovergui"
+                },
+                {
+                    "label": "Guide",
+                    "url": "https://docs.aihub.wtf/rvc/resources/vocal-isolation/"
+                }
+            ]
         }
     }
 }

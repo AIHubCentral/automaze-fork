@@ -1,7 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
+const i18next_1 = __importDefault(require("i18next"));
+const generalUtilities_1 = require("../../Utils/generalUtilities");
 function createMenuOptions(availableOptions) {
     const menuOptions = [];
     for (const option of availableOptions ?? []) {
@@ -18,72 +23,70 @@ function createMenuOptions(availableOptions) {
 }
 const Realtime = {
     name: 'realtime',
-    category: 'Tags',
     description: 'RVC real-time conversion guide',
     aliases: ['rt', 'tts'],
-    syntax: `realtime [member]`,
     run: async (client, message) => {
-        const { botData, botConfigs, botUtils } = client;
+        const { botConfigs, botUtils } = client;
         const availableColors = botUtils.getAvailableColors(botConfigs);
-        const realtimeSelectOptions = botData.embeds.realtime.en['menuOptions'];
-        if (!realtimeSelectOptions)
-            throw new Error('Missing menu options');
-        let selectedGuide = botData.embeds.realtime.en['local'];
+        const realtimeSelectOptions = i18next_1.default.t('tags.realtime.menuOptions', {
+            returnObjects: true,
+        });
+        // selects local RVC by default
+        const selectedGuide = i18next_1.default.t('tags.realtime.local', {
+            returnObjects: true,
+        });
         const menuOptions = createMenuOptions(realtimeSelectOptions);
-        var realtimeGuidesSelectMenu = new discord_js_1.StringSelectMenuBuilder()
-            .setCustomId('realtime_guides')
-            .setPlaceholder('Select a guide')
+        const menuId = `realtime_${(0, generalUtilities_1.generateRandomId)(6)}`;
+        const realtimeGuidesSelectMenu = new discord_js_1.StringSelectMenuBuilder()
+            .setCustomId(menuId)
+            .setPlaceholder(i18next_1.default.t('tags.realtime.placeholder'))
             .addOptions(menuOptions);
-        const realtimeActionRow = new discord_js_1.ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
-        let botResponse = {
+        const row = new discord_js_1.ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
+        const botResponse = {
             embeds: (0, discordUtilities_1.createEmbeds)(selectedGuide.embeds, availableColors),
-            components: [realtimeActionRow],
+            components: [row],
         };
-        let selectMenuDisplayMinutes = 15; // allow interaction with the select menu for 15 minutes
-        let targetUser = message.mentions.members?.first();
-        let mainUser = message.author;
+        const selectMenuDisplayMinutes = 10; // allow interaction with the select menu for 10 minutes
+        const targetUser = message.mentions.members?.first();
+        const mainUser = message.author;
         if (targetUser) {
-            botResponse.content = `*Tag suggestion for ${message.mentions.members?.first()}*`;
+            botResponse.content = i18next_1.default.t('general.suggestions_for_user', { userId: targetUser.id });
         }
         const botReply = await message.reply(botResponse);
-        const collector = botReply.createMessageComponentCollector({
-            componentType: discord_js_1.ComponentType.StringSelect,
+        const currentChannel = message.channel;
+        const filter = (i) => i.isStringSelectMenu() && i.customId === menuId;
+        const collector = currentChannel.createMessageComponentCollector({
+            filter,
             time: selectMenuDisplayMinutes * 60 * 1000,
         });
-        collector.on('collect', (i) => {
+        collector.on('collect', async (i) => {
             let allowedToInteract = i.user.id === mainUser.id;
             if (targetUser) {
                 allowedToInteract = i.user.id === mainUser.id || i.user.id === targetUser.id;
             }
             if (allowedToInteract) {
+                await i.deferUpdate();
                 const selectMenuResult = i.values[0];
-                const realtimeGuides = botData.embeds.realtime.en;
-                let guide;
-                if (selectMenuResult === 'realtime_local') {
-                    guide = realtimeGuides.local;
-                }
-                else if (selectMenuResult === 'realtime_online') {
-                    guide = realtimeGuides.online;
-                }
-                else if (selectMenuResult === 'realtime_faq') {
-                    guide = realtimeGuides.faq;
-                }
+                const guideEmbeds = i18next_1.default.t(`tags.realtime.${selectMenuResult}.embeds`, {
+                    returnObjects: true,
+                });
                 if (targetUser) {
-                    botResponse.content = `\nSuggestions for ${targetUser}`;
+                    botResponse.content = i18next_1.default.t('general.suggestions_for_user', {
+                        userId: targetUser.id,
+                    });
                 }
-                botResponse.embeds = (0, discordUtilities_1.createEmbeds)(guide.embeds, availableColors);
-                i.update(botResponse);
+                botResponse.embeds = (0, discordUtilities_1.createEmbeds)(guideEmbeds, availableColors);
+                i.editReply(botResponse);
             }
             else {
                 i.reply({
-                    content: "You didn't start this interaction, use `/guides realtime` if you wish to choose an option.",
+                    content: i18next_1.default.t('tags.realtime.not_allowed_to_interact'),
                     ephemeral: true,
                 });
             }
         });
         collector.on('end', () => {
-            botResponse.content =
-                '> This interaction has expired, use the command `/guides realtime` if you wish to see it again.';
+            botResponse.content = i18next_1.default.t('tags.realtime.expired');
             botResponse.embeds = [];
             botResponse.components = [];
             botReply.edit(botResponse);

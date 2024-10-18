@@ -4,10 +4,8 @@ import { delay, getRandomFromArray, getRandomNumber } from '../../Utils/generalU
 
 const SVC: PrefixCommand = {
     name: 'svc',
-    category: 'Tags',
     description: 'why do you still use svc',
     aliases: [],
-    syntax: 'svc',
     async run(client, message) {
         const { botResponses } = client;
         const botResponse: MessageReplyOptions = {};
