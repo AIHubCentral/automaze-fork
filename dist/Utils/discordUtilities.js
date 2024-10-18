@@ -8,6 +8,7 @@ exports.getGuildById = getGuildById;
 exports.getChannelById = getChannelById;
 exports.getDisplayName = getDisplayName;
 exports.handleDiscordError = handleDiscordError;
+exports.createStringOption = createStringOption;
 const discord_js_1 = require("discord.js");
 function createEmbed(data, color) {
     /**
@@ -144,4 +145,22 @@ function handleDiscordError(logger, error) {
         default:
             logger.error(`An unexpected error occurred: ${error.message}`, error);
     }
+}
+function createStringOption(optionData) {
+    const option = new discord_js_1.SlashCommandStringOption()
+        .setName(optionData.name)
+        .setDescription(optionData.description);
+    if (optionData.nameLocalizations) {
+        option.setNameLocalizations(optionData.nameLocalizations);
+    }
+    if (optionData.descriptionLocalizations) {
+        option.setDescriptionLocalizations(optionData.descriptionLocalizations);
+    }
+    if (optionData.choices) {
+        option.setChoices(...optionData.choices);
+    }
+    if (optionData.required) {
+        option.setRequired(optionData.required);
+    }
+    return option;
 }

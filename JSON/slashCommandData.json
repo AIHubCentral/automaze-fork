@@ -215,5 +215,117 @@
                 }
             }
         }
+    },
+    "resources": {
+        "name": "resources",
+        "nameLocalizations": {
+            "pt-BR": "recursos"
+        },
+        "description": "Configure resources (links / docs)",
+        "descriptionLocalizations": {
+            "pt-BR": "Configure recursos (links / documentação)"
+        },
+        "subcommands": {
+            "add": {
+                "type": 3,
+                "name": "add",
+                "nameLocalizations": {
+                    "pt-BR": "adicionar"
+                },
+                "description": "Adds a resource",
+                "descriptionLocalizations": {
+                    "pt-BR": "Adicione um recurso"
+                }
+            },
+            "update": {
+                "name": "update",
+                "nameLocalizations": { "pt-BR": "atualizar" },
+                "description": "Updates a resource",
+                "descriptionLocalizations": { "pt-BR": "Atualiza um recurso" }
+            },
+            "delete": {
+                "name": "delete",
+                "nameLocalizations": { "pt-BR": "deletar" },
+                "description": "Deletes a resource",
+                "descriptionLocalizations": { "pt-BR": "Deleta um recurso" }
+            },
+            "show": {
+                "name": "show",
+                "nameLocalizations": { "pt-BR": "mostrar" },
+                "description": "Show resources",
+                "descriptionLocalizations": { "pt-BR": "Mostra os recursos" }
+            },
+            "refresh": {
+                "name": "refresh",
+                "description": "Refresh bot data",
+                "descriptionLocalizations": { "pt-BR": "Atualiza dados do bot" }
+            }
+        },
+        "commonOptions": {
+                "category": {
+                    "type": 3,
+                    "name": "category",
+                    "nameLocalizations": {
+                        "pt-BR": "categoria"
+                    },
+                    "description": "Resource category",
+                    "descriptionLocalizations": {
+                        "pt-BR": "Categoria do recurso"
+                    },
+                    "choices": [
+                        { "name": "audio", "value": "audio" },
+                        { "name": "colab", "value": "colab" },
+                        { "name": "huggingface", "value": "hf" },
+                        { "name": "kaggle", "value": "kaggle" },
+                        { "name": "lightning", "value": "lightning_ai" },
+                        { "name": "local", "value": "local" }
+                    ],
+                    "required": true
+                },
+                "url": {
+                    "type": 3,
+                    "name": "url",
+                    "description": "URL for the resource",
+                    "descriptionLocalizations": {
+                        "pt-BR": "URL do recurso"
+                    },
+                    "required": true
+                },
+                "title": {
+                    "type": 3,
+                    "name": "title",
+                    "nameLocalizations": {
+                        "pt-BR": "titulo"
+                    },
+                    "description": "Title to mask the URL",
+                    "descriptionLocalizations": {
+                        "pt-BR": "Título para esconder a URL"
+                    }
+                },
+                "authors": {
+                    "type": 3,
+                    "name": "authors",
+                    "nameLocalizations": {
+                        "pt-BR": "autores"
+                    },
+                    "description": "(Optional) Authors who made the content",
+                    "descriptionLocalizations": {
+                        "pt-BR": "(Opcional) Autores que criaram o conteúdo"
+                    }
+                },
+                "emoji": {
+                    "type": 3,
+                    "name": "emoji",
+                    "description": "(Optional) Emoji to display before the link",
+                    "descriptionLocalizations": {
+                        "pt-BR": "(Opcional) Emoji para mostrar antes do link"
+                    }
+                },
+                "id": {
+                    "name": "id",
+                    "description": "ID of the resource",
+                    "descriptionLocalizations": { "pt-BR": "ID do recurso" }
+                }
+            }
     }
 }

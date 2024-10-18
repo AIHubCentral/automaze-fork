@@ -7,172 +7,13 @@ const discord_js_1 = require("discord.js");
 const resourcesService_1 = __importDefault(require("../../Services/resourcesService"));
 const collaboratorService_1 = __importDefault(require("../../Services/collaboratorService"));
 const botUtilities_1 = require("../../Utils/botUtilities");
+const slashCommandData_json_1 = __importDefault(require("../../../JSON/slashCommandData.json"));
+const discordUtilities_1 = require("../../Utils/discordUtilities");
+const commandData = slashCommandData_json_1.default.resources;
 const Resources = {
     category: 'Misc',
     cooldown: 5,
-    data: new discord_js_1.SlashCommandBuilder()
-        .setName('resources')
-        .setNameLocalizations({
-        'pt-BR': 'recursos',
-    })
-        .setDescription('Configure resources (links / docs)')
-        .setDescriptionLocalizations({
-        'pt-BR': 'Configure recursos (links / documentação)',
-    })
-        .addSubcommand((subcommand) => subcommand
-        .setName('add')
-        .setNameLocalizations({
-        'pt-BR': 'adicionar',
-    })
-        .setDescription('Adds a resource')
-        .setDescriptionLocalizations({
-        'pt-BR': 'Adicione um recurso',
-    })
-        .addStringOption((option) => option
-        .setName('category')
-        .setNameLocalizations({
-        'pt-BR': 'categoria',
-    })
-        .setDescription('Resource category')
-        .setDescriptionLocalizations({
-        'pt-BR': 'Categoria do recurso',
-    })
-        .addChoices({ name: 'audio', value: 'audio' }, { name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' }, { name: 'lightning', value: 'lightning_ai' })
-        .setRequired(true))
-        .addStringOption((option) => option
-        .setName('url')
-        .setDescription('URL for the resource')
-        .setDescriptionLocalizations({
-        'pt-BR': 'URL do recurso',
-    })
-        .setRequired(true))
-        .addStringOption((option) => option
-        .setName('title')
-        .setNameLocalizations({
-        'pt-BR': 'titulo',
-    })
-        .setDescription('Title to mask the URL')
-        .setDescriptionLocalizations({
-        'pt-BR': 'Título para esconder a URL',
-    })
-        .setRequired(false))
-        .addStringOption((option) => option
-        .setName('authors')
-        .setNameLocalizations({
-        'pt-BR': 'autores',
-    })
-        .setDescription('(Optional) Authors who made the content')
-        .setDescriptionLocalizations({
-        'pt-BR': '(Opcional) Autores que criaram o conteúdo',
-    })
-        .setRequired(false))
-        .addStringOption((option) => option
-        .setName('emoji')
-        .setDescription('(Optional) Emoji to display before the link')
-        .setDescriptionLocalizations({
-        'pt-BR': '(Opcional) Emoji para mostrar antes do link',
-    })
-        .setRequired(false)))
-        .addSubcommand((subcommand) => subcommand
-        .setName('update')
-        .setNameLocalizations({
-        'pt-BR': 'atualiza',
-    })
-        .setDescription('Updates a resource')
-        .setDescriptionLocalizations({
-        'pt-BR': 'Atualiza um recurso',
-    })
-        .addIntegerOption((option) => option
-        .setName('id')
-        .setDescription('ID of the resource')
-        .setDescriptionLocalizations({
-        'pt-BR': 'ID do recurso',
-    })
-        .setRequired(true))
-        .addStringOption((option) => option
-        .setName('category')
-        .setNameLocalizations({
-        'pt-BR': 'categoria',
-    })
-        .setDescription('Resource category')
-        .setDescriptionLocalizations({
-        'pt-BR': 'Categoria do recurso',
-    })
-        .addChoices({ name: 'audio', value: 'audio' }, { name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' }, { name: 'lightning', value: 'lightning_ai' })
-        .setRequired(true))
-        .addStringOption((option) => option
-        .setName('url')
-        .setDescription('URL for the resource')
-        .setDescriptionLocalizations({
-        'pt-BR': 'URL do recurso',
-    })
-        .setRequired(true))
-        .addStringOption((option) => option
-        .setName('title')
-        .setNameLocalizations({
-        'pt-BR': 'título',
-    })
-        .setDescription('Title to mask the URL')
-        .setDescriptionLocalizations({
-        'pt-BR': 'Título para esconder a URL',
-    })
-        .setRequired(false))
-        .addStringOption((option) => option
-        .setName('authors')
-        .setNameLocalizations({
-        'pt-BR': 'autores',
-    })
-        .setDescription('(Optional) Authors who made the content')
-        .setDescriptionLocalizations({
-        'pt-BR': '(Opcional) Autores que criaram o conteúdo',
-    })
-        .setRequired(false))
-        .addStringOption((option) => option
-        .setName('emoji')
-        .setDescription('(Optional) Emoji to display before the link')
-        .setDescriptionLocalizations({
-        'pt-BR': '(Opcional) Emoji para mostrar antes do link',
-    })
-        .setRequired(false)))
-        .addSubcommand((subcommand) => subcommand
-        .setName('delete')
-        .setNameLocalizations({
-        'pt-BR': 'deletar',
-    })
-        .setDescription('Deletes a database')
-        .setDescriptionLocalizations({
-        'pt-BR': 'Deleta um recurso',
-    })
-        .addIntegerOption((option) => option
-        .setName('id')
-        .setDescription('Resource ID')
-        .setDescriptionLocalizations({
-        'pt-BR': 'ID do recurso',
-    })
-        .setRequired(true)))
-        .addSubcommand((subcommand) => subcommand
-        .setName('show')
-        .setNameLocalizations({
-        'pt-BR': 'mostrar',
-    })
-        .setDescription('Show resources')
-        .setDescriptionLocalizations({
-        'pt-BR': 'Mostra os recursos',
-    })
-        .addStringOption((option) => option
-        .setName('category')
-        .setNameLocalizations({
-        'pt-BR': 'categoria',
-    })
-        .setDescription('Resource category')
-        .setDescriptionLocalizations({
-        'pt-BR': 'Categoria do recurso',
-    })
-        .addChoices({ name: 'audio', value: 'audio' }, { name: 'colab', value: 'colab' }, { name: 'huggingface', value: 'hf' }, { name: 'kaggle', value: 'kaggle' }, { name: 'lightning', value: 'lightning_ai' })
-        .setRequired(true)))
-        .addSubcommand((subcommand) => subcommand.setName('refresh').setDescription('Refresh bot data').setDescriptionLocalizations({
-        'pt-BR': 'Atualiza dados do bot',
-    })),
+    data: createSlashCommandData(),
     async execute(interaction) {
         const client = interaction.client;
         const service = new resourcesService_1.default(client.logger);
@@ -348,3 +189,56 @@ const Resources = {
     },
 };
 exports.default = Resources;
+// helper functions
+function createSlashCommandData() {
+    return new discord_js_1.SlashCommandBuilder()
+        .setName(commandData.name)
+        .setNameLocalizations(commandData.nameLocalizations)
+        .setDescription(commandData.description)
+        .setDescriptionLocalizations(commandData.descriptionLocalizations)
+        .addSubcommand((subcommand) => subcommand
+        .setName(commandData.subcommands.add.name)
+        .setNameLocalizations(commandData.subcommands.add.nameLocalizations)
+        .setDescription(commandData.subcommands.add.description)
+        .setDescriptionLocalizations(commandData.subcommands.add.descriptionLocalizations)
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.category))
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.url))
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.title))
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.authors))
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.emoji)))
+        .addSubcommand((subcommand) => subcommand
+        .setName(commandData.subcommands.update.name)
+        .setNameLocalizations(commandData.subcommands.update.nameLocalizations)
+        .setDescription(commandData.subcommands.update.description)
+        .setDescriptionLocalizations(commandData.subcommands.update.descriptionLocalizations)
+        .addIntegerOption((option) => option
+        .setName(commandData.commonOptions.id.name)
+        .setDescription(commandData.commonOptions.id.description)
+        .setDescriptionLocalizations(commandData.commonOptions.id.descriptionLocalizations)
+        .setRequired(true))
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.category))
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.url))
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.title))
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.authors))
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.emoji)))
+        .addSubcommand((subcommand) => subcommand
+        .setName(commandData.subcommands.delete.name)
+        .setNameLocalizations(commandData.subcommands.delete.nameLocalizations)
+        .setDescription(commandData.subcommands.delete.description)
+        .setDescriptionLocalizations(commandData.subcommands.delete.descriptionLocalizations)
+        .addIntegerOption((option) => option
+        .setName(commandData.commonOptions.id.name)
+        .setDescription(commandData.commonOptions.id.description)
+        .setDescriptionLocalizations(commandData.commonOptions.id.descriptionLocalizations)
+        .setRequired(true)))
+        .addSubcommand((subcommand) => subcommand
+        .setName(commandData.subcommands.show.name)
+        .setNameLocalizations(commandData.subcommands.show.nameLocalizations)
+        .setDescription(commandData.subcommands.show.description)
+        .setDescriptionLocalizations(commandData.subcommands.show.descriptionLocalizations)
+        .addStringOption((0, discordUtilities_1.createStringOption)(commandData.commonOptions.category)))
+        .addSubcommand((subcommand) => subcommand
+        .setName(commandData.subcommands.refresh.name)
+        .setDescription(commandData.subcommands.refresh.description)
+        .setDescriptionLocalizations(commandData.subcommands.refresh.descriptionLocalizations));
+}

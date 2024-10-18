@@ -413,6 +413,20 @@
                 ],
                 "footer": "Aliases: -light, -lightningai"
             }
+        },
+        "prefix_local": {
+            "icon": "$t(common.emojis.laptop)",
+            "label": "Local",
+            "description": "Run RVC locally",
+            "embed": {
+                "description": [
+                    "List of up to date guides for using RVC on a local machine. Also available in `/guides local` command.",
+                    "$t(general.usage) `-local options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Note: You need a good GPU to run these locally."
+            }
         }
     },
     "tags": {

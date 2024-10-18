@@ -6,6 +6,8 @@ import {
     GuildBasedChannel,
     User,
     DiscordAPIError,
+    ApplicationCommandStringOptionData,
+    SlashCommandStringOption,
 } from 'discord.js';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
@@ -166,4 +168,28 @@ export function handleDiscordError(logger: winston.Logger, error: DiscordAPIErro
         default:
             logger.error(`An unexpected error occurred: ${error.message}`, error);
     }
+}
+
+export function createStringOption(optionData: ApplicationCommandStringOptionData) {
+    const option = new SlashCommandStringOption()
+        .setName(optionData.name)
+        .setDescription(optionData.description);
+
+    if (optionData.nameLocalizations) {
+        option.setNameLocalizations(optionData.nameLocalizations);
+    }
+
+    if (optionData.descriptionLocalizations) {
+        option.setDescriptionLocalizations(optionData.descriptionLocalizations);
+    }
+
+    if (optionData.choices) {
+        option.setChoices(...optionData.choices);
+    }
+
+    if (optionData.required) {
+        option.setRequired(optionData.required);
+    }
+
+    return option;
 }
