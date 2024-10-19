@@ -219,7 +219,7 @@ async function handleCommandOption(
             await i.editReply({ embeds: [embed], components: [row] });
         } else {
             await i.reply({
-                content: i18next.t('general.not_interaction_author', { lng: language }),
+                content: i18next.t('general.not_interaction_author', { lng: i.locale }),
                 ephemeral: true,
             });
         }

@@ -571,7 +571,7 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
         }
         else {
             i.reply({
-                content: i18n_1.default.t('tags.realtime.not_allowed_to_interact', { lng: language }),
+                content: i18n_1.default.t('tags.realtime.not_allowed_to_interact', { lng: i.locale }),
                 ephemeral: true,
             });
         }

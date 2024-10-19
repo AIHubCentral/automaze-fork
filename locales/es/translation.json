@@ -72,8 +72,8 @@
             }
         },
         "realtime": {
-            "not_allowed_to_interact": "No comenzó esta interacción, use '/guias' si desea elegir una opción.",
-            "expired": "> Esta interacción ha expirado, utilice el comando '/guias' si desea volver a verlo.",
+            "not_allowed_to_interact": "No comenzó esta interacción, use `/guides` si desea elegir una opción.",
+            "expired": "> Esta interacción ha expirado, utilice el comando `/guides` si desea volver a verlo.",
             "online": {
                 "embeds": [
                     {

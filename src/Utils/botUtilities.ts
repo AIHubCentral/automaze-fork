@@ -745,7 +745,7 @@ export async function handleSendRealtimeGuides(
             i.editReply(<InteractionUpdateOptions>botResponse);
         } else {
             i.reply({
-                content: i18next.t('tags.realtime.not_allowed_to_interact', { lng: language }),
+                content: i18next.t('tags.realtime.not_allowed_to_interact', { lng: i.locale }),
                 ephemeral: true,
             });
         }

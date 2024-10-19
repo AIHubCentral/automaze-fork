@@ -151,7 +151,7 @@ async function handleCommandOption(interaction, commandType, language, ephemeral
         }
         else {
             await i.reply({
-                content: i18next_1.default.t('general.not_interaction_author', { lng: language }),
+                content: i18next_1.default.t('general.not_interaction_author', { lng: i.locale }),
                 ephemeral: true,
             });
         }
