@@ -31,7 +31,7 @@ const Guides = {
         const mainUser = interaction.user;
         const client = interaction.client;
         const { botCache, logger } = client;
-        if (['pt', 'it'].includes(language)) {
+        if (['pt'].includes(language)) {
             return await interaction.reply({
                 content: i18n_1.default.t('general.translation_not_available', { lng: language }),
                 ephemeral: true,

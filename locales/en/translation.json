@@ -591,7 +591,7 @@
         },
         "realtime": {
             "placeholder": "$t(general.select_an_option)",
-            "not_allowed_to_interact": "You didn't start this interaction, use `/guides` if you wish to choose an option.",
+            "not_allowed_to_interact": "$t(general.not_interaction_author)",
             "expired": "> This interaction has expired, use the command `/guides` if you wish to see it again.",
             "online": {
                 "embeds": [
