@@ -81,7 +81,7 @@
                         "title": "⚠️ Notas",
                         "color": "Yellow",
                         "description": [
-                            "- As GPUs do plano gratuito Colab normalmente funcionam por cerca de 4 horas por dia",
+                            "- As GPUs do plano gratuito do Colab normalmente funcionam por cerca de 4 horas por dia",
                             "- Kaggle restringe o uso da GPU a 30 horas por semana",
                             "- Essas opções podem não funcionar em dispositivos móveis devido à falta de um cabo de áudio de voz (VAC)"
                         ]
