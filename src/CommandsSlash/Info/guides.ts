@@ -42,12 +42,12 @@ const Guides: SlashCommand = {
         const client = interaction.client as ExtendedClient;
         const { botCache, logger } = client;
 
-        if (['pt'].includes(language)) {
+        /*         if (['pt'].includes(language)) {
             return await interaction.reply({
                 content: i18next.t('general.translation_not_available', { lng: language }),
                 ephemeral: true,
             });
-        }
+        } */
 
         if (category === 'audio' || category === 'local') {
             const resources = await getResourceData(category, botCache, logger);

@@ -31,12 +31,12 @@ const Guides = {
         const mainUser = interaction.user;
         const client = interaction.client;
         const { botCache, logger } = client;
-        if (['pt'].includes(language)) {
+        /*         if (['pt'].includes(language)) {
             return await interaction.reply({
-                content: i18n_1.default.t('general.translation_not_available', { lng: language }),
+                content: i18next.t('general.translation_not_available', { lng: language }),
                 ephemeral: true,
             });
-        }
+        } */
         if (category === 'audio' || category === 'local') {
             const resources = await (0, botUtilities_1.getResourceData)(category, botCache, logger);
             if (resources.length === 0) {
