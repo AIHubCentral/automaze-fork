@@ -585,8 +585,8 @@
         },
         "local": {
             "embed": {
-                "title": "$t(common.emojis.laptop) Local Stuff",
-                "footer": "More commands: -audio, -colabs, -overtrain, -realtime, -rvc, /help"
+                "title": "Local Stuff",
+                "footer": "$t(general.more_commands): -audio, -colabs, -overtrain, -realtime, -rvc, /help"
             }
         },
         "realtime": {

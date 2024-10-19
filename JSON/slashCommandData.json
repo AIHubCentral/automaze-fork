@@ -353,6 +353,7 @@
                 },
                 "choices": [
                     { "name": "Audio", "value": "audio" },
+                    { "name": "Local", "value": "local" },
                     { "name": "Realtime", "value": "realtime" },
                     { "name": "RVC", "value": "rvc" },
                     { "name": "UVR", "value": "uvr" }

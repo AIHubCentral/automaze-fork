@@ -18,7 +18,7 @@ const Local = {
         }
         const content = [
             {
-                title: i18n_1.default.t('tags.local.embed.title'),
+                title: `${i18n_1.default.t('common.emojis.laptop')} ${i18n_1.default.t('tags.local.embed.title')}`,
                 description: [(0, botUtilities_1.resourcesToUnorderedList)(resources)],
                 footer: i18n_1.default.t('tags.local.embed.footer'),
             },

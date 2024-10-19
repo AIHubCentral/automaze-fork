@@ -49,8 +49,8 @@ const Guides: SlashCommand = {
             });
         }
 
-        if (category === 'audio') {
-            const resources = await getResourceData('audio', botCache, logger);
+        if (category === 'audio' || category === 'local') {
+            const resources = await getResourceData(category, botCache, logger);
 
             if (resources.length === 0) {
                 await interaction.reply({
@@ -63,11 +63,11 @@ const Guides: SlashCommand = {
             const embed = createEmbed(
                 {
                     title:
-                        i18next.t('common.emojis.book') +
+                        i18next.t(`common.emojis.${category === 'local' ? 'laptop' : 'book'}`) +
                         ' ' +
-                        i18next.t('tags.audio.embed.title', { lng: language }),
+                        i18next.t(`tags.${category}.embed.title`, { lng: language }),
                     description: [resourcesToUnorderedListAlt(resources, language)],
-                    footer: i18next.t('tags.audio.embed.footer', { lng: language }),
+                    footer: i18next.t(`tags.${category}.embed.footer`, { lng: language }),
                 },
                 Colors.Blue
             );

@@ -19,7 +19,7 @@ const Local: PrefixCommand = {
 
         const content: EmbedData[] = [
             {
-                title: i18next.t('tags.local.embed.title'),
+                title: `${i18next.t('common.emojis.laptop')} ${i18next.t('tags.local.embed.title')}`,
                 description: [resourcesToUnorderedList(resources)],
                 footer: i18next.t('tags.local.embed.footer'),
             },

@@ -37,8 +37,8 @@ const Guides = {
                 ephemeral: true,
             });
         }
-        if (category === 'audio') {
-            const resources = await (0, botUtilities_1.getResourceData)('audio', botCache, logger);
+        if (category === 'audio' || category === 'local') {
+            const resources = await (0, botUtilities_1.getResourceData)(category, botCache, logger);
             if (resources.length === 0) {
                 await interaction.reply({
                     content: i18n_1.default.t('general.not_available', { lng: language }),
@@ -47,11 +47,11 @@ const Guides = {
                 return;
             }
             const embed = (0, discordUtilities_1.createEmbed)({
-                title: i18n_1.default.t('common.emojis.book') +
+                title: i18n_1.default.t(`common.emojis.${category === 'local' ? 'laptop' : 'book'}`) +
                     ' ' +
-                    i18n_1.default.t('tags.audio.embed.title', { lng: language }),
+                    i18n_1.default.t(`tags.${category}.embed.title`, { lng: language }),
                 description: [(0, botUtilities_1.resourcesToUnorderedListAlt)(resources, language)],
-                footer: i18n_1.default.t('tags.audio.embed.footer', { lng: language }),
+                footer: i18n_1.default.t(`tags.${category}.embed.footer`, { lng: language }),
             }, discord_js_1.Colors.Blue);
             logger.info(`sent guides with /${interaction.commandName}`, {
                 guildId: interaction.guildId,
