@@ -19,7 +19,7 @@ const Audio: PrefixCommand = {
 
         const content: EmbedData[] = [
             {
-                title: i18next.t('tags.audio.embed.title'),
+                title: i18next.t('common.emojis.book') + ' ' + i18next.t('tags.audio.embed.title'),
                 description: [resourcesToUnorderedListAlt(resources)],
                 footer: i18next.t('tags.audio.embed.footer'),
             },

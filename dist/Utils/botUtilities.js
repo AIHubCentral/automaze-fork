@@ -98,10 +98,10 @@ function processResource(resource) {
 /**
  * Alternative version of `resourcesToUnorderedList()`
  */
-function resourcesToUnorderedListAlt(resources) {
+function resourcesToUnorderedListAlt(resources, language = 'en') {
     const processedResources = [];
     resources.forEach((resource) => {
-        const currentLine = processResourceAlt(resource);
+        const currentLine = processResourceAlt(resource, language);
         processedResources.push(currentLine);
     });
     return (0, discord_js_1.unorderedList)(processedResources);
@@ -113,7 +113,7 @@ function resourcesToUnorderedListAlt(resources) {
  * @param {IResource} resource - The resource object to be processed.
  * @returns {string} - A formatted string representing the resource.
  */
-function processResourceAlt(resource) {
+function processResourceAlt(resource, language = 'en') {
     const currentLine = [];
     if (resource.emoji && resource.emoji.toLowerCase() != 'none') {
         currentLine.push(`${resource.emoji} `);
@@ -125,7 +125,7 @@ function processResourceAlt(resource) {
         currentLine.push(resource.url);
     }
     if (resource.authors) {
-        currentLine.push(`, by ${(0, discord_js_1.bold)(resource.authors)}`);
+        currentLine.push(`, ${i18n_1.default.t('general.by', { lng: language })} ${(0, discord_js_1.bold)(resource.authors)}`);
     }
     return currentLine.join('');
 }
@@ -510,19 +510,21 @@ function createMenuOptions(availableOptions) {
     }
     return menuOptions;
 }
-async function handleSendRealtimeGuides(message, targetUser, author, ephemeral = false) {
+async function handleSendRealtimeGuides(message, targetUser, author, ephemeral = false, language = 'en') {
     const realtimeSelectOptions = i18n_1.default.t('tags.realtime.menuOptions', {
+        lng: language,
         returnObjects: true,
     });
     // selects local RVC by default
     const selectedGuide = i18n_1.default.t('tags.realtime.local', {
+        lng: language,
         returnObjects: true,
     });
     const menuOptions = createMenuOptions(realtimeSelectOptions);
     const menuId = `realtime_${(0, generalUtilities_1.generateRandomId)(6)}`;
     const realtimeGuidesSelectMenu = new discord_js_1.StringSelectMenuBuilder()
         .setCustomId(menuId)
-        .setPlaceholder(i18n_1.default.t('tags.realtime.placeholder'))
+        .setPlaceholder(i18n_1.default.t('tags.realtime.placeholder', { lng: language }))
         .addOptions(menuOptions);
     const row = new discord_js_1.ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
     const botResponse = {
@@ -534,7 +536,10 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
     const selectMenuDisplayMinutes = 10; // allow interaction with the select menu for 10 minutes
     const mainUser = author;
     if (targetUser) {
-        botResponse.content = i18n_1.default.t('general.suggestions_for_user', { userId: targetUser.id });
+        botResponse.content = i18n_1.default.t('general.suggestions_for_user', {
+            userId: targetUser.id,
+            lng: language,
+        });
     }
     const botReply = await message.reply(botResponse);
     const currentChannel = message.channel;
@@ -553,10 +558,12 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
             const selectMenuResult = i.values[0];
             const guideEmbeds = i18n_1.default.t(`tags.realtime.${selectMenuResult}.embeds`, {
                 returnObjects: true,
+                lng: language,
             });
             if (targetUser) {
                 botResponse.content = i18n_1.default.t('general.suggestions_for_user', {
                     userId: targetUser.id,
+                    lng: language,
                 });
             }
             botResponse.embeds = (0, discordUtilities_1.createEmbeds)(guideEmbeds, [discord_js_1.Colors.Blue, discord_js_1.Colors.Aqua]);
@@ -564,13 +571,13 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
         }
         else {
             i.reply({
-                content: i18n_1.default.t('tags.realtime.not_allowed_to_interact'),
+                content: i18n_1.default.t('tags.realtime.not_allowed_to_interact', { lng: language }),
                 ephemeral: true,
             });
         }
     });
     collector.on('end', () => {
-        botResponse.content = i18n_1.default.t('tags.realtime.expired');
+        botResponse.content = i18n_1.default.t('tags.realtime.expired', { lng: language });
         botResponse.embeds = [];
         botResponse.components = [];
         botReply.edit(botResponse);

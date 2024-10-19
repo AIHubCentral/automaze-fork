@@ -8,7 +8,19 @@
     },
     "general": {
         "translation_not_available": "Este comando aún no está disponible en este idioma.",
-        "not_interaction_author": "Tú no comenzaste esta interacción. Utilice el comando para interactuar con él."
+        "not_found": "Comando no encontrado",
+        "not_available": "Aún no disponible",
+        "not_interaction_author": "Tú no comenzaste esta interacción. Utilice el comando para interactuar con él.",
+        "options": "\n**Opciones**:",
+        "optional": "(Opcional)",
+        "usage": "\nUso:",
+        "suggestions_for_user": "Sugerencias para <@{{userId}}>",
+        "failed_retrieving_guild": "No se pudo recuperar la información del gremio. Vuelva a intentarlo más tarde.",
+        "bot_user": "Ese usuario es un bot",
+        "more_commands": "Más comandos",
+        "by": "por",
+        "select_an_option": "Seleccione una opción",
+        "credits": "Créditos"
     },
     "faq": {
         "topics": {
@@ -51,6 +63,130 @@
                     "Por último, pero no menos importante, pide ayuda en $t(common.channels.ai_art) si está relacionado con imágenes de IA"
                 ]
             }
+        }
+    },
+    "tags": {
+        "audio": {
+            "embed": {
+                "title": "Audioguías y herramientas"
+            }
+        },
+        "realtime": {
+            "not_allowed_to_interact": "No comenzó esta interacción, use '/guias' si desea elegir una opción.",
+            "expired": "> Esta interacción ha expirado, utilice el comando '/guias' si desea volver a verlo.",
+            "online": {
+                "embeds": [
+                    {
+                        "title": "$t(common.emojis.cloud) (En línea) W-Okada - Versión Colab",
+                        "description": [
+                            "- [Cómo usar el cambiador de voz de Original W-Okada Google Colab](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)",
+                            "- [Cambiador de voz modificado de W-Okada Google Colab](https://colab.research.google.com/github/deiteris/voice-changer/blob/master-custom/Colab_RealtimeVoiceChanger.ipynb)",
+                            "- [Cambiador de voz original de W-Okada Kaggle](https://www.kaggle.com/code/hinabl/public-w-okada-voice-changer)",
+                            "- [Modificado el cambiador de voz de W-Okada Kaggle](https://www.kaggle.com/code/suneku/voice-changer-public)"
+                        ]
+                    },
+                    {
+                        "title": "⚠️ Notas",
+                        "color": "Yellow",
+                        "description": [
+                            "- Las GPU del plan gratuito de Colab suelen funcionar durante unas 4 horas al día",
+                            "- Kaggle restringe el uso de la GPU a 30 horas por semana",
+                            "- Es posible que estas opciones no funcionen en dispositivos móviles debido a la falta de un cable de audio y voz (VAC)"
+                        ]
+                    }
+                ]
+            },
+            "local": {
+                "embeds": [
+                    {
+                        "title": "$t(common.emojis.laptop) Local Realtime RVC",
+                        "description": [
+                            "- [Guía para el cliente modificado de W-Okada Voice Changer (bifurcación) de deiteris](https://rentry.co/ForkVoiceChangerGuide)",
+                            "- [Guía para RealTimeVoiceChangerClient de W-Okada](https://rentry.co/VoiceChangerGuide)",
+                            "- [Cómo usar la conversión en tiempo real con RVC (cambiador de voz)](https://docs.google.com/document/d/1haQAWn4Hnh3Aq8SSGX0tBSY3rDzjYJAcczrUy63oTTs)",
+                            "- [RVC TTS](https://rentry.co/RVC-TTS-Guide)"
+                        ]
+                    }
+                ]
+            },
+            "faq": {
+                "embeds": [
+                    {
+                        "title": "$t(common.emojis.question) Preguntas frecuentes sobre el cambiador de voz en ruso",
+                        "color": "#07F7D9",
+                        "description": [
+                            "- 🔗 [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
+                        ],
+                        "footer": "$t(general.credits): blackcat76it, elektroeban, redoverflow and tntmaxim"
+                    }
+                ]
+            },
+            "menuOptions": [
+                {
+                    "label": "Opciones locales",
+                    "description": "Si tienes una GPU decente, estas pueden ser una buena opción",
+                    "value": "local",
+                    "emoji": "$t(common.emojis.laptop)"
+                },
+                {
+                    "label": "Opciones en línea",
+                    "description": "Si NO tienes una GPU decente, estas pueden ser una buena opción",
+                    "value": "online",
+                    "emoji": "$t(common.emojis.cloud)"
+                },
+                {
+                    "label": "Preguntas Frecuentes (RU)",
+                    "description": "Preguntas frecuentes sobre el cambiador de voz en ruso",
+                    "value": "faq",
+                    "emoji": "$t(common.emojis.question)"
+                }
+            ]
+        },
+        "rvc": {
+            "embeds": [
+                {
+                    "title": "$t(common.emojis.book) Documentación",
+                    "description": [
+                        "### $t(common.emojis.aihub) AI HUB Docs",
+                        "**$t(common.websites.aihub.docs)**",
+                        "### $t(common.emojis.applio) Applio Docs",
+                        "**$t(common.websites.applio.docs)**"
+                    ]
+                },
+                {
+                    "title": "✨ Más guías",
+                    "description": [
+                        "- [Cómo usar RVC Mainline Colab](https://rentry.co/RVC-Mainline-Colab) $t(general.by) **Cauthess**",
+                        "- [Guía de AICoverGen Colab](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub) $t(general.by) **Eddy (Spanish Helper)**",
+                        "- [Creación de un modelo con RVC desconectado (colab)](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk) $t(general.by) **Angetyde**",
+                        "- [Guías italianos](https://rentry.org/link-utili) $t(general.by) **Ilaria**"
+                    ]
+                }
+            ]
+        },
+        "uvr": {
+            "embed": {
+                "title": "Ultimate Vocal Remover",
+                "description": [
+                    "Una de las mejores herramientas de aislamiento vocal e instrumental gratuitas y de código abierto."
+                ],
+                "color": "05998c",
+                "image": "https://img1.wsimg.com/isteam/ip/27b42b0b-4e5c-4246-8229-db96bd3bf24e/UVR_v5.6.png/:/"
+            },
+            "buttons": [
+                {
+                    "label": "Sitio web",
+                    "url": "https://ultimatevocalremover.com/"
+                },
+                {
+                    "label": "GitHub",
+                    "url": "https://github.com/Anjok07/ultimatevocalremovergui"
+                },
+                {
+                    "label": "Guía",
+                    "url": "$t(common.websites.aihub.uvr)"
+                }
+            ]
         }
     }
 }

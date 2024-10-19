@@ -112,11 +112,11 @@ export function processResource(resource: IResource): string {
 /**
  * Alternative version of `resourcesToUnorderedList()`
  */
-export function resourcesToUnorderedListAlt(resources: IResource[]): string {
+export function resourcesToUnorderedListAlt(resources: IResource[], language: string = 'en'): string {
     const processedResources: string[] = [];
 
     resources.forEach((resource) => {
-        const currentLine = processResourceAlt(resource);
+        const currentLine = processResourceAlt(resource, language);
         processedResources.push(currentLine);
     });
 
@@ -130,7 +130,7 @@ export function resourcesToUnorderedListAlt(resources: IResource[]): string {
  * @param {IResource} resource - The resource object to be processed.
  * @returns {string} - A formatted string representing the resource.
  */
-export function processResourceAlt(resource: IResource): string {
+export function processResourceAlt(resource: IResource, language: string = 'en'): string {
     const currentLine: string[] = [];
 
     if (resource.emoji && resource.emoji.toLowerCase() != 'none') {
@@ -144,7 +144,7 @@ export function processResourceAlt(resource: IResource): string {
     }
 
     if (resource.authors) {
-        currentLine.push(`, by ${bold(resource.authors)}`);
+        currentLine.push(`, ${i18next.t('general.by', { lng: language })} ${bold(resource.authors)}`);
     }
 
     return currentLine.join('');
@@ -664,14 +664,17 @@ export async function handleSendRealtimeGuides(
     message: Message | ChatInputCommandInteraction | UserContextMenuCommandInteraction,
     targetUser: User | GuildMember | undefined,
     author: User,
-    ephemeral: boolean = false
+    ephemeral: boolean = false,
+    language: string = 'en'
 ) {
     const realtimeSelectOptions = i18next.t('tags.realtime.menuOptions', {
+        lng: language,
         returnObjects: true,
     }) as SelectMenuOption[];
 
     // selects local RVC by default
     const selectedGuide = i18next.t('tags.realtime.local', {
+        lng: language,
         returnObjects: true,
     }) as SelectMenuData;
 
@@ -681,7 +684,7 @@ export async function handleSendRealtimeGuides(
 
     const realtimeGuidesSelectMenu = new StringSelectMenuBuilder()
         .setCustomId(menuId)
-        .setPlaceholder(i18next.t('tags.realtime.placeholder'))
+        .setPlaceholder(i18next.t('tags.realtime.placeholder', { lng: language }))
         .addOptions(menuOptions);
 
     const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(realtimeGuidesSelectMenu);
@@ -697,7 +700,10 @@ export async function handleSendRealtimeGuides(
     const mainUser = author;
 
     if (targetUser) {
-        botResponse.content = i18next.t('general.suggestions_for_user', { userId: targetUser.id });
+        botResponse.content = i18next.t('general.suggestions_for_user', {
+            userId: targetUser.id,
+            lng: language,
+        });
     }
 
     const botReply = await message.reply(botResponse);
@@ -724,11 +730,13 @@ export async function handleSendRealtimeGuides(
 
             const guideEmbeds = i18next.t(`tags.realtime.${selectMenuResult}.embeds`, {
                 returnObjects: true,
+                lng: language,
             }) as EmbedData[];
 
             if (targetUser) {
                 botResponse.content = i18next.t('general.suggestions_for_user', {
                     userId: targetUser.id,
+                    lng: language,
                 });
             }
 
@@ -737,14 +745,14 @@ export async function handleSendRealtimeGuides(
             i.editReply(<InteractionUpdateOptions>botResponse);
         } else {
             i.reply({
-                content: i18next.t('tags.realtime.not_allowed_to_interact'),
+                content: i18next.t('tags.realtime.not_allowed_to_interact', { lng: language }),
                 ephemeral: true,
             });
         }
     });
 
     collector.on('end', () => {
-        botResponse.content = i18next.t('tags.realtime.expired');
+        botResponse.content = i18next.t('tags.realtime.expired', { lng: language });
         botResponse.embeds = [];
         botResponse.components = [];
         botReply.edit(<MessageEditOptions>botResponse);

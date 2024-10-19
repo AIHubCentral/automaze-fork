@@ -18,7 +18,7 @@ const Audio = {
         }
         const content = [
             {
-                title: i18next_1.default.t('tags.audio.embed.title'),
+                title: i18next_1.default.t('common.emojis.book') + ' ' + i18next_1.default.t('tags.audio.embed.title'),
                 description: [(0, botUtilities_1.resourcesToUnorderedListAlt)(resources)],
                 footer: i18next_1.default.t('tags.audio.embed.footer'),
             },

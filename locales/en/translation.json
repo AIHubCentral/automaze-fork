@@ -2,7 +2,11 @@
     "common": {
         "websites": {
             "aihub": {
-                "docs": "https://docs.aihub.wtf/"
+                "docs": "https://docs.ai-hub.wtf",
+                "upload": "$t(common.websites.aihub.docs)/essentials/voice-models/#uploading-to-hugging-face",
+                "role": "$t(common.websites.aihub.docs)/extra/model-maker-role/",
+                "tensorboard": "$t(common.websites.aihub.docs)/rvc/resources/epochs-tensorboard/",
+                "uvr": "$t(common.websites.aihub.docs)/rvc/resources/vocal-isolation/"
             },
             "applio": {
                 "docs": "https://docs.applio.org/",
@@ -55,14 +59,18 @@
     "general": {
         "translation_not_available": "This command is not available in this language yet.",
         "not_found": "Command not found",
-        "not_available": "Not available yet.",
+        "not_available": "Not available yet",
         "not_interaction_author": "You didn't start this interaction. Use the command for interacting with it.",
         "options": "\n**Options**:",
         "optional": "(Optional)",
         "usage": "\nUsage:",
         "suggestions_for_user": "Suggestions for <@{{userId}}>",
         "failed_retrieving_guild": "Failed to retrieve guild information. Try again later.",
-        "bot_user": "That user is a bot."
+        "bot_user": "That user is a bot",
+        "more_commands": "More commands",
+        "by": "by",
+        "select_an_option": "Select an option",
+        "credits": "credits"
     },
     "faq": {
         "topics": {
@@ -306,7 +314,7 @@
             "description": "Guides for making datasets",
             "embed": {
                 "description": [
-                    "Learn how to process your dataset audio for creating high quality RVC models. Also available in `/guides audio` command.",
+                    "Learn how to process your dataset audio for creating high quality RVC models. Also available in `/guides` command.",
                     "$t(general.usage) `-audio options`",
                     "$t(general.options)",
                     "- $t(general.optional) `User`: Send this to a user (will ping them)"
@@ -529,8 +537,8 @@
     "tags": {
         "audio": {
             "embed": {
-                "title": "$t(common.emojis.book) Audio Guides & Tools",
-                "footer": "More commands: -colab, -uvr, -karafan, -overtrain, /help"
+                "title": "Audio Guides & Tools",
+                "footer": "$t(general.more_commands): -colab, -uvr, -karafan, -overtrain, /help"
             }
         },
         "colab": {
@@ -602,14 +610,13 @@
             }
         },
         "realtime": {
-            "placeholder": "Select a guide",
-            "not_allowd_to_interact": "You didn't start this interaction, use `/guides` if you wish to choose an option.",
+            "placeholder": "$t(general.select_an_option)",
+            "not_allowed_to_interact": "You didn't start this interaction, use `/guides` if you wish to choose an option.",
             "expired": "> This interaction has expired, use the command `/guides` if you wish to see it again.",
             "online": {
                 "embeds": [
                     {
-                        "title": "☁ (Online) W-Okada - Colab Version",
-                        "color": "#077CF7",
+                        "title": "$t(common.emojis.cloud) (Online) W-Okada - Colab Version",
                         "description": [
                             "- [How to use Original W-Okada's Voice Changer Google Colab](https://docs.google.com/document/d/e/2PACX-1vTIceEcBfS6Zqolv_QEysrFfI_EJikPxozWptP_EjkpLVl-l-gdo-ijBonQMTviAHEYm5emmd9k9TdC/pub)",
                             "- [Modified W-Okada's Voice Changer Google Colab](https://colab.research.google.com/github/deiteris/voice-changer/blob/master-custom/Colab_RealtimeVoiceChanger.ipynb)",
@@ -644,12 +651,12 @@
             "faq": {
                 "embeds": [
                     {
-                        "title": "❔ Russian FAQ for voice changer",
+                        "title": "$t(common.emojis.question) Russian FAQ for voice changer",
                         "color": "#07F7D9",
                         "description": [
                             "- 🔗 [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
                         ],
-                        "footer": "Credits: blackcat76it, elektroeban, redoverflow and tntmaxim"
+                        "footer": "$t(general.credits): blackcat76it, elektroeban, redoverflow and tntmaxim"
                     }
                 ]
             },
@@ -677,7 +684,7 @@
         "rvc": {
             "embeds": [
                 {
-                    "title": "$t(common.emojis.book) Documentation ",
+                    "title": "$t(common.emojis.book) Documentation",
                     "description": [
                         "### $t(common.emojis.aihub) AI HUB Docs",
                         "**$t(common.websites.aihub.docs)**",
@@ -688,10 +695,10 @@
                 {
                     "title": "✨ More guides",
                     "description": [
-                        "- [How to use RVC Mainline Colab](https://rentry.co/RVC-Mainline-Colab) by **Cauthess**",
-                        "- [AICoverGen Colab Guide](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub) by **Eddy (Spanish Helper)**",
-                        "- [Create a model with RVC disconnected (colab)](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk) by **Angetyde**",
-                        "- [Italian Guides](https://rentry.org/link-utili) by **Ilaria**"
+                        "- [How to use RVC Mainline Colab](https://rentry.co/RVC-Mainline-Colab) $t(general.by) **Cauthess**",
+                        "- [AICoverGen Colab Guide](https://docs.google.com/document/d/e/2PACX-1vThk7Qo7yCWNVbxOmahl2R8_Jgi6TFuMBUIi-PWre_HIN0lFTq-dr37Rh5iJlGgYb_vFapXMHt2W8Kp/pub) $t(general.by) **Eddy (Spanish Helper)**",
+                        "- [Create a model with RVC disconnected (colab)](https://docs.google.com/document/d/1XuxQYiqEhYrdYeCZRRLrmV_ciMKo0bV-jTCGHu_-5Cc/edit?usp=drivesdk) $t(general.by) **Angetyde**",
+                        "- [Italian Guides](https://rentry.org/link-utili) $t(general.by) **Ilaria**"
                     ]
                 }
             ]
@@ -716,7 +723,7 @@
                 },
                 {
                     "label": "Guide",
-                    "url": "https://docs.aihub.wtf/rvc/resources/vocal-isolation/"
+                    "url": "$t(common.websites.aihub.uvr)"
                 }
             ]
         }

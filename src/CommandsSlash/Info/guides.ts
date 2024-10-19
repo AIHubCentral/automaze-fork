@@ -46,7 +46,7 @@ const Guides: SlashCommand = {
         const client = interaction.client as ExtendedClient;
         const { botCache, logger } = client;
 
-        if (['pt', 'es', 'it'].includes(language)) {
+        if (['pt', 'it'].includes(language)) {
             return await interaction.reply({
                 content: i18next.t('general.translation_not_available', { lng: language }),
                 ephemeral: true,
@@ -66,9 +66,12 @@ const Guides: SlashCommand = {
 
             const embed = createEmbed(
                 {
-                    title: i18next.t('tags.audio.embed.title', { lng: language }),
-                    description: [resourcesToUnorderedListAlt(resources)],
-                    footer: i18next.t('tags.audio.embed.footer'),
+                    title:
+                        i18next.t('common.emojis.book') +
+                        ' ' +
+                        i18next.t('tags.audio.embed.title', { lng: language }),
+                    description: [resourcesToUnorderedListAlt(resources, language)],
+                    footer: i18next.t('tags.audio.embed.footer', { lng: language }),
                 },
                 Colors.Blue
             );
@@ -102,7 +105,7 @@ const Guides: SlashCommand = {
 
             return await interaction.reply({ embeds: [embed], ephemeral });
         } else if (category === 'realtime') {
-            await handleSendRealtimeGuides(interaction, undefined, mainUser, ephemeral);
+            await handleSendRealtimeGuides(interaction, undefined, mainUser, ephemeral, language);
             return;
         } else if (category === 'rvc') {
             const content = i18next.t('tags.rvc.embeds', {

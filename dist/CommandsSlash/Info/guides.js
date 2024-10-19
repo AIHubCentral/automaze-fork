@@ -31,7 +31,7 @@ const Guides = {
         const mainUser = interaction.user;
         const client = interaction.client;
         const { botCache, logger } = client;
-        if (['pt', 'es', 'it'].includes(language)) {
+        if (['pt', 'it'].includes(language)) {
             return await interaction.reply({
                 content: i18n_1.default.t('general.translation_not_available', { lng: language }),
                 ephemeral: true,
@@ -47,9 +47,11 @@ const Guides = {
                 return;
             }
             const embed = (0, discordUtilities_1.createEmbed)({
-                title: i18n_1.default.t('tags.audio.embed.title', { lng: language }),
-                description: [(0, botUtilities_1.resourcesToUnorderedListAlt)(resources)],
-                footer: i18n_1.default.t('tags.audio.embed.footer'),
+                title: i18n_1.default.t('common.emojis.book') +
+                    ' ' +
+                    i18n_1.default.t('tags.audio.embed.title', { lng: language }),
+                description: [(0, botUtilities_1.resourcesToUnorderedListAlt)(resources, language)],
+                footer: i18n_1.default.t('tags.audio.embed.footer', { lng: language }),
             }, discord_js_1.Colors.Blue);
             logger.info(`sent guides with /${interaction.commandName}`, {
                 guildId: interaction.guildId,
@@ -79,7 +81,7 @@ const Guides = {
             return await interaction.reply({ embeds: [embed], ephemeral });
         }
         else if (category === 'realtime') {
-            await (0, botUtilities_1.handleSendRealtimeGuides)(interaction, undefined, mainUser, ephemeral);
+            await (0, botUtilities_1.handleSendRealtimeGuides)(interaction, undefined, mainUser, ephemeral, language);
             return;
         }
         else if (category === 'rvc') {
