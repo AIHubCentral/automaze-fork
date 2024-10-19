@@ -353,7 +353,6 @@
                 },
                 "choices": [
                     { "name": "Audio", "value": "audio" },
-                    { "name": "Paperspace", "value": "paperspace" },
                     { "name": "Realtime", "value": "realtime" },
                     { "name": "RVC", "value": "rvc" },
                     { "name": "UVR", "value": "uvr" }

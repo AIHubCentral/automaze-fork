@@ -13,10 +13,6 @@ import {
 } from '../../Utils/botUtilities';
 import i18next from '../../i18n';
 
-interface Response {
-    embed: EmbedData;
-}
-
 const commandData = slashCommandData.guides;
 
 const Guides: SlashCommand = {
@@ -75,22 +71,6 @@ const Guides: SlashCommand = {
                 },
                 Colors.Blue
             );
-
-            logger.info(`sent guides with /${interaction.commandName}`, {
-                guildId: interaction.guildId,
-                channelId: interaction.channelId,
-                params: {
-                    category,
-                    language,
-                    ephemeral,
-                },
-                executionTime: ms(Date.now() - startTime),
-            });
-
-            return await interaction.reply({ embeds: [embed], ephemeral });
-        } else if (category === 'paperspace') {
-            const content = i18next.t('tags.paperspace', { lng: language, returnObjects: true }) as Response;
-            const embed = createEmbed(content.embed, Colors.Blue);
 
             logger.info(`sent guides with /${interaction.commandName}`, {
                 guildId: interaction.guildId,

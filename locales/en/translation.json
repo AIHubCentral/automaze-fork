@@ -452,19 +452,6 @@
                 "footer": "Alias: -overtraining"
             }
         },
-        "prefix_paperspace": {
-            "icon": "🧻",
-            "label": "Paperspace",
-            "description": "How to run RVC on paperspace",
-            "embed": {
-                "description": [
-                    "Paperspace guide by **LollenApe** (Possibly outdated $t(common.emojis.nails)). Also available in `/guides` command.",
-                    "$t(general.usage) `-paperspace options`",
-                    "$t(general.options)",
-                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
-                ]
-            }
-        },
         "prefix_realtime": {
             "icon": "$t(common.emojis.mic)",
             "label": "Realtime",
@@ -599,14 +586,6 @@
             "embed": {
                 "title": "$t(common.emojis.laptop) Local Stuff",
                 "footer": "More commands: -audio, -colabs, -overtrain, -realtime, -rvc, /help"
-            }
-        },
-        "paperspace": {
-            "embed": {
-                "title": "🧻 Paperspace",
-                "description": [
-                    "RVC v2 [Tutorial for Paperspace](https://docs.google.com/document/d/1lIAK4Y0ylash_1M2UTTL_tfA3_mEzP0D2kjX2A3rfSY/edit?usp=sharing) by **LollenApe**"
-                ]
             }
         },
         "realtime": {

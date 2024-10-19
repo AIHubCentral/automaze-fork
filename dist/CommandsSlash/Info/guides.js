@@ -65,21 +65,6 @@ const Guides = {
             });
             return await interaction.reply({ embeds: [embed], ephemeral });
         }
-        else if (category === 'paperspace') {
-            const content = i18n_1.default.t('tags.paperspace', { lng: language, returnObjects: true });
-            const embed = (0, discordUtilities_1.createEmbed)(content.embed, discord_js_1.Colors.Blue);
-            logger.info(`sent guides with /${interaction.commandName}`, {
-                guildId: interaction.guildId,
-                channelId: interaction.channelId,
-                params: {
-                    category,
-                    language,
-                    ephemeral,
-                },
-                executionTime: (0, pretty_ms_1.default)(Date.now() - startTime),
-            });
-            return await interaction.reply({ embeds: [embed], ephemeral });
-        }
         else if (category === 'realtime') {
             await (0, botUtilities_1.handleSendRealtimeGuides)(interaction, undefined, mainUser, ephemeral, language);
             return;
