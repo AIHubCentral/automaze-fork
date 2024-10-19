@@ -14,7 +14,7 @@ const UVR = {
             returnObjects: true,
         });
         const sender = new botUtilities_1.TagResponseSender(client);
-        sender.setEmbeds(content.embeds);
+        sender.setEmbeds([content.embed]);
         sender.setButtons(content.buttons);
         sender.config(message);
         await sender.send();

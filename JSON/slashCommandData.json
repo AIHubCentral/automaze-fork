@@ -262,70 +262,140 @@
             }
         },
         "commonOptions": {
-                "category": {
-                    "type": 3,
-                    "name": "category",
-                    "nameLocalizations": {
-                        "pt-BR": "categoria"
-                    },
-                    "description": "Resource category",
-                    "descriptionLocalizations": {
-                        "pt-BR": "Categoria do recurso"
-                    },
-                    "choices": [
-                        { "name": "audio", "value": "audio" },
-                        { "name": "colab", "value": "colab" },
-                        { "name": "huggingface", "value": "hf" },
-                        { "name": "kaggle", "value": "kaggle" },
-                        { "name": "lightning", "value": "lightning_ai" },
-                        { "name": "local", "value": "local" }
-                    ],
-                    "required": true
+            "category": {
+                "type": 3,
+                "name": "category",
+                "nameLocalizations": {
+                    "pt-BR": "categoria"
                 },
-                "url": {
-                    "type": 3,
-                    "name": "url",
-                    "description": "URL for the resource",
-                    "descriptionLocalizations": {
-                        "pt-BR": "URL do recurso"
-                    },
-                    "required": true
+                "description": "Resource category",
+                "descriptionLocalizations": {
+                    "pt-BR": "Categoria do recurso"
                 },
-                "title": {
-                    "type": 3,
-                    "name": "title",
-                    "nameLocalizations": {
-                        "pt-BR": "titulo"
-                    },
-                    "description": "Title to mask the URL",
-                    "descriptionLocalizations": {
-                        "pt-BR": "Título para esconder a URL"
-                    }
+                "choices": [
+                    { "name": "audio", "value": "audio" },
+                    { "name": "colab", "value": "colab" },
+                    { "name": "huggingface", "value": "hf" },
+                    { "name": "kaggle", "value": "kaggle" },
+                    { "name": "lightning", "value": "lightning_ai" },
+                    { "name": "local", "value": "local" }
+                ],
+                "required": true
+            },
+            "url": {
+                "type": 3,
+                "name": "url",
+                "description": "URL for the resource",
+                "descriptionLocalizations": {
+                    "pt-BR": "URL do recurso"
                 },
-                "authors": {
-                    "type": 3,
-                    "name": "authors",
-                    "nameLocalizations": {
-                        "pt-BR": "autores"
-                    },
-                    "description": "(Optional) Authors who made the content",
-                    "descriptionLocalizations": {
-                        "pt-BR": "(Opcional) Autores que criaram o conteúdo"
-                    }
+                "required": true
+            },
+            "title": {
+                "type": 3,
+                "name": "title",
+                "nameLocalizations": {
+                    "pt-BR": "titulo"
                 },
-                "emoji": {
-                    "type": 3,
-                    "name": "emoji",
-                    "description": "(Optional) Emoji to display before the link",
-                    "descriptionLocalizations": {
-                        "pt-BR": "(Opcional) Emoji para mostrar antes do link"
-                    }
+                "description": "Title to mask the URL",
+                "descriptionLocalizations": {
+                    "pt-BR": "Título para esconder a URL"
+                }
+            },
+            "authors": {
+                "type": 3,
+                "name": "authors",
+                "nameLocalizations": {
+                    "pt-BR": "autores"
                 },
-                "id": {
-                    "name": "id",
-                    "description": "ID of the resource",
-                    "descriptionLocalizations": { "pt-BR": "ID do recurso" }
+                "description": "(Optional) Authors who made the content",
+                "descriptionLocalizations": {
+                    "pt-BR": "(Opcional) Autores que criaram o conteúdo"
+                }
+            },
+            "emoji": {
+                "type": 3,
+                "name": "emoji",
+                "description": "(Optional) Emoji to display before the link",
+                "descriptionLocalizations": {
+                    "pt-BR": "(Opcional) Emoji para mostrar antes do link"
+                }
+            },
+            "id": {
+                "name": "id",
+                "description": "ID of the resource",
+                "descriptionLocalizations": { "pt-BR": "ID do recurso" }
+            }
+        }
+    },
+    "guides": {
+        "name": "guides",
+        "description": "Guides for RVC",
+        "descriptionLocalizations": {
+            "es-ES": "Guías para RVC",
+            "it": "Guide per RVC",
+            "pt-BR": "Guias para RVC"
+        },
+        "options": {
+            "category": {
+                "type": 3,
+                "name": "category",
+                "nameLocalizations": {
+                    "es-ES": "categoria",
+                    "it": "categoria",
+                    "pt-BR": "categoria"
+                },
+                "description": "Choose a category",
+                "descriptionLocalizations": {
+                    "es-ES": "Elige una categoría",
+                    "it": "Scegli una categoria",
+                    "pt-BR": "Escolha uma categoria"
+                },
+                "choices": [
+                    { "name": "Audio", "value": "audio" },
+                    { "name": "Paperspace", "value": "paperspace" },
+                    { "name": "Realtime", "value": "realtime" },
+                    { "name": "RVC", "value": "rvc" },
+                    { "name": "UVR", "value": "uvr" }
+                ],
+                "required": true
+            },
+            "language": {
+                "type": 3,
+                "name": "language",
+                "nameLocalizations": {
+                    "es-ES": "idioma",
+                    "it": "lingua",
+                    "pt-BR": "idioma"
+                },
+                "description": "(Optional) Response language",
+                "descriptionLocalizations": {
+                    "es-ES": "(Opcional) Idioma de respuesta",
+                    "it": "(Facoltativo) Lingua della risposta",
+                    "pt-BR": "(Opcional) Idioma da resposta"
+                },
+                "choices": [
+                    { "name": "en", "value": "en" },
+                    { "name": "es", "value": "es" },
+                    { "name": "it", "value": "it" },
+                    { "name": "pt", "value": "pt" }
+                ]
+            },
+            "private": {
+                "type": 3,
+                "name": "private",
+                "nameLocalizations": {
+                    "es-ES": "privado",
+                    "pt-BR": "privado",
+                    "it": "silenzioso"
+                },
+                "description": "Only you can see the response (optional)",
+                "descriptionLocalizations": {
+                    "es-ES": "Solo tú puedes ver la respuesta (opcional)",
+                    "pt-BR": "Apenas você vê a resposta (opcional)",
+                    "it": "Solo tu puoi vedere la risposta (opzionale)"
                 }
             }
+        }
     }
 }

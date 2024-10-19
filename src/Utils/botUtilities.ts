@@ -663,7 +663,8 @@ function createMenuOptions(availableOptions: SelectMenuOption[]): StringSelectMe
 export async function handleSendRealtimeGuides(
     message: Message | ChatInputCommandInteraction | UserContextMenuCommandInteraction,
     targetUser: User | GuildMember | undefined,
-    author: User
+    author: User,
+    ephemeral: boolean = false
 ) {
     const realtimeSelectOptions = i18next.t('tags.realtime.menuOptions', {
         returnObjects: true,
@@ -689,6 +690,7 @@ export async function handleSendRealtimeGuides(
         embeds: createEmbeds(selectedGuide.embeds, [Colors.Blue, Colors.Aqua]),
         components: [row],
         content: '',
+        ephemeral,
     };
 
     const selectMenuDisplayMinutes = 10; // allow interaction with the select menu for 10 minutes

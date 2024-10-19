@@ -9,6 +9,7 @@ exports.getChannelById = getChannelById;
 exports.getDisplayName = getDisplayName;
 exports.handleDiscordError = handleDiscordError;
 exports.createStringOption = createStringOption;
+exports.createButtons = createButtons;
 const discord_js_1 = require("discord.js");
 function createEmbed(data, color) {
     /**
@@ -163,4 +164,7 @@ function createStringOption(optionData) {
         option.setRequired(optionData.required);
     }
     return option;
+}
+function createButtons(buttons) {
+    return new discord_js_1.ActionRowBuilder().addComponents(buttons.map((btn) => new discord_js_1.ButtonBuilder().setLabel(btn.label).setURL(btn.url).setStyle(discord_js_1.ButtonStyle.Link)));
 }

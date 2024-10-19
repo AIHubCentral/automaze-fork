@@ -9,11 +9,15 @@ import {
     ApplicationCommandStringOptionData,
     SlashCommandStringOption,
     TextChannel,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
 } from 'discord.js';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
-import { EmbedData } from '../Interfaces/BotData';
+import { ButtonData, EmbedData } from '../Interfaces/BotData';
 import winston from 'winston';
+import { generateRandomId } from './generalUtilities';
 
 export function createEmbed(data: EmbedData, color?: ColorResolvable): EmbedBuilder {
     /**
@@ -193,4 +197,12 @@ export function createStringOption(optionData: ApplicationCommandStringOptionDat
     }
 
     return option;
+}
+
+export function createButtons(buttons: ButtonData[]): ActionRowBuilder<ButtonBuilder> {
+    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+        buttons.map((btn) =>
+            new ButtonBuilder().setLabel(btn.label).setURL(btn.url).setStyle(ButtonStyle.Link)
+        )
+    );
 }

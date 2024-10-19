@@ -510,7 +510,7 @@ function createMenuOptions(availableOptions) {
     }
     return menuOptions;
 }
-async function handleSendRealtimeGuides(message, targetUser, author) {
+async function handleSendRealtimeGuides(message, targetUser, author, ephemeral = false) {
     const realtimeSelectOptions = i18n_1.default.t('tags.realtime.menuOptions', {
         returnObjects: true,
     });
@@ -529,6 +529,7 @@ async function handleSendRealtimeGuides(message, targetUser, author) {
         embeds: (0, discordUtilities_1.createEmbeds)(selectedGuide.embeds, [discord_js_1.Colors.Blue, discord_js_1.Colors.Aqua]),
         components: [row],
         content: '',
+        ephemeral,
     };
     const selectMenuDisplayMinutes = 10; // allow interaction with the select menu for 10 minutes
     const mainUser = author;

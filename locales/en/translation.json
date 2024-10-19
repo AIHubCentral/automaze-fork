@@ -697,16 +697,14 @@
             ]
         },
         "uvr": {
-            "embeds": [
-                {
-                    "title": "Ultimate Vocal Remover",
-                    "description": [
-                        "One of the best free and open source vocal and instrumental isolation tool."
-                    ],
-                    "color": "05998c",
-                    "image": "https://img1.wsimg.com/isteam/ip/27b42b0b-4e5c-4246-8229-db96bd3bf24e/UVR_v5.6.png/:/"
-                }
-            ],
+            "embed": {
+                "title": "Ultimate Vocal Remover",
+                "description": [
+                    "One of the best free and open source vocal and instrumental isolation tool."
+                ],
+                "color": "05998c",
+                "image": "https://img1.wsimg.com/isteam/ip/27b42b0b-4e5c-4246-8229-db96bd3bf24e/UVR_v5.6.png/:/"
+            },
             "buttons": [
                 {
                     "label": "Website",

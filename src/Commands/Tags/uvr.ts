@@ -3,7 +3,7 @@ import { ButtonData, EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
 import { TagResponseSender } from '../../Utils/botUtilities';
 
-type response = { embeds: EmbedData[]; buttons: ButtonData[] };
+type response = { embed: EmbedData; buttons: ButtonData[] };
 
 const UVR: PrefixCommand = {
     name: 'uvr',
@@ -15,7 +15,7 @@ const UVR: PrefixCommand = {
         }) as response;
 
         const sender = new TagResponseSender(client);
-        sender.setEmbeds(content.embeds);
+        sender.setEmbeds([content.embed]);
         sender.setButtons(content.buttons);
         sender.config(message);
         await sender.send();
