@@ -35,7 +35,8 @@
             "help": "<#1159290139609137264>",
             "ai_art": "<#1185670409270607993>",
             "voice_models": "<#1159289700490694666>",
-            "model_request": "<#1159289738314919936>"
+            "model_request": "<#1159289738314919936>",
+            "realtime_guides": "<#1297207135469305866>"
         },
         "emojis": {
             "aihub": "<:AIHUB:1181640583966629968>",
@@ -108,7 +109,7 @@
                 "title": "Suggestions",
                 "description": [
                     "Search for it in [AI HUB Docs]($t(common.websites.aihub.docs)) or [Applio Docs]($t(common.websites.applio.faq)). You will probably find your answer there $t(common.emojis.book)",
-                    "Ask for help in $t(common.channels.okada) if it's related to real time voice changing",
+                    "Ask for help in $t(common.channels.okada) if it's related to real time voice changing but make sure to read $t(common.channels.realtime_guides) first",
                     "Ask for help in $t(common.channels.help) for general help, but use the command `!howtoask` first to learn how to structure your question properly and increase your chances of getting a reply",
                     "Last but not least, ask for help in $t(common.channels.ai_art) if it's related to AI images."
                 ]
