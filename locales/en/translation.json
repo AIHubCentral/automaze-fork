@@ -83,7 +83,8 @@
         "select_an_option": "Select an option",
         "suggestions_for_user": "Suggestions for <@{{userId}}>",
         "translation_not_available": "This command is not available in this language yet.",
-        "usage": "\nUsage:"
+        "usage": "\nUsage:",
+        "source": "\n-# Source"
     },
     "close": {
         "already_locked": "This thread have already been locked",
@@ -126,7 +127,7 @@
                     "- In the field of digital audio, it defines the dynamic range of each sample.",
                     "- This determines the difference between the quietest & loudest sound.",
                     "- Basically, higher bit depths represent more accurately the loudness of an audio.",
-                    "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
+                    "$t(general.source): $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
                 ]
             },
             "bitrate": {
@@ -134,7 +135,7 @@
                 "description": [
                     "- The amount of data processed per certain unit of time, usually in kilobits per second (KBPS).",
                     "- Higher bitrate equals a higher quality.",
-                    "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
+                    "$t(general.source): $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
                 ]
             },
             "cuda": {
@@ -143,7 +144,7 @@
                     "- A technology developed by NVIDIA, that uses the power of graphics cards to perform calculations that require great processing power.",
                     "- It's especially useful for AI tools, such as RVC and UVR, which greatly optimizes the process.",
                     "- CUDA is downloaded automatically as a part of the NVIDIA driver.",
-                    "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
+                    "$t(general.source): $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
                 ]
             },
             "dataset": {
@@ -168,7 +169,7 @@
                     "- It stands for Graphics Processing Unit. It's designed to rapidly manipulate and alter memory to accelerate creation of images.",
                     "- In AI training, is used for quick parallel independent computations, which increases the speed substantially.",
                     "- Basically the speed at which RVC/UVR will work will depend on how good your GPU is.",
-                    "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
+                    "$t(general.source): $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
                 ]
             },
             "gradient": {
@@ -182,7 +183,7 @@
                 "description": [
                     "- Gradio is an open-source Python packag that makes it easy for developers to create user-friendly web interfaces for machine learning models and other applications, such as RVC.",
                     "- It deploys the program on a Local URL, which is the one running locally on the machine, and a Public Share Link, which is a tunnel that exposes the Local URL. The Public Share Link is used, for example, in Google Colabs, powered by their Share API.",
-                    "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
+                    "$t(general.source): $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
                 ]
             },
             "hubert": "**HuBERT**: A transformer-based model that extracts text from raw audio, previously trained on a masked prediction task, which RVC uses to train the voice models. There are several types of Hubert, some of examples are ContentVec, Japanese Hubert-Base and Chinese Hubert-Large. You can learn more about it in the [Applio Docs]($t(common.websites.applio.faq))",

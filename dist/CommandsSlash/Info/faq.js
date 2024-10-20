@@ -44,12 +44,8 @@ const Faq = {
     },
     async execute(interaction) {
         const topic = interaction.options.getString('topic', true);
-        let language = interaction.options.getString('language') || '';
+        const language = interaction.options.getString('language') || interaction.locale;
         const ephemeral = interaction.options.getBoolean('private') || false;
-        // try to get the language from the user locale if language input is an empty string
-        if (language === '') {
-            language = interaction.locale;
-        }
         const client = interaction.client;
         const { logger } = client;
         const logData = {
