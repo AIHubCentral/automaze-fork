@@ -15,6 +15,12 @@
         "select_an_option": "Seleziona un'opzione",
         "credits": "Crediti"
     },
+    "close": {
+        "already_locked": "Questo thread è già stato bloccato",
+        "failure": "$t(common.emojis.failure) Impossibile chiudere il post. Chiedi a un moderatore di chiuderlo manualmente.",
+        "invalid_channel": "Questo comando può essere utilizzato solo su $t(common.channels.voice_models) o $t(common.channels.model_request)",
+        "not_author": "Puoi chiudere solo i post che hai creato"
+    },
     "faq": {
         "topics": {
             "artifacting": "**Artefatti**: quando l'output di inferenza suona robotico, distorto, con rumore di fondo e non riesce a modulare correttamente le parole.",

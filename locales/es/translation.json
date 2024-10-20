@@ -22,6 +22,12 @@
         "select_an_option": "Seleccione una opción",
         "credits": "Créditos"
     },
+    "close": {
+        "already_locked": "Esta publicación ya ha sido bloqueada",
+        "failure": "$t(common.emojis.failure) No se pudo cerrar la publicación. Pídale a un moderador que la cierre manualmente.",
+        "invalid_channel": "Este comando solo se puede utilizar en $t(common.channels.voice_models) o $t(common.channels.model_request)",
+        "not_author": "Solo puedes cerrar publicaciones que hayas creado"
+    },
     "faq": {
         "topics": {
             "artifacting": "**Artefacto**: Cuando la salida de inferencia suena robótica, distorsionada, con ruido de fondo y no modula las palabras correctamente.",

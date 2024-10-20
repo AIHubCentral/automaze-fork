@@ -73,7 +73,7 @@ async function handlePaidRequest(client: ExtendedClient, thread: ThreadChannel):
                 color: client.botConfigs.colors.theme.primary as ColorResolvable,
                 description: [
                     `Hello, ${userMention(thread.ownerId)}!`,
-                    '\nPeople will contact you to offer their services. However, if you created a **paid** request by mistake or if someone already finished your request, use the `-close` command to archive this post.',
+                    '\nPeople will contact you to offer their services. However, if you created a **paid** request by mistake or if someone already finished your request, use the `/close` command to archive this post.',
                 ],
             })
         );
@@ -86,7 +86,6 @@ async function handlePaidRequest(client: ExtendedClient, thread: ThreadChannel):
                 '\n**Some general recommendations regarding commissions:**',
                 "- Don't rush! You'll receive many requests, so take your time to review the best offer. The first person who contacts you may not always be the best option.",
                 `- We recommend exclusively accepting commission from people holding the ${roleMention(modelMasterRoleId)} role, regardless of any role above it when accepting commissions to ensure a secure and qualified working relationship.`,
-                '- If you encounter any issues with a member related to a commission (scam, failure to fulfill terms, etc.), please report it to the administrative team to assess whether sanctions should be applied.',
             ],
         })
     );
@@ -97,7 +96,7 @@ async function handlePaidRequest(client: ExtendedClient, thread: ThreadChannel):
                 title: '⚠️ Warning to model makers',
                 color: Colors.Yellow,
                 description: [
-                    '> Make sure you have the **model master** role, or your response might be deleted.',
+                    `> Make sure you have the ${roleMention(modelMasterRoleId)} role, or your response might be deleted.`,
                 ],
             })
         );

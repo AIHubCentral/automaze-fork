@@ -15,6 +15,12 @@
         "select_an_option": "Selecione uma opção",
         "credits": "Créditos"
     },
+    "close": {
+        "already_locked": "Este tópico já foi bloqueado",
+        "failure": "$t(common.emojis.failure) Não foi possível fechar a publicação. Peça para um moderador fechá-la manualmente.",
+        "invalid_channel": "Este comando só pode ser usado em $t(common.channels.voice_models) ou $t(common.channels.model_request)",
+        "not_author": "Você só pode fechar postagens que você criou"
+    },
     "faq": {
         "topics": {
             "artifacting": "**Artefatos**: Quando o resultado da inferência soa robótica, distorcida, com ruído de fundo e não consegue produzir as palavras corretamente.",

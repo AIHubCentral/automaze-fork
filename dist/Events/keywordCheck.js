@@ -6,13 +6,11 @@ const generalUtilities_2 = require("../Utils/generalUtilities");
 function isUserOnCooldown(client, userId) {
     let result = false;
     if (client.cooldowns.reactions.has(userId)) {
-        client.logger.info(`${userId} is on cooldown...`);
         result = true;
         const cooldownExpiration = client.cooldowns.reactions.get(userId);
         const currentDate = new Date();
         if (currentDate.getTime() > cooldownExpiration.getTime()) {
             client.cooldowns.reactions.delete(userId);
-            client.logger.info(`${userId} cooldown has expired`);
             result = false;
         }
     }

@@ -38,7 +38,7 @@
             "okada": "<#1159290161683767298>",
             "help": "<#1159290139609137264>",
             "ai_art": "<#1185670409270607993>",
-            "voice_models": "<#1159289700490694666>",
+            "voice_models": "<#1175430844685484042>",
             "model_request": "<#1159289738314919936>",
             "realtime_guides": "<#1297207135469305866>"
         },
@@ -49,6 +49,7 @@
             "book": "📚",
             "colab": "📒",
             "cloud": "☁️",
+            "failure": "❌",
             "help": "🆘",
             "hf": "🤗",
             "info": "ℹ️",
@@ -58,6 +59,7 @@
             "mic": "🎤",
             "nails": "<:nails:1159569314848972891>",
             "question": "❔",
+            "success": "✅",
             "tip": "💡"
         }
     },
@@ -76,6 +78,24 @@
         "by": "by",
         "select_an_option": "Select an option",
         "credits": "Credits"
+    },
+    "close": {
+        "already_locked": "This thread have already been locked",
+        "failure": "$t(common.emojis.failure) Could not close the post. Ask a moderator to manually close it.",
+        "invalid_channel": "This command can only be used on $t(common.channels.voice_models) or $t(common.channels.model_request)",
+        "not_author": "You can only close posts you have created",
+        "success_embed_title": "Thread Locked",
+        "success_message": "$t(common.emojis.success) $t(close.success_embed_title)",
+        "success": {
+            "closed_by_author": {
+                "title": "$t(close.success_embed_title)",
+                "description": ["User has closed their post."]
+            },
+            "closed_by_staff": {
+                "title": "$t(close.success_embed_title)",
+                "description": ["This post was closed by a staff member."]
+            }
+        }
     },
     "faq": {
         "topics": {

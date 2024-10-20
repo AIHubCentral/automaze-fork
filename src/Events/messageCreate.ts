@@ -109,7 +109,7 @@ const messageCreateEvent: IEventData = {
             const messageLowercase = message.content.toLowerCase();
 
             if (messageLowercase.includes('taken')) {
-                await message.reply('**Tip**: You can use the `-close` command to lock this post.');
+                await message.reply('**Tip**: You can use the `/close` command to lock this post.');
             }
         }
     },

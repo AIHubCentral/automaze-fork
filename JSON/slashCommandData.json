@@ -1,4 +1,13 @@
 {
+    "close": {
+        "name": "close",
+        "description": "Close your own post",
+        "descriptionLocalizations": {
+            "es-ES": "Cierra tu propia publicación",
+            "pt-BR": "Feche sua própria postagem",
+            "it": "Chiudi il tuo post"
+        }
+    },
     "cloud": {
         "name": "cloud",
         "description": "Links to useful resources available on the cloud",

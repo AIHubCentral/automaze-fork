@@ -51,7 +51,7 @@ async function handlePaidRequest(client, thread) {
             color: client.botConfigs.colors.theme.primary,
             description: [
                 `Hello, ${(0, discord_js_1.userMention)(thread.ownerId)}!`,
-                '\nPeople will contact you to offer their services. However, if you created a **paid** request by mistake or if someone already finished your request, use the `-close` command to archive this post.',
+                '\nPeople will contact you to offer their services. However, if you created a **paid** request by mistake or if someone already finished your request, use the `/close` command to archive this post.',
             ],
         }));
     }
@@ -61,7 +61,6 @@ async function handlePaidRequest(client, thread) {
             '\n**Some general recommendations regarding commissions:**',
             "- Don't rush! You'll receive many requests, so take your time to review the best offer. The first person who contacts you may not always be the best option.",
             `- We recommend exclusively accepting commission from people holding the ${(0, discord_js_1.roleMention)(modelMasterRoleId)} role, regardless of any role above it when accepting commissions to ensure a secure and qualified working relationship.`,
-            '- If you encounter any issues with a member related to a commission (scam, failure to fulfill terms, etc.), please report it to the administrative team to assess whether sanctions should be applied.',
         ],
     }));
     if (client.botConfigs.commissions.deleteMessages) {
@@ -69,7 +68,7 @@ async function handlePaidRequest(client, thread) {
             title: '⚠️ Warning to model makers',
             color: discord_js_1.Colors.Yellow,
             description: [
-                '> Make sure you have the **model master** role, or your response might be deleted.',
+                `> Make sure you have the ${(0, discord_js_1.roleMention)(modelMasterRoleId)} role, or your response might be deleted.`,
             ],
         }));
     }
