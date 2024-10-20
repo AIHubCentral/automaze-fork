@@ -213,6 +213,10 @@ describe('Bot Utilities', () => {
             expect(containsKeyword(tokens3, keywords)).toBe('epoch');
             expect(containsKeyword(tokens4, keywords)).toBe('overtraining');
             expect(containsKeyword(['what', 'is', 'a', 'gradient'], keywords)).toBe('gradient');
+            expect(containsKeyword(['what', 'is', 'cuda'], keywords)).toBe('cuda');
+            expect(containsKeyword(['what', 'is', 'gradio'], keywords)).toBe('gradio');
+            expect(containsKeyword(['what', 'is', 'hubert'], keywords)).toBe('hubert');
+            expect(containsKeyword(['what', 'is', 'an', 'index', 'file'], keywords)).toBe('index');
         });
 
         it('should return null if no keywords are present', () => {

@@ -131,11 +131,15 @@ function processResourceAlt(resource, language = 'en') {
 }
 function getFaqKeywords() {
     return [
+        'cuda',
         'epoch',
         'epochs',
         'dataset',
         'datasets',
         'gradient',
+        'gradio',
+        'hubert',
+        'index',
         'model',
         'models',
         'inference',

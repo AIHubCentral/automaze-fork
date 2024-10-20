@@ -6,6 +6,7 @@
         "websites": {
             "aihub": {
                 "docs": "https://docs.ai-hub.wtf",
+                "glossary": "$t(common.websites.aihub.docs)/extra/glossary/",
                 "upload": "$t(common.websites.aihub.docs)/essentials/voice-models/#uploading-to-hugging-face",
                 "role": "$t(common.websites.aihub.docs)/extra/model-maker-role/",
                 "tensorboard": "$t(common.websites.aihub.docs)/rvc/resources/epochs-tensorboard/",
@@ -81,14 +82,58 @@
             "artifacting": "**Artifacting**: When the inference output sounds robotic, distorted, with background noise, and fails to modulate words properly.",
             "architecture": "**Model Architecture**: The core models involved in RVC are HuBERT (for feature extraction) and Net_G (the generator model).",
             "batch size": "**Batch Size**: The amount of GPU used to train the model, with larger batch sizes generally leading to shorter training duration. On the other hand, lower batch size can make the model more accurate, however it's more resource intensive and slower. **For most cases a batch size of 4 gives good results**.",
+            "bit depth": {
+                "title": "Bit Depth",
+                "description": [
+                    "- In the field of digital audio, it defines the dynamic range of each sample.",
+                    "- This determines the difference between the quietest & loudest sound.",
+                    "- Basically, higher bit depths represent more accurately the loudness of an audio.",
+                    "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
+                ]
+            },
+            "bitrate": {
+                "title": "Bitrate",
+                "description": [
+                    "- The amount of data processed per certain unit of time, usually in kilobits per second (KBPS).",
+                    "- Higher bitrate equals a higher quality.",
+                    "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
+                ]
+            },
+            "cuda": {
+                "title": "CUDA",
+                "description": [
+                    "- A technology developed by NVIDIA, that uses the power of graphics cards to perform calculations that require great processing power.",
+                    "- It's especially useful for AI tools, such as RVC and UVR, which greatly optimizes the process.",
+                    "- CUDA is downloaded automatically as a part of the NVIDIA driver.",
+                    "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
+                ]
+            },
             "epoch": "**Epoch**: The number of iterations performed to complete one full cycle of the dataset during training. It's not possible to say precisely how many epochs you need for your dataset, you need to monitor the [TensorBoard Graph]($t(common.websites.applio.tensorboard)) to know if your model is overtraining.",
             "dataset": "**Dataset**: A set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs]($t(common.websites.applio.dataset))",
+            "gpu": {
+                "title": "GPU",
+                "description": [
+                    "- It stands for Graphics Processing Unit. It's designed to rapidly manipulate and alter memory to accelerate creation of images.",
+                    "- In AI training, is used for quick parallel independent computations, which increases the speed substantially.",
+                    "- Basically the speed at which RVC/UVR will work will depend on how good your GPU is.",
+                    "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
+                ]
+            },
             "gradient": {
                 "title": "Gradient",
                 "description": [
                     "A gradient in machine learning, specifically in the context of training a model, represents the direction and rate of change of the model's error with respect to its parameters. It's used in optimization algorithms like [gradient descent]($t(common.examples.gradientDescent)) to adjust the model's parameters (weights and biases) in order to minimize the error, leading to better performance and accuracy. Essentially, it guides the model on how to improve itself step by step."
                 ]
             },
+            "gradio": {
+                "title": "Gradio",
+                "description": [
+                    "- Gradio is an open-source Python packag that makes it easy for developers to create user-friendly web interfaces for machine learning models and other applications, such as RVC.",
+                    "- It deploys the program on a Local URL, which is the one running locally on the machine, and a Public Share Link, which is a tunnel that exposes the Local URL. The Public Share Link is used, for example, in Google Colabs, powered by their Share API.",
+                    "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
+                ]
+            },
+            "fine-tuning": "**Fine-tuning**: Further improving an AI model, training it with a another dataset.\n\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))",
             "G and D": "**G and D**: Generative (G) and Discriminator (D) models, respectively, that store the training data, with the Generative model learning to replicate results similar to the original, and the Discriminator trying to distinguish real data from generated data.",
             "hubert": "**HuBERT**: A transformer-based model that extracts text from raw audio, previously trained on a masked prediction task, which RVC uses to train the voice models. There are several types of Hubert, some of examples are ContentVec, Japanese Hubert-Base and Chinese Hubert-Large. You can learn more about it in the [Applio Docs]($t(common.websites.applio.faq))",
             "index": "**Faiss Integration (.index file)**: The [Faiss library]($t(common.websites.github.faiss)) enables efficient approximate nearest neighbor search in RVC during inference, retrieving and combining training audio segments with closest embeddings. For your final RVC model, include the one which the file name starts with **added**.\n\n> Example: `added_IVF157_Flat_nprobe_myModel.index`",

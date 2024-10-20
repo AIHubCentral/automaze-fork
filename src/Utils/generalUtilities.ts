@@ -3,6 +3,7 @@
 
 import { setTimeout } from 'node:timers/promises';
 import { EmbedData } from '../Interfaces/BotData';
+import { APIEmbed } from 'discord.js';
 
 export async function delay(durationMs: number): Promise<void> {
     await setTimeout(durationMs);

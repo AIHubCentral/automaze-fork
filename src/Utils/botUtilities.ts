@@ -152,11 +152,15 @@ export function processResourceAlt(resource: IResource, language: string = 'en')
 
 export function getFaqKeywords(): string[] {
     return [
+        'cuda',
         'epoch',
         'epochs',
         'dataset',
         'datasets',
         'gradient',
+        'gradio',
+        'hubert',
+        'index',
         'model',
         'models',
         'inference',
