@@ -6,9 +6,13 @@
         "websites": {
             "aihub": {
                 "docs": "https://docs.ai-hub.wtf",
+                "artifacting": "$t(common.websites.aihub.docs)/rvc/resources/artifacting/#artifacting",
+                "dataset": "$t(common.websites.aihub.docs)/rvc/resources/datasets/",
                 "glossary": "$t(common.websites.aihub.docs)/extra/glossary/",
                 "upload": "$t(common.websites.aihub.docs)/essentials/voice-models/#uploading-to-hugging-face",
+                "model": "$t(common.websites.aihub.docs)/essentials/how-to-make-voice-models/",
                 "role": "$t(common.websites.aihub.docs)/extra/model-maker-role/",
+                "rvc": "$t(common.websites.aihub.docs)/essentials/whats-rvc/",
                 "tensorboard": "$t(common.websites.aihub.docs)/rvc/resources/epochs-tensorboard/",
                 "uvr": "$t(common.websites.aihub.docs)/rvc/resources/vocal-isolation/"
             },
@@ -19,11 +23,9 @@
                 "dataset": "https://docs.applio.org/guides/create-datasets/create-datasets",
                 "training": "https://docs.applio.org/getting-started/training"
             },
-            "medium": {
-                "pth": "https://medium.com/@manasnandmohan/comprehending-pth-files-the-backbone-of-pytorch-models-ef9b232e092a"
-            },
             "github": {
-                "faiss": "https://github.com/facebookresearch/faiss"
+                "faiss": "https://github.com/facebookresearch/faiss",
+                "rvc": "https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI"
             },
             "wikipedia": {
                 "fundamental_frequency": "https://en.wikipedia.org/wiki/Fundamental_frequency"
@@ -41,6 +43,9 @@
             "voice_models": "<#1175430844685484042>",
             "model_request": "<#1159289738314919936>",
             "realtime_guides": "<#1297207135469305866>"
+        },
+        "roles": {
+            "model_maker": "<@&1159332519167144039>"
         },
         "emojis": {
             "aihub": "<:AIHUB:1181640583966629968>",
@@ -64,20 +69,21 @@
         }
     },
     "general": {
-        "translation_not_available": "This command is not available in this language yet.",
-        "not_found": "Command not found",
+        "bot_user": "That user is a bot",
+        "by": "by",
+        "credits": "Credits",
+        "failed_retrieving_guild": "Failed to retrieve guild information. Try again later.",
+        "learn_more": "Learn More",
+        "more_commands": "More commands",
         "not_available": "Not available yet",
+        "not_found": "Command not found",
         "not_interaction_author": "You didn't start this interaction. Use the command for interacting with it.",
         "options": "\n**Options**:",
         "optional": "(Optional)",
-        "usage": "\nUsage:",
-        "suggestions_for_user": "Suggestions for <@{{userId}}>",
-        "failed_retrieving_guild": "Failed to retrieve guild information. Try again later.",
-        "bot_user": "That user is a bot",
-        "more_commands": "More commands",
-        "by": "by",
         "select_an_option": "Select an option",
-        "credits": "Credits"
+        "suggestions_for_user": "Suggestions for <@{{userId}}>",
+        "translation_not_available": "This command is not available in this language yet.",
+        "usage": "\nUsage:"
     },
     "close": {
         "already_locked": "This thread have already been locked",
@@ -99,8 +105,20 @@
     },
     "faq": {
         "topics": {
-            "artifacting": "**Artifacting**: When the inference output sounds robotic, distorted, with background noise, and fails to modulate words properly.",
             "architecture": "**Model Architecture**: The core models involved in RVC are HuBERT (for feature extraction) and Net_G (the generator model).",
+            "artifacting": {
+                "title": "Artifacting",
+                "description": [
+                    "It's when the inference output sounds robotic, distorted, with background noise, and fails to modulate words properly."
+                ],
+                "buttons": [
+                    {
+                        "label": "$t(general.learn_more)",
+                        "url": "$t(common.websites.aihub.artifacting)",
+                        "emoji": "$t(common.emojis.aihub)"
+                    }
+                ]
+            },
             "batch size": "**Batch Size**: The amount of GPU used to train the model, with larger batch sizes generally leading to shorter training duration. On the other hand, lower batch size can make the model more accurate, however it's more resource intensive and slower. **For most cases a batch size of 4 gives good results**.",
             "bit depth": {
                 "title": "Bit Depth",
@@ -128,8 +146,22 @@
                     "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
                 ]
             },
-            "epoch": "**Epoch**: The number of iterations performed to complete one full cycle of the dataset during training. It's not possible to say precisely how many epochs you need for your dataset, you need to monitor the [TensorBoard Graph]($t(common.websites.applio.tensorboard)) to know if your model is overtraining.",
-            "dataset": "**Dataset**: A set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs]($t(common.websites.applio.dataset))",
+            "dataset": {
+                "title": "Dataset",
+                "description": [
+                    "A set of audio files compressed into a .zip file, used by RVC for voice training. The **quality** & **length** of the dataset are the biggest determining factors of the final quality of the model."
+                ],
+                "buttons": [
+                    {
+                        "label": "$t(general.learn_more)",
+                        "url": "$t(common.websites.aihub.dataset)",
+                        "emoji": "$t(common.emojis.aihub)"
+                    }
+                ]
+            },
+            "epoch": "**Epoch**: The number of iterations performed to complete one full cycle of the dataset during training. It's not possible to say precisely how many epochs you need for your [dataset]($t(common.websites.aihub.dataset)), you need to monitor the [TensorBoard Graph]($t(common.websites.aihub.tensorboard)) to know if your model is overtraining.",
+            "f0 extraction": "**F0 Extraction Methods**: Techniques like Crepe (full-tiny), RMVPE, and FCPE used for extracting [fundamental frequency (pitch)]($t(common.websites.wikipedia.fundamental_frequency)) information from audio.",
+            "fine-tuning": "**Fine-tuning**: Further improving an AI model, training it with a another dataset.\n\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))",
             "gpu": {
                 "title": "GPU",
                 "description": [
@@ -153,17 +185,24 @@
                     "\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))"
                 ]
             },
-            "fine-tuning": "**Fine-tuning**: Further improving an AI model, training it with a another dataset.\n\n-# Source: $t(common.emojis.aihub) [AI HUB Docs]($t(common.websites.aihub.glossary))",
-            "G and D": "**G and D**: Generative (G) and Discriminator (D) models, respectively, that store the training data, with the Generative model learning to replicate results similar to the original, and the Discriminator trying to distinguish real data from generated data.",
             "hubert": "**HuBERT**: A transformer-based model that extracts text from raw audio, previously trained on a masked prediction task, which RVC uses to train the voice models. There are several types of Hubert, some of examples are ContentVec, Japanese Hubert-Base and Chinese Hubert-Large. You can learn more about it in the [Applio Docs]($t(common.websites.applio.faq))",
             "index": "**Faiss Integration (.index file)**: The [Faiss library]($t(common.websites.github.faiss)) enables efficient approximate nearest neighbor search in RVC during inference, retrieving and combining training audio segments with closest embeddings. For your final RVC model, include the one which the file name starts with **added**.\n\n> Example: `added_IVF157_Flat_nprobe_myModel.index`",
-            "model": "**Model**: The result of training on a dataset. Trained RVC models usually have the [.pth file extension]($t(common.websites.medium.pth)) which is is a file format used to save different states of model including it's weights, biases and other parameter. [Check this guide]($t(common.websites.applio.training)) for learning how to make your first voice model.",
-            "net_g": "**Net_G**: The generator model in RVC that takes [HuBERT]($t(common.websites.hubert)) features and speaker embeddings as input to generate the converted audio waveform.",
-            "f0 extraction": "**F0 Extraction Methods**: Techniques like Crepe (full-tiny), RMVPE, and FCPE used for extracting [fundamental frequency (pitch)]($t(common.websites.wikipedia.fundamental_frequency)) information from audio.",
-            "pitch guidance": "**Pitch Guidance**: Leverages the [fundamental frequency (f0)]($t(common.websites.wikipedia.fundamental_frequency)) of the input voice during synthesis to better maintain the original pitch, intonation, and melody.",
-            "sample rate": "$t(common.emojis.audio) **Sample rate** refers to the number of times per second an analog audio signal is converted to digital, measured in Hertz (Hz). Higher sample rates capture more detail but increase file size. Simple yet crucial for audio quality.\n\n> $t(common.emojis.tip) **Tip**: Check the sample rate of your dataset for better choosing a pretrained model such as 32k, 40k or 48k. Unfortunately there aren't any 44.1Khz pretrain available yet, so choose one that has a sample rate closer to your dataset and test if it works well.",
             "inference": "**Inference** in machine learning is when a trained model uses what it has learned from data to make predictions or decisions on new, unseen information. In the context of RVC, it's when you use a voice model to produce an output audio.",
+            "model maker": {
+                "title": "Model Maker Role",
+                "description": [
+                    "If you want to upload a voice model to $t(common.channels.voice_models) you will need the $t(common.roles.model_maker) role"
+                ],
+                "buttons": [
+                    {
+                        "label": "$t(general.learn_more)",
+                        "url": "$t(common.websites.aihub.role)",
+                        "emoji": "$t(common.emojis.aihub)"
+                    }
+                ]
+            },
             "overtraining": "**Overtraining**, or **overfitting**, in machine learning is when a model learns too much from the training data, including noise or irrelevant details. As a result, it performs well on the training data but struggles to make accurate predictions on new, unseen data.\n\n > $t(common.emojis.tip) **Tip**: An effective way to detect overtraining is checking if the [TensorBoard Graph]($t(common.websites.applio.tensorboard)) starts rising and never comes back down.",
+            "pitch guidance": "**Pitch Guidance**: Leverages the [fundamental frequency (f0)]($t(common.websites.wikipedia.fundamental_frequency)) of the input voice during synthesis to better maintain the original pitch, intonation, and melody.",
             "pretrain": "**Pretrained**: A model trained on several sets of long-duration audios, used as a starting point for training in RVC. You can check a good list of pretrained models in $t(common.channels.pretrain)",
             "rmvpe": {
                 "title": "Different types of **RMVPE** Pitch Extraction",
@@ -175,7 +214,35 @@
                 ],
                 "footer": "Credits: Nick088"
             },
-            "rvc": "**RVC (Retrieval-based Voice Conversion)**: A voice cloning technique that retrieves and combines audio segments from a source speaker to synthesize the voice of a target speaker, without requiring large parallel datasets."
+            "rvc": {
+                "title": "RVC",
+                "description": [
+                    "- RVC (Retrieval-Based Voice Conversion) is an advanced AI voice cloning software, developed by the [RVC-Project team]($t(common.websites.github.rvc)). It's considered the best free & open-source one to date.",
+                    "- It was designed for desktop, requiring great specs to run it effectively, specially GPU for training models (specifically NVIDIA).",
+                    "- Though it can be executed through the **cloud** & be used in any device, in case you don't meet the previous requirement."
+                ],
+                "buttons": [
+                    {
+                        "label": "$t(general.learn_more)",
+                        "url": "$t(common.websites.aihub.rvc)",
+                        "emoji": "$t(common.emojis.aihub)"
+                    }
+                ]
+            },
+            "sample rate": "$t(common.emojis.audio) **Sample rate** refers to the number of times per second an analog audio signal is converted to digital, measured in Hertz (Hz). Higher sample rates capture more detail but increase file size. Simple yet crucial for audio quality.\n\n> $t(common.emojis.tip) **Tip**: Check the sample rate of your dataset for better choosing a pretrained model such as 32k, 40k or 48k. Unfortunately there aren't any 44.1Khz pretrain available yet, so choose one that has a sample rate closer to your dataset and test if it works well.",
+            "upload": {
+                "title": "Model Upload",
+                "description": [
+                    "If you want to share your voice model in the $t(common.channels.voice_models) channel, you will need to upload your model to huggingface"
+                ],
+                "buttons": [
+                    {
+                        "label": "Learn More",
+                        "url": "$t(common.websites.aihub.upload)"
+                    }
+                ]
+            },
+            "voice model": "**Model**: The result of training on a dataset. Trained RVC models usually have the `.pth` file format which is used to save different states of model including it's weights, biases and other parameter. [Check this guide]($t(common.websites.aihub.model)) for learning how to make your first voice model."
         },
         "unknown": {
             "message": "I'm sorry, {{user}}. I couldn't find the topic you were looking for",

@@ -7,13 +7,14 @@ import {
     EmbedBuilder,
     inlineCode,
     Message,
+    MessageReplyOptions,
     PublicThreadChannel,
     TextChannel,
 } from 'discord.js';
 import IEventData from '../Interfaces/Events';
 import ExtendedClient from '../Core/extendedClient';
 import { EmbedData } from '../Interfaces/BotData';
-import { createEmbed, getDisplayName } from '../Utils/discordUtilities';
+import { createButtons, createEmbed, getDisplayName } from '../Utils/discordUtilities';
 import { tokenizer } from '../Database/nlpClassifier';
 import {
     containsKeyword,
@@ -198,8 +199,6 @@ async function handleFaqQuestions(
 
         const stemmedKeyword = stemmer.stem(matchedKeyword);
 
-        console.log(stemmedKeyword);
-
         const responseData = i18next.t(`faq.topics.${stemmedKeyword}`, {
             returnObjects: true,
         }) as TranslationResult;
@@ -207,6 +206,7 @@ async function handleFaqQuestions(
         const processedTranslation = processTranslation(responseData);
 
         const embed = new EmbedBuilder().setColor(Colors.LightGrey);
+        const botResponse: MessageReplyOptions = { embeds: [embed], allowedMentions: { repliedUser: true } };
 
         if (typeof processedTranslation === 'string') {
             embed.setDescription(processedTranslation);
@@ -222,12 +222,15 @@ async function handleFaqQuestions(
             if (processedTranslation.footer) {
                 embed.setFooter({ text: processedTranslation.footer });
             }
+
+            if (processedTranslation.buttons) {
+                botResponse.components = [createButtons(processedTranslation.buttons)];
+            }
         }
 
         await messageChannel.sendTyping();
         await delay(3_000);
-
-        await message.reply({ embeds: [embed], allowedMentions: { repliedUser: true } });
+        await message.reply(botResponse);
 
         repliedUsers.set(userId, Date.now());
 

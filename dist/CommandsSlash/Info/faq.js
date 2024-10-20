@@ -85,7 +85,7 @@ const Faq = {
                 embeds: [
                     new discord_js_1.EmbedBuilder()
                         .setTitle(`✍ ${embedTitle}`)
-                        .setColor(discord_js_1.Colors.DarkAqua)
+                        .setColor(discord_js_1.Colors.Yellow)
                         .setDescription((0, discord_js_1.unorderedList)(embedDescription)),
                 ],
             });
@@ -93,7 +93,9 @@ const Faq = {
             return;
         }
         const processedTranslation = (0, generalUtilities_1.processTranslation)(response);
-        const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Blurple);
+        const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Blue);
+        let hasButtons = false;
+        const rows = [];
         if (typeof processedTranslation === 'string') {
             embed.setDescription(processedTranslation);
         }
@@ -107,11 +109,24 @@ const Faq = {
             if (processedTranslation.footer) {
                 embed.setFooter({ text: processedTranslation.footer });
             }
+            if (processedTranslation.buttons) {
+                hasButtons = true;
+                rows.push((0, discordUtilities_1.createButtons)(processedTranslation.buttons));
+            }
         }
-        await interaction.reply({
-            embeds: [embed],
-            ephemeral,
-        });
+        if (hasButtons) {
+            await interaction.reply({
+                embeds: [embed],
+                components: rows,
+                ephemeral,
+            });
+        }
+        else {
+            await interaction.reply({
+                embeds: [embed],
+                ephemeral,
+            });
+        }
         logger.info('FAQ sent by slash command', logData);
     },
 };

@@ -201,8 +201,12 @@ export function createStringOption(optionData: ApplicationCommandStringOptionDat
 
 export function createButtons(buttons: ButtonData[]): ActionRowBuilder<ButtonBuilder> {
     return new ActionRowBuilder<ButtonBuilder>().addComponents(
-        buttons.map((btn) =>
-            new ButtonBuilder().setLabel(btn.label).setURL(btn.url).setStyle(ButtonStyle.Link)
-        )
+        buttons.map((btn) => {
+            const button = new ButtonBuilder().setLabel(btn.label).setURL(btn.url).setStyle(ButtonStyle.Link);
+            if (btn.emoji) {
+                button.setEmoji(btn.emoji);
+            }
+            return button;
+        })
     );
 }

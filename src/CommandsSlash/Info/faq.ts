@@ -5,7 +5,7 @@ import { SlashCommand } from '../../Interfaces/Command';
 
 import i18next from 'i18next';
 import { delay, processTranslation, TranslationResult } from '../../Utils/generalUtilities';
-import { getDisplayName } from '../../Utils/discordUtilities';
+import { createButtons, getDisplayName } from '../../Utils/discordUtilities';
 
 const commandData = slashCommandData.faq;
 
@@ -103,7 +103,7 @@ const Faq: SlashCommand = {
                 embeds: [
                     new EmbedBuilder()
                         .setTitle(`✍ ${embedTitle}`)
-                        .setColor(Colors.DarkAqua)
+                        .setColor(Colors.Yellow)
                         .setDescription(unorderedList(embedDescription)),
                 ],
             });
@@ -114,7 +114,9 @@ const Faq: SlashCommand = {
         }
 
         const processedTranslation = processTranslation(response);
-        const embed = new EmbedBuilder().setColor(Colors.Blurple);
+        const embed = new EmbedBuilder().setColor(Colors.Blue);
+        let hasButtons = false;
+        const rows = [];
 
         if (typeof processedTranslation === 'string') {
             embed.setDescription(processedTranslation);
@@ -130,12 +132,25 @@ const Faq: SlashCommand = {
             if (processedTranslation.footer) {
                 embed.setFooter({ text: processedTranslation.footer });
             }
+
+            if (processedTranslation.buttons) {
+                hasButtons = true;
+                rows.push(createButtons(processedTranslation.buttons));
+            }
         }
 
-        await interaction.reply({
-            embeds: [embed],
-            ephemeral,
-        });
+        if (hasButtons) {
+            await interaction.reply({
+                embeds: [embed],
+                components: rows,
+                ephemeral,
+            });
+        } else {
+            await interaction.reply({
+                embeds: [embed],
+                ephemeral,
+            });
+        }
 
         logger.info('FAQ sent by slash command', logData);
     },

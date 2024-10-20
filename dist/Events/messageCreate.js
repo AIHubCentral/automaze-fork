@@ -144,12 +144,12 @@ async function handleFaqQuestions(userId, message, repliedUsers, logger) {
             return;
         const messageChannel = message.channel;
         const stemmedKeyword = stemmer.stem(matchedKeyword);
-        console.log(stemmedKeyword);
         const responseData = i18n_1.default.t(`faq.topics.${stemmedKeyword}`, {
             returnObjects: true,
         });
         const processedTranslation = (0, generalUtilities_1.processTranslation)(responseData);
         const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.LightGrey);
+        const botResponse = { embeds: [embed], allowedMentions: { repliedUser: true } };
         if (typeof processedTranslation === 'string') {
             embed.setDescription(processedTranslation);
         }
@@ -163,10 +163,13 @@ async function handleFaqQuestions(userId, message, repliedUsers, logger) {
             if (processedTranslation.footer) {
                 embed.setFooter({ text: processedTranslation.footer });
             }
+            if (processedTranslation.buttons) {
+                botResponse.components = [(0, discordUtilities_1.createButtons)(processedTranslation.buttons)];
+            }
         }
         await messageChannel.sendTyping();
         await (0, generalUtilities_1.delay)(3_000);
-        await message.reply({ embeds: [embed], allowedMentions: { repliedUser: true } });
+        await message.reply(botResponse);
         repliedUsers.set(userId, Date.now());
         logger.info('Sent FAQ reply', {
             guildId: messageChannel.guildId,

@@ -15,11 +15,13 @@ export interface EmbedData {
     footer?: string;
     timestamp?: boolean;
     thumbnail?: string;
+    buttons?: ButtonData[];
 }
 
 export interface ButtonData {
     label: string;
     url: string;
+    emoji?: string;
 }
 
 export interface SelectMenuData {

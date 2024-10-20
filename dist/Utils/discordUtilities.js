@@ -166,5 +166,11 @@ function createStringOption(optionData) {
     return option;
 }
 function createButtons(buttons) {
-    return new discord_js_1.ActionRowBuilder().addComponents(buttons.map((btn) => new discord_js_1.ButtonBuilder().setLabel(btn.label).setURL(btn.url).setStyle(discord_js_1.ButtonStyle.Link)));
+    return new discord_js_1.ActionRowBuilder().addComponents(buttons.map((btn) => {
+        const button = new discord_js_1.ButtonBuilder().setLabel(btn.label).setURL(btn.url).setStyle(discord_js_1.ButtonStyle.Link);
+        if (btn.emoji) {
+            button.setEmoji(btn.emoji);
+        }
+        return button;
+    }));
 }
