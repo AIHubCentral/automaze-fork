@@ -27,17 +27,6 @@ const reactionAddEvent: IEventData = {
 
         if (!client.botConfigs.logs.emojis) return;
 
-        client.logger.debug('User added to cooldown', {
-            more: {
-                user: {
-                    id: reactionAuthor.id,
-                    displayName: reactionAuthor.displayName,
-                    userName: reactionAuthor.username,
-                },
-                expiresIn: expirationDate,
-            },
-        });
-
         client.logger.info('Added emoji reaction', {
             more: {
                 user: {
