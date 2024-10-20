@@ -1,10 +1,16 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../Utils/discordUtilities");
 const nlpClassifier_1 = require("../Database/nlpClassifier");
 const botUtilities_1 = require("../Utils/botUtilities");
 const generalUtilities_1 = require("../Utils/generalUtilities");
+const i18n_1 = __importDefault(require("../i18n"));
+const natural_1 = __importDefault(require("natural"));
+const stemmer = natural_1.default.PorterStemmer;
 const messageCreateEvent = {
     name: 'messageCreate',
     once: false,
@@ -137,42 +143,36 @@ async function handleFaqQuestions(userId, message, repliedUsers, logger) {
         if (repliedUsers.has(userId))
             return;
         const messageChannel = message.channel;
-        let response = null;
-        switch (matchedKeyword) {
-            case 'epoch':
-            case 'epochs':
-                response =
-                    'Epoch is the number of iterations performed to complete one full cycle of the dataset during training. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
-                break;
-            case 'dataset':
-            case 'datasets':
-                response = `Datasets are a set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)`;
-                break;
-            case 'model':
-            case 'models':
-                response =
-                    'A model is the result of training on a dataset. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
-                break;
-            case 'inference':
-                response =
-                    'Inference is the process where an audio is transformed by the voice model. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
-                break;
-            case 'overtraining':
-                response =
-                    'A solid way to detect overtraining is checking if the **TensorBoard** graph starts rising and never comes back down, leading to robotic, muffled output with poor articulation. You can learn more about it in the [Applio Docs](https://docs.applio.org/getting-started/tensorboard)';
-                break;
+        const stemmedKeyword = stemmer.stem(matchedKeyword);
+        console.log(stemmedKeyword);
+        const responseData = i18n_1.default.t(`faq.topics.${stemmedKeyword}`, {
+            returnObjects: true,
+        });
+        const processedTranslation = (0, generalUtilities_1.processTranslation)(responseData);
+        const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.LightGrey);
+        if (typeof processedTranslation === 'string') {
+            embed.setDescription(processedTranslation);
         }
-        if (response != null) {
-            messageChannel.sendTyping();
-            await (0, generalUtilities_1.delay)(50 * response.length);
-            await message.reply({ content: response, allowedMentions: { repliedUser: true } });
-            repliedUsers.set(userId, Date.now());
-            logger.info('Sent FAQ reply', {
-                guildId: messageChannel.guildId,
-                channelId: messageChannel.id,
-                channelName: messageChannel.name,
-                keyword: matchedKeyword,
-            });
+        else {
+            if (processedTranslation.title) {
+                embed.setTitle(processedTranslation.title);
+            }
+            if (processedTranslation.description) {
+                embed.setDescription(processedTranslation.description.join('\n'));
+            }
+            if (processedTranslation.footer) {
+                embed.setFooter({ text: processedTranslation.footer });
+            }
         }
+        await messageChannel.sendTyping();
+        await (0, generalUtilities_1.delay)(3_000);
+        await message.reply({ embeds: [embed], allowedMentions: { repliedUser: true } });
+        repliedUsers.set(userId, Date.now());
+        logger.info('Sent FAQ reply', {
+            guildId: messageChannel.guildId,
+            channelId: messageChannel.id,
+            channelName: messageChannel.name,
+            keyword: matchedKeyword,
+        });
     }
 }

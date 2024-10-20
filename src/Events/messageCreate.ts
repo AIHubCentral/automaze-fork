@@ -21,8 +21,12 @@ import {
     getFaqKeywords,
     isAskingForAssistance,
 } from '../Utils/botUtilities';
-import { delay } from '../Utils/generalUtilities';
+import { delay, processTranslation, TranslationResult } from '../Utils/generalUtilities';
 import winston from 'winston';
+import i18next from '../i18n';
+import natural from 'natural';
+
+const stemmer = natural.PorterStemmer;
 
 const messageCreateEvent: IEventData = {
     name: 'messageCreate',
@@ -191,46 +195,47 @@ async function handleFaqQuestions(
         if (repliedUsers.has(userId)) return;
 
         const messageChannel = message.channel as TextChannel;
-        let response = null;
 
-        switch (matchedKeyword) {
-            case 'epoch':
-            case 'epochs':
-                response =
-                    'Epoch is the number of iterations performed to complete one full cycle of the dataset during training. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
-                break;
-            case 'dataset':
-            case 'datasets':
-                response = `Datasets are a set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)`;
-                break;
-            case 'model':
-            case 'models':
-                response =
-                    'A model is the result of training on a dataset. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
-                break;
-            case 'inference':
-                response =
-                    'Inference is the process where an audio is transformed by the voice model. You can learn more about it in the [Applio Docs](https://docs.applio.org/faq)';
-                break;
-            case 'overtraining':
-                response =
-                    'A solid way to detect overtraining is checking if the **TensorBoard** graph starts rising and never comes back down, leading to robotic, muffled output with poor articulation. You can learn more about it in the [Applio Docs](https://docs.applio.org/getting-started/tensorboard)';
-                break;
+        const stemmedKeyword = stemmer.stem(matchedKeyword);
+
+        console.log(stemmedKeyword);
+
+        const responseData = i18next.t(`faq.topics.${stemmedKeyword}`, {
+            returnObjects: true,
+        }) as TranslationResult;
+
+        const processedTranslation = processTranslation(responseData);
+
+        const embed = new EmbedBuilder().setColor(Colors.LightGrey);
+
+        if (typeof processedTranslation === 'string') {
+            embed.setDescription(processedTranslation);
+        } else {
+            if (processedTranslation.title) {
+                embed.setTitle(processedTranslation.title);
+            }
+
+            if (processedTranslation.description) {
+                embed.setDescription(processedTranslation.description.join('\n'));
+            }
+
+            if (processedTranslation.footer) {
+                embed.setFooter({ text: processedTranslation.footer });
+            }
         }
 
-        if (response != null) {
-            messageChannel.sendTyping();
-            await delay(50 * response.length);
-            await message.reply({ content: response, allowedMentions: { repliedUser: true } });
+        await messageChannel.sendTyping();
+        await delay(3_000);
 
-            repliedUsers.set(userId, Date.now());
+        await message.reply({ embeds: [embed], allowedMentions: { repliedUser: true } });
 
-            logger.info('Sent FAQ reply', {
-                guildId: messageChannel.guildId,
-                channelId: messageChannel.id,
-                channelName: messageChannel.name,
-                keyword: matchedKeyword,
-            });
-        }
+        repliedUsers.set(userId, Date.now());
+
+        logger.info('Sent FAQ reply', {
+            guildId: messageChannel.guildId,
+            channelId: messageChannel.id,
+            channelName: messageChannel.name,
+            keyword: matchedKeyword,
+        });
     }
 }

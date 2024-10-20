@@ -130,7 +130,17 @@ function processResourceAlt(resource, language = 'en') {
     return currentLine.join('');
 }
 function getFaqKeywords() {
-    return ['epoch', 'epochs', 'dataset', 'datasets', 'model', 'models', 'inference', 'overtraining'];
+    return [
+        'epoch',
+        'epochs',
+        'dataset',
+        'datasets',
+        'gradient',
+        'model',
+        'models',
+        'inference',
+        'overtraining',
+    ];
 }
 /**
  * Checks if a keyword was found in the tokens and returns the matched keyword if found

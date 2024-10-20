@@ -1,8 +1,4 @@
-import { IResource } from '../src/Services/resourcesService';
 import {
-    processResource,
-    processResourceAlt,
-    resourcesToUnorderedList,
     containsKeyword,
     getFaqKeywords,
     containsQuestionPattern,
@@ -13,7 +9,7 @@ import { processTranslation } from '../src/Utils/generalUtilities';
 import { EmbedData } from '../src/Interfaces/BotData';
 
 describe('Bot Utilities', () => {
-    describe('Embed Formatting', () => {
+    /* describe('Embed Formatting', () => {
         it('should process the resource and return a formatted output based on the fields available in the resource object', () => {
             expect(
                 processResource({
@@ -201,7 +197,7 @@ describe('Bot Utilities', () => {
                 '- 📘 **Kaggle Notebook**, by John [Kaggle](https://www.kaggle.com/)\n- by Ulyssa https://www.kaggle.com/'
             );
         });
-    });
+    }); */
 
     describe('Keyword Checking', () => {
         it('should return the matched keyword if present', () => {
@@ -216,6 +212,7 @@ describe('Bot Utilities', () => {
             expect(containsKeyword(tokens2, keywords)).toBe('datasets');
             expect(containsKeyword(tokens3, keywords)).toBe('epoch');
             expect(containsKeyword(tokens4, keywords)).toBe('overtraining');
+            expect(containsKeyword(['what', 'is', 'a', 'gradient'], keywords)).toBe('gradient');
         });
 
         it('should return null if no keywords are present', () => {

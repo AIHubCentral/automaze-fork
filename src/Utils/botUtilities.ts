@@ -151,7 +151,17 @@ export function processResourceAlt(resource: IResource, language: string = 'en')
 }
 
 export function getFaqKeywords(): string[] {
-    return ['epoch', 'epochs', 'dataset', 'datasets', 'model', 'models', 'inference', 'overtraining'];
+    return [
+        'epoch',
+        'epochs',
+        'dataset',
+        'datasets',
+        'gradient',
+        'model',
+        'models',
+        'inference',
+        'overtraining',
+    ];
 }
 
 /**

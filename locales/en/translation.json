@@ -1,5 +1,8 @@
 {
     "common": {
+        "examples": {
+            "gradientDescent": "https://www.youtube.com/watch?v=i62czvwDlsw"
+        },
         "websites": {
             "aihub": {
                 "docs": "https://docs.ai-hub.wtf",
@@ -80,6 +83,12 @@
             "batch size": "**Batch Size**: The amount of GPU used to train the model, with larger batch sizes generally leading to shorter training duration. On the other hand, lower batch size can make the model more accurate, however it's more resource intensive and slower. **For most cases a batch size of 4 gives good results**.",
             "epoch": "**Epoch**: The number of iterations performed to complete one full cycle of the dataset during training. It's not possible to say precisely how many epochs you need for your dataset, you need to monitor the [TensorBoard Graph]($t(common.websites.applio.tensorboard)) to know if your model is overtraining.",
             "dataset": "**Dataset**: A set of audio files compressed into a .zip file, used by RVC for voice training. You can learn more about it in the [Applio Docs]($t(common.websites.applio.dataset))",
+            "gradient": {
+                "title": "Gradient",
+                "description": [
+                    "A gradient in machine learning, specifically in the context of training a model, represents the direction and rate of change of the model's error with respect to its parameters. It's used in optimization algorithms like [gradient descent]($t(common.examples.gradientDescent)) to adjust the model's parameters (weights and biases) in order to minimize the error, leading to better performance and accuracy. Essentially, it guides the model on how to improve itself step by step."
+                ]
+            },
             "G and D": "**G and D**: Generative (G) and Discriminator (D) models, respectively, that store the training data, with the Generative model learning to replicate results similar to the original, and the Discriminator trying to distinguish real data from generated data.",
             "hubert": "**HuBERT**: A transformer-based model that extracts text from raw audio, previously trained on a masked prediction task, which RVC uses to train the voice models. There are several types of Hubert, some of examples are ContentVec, Japanese Hubert-Base and Chinese Hubert-Large. You can learn more about it in the [Applio Docs]($t(common.websites.applio.faq))",
             "index": "**Faiss Integration (.index file)**: The [Faiss library]($t(common.websites.github.faiss)) enables efficient approximate nearest neighbor search in RVC during inference, retrieving and combining training audio segments with closest embeddings. For your final RVC model, include the one which the file name starts with **added**.\n\n> Example: `added_IVF157_Flat_nprobe_myModel.index`",
