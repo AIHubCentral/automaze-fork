@@ -161,8 +161,6 @@ export function getFaqKeywords(): string[] {
         'gradio',
         'hubert',
         'index',
-        'model',
-        'models',
         'inference',
         'overtraining',
     ];
