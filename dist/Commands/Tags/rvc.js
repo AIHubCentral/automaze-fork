@@ -10,7 +10,8 @@ const RVC = {
     description: 'Retrieval-based Voice Conversion Documentation (a.k.a How to Make AI Cover)',
     aliases: ['guide', 'guides', 'docs', 'doc', 'documentation'],
     async run(client, message) {
-        const content = i18n_1.default.t('tags.rvc.embeds', { returnObjects: true });
+        const language = (0, botUtilities_1.getLanguageByChannelId)(message.channelId);
+        const content = i18n_1.default.t('tags.rvc.embeds', { lng: language, returnObjects: true });
         const sender = new botUtilities_1.TagResponseSender(client);
         sender.setEmbeds(content);
         sender.config(message);

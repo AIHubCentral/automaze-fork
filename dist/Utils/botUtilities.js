@@ -20,6 +20,7 @@ exports.getPaginatedData = getPaginatedData;
 exports.createPaginatedEmbed = createPaginatedEmbed;
 exports.banan = banan;
 exports.handleSendRealtimeGuides = handleSendRealtimeGuides;
+exports.getLanguageByChannelId = getLanguageByChannelId;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
@@ -45,10 +46,10 @@ var CloudPlatform;
  * @param {IResource[]} resources - An array of resource objects to be processed.
  * @returns {string} - A string representing the unordered list in Markdown format.
  */
-function resourcesToUnorderedList(resources) {
+function resourcesToUnorderedList(resources, language = 'en') {
     const processedResources = [];
     resources.forEach((resource) => {
-        const currentLine = processResource(resource);
+        const currentLine = processResource(resource, language);
         processedResources.push(currentLine);
     });
     return (0, discord_js_1.unorderedList)(processedResources);
@@ -57,9 +58,10 @@ function resourcesToUnorderedList(resources) {
  * Processes a single resource into a formatted string for an unordered list.
  *
  * @param {IResource} resource - The resource object to be processed.
+ * @param {string} language - A two character language code (defaults to 'en')
  * @returns {string} - A formatted string representing the resource.
  */
-function processResource(resource) {
+function processResource(resource, language = 'en') {
     const currentLine = [];
     if (resource.emoji && resource.emoji.toLowerCase() != 'none') {
         currentLine.push(`${resource.emoji} `);
@@ -69,7 +71,7 @@ function processResource(resource) {
         currentLine.push(', ');
     }
     if (resource.authors) {
-        currentLine.push(`by ${resource.authors} `);
+        currentLine.push(`${i18n_1.default.t('general.by', { lng: language })} ${(0, discord_js_1.bold)(resource.authors)} `);
     }
     if (resource.displayTitle) {
         let category = resource.category;
@@ -140,8 +142,6 @@ function getFaqKeywords() {
         'gradio',
         'hubert',
         'index',
-        'model',
-        'models',
         'inference',
         'overtraining',
     ];
@@ -596,4 +596,20 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
         botResponse.components = [];
         botReply.edit(botResponse);
     });
+}
+/**
+ * Maps a channel ID to its corresponding language code.
+ * If the channel ID is not found in the predefined language mappings,
+ * the default language code 'en' (English) is returned.
+ *
+ * @param {string} channelId - The ID of the Discord channel.
+ * @returns {string} The corresponding language code for the channel, or 'en' if not found.
+ */
+function getLanguageByChannelId(channelId) {
+    const languages = {
+        '1159369117854347276': 'es',
+        '1159291287430778933': 'it',
+        '1159572045043081247': 'pt',
+    };
+    return languages[channelId] || 'en';
 }

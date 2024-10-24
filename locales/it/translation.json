@@ -4,6 +4,7 @@
         "not_found": "Comando non trovato",
         "not_available": "Non ancora disponibile",
         "not_interaction_author": "Non hai iniziato tu questa interazione. Usa il comando per interagire con esso.",
+        "note": "Nota",
         "options": "\n**Opzioni**:",
         "optional": "(Facoltativo)",
         "usage": "\nUso:",
@@ -69,6 +70,17 @@
             "embed": {
                 "title": "Audioguide e strumenti"
             }
+        },
+        "colab": {
+            "notice": {
+                "embed": {
+                    "description": "Sebbene il piano gratuito di Colab offra fino a 12 ore di utilizzo quotidiano, la GPU è generalmente disponibile per solo circa 4 ore ogni giorno, in media."
+                }
+            }
+        },
+        "kaggle": {
+            "guide": "- 📖 [Come utilizzare RVC Mainline su Kaggle](https://rentry.co/RVC-Mainline-Kaggle) $t(general.by) **Cauthess**",
+            "notice": "> $t(general.note): Kaggle limita l'utilizzo della GPU a 30 ore settimanali."
         },
         "realtime": {
             "expired": "> Questa interazione è scaduta, usa il comando `/guides` se desideri vederla di nuovo.",

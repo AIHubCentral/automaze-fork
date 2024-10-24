@@ -12,20 +12,21 @@ const Colab = {
     async run(client, message) {
         const { botCache, logger } = client;
         const resources = await (0, botUtilities_1.getResourceData)('colab', botCache, logger);
+        const language = (0, botUtilities_1.getLanguageByChannelId)(message.channelId);
         if (resources.length === 0) {
-            await message.reply({ content: i18next_1.default.t('general.not_available') });
+            await message.reply({ content: i18next_1.default.t('general.not_available', { lng: language }) });
             return;
         }
         const content = [
             {
-                title: i18next_1.default.t('tags.colab.embed.title'),
+                title: i18next_1.default.t('tags.colab.embed.title', { lng: language }),
                 color: 'f9ab00',
-                description: [(0, botUtilities_1.resourcesToUnorderedList)(resources)],
+                description: [(0, botUtilities_1.resourcesToUnorderedList)(resources, language)],
             },
             {
-                title: i18next_1.default.t('tags.colab.notice.embed.title'),
-                description: [i18next_1.default.t('tags.colab.notice.embed.description')],
-                footer: i18next_1.default.t('tags.colab.embed.footer'),
+                title: i18next_1.default.t('tags.colab.notice.embed.title', { lng: language }),
+                description: [i18next_1.default.t('tags.colab.notice.embed.description', { lng: language })],
+                footer: i18next_1.default.t('tags.colab.embed.footer', { lng: language }),
             },
         ];
         const sender = new botUtilities_1.TagResponseSender(client);

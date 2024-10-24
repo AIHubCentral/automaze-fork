@@ -12,16 +12,17 @@ const HF = {
     async run(client, message) {
         const { botCache, logger } = client;
         const resources = await (0, botUtilities_1.getResourceData)('hf', botCache, logger);
+        const language = (0, botUtilities_1.getLanguageByChannelId)(message.channelId);
         if (resources.length === 0) {
-            await message.reply({ content: i18n_1.default.t('general.not_available') });
+            await message.reply({ content: i18n_1.default.t('general.not_available', { lng: language }) });
             return;
         }
         const content = [
             {
-                title: i18n_1.default.t('tags.hf.embed.title'),
+                title: i18n_1.default.t('tags.hf.embed.title', { lng: language }),
                 color: 'ffcc4d',
-                description: [(0, botUtilities_1.resourcesToUnorderedList)(resources)],
-                footer: i18n_1.default.t('tags.hf.embed.footer'),
+                description: [(0, botUtilities_1.resourcesToUnorderedList)(resources, language)],
+                footer: i18n_1.default.t('tags.hf.embed.footer', { lng: language }),
             },
         ];
         const sender = new botUtilities_1.TagResponseSender(client);

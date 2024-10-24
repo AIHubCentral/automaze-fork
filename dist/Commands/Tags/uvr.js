@@ -10,7 +10,9 @@ const UVR = {
     description: 'Ultimate Vocal Remover',
     aliases: [],
     async run(client, message) {
+        const language = (0, botUtilities_1.getLanguageByChannelId)(message.channelId);
         const content = i18n_1.default.t('tags.uvr', {
+            lng: language,
             returnObjects: true,
         });
         const sender = new botUtilities_1.TagResponseSender(client);

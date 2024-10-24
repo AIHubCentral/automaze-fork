@@ -1,7 +1,7 @@
 import i18next from '../../i18n';
 import { ButtonData, EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
-import { TagResponseSender } from '../../Utils/botUtilities';
+import { getLanguageByChannelId, TagResponseSender } from '../../Utils/botUtilities';
 
 type response = { embed: EmbedData; buttons: ButtonData[] };
 
@@ -10,7 +10,9 @@ const UVR: PrefixCommand = {
     description: 'Ultimate Vocal Remover',
     aliases: [],
     async run(client, message) {
+        const language = getLanguageByChannelId(message.channelId);
         const content = i18next.t('tags.uvr', {
+            lng: language,
             returnObjects: true,
         }) as response;
 

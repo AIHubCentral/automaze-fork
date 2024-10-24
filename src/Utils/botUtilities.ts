@@ -53,11 +53,11 @@ export enum CloudPlatform {
  * @param {IResource[]} resources - An array of resource objects to be processed.
  * @returns {string} - A string representing the unordered list in Markdown format.
  */
-export function resourcesToUnorderedList(resources: IResource[]): string {
+export function resourcesToUnorderedList(resources: IResource[], language: string = 'en'): string {
     const processedResources: string[] = [];
 
     resources.forEach((resource) => {
-        const currentLine = processResource(resource);
+        const currentLine = processResource(resource, language);
         processedResources.push(currentLine);
     });
 
@@ -68,9 +68,10 @@ export function resourcesToUnorderedList(resources: IResource[]): string {
  * Processes a single resource into a formatted string for an unordered list.
  *
  * @param {IResource} resource - The resource object to be processed.
+ * @param {string} language - A two character language code (defaults to 'en')
  * @returns {string} - A formatted string representing the resource.
  */
-export function processResource(resource: IResource): string {
+export function processResource(resource: IResource, language: string = 'en'): string {
     const currentLine: string[] = [];
 
     if (resource.emoji && resource.emoji.toLowerCase() != 'none') {
@@ -83,7 +84,7 @@ export function processResource(resource: IResource): string {
     }
 
     if (resource.authors) {
-        currentLine.push(`by ${resource.authors} `);
+        currentLine.push(`${i18next.t('general.by', { lng: language })} ${bold(resource.authors)} `);
     }
 
     if (resource.displayTitle) {
@@ -770,3 +771,22 @@ export async function handleSendRealtimeGuides(
         botReply.edit(<MessageEditOptions>botResponse);
     });
 }
+
+/**
+ * Maps a channel ID to its corresponding language code.
+ * If the channel ID is not found in the predefined language mappings,
+ * the default language code 'en' (English) is returned.
+ *
+ * @param {string} channelId - The ID of the Discord channel.
+ * @returns {string} The corresponding language code for the channel, or 'en' if not found.
+ */
+function getLanguageByChannelId(channelId: string): string {
+    const languages: { [key: string]: string } = {
+        '1159369117854347276': 'es',
+        '1159291287430778933': 'it',
+        '1159572045043081247': 'pt',
+    };
+    return languages[channelId] || 'en';
+}
+
+export { getLanguageByChannelId };

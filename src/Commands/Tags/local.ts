@@ -1,7 +1,12 @@
 import i18next from '../../i18n';
 import { EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
-import { getResourceData, resourcesToUnorderedList, TagResponseSender } from '../../Utils/botUtilities';
+import {
+    getLanguageByChannelId,
+    getResourceData,
+    resourcesToUnorderedList,
+    TagResponseSender,
+} from '../../Utils/botUtilities';
 
 const Local: PrefixCommand = {
     name: 'local',
@@ -12,16 +17,18 @@ const Local: PrefixCommand = {
 
         const resources = await getResourceData('local', botCache, logger);
 
+        const language = getLanguageByChannelId(message.channelId);
+
         if (resources.length === 0) {
-            await message.reply({ content: i18next.t('general.not_available') });
+            await message.reply({ content: i18next.t('general.not_available', { lng: language }) });
             return;
         }
 
         const content: EmbedData[] = [
             {
                 title: `${i18next.t('common.emojis.laptop')} ${i18next.t('tags.local.embed.title')}`,
-                description: [resourcesToUnorderedList(resources)],
-                footer: i18next.t('tags.local.embed.footer'),
+                description: [resourcesToUnorderedList(resources, language)],
+                footer: i18next.t('tags.local.embed.footer', { lng: language }),
             },
         ];
 

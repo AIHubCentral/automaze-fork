@@ -12,15 +12,16 @@ const Local = {
     async run(client, message) {
         const { botCache, logger } = client;
         const resources = await (0, botUtilities_1.getResourceData)('local', botCache, logger);
+        const language = (0, botUtilities_1.getLanguageByChannelId)(message.channelId);
         if (resources.length === 0) {
-            await message.reply({ content: i18n_1.default.t('general.not_available') });
+            await message.reply({ content: i18n_1.default.t('general.not_available', { lng: language }) });
             return;
         }
         const content = [
             {
                 title: `${i18n_1.default.t('common.emojis.laptop')} ${i18n_1.default.t('tags.local.embed.title')}`,
-                description: [(0, botUtilities_1.resourcesToUnorderedList)(resources)],
-                footer: i18n_1.default.t('tags.local.embed.footer'),
+                description: [(0, botUtilities_1.resourcesToUnorderedList)(resources, language)],
+                footer: i18n_1.default.t('tags.local.embed.footer', { lng: language }),
             },
         ];
         const sender = new botUtilities_1.TagResponseSender(client);

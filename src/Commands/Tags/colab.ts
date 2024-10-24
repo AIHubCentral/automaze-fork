@@ -1,6 +1,11 @@
 import { ColorResolvable } from 'discord.js';
 import { PrefixCommand } from '../../Interfaces/Command';
-import { getResourceData, resourcesToUnorderedList, TagResponseSender } from '../../Utils/botUtilities';
+import {
+    getLanguageByChannelId,
+    getResourceData,
+    resourcesToUnorderedList,
+    TagResponseSender,
+} from '../../Utils/botUtilities';
 import { EmbedData } from '../../Interfaces/BotData';
 import i18next from 'i18next';
 
@@ -13,21 +18,23 @@ const Colab: PrefixCommand = {
 
         const resources = await getResourceData('colab', botCache, logger);
 
+        const language = getLanguageByChannelId(message.channelId);
+
         if (resources.length === 0) {
-            await message.reply({ content: i18next.t('general.not_available') });
+            await message.reply({ content: i18next.t('general.not_available', { lng: language }) });
             return;
         }
 
         const content: EmbedData[] = [
             {
-                title: i18next.t('tags.colab.embed.title'),
+                title: i18next.t('tags.colab.embed.title', { lng: language }),
                 color: 'f9ab00' as ColorResolvable,
-                description: [resourcesToUnorderedList(resources)],
+                description: [resourcesToUnorderedList(resources, language)],
             },
             {
-                title: i18next.t('tags.colab.notice.embed.title'),
-                description: [i18next.t('tags.colab.notice.embed.description')],
-                footer: i18next.t('tags.colab.embed.footer'),
+                title: i18next.t('tags.colab.notice.embed.title', { lng: language }),
+                description: [i18next.t('tags.colab.notice.embed.description', { lng: language })],
+                footer: i18next.t('tags.colab.embed.footer', { lng: language }),
             },
         ];
 

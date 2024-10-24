@@ -7,7 +7,8 @@ const Realtime = {
     aliases: ['rt', 'tts'],
     run: async (client, message) => {
         const targetUser = message.mentions.members?.first();
-        await (0, botUtilities_1.handleSendRealtimeGuides)(message, targetUser, message.author);
+        const language = (0, botUtilities_1.getLanguageByChannelId)(message.channelId);
+        await (0, botUtilities_1.handleSendRealtimeGuides)(message, targetUser, message.author, false, language);
     },
 };
 exports.default = Realtime;

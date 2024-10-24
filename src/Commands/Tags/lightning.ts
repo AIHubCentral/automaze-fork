@@ -1,7 +1,12 @@
 import { ColorResolvable } from 'discord.js';
 import { EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
-import { getResourceData, resourcesToUnorderedList, TagResponseSender } from '../../Utils/botUtilities';
+import {
+    getLanguageByChannelId,
+    getResourceData,
+    resourcesToUnorderedList,
+    TagResponseSender,
+} from '../../Utils/botUtilities';
 import i18next from '../../i18n';
 
 const Lightning: PrefixCommand = {
@@ -13,8 +18,10 @@ const Lightning: PrefixCommand = {
 
         const resources = await getResourceData('lightning_ai', botCache, logger);
 
+        const language = getLanguageByChannelId(message.channelId);
+
         if (resources.length === 0) {
-            await message.reply({ content: i18next.t('general.not_available') });
+            await message.reply({ content: i18next.t('general.not_available', { lng: language }) });
             return;
         }
 
@@ -22,8 +29,8 @@ const Lightning: PrefixCommand = {
             {
                 title: i18next.t('tags.lightning.embed.title'),
                 color: 'b45aff' as ColorResolvable,
-                description: [resourcesToUnorderedList(resources)],
-                footer: i18next.t('tags.lightning.embed.footer'),
+                description: [resourcesToUnorderedList(resources, language)],
+                footer: i18next.t('tags.lightning.embed.footer', { lng: language }),
             },
         ];
 

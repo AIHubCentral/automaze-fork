@@ -78,6 +78,7 @@
         "not_available": "Not available yet",
         "not_found": "Command not found",
         "not_interaction_author": "You didn't start this interaction. Use the command for interacting with it.",
+        "note": "Note",
         "options": "\n**Options**:",
         "optional": "(Optional)",
         "select_an_option": "Select an option",
@@ -674,29 +675,28 @@
         "colab": {
             "embed": {
                 "title": "$t(common.emojis.colab) Google Colab Notebooks",
-                "footer": "More commands: -colab, -uvr, -karafan, -overtrain, /help"
+                "footer": "$t(general.more_commands): -audio, -hf, -local, -kaggle, -realtime, -rvc, /help"
             },
             "notice": {
                 "embed": {
-                    "title": "$t(common.emojis.info) Note",
-                    "description": "While the Colab free plan provides up to 12 hours of daily usage, the GPU is typically available for only about 4 hours each day on average.",
-                    "footer": "More commands: -audio, -hf, -local, -kaggle, -overtraining, -realtime, -rvc, /help"
+                    "title": "$t(common.emojis.info) $t(general.note)",
+                    "description": "While the Colab free plan provides up to 12 hours of daily usage, the GPU is typically available for only about 4 hours each day on average."
                 }
             }
         },
         "hf": {
             "embed": {
                 "title": "$t(common.emojis.hf) Huggingface Spaces",
-                "footer": "More commands: -audio, - colabs, -kaggle, -local, -rvc, /help"
+                "footer": "$t(general.more_commands): -audio, - colabs, -kaggle, -local, -rvc, /help"
             }
         },
         "kaggle": {
             "embed": {
                 "title": "$t(common.emojis.kaggle) Kaggle Notebooks",
-                "footer": "More commands: -colabs, -hf, -local, -rvc, /help"
+                "footer": "$t(general.more_commands): -colabs, -hf, -local, -rvc, /help"
             },
-            "guide": "- 📖 [How to use RVC Mainline Kaggle](https://rentry.co/RVC-Mainline-Kaggle) by **Cauthess**",
-            "notice": "> Note: Kaggle limits GPU usage to 30 hours per week."
+            "guide": "- 📖 [How to use RVC Mainline on Kaggle](https://rentry.co/RVC-Mainline-Kaggle) $t(general.by) **Cauthess**",
+            "notice": "> $t(general.note): Kaggle limits GPU usage to 30 hours per week."
         },
         "karafan": {
             "embed": {
@@ -722,12 +722,12 @@
         "lightning": {
             "embed": {
                 "title": "$t(common.emojis.lightning) Lightning AI",
-                "footer": "More commands: -colabs, -kaggle, -hf, -realtime, -rvc, /help"
+                "footer": "$t(general.more_commands): -colabs, -kaggle, -hf, -realtime, -rvc, /help"
             }
         },
         "local": {
             "embed": {
-                "title": "Local Stuff",
+                "title": "Local",
                 "footer": "$t(general.more_commands): -audio, -colabs, -overtrain, -realtime, -rvc, /help"
             }
         },

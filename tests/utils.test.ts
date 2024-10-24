@@ -4,6 +4,7 @@ import {
     containsQuestionPattern,
     isAskingForAssistance,
     isAskingForGirlModel,
+    getLanguageByChannelId,
 } from '../src/Utils/botUtilities';
 import { processTranslation } from '../src/Utils/generalUtilities';
 import { EmbedData } from '../src/Interfaces/BotData';
@@ -273,6 +274,28 @@ describe('Bot Utilities', () => {
             expect(isAskingForGirlModel('e-girl voice pls')).toBe(true);
             expect(isAskingForGirlModel('what is a good female model')).toBe(true);
             expect(isAskingForGirlModel('test')).toBe(false);
+        });
+    });
+
+    describe('getLanguageByChannelId', () => {
+        it('should return "es" for Spanish channel ID', () => {
+            const result = getLanguageByChannelId('1159369117854347276');
+            expect(result).toBe('es');
+        });
+
+        it('should return "it" for Italian channel ID', () => {
+            const result = getLanguageByChannelId('1159291287430778933');
+            expect(result).toBe('it');
+        });
+
+        it('should return "pt" for Portuguese channel ID', () => {
+            const result = getLanguageByChannelId('1159572045043081247');
+            expect(result).toBe('pt');
+        });
+
+        it('should return "en" for an unknown channel ID', () => {
+            const result = getLanguageByChannelId('1159289354439626772');
+            expect(result).toBe('en');
         });
     });
 });

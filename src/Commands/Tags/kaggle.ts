@@ -1,6 +1,11 @@
 import { EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
-import { getResourceData, resourcesToUnorderedList, TagResponseSender } from '../../Utils/botUtilities';
+import {
+    getLanguageByChannelId,
+    getResourceData,
+    resourcesToUnorderedList,
+    TagResponseSender,
+} from '../../Utils/botUtilities';
 import i18next from '../../i18n';
 
 const Kaggle: PrefixCommand = {
@@ -12,20 +17,22 @@ const Kaggle: PrefixCommand = {
 
         const resources = await getResourceData('kaggle', botCache, logger);
 
+        const language = getLanguageByChannelId(message.channelId);
+
         if (resources.length === 0) {
-            await message.reply({ content: i18next.t('general.not_available') });
+            await message.reply({ content: i18next.t('general.not_available', { lng: language }) });
             return;
         }
 
         const content: EmbedData[] = [
             {
-                title: i18next.t('tags.kaggle.embed.title'),
+                title: i18next.t('tags.kaggle.embed.title', { lng: language }),
                 description: [
-                    resourcesToUnorderedList(resources),
-                    i18next.t('tags.kaggle.guide'),
-                    i18next.t('tags.kaggle.notice'),
+                    resourcesToUnorderedList(resources, language),
+                    i18next.t('tags.kaggle.guide', { lng: language }),
+                    i18next.t('tags.kaggle.notice', { lng: language }),
                 ],
-                footer: i18next.t('tags.kaggle.embed.footer'),
+                footer: i18next.t('tags.kaggle.embed.footer', { lng: language }),
             },
         ];
 

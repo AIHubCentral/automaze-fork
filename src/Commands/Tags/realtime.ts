@@ -2,7 +2,7 @@ import { Message } from 'discord.js';
 
 import ExtendedClient from '../../Core/extendedClient';
 import { PrefixCommand } from '../../Interfaces/Command';
-import { handleSendRealtimeGuides } from '../../Utils/botUtilities';
+import { getLanguageByChannelId, handleSendRealtimeGuides } from '../../Utils/botUtilities';
 
 const Realtime: PrefixCommand = {
     name: 'realtime',
@@ -10,7 +10,8 @@ const Realtime: PrefixCommand = {
     aliases: ['rt', 'tts'],
     run: async (client: ExtendedClient, message: Message) => {
         const targetUser = message.mentions.members?.first();
-        await handleSendRealtimeGuides(message, targetUser, message.author);
+        const language = getLanguageByChannelId(message.channelId);
+        await handleSendRealtimeGuides(message, targetUser, message.author, false, language);
     },
 };
 
