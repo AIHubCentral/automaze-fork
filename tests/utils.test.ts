@@ -5,9 +5,15 @@ import {
     isAskingForAssistance,
     isAskingForGirlModel,
     getLanguageByChannelId,
+    getFaqReply,
 } from '../src/Utils/botUtilities';
 import { processTranslation } from '../src/Utils/generalUtilities';
 import { EmbedData } from '../src/Interfaces/BotData';
+import { initI18n } from '../src/i18n';
+
+beforeAll(async () => {
+    await initI18n();
+});
 
 describe('Bot Utilities', () => {
     /* describe('Embed Formatting', () => {
@@ -296,6 +302,46 @@ describe('Bot Utilities', () => {
         it('should return "en" for an unknown channel ID', () => {
             const result = getLanguageByChannelId('1159289354439626772');
             expect(result).toBe('en');
+        });
+    });
+
+    describe('FAQ reply', () => {
+        it('should return null for unknown keyword', () => {
+            expect(getFaqReply('something_else')).toBeNull();
+        });
+
+        it('should return an object for cuda keyword', () => {
+            expect(typeof getFaqReply('cuda')).toBe('object');
+        });
+
+        it('should return a string for epoch and epochs', () => {
+            expect(typeof getFaqReply('epoch')).toBe('string');
+            expect(typeof getFaqReply('epochs')).toBe('string');
+        });
+
+        it('should return an object for dataset and datasets', () => {
+            expect(typeof getFaqReply('dataset')).toBe('object');
+            expect(typeof getFaqReply('datasets')).toBe('object');
+        });
+
+        it('should return an object for gradio keyword', () => {
+            expect(typeof getFaqReply('gradio')).toBe('object');
+        });
+
+        it('should return a string for hubert keyword', () => {
+            expect(typeof getFaqReply('hubert')).toBe('string');
+        });
+
+        it('should return a string for index keyword', () => {
+            expect(typeof getFaqReply('index')).toBe('string');
+        });
+
+        it('should return a string for inference keyword', () => {
+            expect(typeof getFaqReply('inference')).toBe('string');
+        });
+
+        it('should return a string for overtraining keyword', () => {
+            expect(typeof getFaqReply('overtraining')).toBe('string');
         });
     });
 });

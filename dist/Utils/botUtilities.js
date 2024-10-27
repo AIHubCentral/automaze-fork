@@ -9,6 +9,8 @@ exports.processResource = processResource;
 exports.resourcesToUnorderedListAlt = resourcesToUnorderedListAlt;
 exports.processResourceAlt = processResourceAlt;
 exports.getFaqKeywords = getFaqKeywords;
+exports.getFaqReply = getFaqReply;
+exports.processFaqReply = processFaqReply;
 exports.containsKeyword = containsKeyword;
 exports.containsQuestionPattern = containsQuestionPattern;
 exports.isAskingForAssistance = isAskingForAssistance;
@@ -31,6 +33,7 @@ const fileUtilities_1 = require("./fileUtilities");
 const resourcesService_1 = __importDefault(require("../Services/resourcesService"));
 const i18n_1 = __importDefault(require("../i18n"));
 const generalUtilities_1 = require("./generalUtilities");
+const natural_1 = __importDefault(require("natural"));
 /* Enums */
 var CloudPlatform;
 (function (CloudPlatform) {
@@ -145,6 +148,49 @@ function getFaqKeywords() {
         'inference',
         'overtraining',
     ];
+}
+/**
+ * Attempt to get a FAQ answer
+ * @param keyword - The keyword to look for
+ * @returns TranslationResult or null if not found
+ */
+function getFaqReply(keyword) {
+    let stemmedKeyword = natural_1.default.PorterStemmer.stem(keyword);
+    if (stemmedKeyword === 'infer') {
+        stemmedKeyword = 'inference';
+    }
+    else if (stemmedKeyword === 'overtrain') {
+        stemmedKeyword = 'overtraining';
+    }
+    const responseData = i18n_1.default.t(`faq.topics.${stemmedKeyword}`, {
+        returnObjects: true,
+    });
+    if (typeof responseData === 'string' && responseData.startsWith('faq.topics'))
+        return null;
+    return responseData;
+}
+function processFaqReply(responseData) {
+    const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.LightGrey);
+    const botResponse = { embeds: [embed], allowedMentions: { repliedUser: true } };
+    const processedTranslation = (0, generalUtilities_1.processTranslation)(responseData);
+    if (typeof processedTranslation === 'string') {
+        embed.setDescription(processedTranslation);
+    }
+    else {
+        if (processedTranslation.title) {
+            embed.setTitle(processedTranslation.title);
+        }
+        if (processedTranslation.description) {
+            embed.setDescription(processedTranslation.description.join('\n'));
+        }
+        if (processedTranslation.footer) {
+            embed.setFooter({ text: processedTranslation.footer });
+        }
+        if (processedTranslation.buttons) {
+            botResponse.components = [(0, discordUtilities_1.createButtons)(processedTranslation.buttons)];
+        }
+    }
+    return botResponse;
 }
 /**
  * Checks if a keyword was found in the tokens and returns the matched keyword if found

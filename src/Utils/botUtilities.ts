@@ -27,7 +27,7 @@ import {
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { ButtonData, EmbedData, SelectMenuData, SelectMenuOption } from '../Interfaces/BotData';
-import { createEmbed, createEmbeds, getChannelById, getGuildById } from './discordUtilities';
+import { createButtons, createEmbed, createEmbeds, getChannelById, getGuildById } from './discordUtilities';
 import UserService, { UserModel } from '../Services/userService';
 import path from 'path';
 import fs from 'fs';
@@ -35,7 +35,8 @@ import { getAllFiles } from './fileUtilities';
 import ResourceService, { IResource } from '../Services/resourcesService';
 import winston from 'winston';
 import i18next from '../i18n';
-import { generateRandomId } from './generalUtilities';
+import { generateRandomId, processTranslation, TranslationResult } from './generalUtilities';
+import natural from 'natural';
 
 /* Enums */
 export enum CloudPlatform {
@@ -165,6 +166,55 @@ export function getFaqKeywords(): string[] {
         'inference',
         'overtraining',
     ];
+}
+
+/**
+ * Attempt to get a FAQ answer
+ * @param keyword - The keyword to look for
+ * @returns TranslationResult or null if not found
+ */
+export function getFaqReply(keyword: string): TranslationResult | null {
+    let stemmedKeyword = natural.PorterStemmer.stem(keyword);
+
+    if (stemmedKeyword === 'infer') {
+        stemmedKeyword = 'inference';
+    } else if (stemmedKeyword === 'overtrain') {
+        stemmedKeyword = 'overtraining';
+    }
+
+    const responseData = i18next.t(`faq.topics.${stemmedKeyword}`, {
+        returnObjects: true,
+    }) as TranslationResult;
+    if (typeof responseData === 'string' && responseData.startsWith('faq.topics')) return null;
+    return responseData;
+}
+
+export function processFaqReply(responseData: TranslationResult): MessageReplyOptions {
+    const embed = new EmbedBuilder().setColor(Colors.LightGrey);
+    const botResponse: MessageReplyOptions = { embeds: [embed], allowedMentions: { repliedUser: true } };
+    const processedTranslation = processTranslation(responseData);
+
+    if (typeof processedTranslation === 'string') {
+        embed.setDescription(processedTranslation);
+    } else {
+        if (processedTranslation.title) {
+            embed.setTitle(processedTranslation.title);
+        }
+
+        if (processedTranslation.description) {
+            embed.setDescription(processedTranslation.description.join('\n'));
+        }
+
+        if (processedTranslation.footer) {
+            embed.setFooter({ text: processedTranslation.footer });
+        }
+
+        if (processedTranslation.buttons) {
+            botResponse.components = [createButtons(processedTranslation.buttons)];
+        }
+    }
+
+    return botResponse;
 }
 
 /**

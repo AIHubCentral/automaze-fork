@@ -7,27 +7,24 @@ import {
     EmbedBuilder,
     inlineCode,
     Message,
-    MessageReplyOptions,
     PublicThreadChannel,
     TextChannel,
 } from 'discord.js';
 import IEventData from '../Interfaces/Events';
 import ExtendedClient from '../Core/extendedClient';
 import { EmbedData } from '../Interfaces/BotData';
-import { createButtons, createEmbed, getDisplayName } from '../Utils/discordUtilities';
+import { createEmbed, getDisplayName } from '../Utils/discordUtilities';
 import { tokenizer } from '../Database/nlpClassifier';
 import {
     containsKeyword,
     containsQuestionPattern,
     getFaqKeywords,
+    getFaqReply,
     isAskingForAssistance,
+    processFaqReply,
 } from '../Utils/botUtilities';
-import { delay, processTranslation, TranslationResult } from '../Utils/generalUtilities';
+import { delay } from '../Utils/generalUtilities';
 import winston from 'winston';
-import i18next from '../i18n';
-import natural from 'natural';
-
-const stemmer = natural.PorterStemmer;
 
 const messageCreateEvent: IEventData = {
     name: 'messageCreate',
@@ -197,36 +194,10 @@ async function handleFaqQuestions(
 
         const messageChannel = message.channel as TextChannel;
 
-        const stemmedKeyword = stemmer.stem(matchedKeyword);
+        const faqReply = getFaqReply(matchedKeyword);
+        if (!faqReply) return;
 
-        const responseData = i18next.t(`faq.topics.${stemmedKeyword}`, {
-            returnObjects: true,
-        }) as TranslationResult;
-
-        const processedTranslation = processTranslation(responseData);
-
-        const embed = new EmbedBuilder().setColor(Colors.LightGrey);
-        const botResponse: MessageReplyOptions = { embeds: [embed], allowedMentions: { repliedUser: true } };
-
-        if (typeof processedTranslation === 'string') {
-            embed.setDescription(processedTranslation);
-        } else {
-            if (processedTranslation.title) {
-                embed.setTitle(processedTranslation.title);
-            }
-
-            if (processedTranslation.description) {
-                embed.setDescription(processedTranslation.description.join('\n'));
-            }
-
-            if (processedTranslation.footer) {
-                embed.setFooter({ text: processedTranslation.footer });
-            }
-
-            if (processedTranslation.buttons) {
-                botResponse.components = [createButtons(processedTranslation.buttons)];
-            }
-        }
+        const botResponse = processFaqReply(faqReply);
 
         await messageChannel.sendTyping();
         await delay(3_000);

@@ -1,16 +1,10 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../Utils/discordUtilities");
 const nlpClassifier_1 = require("../Database/nlpClassifier");
 const botUtilities_1 = require("../Utils/botUtilities");
 const generalUtilities_1 = require("../Utils/generalUtilities");
-const i18n_1 = __importDefault(require("../i18n"));
-const natural_1 = __importDefault(require("natural"));
-const stemmer = natural_1.default.PorterStemmer;
 const messageCreateEvent = {
     name: 'messageCreate',
     once: false,
@@ -143,30 +137,10 @@ async function handleFaqQuestions(userId, message, repliedUsers, logger) {
         if (repliedUsers.has(userId))
             return;
         const messageChannel = message.channel;
-        const stemmedKeyword = stemmer.stem(matchedKeyword);
-        const responseData = i18n_1.default.t(`faq.topics.${stemmedKeyword}`, {
-            returnObjects: true,
-        });
-        const processedTranslation = (0, generalUtilities_1.processTranslation)(responseData);
-        const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.LightGrey);
-        const botResponse = { embeds: [embed], allowedMentions: { repliedUser: true } };
-        if (typeof processedTranslation === 'string') {
-            embed.setDescription(processedTranslation);
-        }
-        else {
-            if (processedTranslation.title) {
-                embed.setTitle(processedTranslation.title);
-            }
-            if (processedTranslation.description) {
-                embed.setDescription(processedTranslation.description.join('\n'));
-            }
-            if (processedTranslation.footer) {
-                embed.setFooter({ text: processedTranslation.footer });
-            }
-            if (processedTranslation.buttons) {
-                botResponse.components = [(0, discordUtilities_1.createButtons)(processedTranslation.buttons)];
-            }
-        }
+        const faqReply = (0, botUtilities_1.getFaqReply)(matchedKeyword);
+        if (!faqReply)
+            return;
+        const botResponse = (0, botUtilities_1.processFaqReply)(faqReply);
         await messageChannel.sendTyping();
         await (0, generalUtilities_1.delay)(3_000);
         await message.reply(botResponse);
