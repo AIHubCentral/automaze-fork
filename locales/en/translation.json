@@ -734,7 +734,7 @@
         "realtime": {
             "placeholder": "$t(general.select_an_option)",
             "not_allowed_to_interact": "$t(general.not_interaction_author)",
-            "expired": "> This interaction has expired, use the command `/guides` if you wish to see it again.",
+            "expired": "> Interaction has expired, use the command again for a new interaction.",
             "online": {
                 "embeds": [
                     {

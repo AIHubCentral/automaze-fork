@@ -593,7 +593,7 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
         content: '',
         ephemeral,
     };
-    const selectMenuDisplayMinutes = 10; // allow interaction with the select menu for 10 minutes
+    const selectMenuDisplayMinutes = 1; // allow interaction with the select menu for 14 minutes
     const mainUser = author;
     if (targetUser) {
         botResponse.content = i18n_1.default.t('general.suggestions_for_user', {
@@ -610,6 +610,7 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
     });
     collector.on('collect', async (i) => {
         let allowedToInteract = i.user.id === mainUser.id;
+        // The mentioned user also can interact with the menu instead of only the user who used the command
         if (targetUser) {
             allowedToInteract = i.user.id === mainUser.id || i.user.id === targetUser.id;
         }
@@ -638,7 +639,7 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
     });
     collector.on('end', () => {
         botResponse.content = i18n_1.default.t('tags.realtime.expired', { lng: language });
-        botResponse.embeds = [];
+        botResponse.embeds[0].setColor(discord_js_1.Colors.Red);
         botResponse.components = [];
         botReply.edit(botResponse);
     });

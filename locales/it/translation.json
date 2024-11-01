@@ -83,7 +83,7 @@
             "notice": "> $t(general.note): Kaggle limita l'utilizzo della GPU a 30 ore settimanali."
         },
         "realtime": {
-            "expired": "> Questa interazione è scaduta, usa il comando `/guides` se desideri vederla di nuovo.",
+            "expired": "> L'interazione è scaduta, utilizzare nuovamente il comando per una nuova interazione.",
             "online": {
                 "embeds": [
                     {
