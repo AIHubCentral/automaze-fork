@@ -80,12 +80,15 @@
         "not_interaction_author": "You didn't start this interaction. Use the command for interacting with it.",
         "note": "Note",
         "options": "\n**Options**:",
+        "options_lowercase": "options",
         "optional": "(Optional)",
+        "required": "(Required)",
         "select_an_option": "Select an option",
         "suggestions_for_user": "Suggestions for <@{{userId}}>",
         "translation_not_available": "This command is not available in this language yet.",
         "usage": "\nUsage:",
-        "source": "\n-# Source"
+        "source": "\n-# Source",
+        "also_available_in_guides": "Note: Also available in /guides"
     },
     "close": {
         "already_locked": "This thread have already been locked",
@@ -261,7 +264,7 @@
     },
     "help": {
         "title": "📖 Command Help",
-        "placeholder": "Select an option",
+        "placeholder": "$t(general.select_an_option)",
         "timeout": "Command timed out. Use `/help` to for a new interaction",
         "slash_doxx": {
             "icon": "👨‍💻",
@@ -270,8 +273,8 @@
             "embed": {
                 "description": [
                     "Not actual doxxing, creates random house and IP addresses to troll someone.",
-                    "\nUsage: `/doxx user`",
-                    "\n**Options**:",
+                    "$t(general.usage): `/doxx user`",
+                    "$t(general.options)",
                     "- `User`: Discord user to doxx"
                 ]
             }
@@ -283,8 +286,8 @@
             "embed": {
                 "description": [
                     "Answers questions with a probability of that being possible or not of happening in a funny way, don't take the answers seriously as they are randomly generated.",
-                    "\nUsage: `/8ball options`",
-                    "\n**Options**:",
+                    "$t(general.usage) `/8ball $t(general.options_lowercase)`",
+                    "$t(general.options)",
                     "- `Question`: What do you want it to answer about"
                 ]
             }
@@ -296,11 +299,11 @@
             "embed": {
                 "description": [
                     "Gives a banana to someone in a fun and playful way, it's not supposed to offend anyone.",
-                    "\nUsage: `/banana user`",
-                    "\n**Options**:",
+                    "$t(general.usage) `/banana user`",
+                    "$t(general.options)",
                     "- `User`: Discord user to banan"
                 ],
-                "footer": "Note: It's also possible to use this command by right clicking (long press on mobile) on a user profile picture or name and then choose  Apps > banan."
+                "footer": "$t(general.note): It's also possible to use this command by right clicking (long press on mobile) on a user profile picture or name and then choose  Apps > banan."
             }
         },
         "slash_topbanana": {
@@ -310,9 +313,9 @@
             "embed": {
                 "description": [
                     "Shows the top banan'd users. In other words, how much someone got `/banana` by other users.",
-                    "\nUsage: `/topbanana options`",
-                    "\n**Options**:",
-                    "- `Limit` (optional): How many users to show (max 50)"
+                    "$t(general.usage) `/topbanana options`",
+                    "$t(general.options)",
+                    "- `Limit` $t(general.optional): How many users to show (max 50)"
                 ]
             }
         },
@@ -321,7 +324,7 @@
             "label": "Ping",
             "description": "Check the bot latency speed",
             "embed": {
-                "description": ["Check the bot latency speed", "\nUsage: `/ping`"]
+                "description": ["$t(help.slash_ping.description)", "$t(general.usage) `/ping`"]
             }
         },
         "slash_close": {
@@ -331,7 +334,7 @@
             "embed": {
                 "description": [
                     "Close your own post in $t(common.channels.voice_models) or $t(common.channels.model_request). Note that staff members can also close your post.",
-                    "\nUsage: `/close`"
+                    "$t(general.usage) `/close`"
                 ]
             }
         },
@@ -341,12 +344,12 @@
             "description": "Shows guides for RVC and related things",
             "embed": {
                 "description": [
-                    "Shows guides for RVC and related things",
-                    "\nUsage: `/guides options`",
-                    "\n**Options**:",
-                    "- `(Required) category`: Choose a category such as RVC or Upload for instance",
-                    "- `(Optional) language`: Which language should be used on the response, defaults to english if not available",
-                    "- `(Optional) user`: Recommend the guide to an user, note that this will ping the user."
+                    "$t(help.slash_guides.description)",
+                    "$t(general.usage) `/guides options`",
+                    "$t(general.options)",
+                    "- `$t(general.required) category`: Choose a category such as RVC or Upload for instance",
+                    "- `$t(general.optional) language`: Which language should be used on the response, defaults to english if not available",
+                    "- `$t(general.optional) user`: Recommend the guide to an user, note that this will ping the user."
                 ]
             }
         },
@@ -356,9 +359,9 @@
             "description": "Use these if you don't have a powerful computer to run things locally",
             "embed": {
                 "description": [
-                    "Use these if you don't have a powerful computer to run things locally",
-                    "\nUsage: `/cloud options`",
-                    "\n**Options**:",
+                    "$t(help.slash_cloud.description)",
+                    "$t(general.usage) `/cloud options`",
+                    "$t(general.options)",
                     "- `platform`: Links to resources available in the selected cloud platform (colab, kaggle, lightning, etc...)"
                 ]
             }
@@ -369,12 +372,12 @@
             "description": "Frequently asked questions about RVC or related technologies",
             "embed": {
                 "description": [
-                    "Frequently asked questions about RVC or related technologies",
-                    "\nUsage: `/faq options`",
-                    "\n**Options**:",
+                    "$t(help.slash_faq.description)",
+                    "$t(general.usage) `/faq $t(general.options_lowercase)`",
+                    "$t(general.options)",
                     "- `Topic`: What do you want to know about",
-                    "- `(Optional) Language`: Which language the bot will use to respond",
-                    "- `(Optional) Private`: If set to `True` only you will be able to see the response"
+                    "- `$t(general.optional) Language`: Which language the bot will use to respond",
+                    "- `$t(general.optional) Private`: If set to `True` only you will be able to see the response"
                 ]
             }
         },
@@ -385,8 +388,8 @@
             "embed": {
                 "description": [
                     "Shows help for Automaze commands or the channels you can ask for help on RVC or related things.",
-                    "\nUsage: `/help options`",
-                    "\n**Options**:",
+                    "$t(general.usage) `/help $t(general.options_lowercase)`",
+                    "$t(general.options)",
                     "- `Commands`:  Choose a command to learn more about it",
                     "- `General`: Discover which channels you can ask for help if you need help with RVC or related things"
                 ]
@@ -395,13 +398,13 @@
         "context_banan": {
             "icon": "🤣",
             "label": "Banana",
-            "description": "Puts someone in /topbanana leaderboard",
+            "description": "$t(help.slash_banana.description)",
             "embed": {
                 "description": [
                     "Gives a banana to someone in a fun and playful way, it's not supposed to offend anyone.",
-                    "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > banan`"
+                    "$t(general.usage) Right click a username or profile picture (long press on mobile), then select `Apps > banan`"
                 ],
-                "footer": "Note: It's also possible to use this command with /banana"
+                "footer": "$t(general.note): It's also possible to use this command with /banana"
             }
         },
         "context_colab": {
@@ -410,10 +413,10 @@
             "description": "Sends the links for the working Google Colab notebooks",
             "embed": {
                 "description": [
-                    "Sends the links for the working Google Colab notebooks",
-                    "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > Send Colab links`"
+                    "$t(help.context_colab.description)",
+                    "$t(general.usage) Right click a username or profile picture (long press on mobile), then select `Apps > Send Colab links`"
                 ],
-                "footer": "Note: It's also possible to access the colab links with /cloud"
+                "footer": "$t(general.note): It's also possible to access the colab links with /cloud"
             }
         },
         "context_realtime": {
@@ -423,9 +426,9 @@
             "embed": {
                 "description": [
                     "Sends the links for the realtime RVC and W-Okada guides",
-                    "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > Send Realtime links`"
+                    "$t(general.usage) Right click a username or profile picture (long press on mobile), then select `Apps > Send Realtime links`"
                 ],
-                "footer": "Note: It's also possible to access the realtime guides with /guides realtime"
+                "footer": "$t(general.also_available_in_guides)"
             }
         },
         "context_rvc": {
@@ -434,10 +437,10 @@
             "description": "Sends the links for RVC guides",
             "embed": {
                 "description": [
-                    "Sends the links for RVC guides",
-                    "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > Send RVC guides`"
+                    "$t(help.context_rvc.description)",
+                    "$t(general.usage) Right click a username or profile picture (long press on mobile), then select `Apps > Send RVC guides`"
                 ],
-                "footer": "Note: It's also possible to access the RVC guides with /guides rvc"
+                "footer": "$t(general.note): It's also possible to access the RVC guides with /guides rvc"
             }
         },
         "context_help": {
@@ -446,10 +449,10 @@
             "description": "Sends the links for help channels",
             "embed": {
                 "description": [
-                    "Sends the links for help channels",
-                    "\nUsage: Right click a username or profile picture (long press on mobile), then select `Apps > Send Help`"
+                    "$t(help.context_help.description)",
+                    "$t(general.usage) Right click a username or profile picture (long press on mobile), then select `Apps > Send Help`"
                 ],
-                "footer": "Note: It's also possible to access the channel links with the command /help general"
+                "footer": "$t(general.note): It's also possible to access the channel links with the command /help general"
             }
         },
         "prefix_audio": {

@@ -107,7 +107,7 @@ const Help: SlashCommand = {
 
         const language = interaction.options.getString('language') ?? '';
 
-        if (['es', 'pt'].includes(language)) {
+        if (['pt'].includes(language)) {
             return await interaction.reply({
                 content: i18next.t('general.translation_not_available', { lng: language }),
                 ephemeral: true,

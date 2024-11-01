@@ -61,7 +61,7 @@ const Help = {
         const commandType = interaction.options.getString('type');
         const ephemeral = interaction.options.getBoolean('private') ?? false;
         const language = interaction.options.getString('language') ?? '';
-        if (['es', 'pt'].includes(language)) {
+        if (['pt'].includes(language)) {
             return await interaction.reply({
                 content: i18next_1.default.t('general.translation_not_available', { lng: language }),
                 ephemeral: true,

@@ -13,7 +13,9 @@
         "not_interaction_author": "Tú no comenzaste esta interacción. Utilice el comando para interactuar con él.",
         "note": "Nota",
         "options": "\n**Opciones**:",
+        "options_lowercase": "opciones",
         "optional": "(Opcional)",
+        "required": "(Requerido)",
         "usage": "\nUso:",
         "suggestions_for_user": "Sugerencias para <@{{userId}}>",
         "failed_retrieving_guild": "No se pudo recuperar la información del gremio. Vuelva a intentarlo más tarde.",
@@ -22,7 +24,8 @@
         "by": "por",
         "select_an_option": "Seleccione una opción",
         "credits": "Créditos",
-        "source": "\n-# Fuente"
+        "source": "\n-# Fuente",
+        "also_available_in_guides": "Nota: También disponible en /guides"
     },
     "close": {
         "already_locked": "Esta publicación ya ha sido bloqueada",
@@ -68,6 +71,377 @@
                     "Pide ayuda en $t(common.channels.okada) si está relacionado con el cambio de voz en tiempo real",
                     "Pide ayuda en $t(common.channels.help) para obtener ayuda general, pero usa primero el comando `!howtoask` para aprender a estructurar tu pregunta correctamente y aumentar tus posibilidades de obtener una respuesta",
                     "Por último, pero no menos importante, pide ayuda en $t(common.channels.ai_art) si está relacionado con imágenes de IA"
+                ]
+            }
+        }
+    },
+    "help": {
+        "title": "📖 Ayuda de comandos",
+        "timeout": "Se agotó el tiempo de espera del comando. Utilice `/help` para una nueva interacción",
+        "slash_doxx": {
+            "description": "Crea direcciones IP y de casa aleatorias para trolear a alguien",
+            "embed": {
+                "description": [
+                    "No es doxxing real, crea direcciones IP y de casas aleatorias para trolear a alguien.",
+                    "$t(general.usage) `/doxx usuario`",
+                    "$t(general.options)",
+                    "- `Usuario`: Usuario de Discord a doxx"
+                ]
+            }
+        },
+        "slash_8ball": {
+            "description": "Responde a preguntas cerradas",
+            "embed": {
+                "description": [
+                    "Responde preguntas con una probabilidad de que eso sea posible o no de suceder de una manera divertida, no tomes en serio las respuestas ya que se generan aleatoriamente.",
+                    "$t(general.usage) `/8ball $t(general.options_lowercase)`",
+                    "$t(general.options)",
+                    "- `Pregunta`: ¿Sobre qué quieres que responda?"
+                ]
+            }
+        },
+        "slash_banana": {
+            "description": "Pone a alguien en la tabla de clasificación /topbanana",
+            "embed": {
+                "description": [
+                    "Le da un plátano a alguien de una manera divertida y juguetona, no se supone que ofenda a nadie.",
+                    "$t(general.usage) `/banana usuario`",
+                    "$t(general.options)",
+                    "- `Usuario`: Usuario de Discord a banan"
+                ],
+                "footer": "$t(general.note): También es posible usar este comando haciendo clic con el botón derecho (pulsación prolongada en el móvil) en una foto de perfil o nombre de usuario y luego elegir Aplicaciones > banan."
+            }
+        },
+        "slash_topbanana": {
+            "label": "Top Banana (Tabla de clasificación)",
+            "description": "Muestra los principales usuarios que obtuvieron plátano",
+            "embed": {
+                "description": [
+                    "Muestra los principales usuarios que obtuvieron plátano. En otras palabras, cuánto obtuvo alguien `/banana` por otros usuarios.",
+                    "$t(general.usage) `/topbanana $t(general.options_lowercase)`",
+                    "$t(general.options)",
+                    "- `Límite` $t(general.optional): Cuántos usuarios mostrar (máx. 50)"
+                ]
+            }
+        },
+        "slash_ping": {
+            "description": "Comprobar la velocidad de latencia del bot"
+        },
+        "slash_close": {
+            "description": "Cierra tu publicación",
+            "embed": {
+                "description": [
+                    "Cierra tu propia publicación en $t(common.channels.voice_models) o $t(common.channels.model_request). Tenga en cuenta que los miembros del personal también pueden cerrar su publicación.",
+                    "$t(general.usage) `/close`"
+                ]
+            }
+        },
+        "slash_guides": {
+            "description": "Muestra guías para RVC y cosas relacionadas",
+            "embed": {
+                "description": [
+                    "$t(help.slash_guides.description)",
+                    "$t(general.usage) `/guides $t(general.options_lowercase)`",
+                    "$t(general.options)",
+                    "- `$t(general.required) categoría`: Elija una categoría como RVC o Upload, por ejemplo",
+                    "- `$t(general.optional) idioma`: El idioma que se debe usar en la respuesta, el valor predeterminado es inglés si no está disponible",
+                    "- `$t(general.optional) usuario`: Recomiende la guía a un usuario, tenga en cuenta que esto hará ping al usuario."
+                ]
+            }
+        },
+        "slash_cloud": {
+            "description": "Úselos si no tiene una computadora potente para ejecutar cosas localmente",
+            "embed": {
+                "description": [
+                    "$t(help.slash_cloud.description)",
+                    "$t(general.usage) `/cloud $t(general.options_lowercase)`",
+                    "$t(general.options)",
+                    "- `plataforma`: Enlaces a recursos disponibles en la plataforma en la nube seleccionada (colab, kaggle, lightning, etc...)"
+                ]
+            }
+        },
+        "slash_faq": {
+            "description": "Preguntas frecuentes sobre RVC o tecnologías relacionadas",
+            "embed": {
+                "description": [
+                    "$t(help.slash_faq.description)",
+                    "$t(general.usage) `/faq $t(general.options_lowercase)`",
+                    "$t(general.options)",
+                    "- `Tema`: ¿Qué quieres saber sobre?",
+                    "- `$t(general.optional) Idioma`: Qué idioma usará el bot para responder",
+                    "- `$t(general.optional) Privado`: Si se establece en `Verdadero`, solo usted podrá ver la respuesta"
+                ]
+            }
+        },
+        "slash_help": {
+            "description": "Muestra ayuda para los comandos de Automaze",
+            "embed": {
+                "description": [
+                    "Muestra ayuda para los comandos de Automaze o los canales a los que puede solicitar ayuda en RVC o cosas relacionadas.",
+                    "$t(general.usage) `/help $t(general.options_lowercase)`",
+                    "$t(general.options)",
+                    "- `Comandos`: Elija un comando para obtener más información sobre él",
+                    "- `General`: Descubra qué canales puede pedir ayuda si necesita ayuda con RVC o cosas relacionadas"
+                ]
+            }
+        },
+        "context_banan": {
+            "description": "$t(help.slash_banana.description)",
+            "embed": {
+                "description": [
+                    "Le da un plátano a alguien de una manera divertida y juguetona, no se supone que ofenda a nadie.",
+                    "$t(general.usage) Haga clic con el botón derecho en un nombre de usuario o foto de perfil (mantenga presionado en el móvil), luego seleccione `Apps > banan`"
+                ],
+                "footer": "$t(general.note): También es posible usar este comando con /banana"
+            }
+        },
+        "context_colab": {
+            "description": "Envía los enlaces para los blocs de notas de Google Colab en funcionamiento",
+            "embed": {
+                "description": [
+                    "$t(help.context_colab.description)",
+                    "$t(general.usage) Haga clic con el botón derecho en un nombre de usuario o foto de perfil (mantenga presionado en el móvil), luego seleccione `Apps > Send Colab links`"
+                ],
+                "footer": "$t(general.note): También es posible acceder a los enlaces de colab con /cloud"
+            }
+        },
+        "context_realtime": {
+            "description": "Envía los enlaces para el RVC en tiempo real",
+            "embed": {
+                "description": [
+                    "Envía los enlaces para los guías RVC y W-Okada en tiempo real",
+                    "$t(general.usage) Haga clic con el botón derecho en un nombre de usuario o foto de perfil (mantenga presionado en el móvil), luego seleccione `Apps > Send Realtime links`"
+                ]
+            }
+        },
+        "context_rvc": {
+            "description": "Envía los enlaces para los guías de RVC",
+            "embed": {
+                "description": [
+                    "$t(help.context_rvc.description)",
+                    "$t(general.usage) Haga clic con el botón derecho en un nombre de usuario o foto de perfil (mantenga presionado en el móvil), luego seleccione `Apps > Send RVC guides`"
+                ]
+            }
+        },
+        "context_help": {
+            "description": "Envía los enlaces a los canales de ayuda",
+            "embed": {
+                "description": [
+                    "$t(help.context_help.description)",
+                    "$t(general.usage) Haga clic con el botón derecho en un nombre de usuario o foto de perfil (mantenga presionado en el móvil), luego seleccione `Apps > Send Help`"
+                ],
+                "footer": "$t(general.note): También es posible acceder a los enlaces de los canales con el comando /help general"
+            }
+        },
+        "prefix_audio": {
+            "icon": "$t(common.emojis.audio)",
+            "label": "Audio",
+            "description": "Guides for making datasets",
+            "embed": {
+                "description": [
+                    "Learn how to process your dataset audio for creating high quality RVC models. Also available in `/guides` command.",
+                    "$t(general.usage) `-audio options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -dataset"
+            }
+        },
+        "prefix_colab": {
+            "icon": "$t(common.emojis.colab)",
+            "label": "Colab",
+            "description": "Google Colab Notebooks",
+            "embed": {
+                "description": [
+                    "Latest working links for $t(common.websites.colab) notebooks",
+                    "$t(general.usage) `-colab options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -colabs, -disconnected, -train, -training"
+            }
+        },
+        "prefix_gui": {
+            "icon": "$t(common.emojis.laptop)",
+            "label": "GUI",
+            "description": "RVC Easy GUI",
+            "embed": {
+                "description": [
+                    "Yeah, I still use RVC Easy GUI",
+                    "$t(general.usage) `-gui options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ]
+            }
+        },
+        "prefix_hf": {
+            "icon": "$t(common.emojis.hf)",
+            "label": "Huggingface",
+            "description": "Huggingface Spaces",
+            "embed": {
+                "description": [
+                    "List of up to date huggingface spaces. Also available with `/cloud` command.",
+                    "$t(general.usage) `-hf options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -spaces, -huggingface"
+            }
+        },
+        "prefix_hfstatus": {
+            "icon": "$t(common.emojis.hf)",
+            "label": "Huggingface Status",
+            "description": "Check status of the hugginface spaces",
+            "embed": {
+                "description": ["Check status of the hugginface spaces.", "$t(general.usage) `-hfstatus`"]
+            }
+        },
+        "prefix_java": {
+            "icon": "☕",
+            "label": "Java",
+            "description": "Java vs JavaScript",
+            "embed": {
+                "description": [
+                    "Difference of Java and JavaScript by **FungusDesu**",
+                    "$t(general.usage) `-java`"
+                ],
+                "footer": "Aliases: -js, -javascript"
+            }
+        },
+        "prefix_kaggle": {
+            "icon": "$t(common.emojis.kaggle)",
+            "label": "Kaggle",
+            "description": "Kaggle Notebooks",
+            "embed": {
+                "description": [
+                    "List of up to date $t(common.websites.kaggle) notebooks. Also available with `/cloud` command.",
+                    "$t(general.usage) `-kaggle options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ]
+            }
+        },
+        "prefix_karafan": {
+            "icon": "$t(common.emojis.mic)",
+            "label": "Karafan",
+            "description": "Good vocal/instrumental separator",
+            "embed": {
+                "description": [
+                    "Good vocal/instrumental separator. Create acapella or instrumental from an audio source.",
+                    "$t(general.usage) `-karafan options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ]
+            }
+        },
+        "prefix_lightning": {
+            "icon": "$t(common.emojis.lightning)",
+            "label": "Lightning AI",
+            "description": "Links to relevant lightning.ai stuff!",
+            "embed": {
+                "description": [
+                    "List of up to date $t(common.websites.lightning) notebooks. Also available with `/cloud` command.",
+                    "$t(general.usage) `-lightning options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -light, -lightningai"
+            }
+        },
+        "prefix_local": {
+            "icon": "$t(common.emojis.laptop)",
+            "label": "Local",
+            "description": "Run RVC locally",
+            "embed": {
+                "description": [
+                    "List of up to date guides for using RVC on a local machine. Also available in `/guides` command.",
+                    "$t(general.usage) `-local options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)",
+                    "\n> Note: You need a good GPU to run these locally"
+                ],
+                "footer": "Aliases: -applio, -mangio, -studio, -links"
+            }
+        },
+        "prefix_overtraining": {
+            "icon": "📈",
+            "label": "Overtrain",
+            "description": "How to avoid it",
+            "embed": {
+                "description": [
+                    "Learn how to detect if your voice model is overtraining and how to avoid it.",
+                    "$t(general.usage) `-overtrain options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Alias: -overtraining"
+            }
+        },
+        "prefix_realtime": {
+            "icon": "$t(common.emojis.mic)",
+            "label": "Realtime",
+            "description": "Realtime RVC",
+            "embed": {
+                "description": [
+                    "List of up to date guides for using realtime RVC. Also available in `/guides` command.",
+                    "$t(general.usage) `-realtime options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -rt, -tts"
+            }
+        },
+        "prefix_rvc": {
+            "icon": "$t(common.emojis.mic)",
+            "label": "RVC",
+            "description": "Retrieval-based Voice Conversion",
+            "embed": {
+                "description": [
+                    "Guides for using RVC to train voice models or create ai covers. Also available in `/guides` command.",
+                    "$t(general.usage) `-rvc options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -guide, -guides, -doc, -docs, -documentation"
+            }
+        },
+        "prefix_svc": {
+            "icon": "🗿",
+            "label": "SVC",
+            "description": "So-Vits-SVC",
+            "embed": {
+                "description": [
+                    "Yeah, I still use so-vits-svc!!!",
+                    "$t(general.usage) `-svc options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ]
+            }
+        },
+        "prefix_tracker": {
+            "icon": "📃",
+            "label": "Tracker",
+            "description": "Voice model tracker",
+            "embed": {
+                "description": [
+                    "Massive spreadsheet with RVC models (outdated).",
+                    "$t(general.usage) `-tracker options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
+                ],
+                "footer": "Aliases: -ss, -spreadsheet"
+            }
+        },
+        "prefix_uvr": {
+            "icon": "$t(common.emojis.laptop)",
+            "label": "UVR",
+            "description": "Ultimate Vocal Remover",
+            "embed": {
+                "description": [
+                    "**Ultimate Vocal Remover** is a fantastic option for audio stems separation. Learn how to use it with `/guides` command.",
+                    "$t(general.usage) `-uvr options`",
+                    "$t(general.options)",
+                    "- $t(general.optional) `User`: Send this to a user (will ping them)"
                 ]
             }
         }

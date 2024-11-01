@@ -593,7 +593,7 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
         content: '',
         ephemeral,
     };
-    const selectMenuDisplayMinutes = 1; // allow interaction with the select menu for 14 minutes
+    const selectMenuDisplayMinutes = 14; // allow interaction with the select menu for 14 minutes
     const mainUser = author;
     if (targetUser) {
         botResponse.content = i18n_1.default.t('general.suggestions_for_user', {
