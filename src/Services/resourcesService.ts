@@ -1,8 +1,7 @@
 /* Resources: Documentation links */
 
-import fs from 'fs/promises';
-import { RESOURCES_DATABASE_PATH, resourcesDatabase } from '../Database/dbManager';
 import winston from 'winston';
+import knexInstance from '../db';
 
 export interface IResource {
     id?: number;
@@ -27,65 +26,13 @@ export default class ResourceService {
     }
 
     /**
-     * Initializes the resources.sqlite database schema by creating the tables
-     *
-     * @returns boolean Whether the database was successfully created or not
-     */
-    async createDatabase(): Promise<boolean> {
-        try {
-            await resourcesDatabase.schema.createTable('resources', (table) => {
-                table.increments('id').primary();
-                table.string('category').notNullable();
-                table.string('url').notNullable();
-                table.string('displayTitle');
-                table.string('emoji');
-                table.string('authors');
-            });
-
-            await resourcesDatabase.schema.createTable('collaborators', (table) => {
-                table.string('discordId').primary();
-                table.string('username').notNullable();
-                table.string('displayName');
-            });
-
-            await resourcesDatabase.schema.createTable('settings', (table) => {
-                table.increments('id').primary();
-                table.string('debug_guild_id');
-                table.string('debug_guild_channel_id');
-                table.boolean('send_logs');
-                table.boolean('send_automated_messages');
-            });
-
-            return true;
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (error) {
-            return false;
-        }
-    }
-
-    /**
-     * Drops the resources database
-     * @returns boolean If the database was successfully removed
-     */
-    async dropDatabase(): Promise<boolean> {
-        try {
-            await resourcesDatabase.destroy();
-            await fs.unlink(RESOURCES_DATABASE_PATH);
-            return true;
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (error) {
-            return false;
-        }
-    }
-
-    /**
      * Inserts a resource in the database
      * @param resource Object of type IResource
      * @returns The id of the inserted record
      */
     async insert(resource: IResource): Promise<number> {
         try {
-            const [id] = await resourcesDatabase('resources').insert(resource);
+            const [id] = await knexInstance('resources').insert(resource);
             this.logger.info(`Resource created with ID: ${id}`);
             return id;
         } catch (error) {
@@ -99,13 +46,13 @@ export default class ResourceService {
      * @returns Array of IResource
      */
     async findAll(): Promise<IResource[]> {
-        const queryResult: IResource[] = await resourcesDatabase('resources').select('*');
+        const queryResult: IResource[] = await knexInstance('resources').select('*');
         return queryResult;
     }
 
     async findById(id: number): Promise<IResource | undefined> {
         try {
-            const resource = await resourcesDatabase('resources').where({ id }).first();
+            const resource = await knexInstance('resources').where({ id }).first();
             this.logger.info('Resource fetched:', resource);
             return resource;
         } catch (error) {
@@ -115,7 +62,7 @@ export default class ResourceService {
 
     async findByCategory(category: string): Promise<IResource[]> {
         try {
-            const resources = await resourcesDatabase('resources').where({ category });
+            const resources = await knexInstance('resources').where({ category });
 
             if (!resources) {
                 this.logger.debug(`No resource found for ${category}`);
@@ -142,18 +89,18 @@ export default class ResourceService {
         let counter = undefined;
 
         if (filter) {
-            data = await resourcesDatabase('resources')
+            data = await knexInstance('resources')
                 .select('*')
                 .where(filter.column, filter.value)
                 .limit(recordsPerPage)
                 .offset(offset);
-            counter = await resourcesDatabase('resources')
+            counter = await knexInstance('resources')
                 .where(filter.column, filter.value)
                 .count('* as count')
                 .first();
         } else {
-            data = await resourcesDatabase('resources').select('*').limit(recordsPerPage).offset(offset);
-            counter = await resourcesDatabase('resources').count('* as count').first();
+            data = await knexInstance('resources').select('*').limit(recordsPerPage).offset(offset);
+            counter = await knexInstance('resources').count('* as count').first();
         }
         return { data, counter };
     }
@@ -166,7 +113,7 @@ export default class ResourceService {
      */
     async update(id: number, resource: Partial<IResource>): Promise<boolean> {
         try {
-            await resourcesDatabase('resources').where({ id }).update(resource);
+            await knexInstance('resources').where({ id }).update(resource);
             this.logger.info(`Resouce with id ${id} updated`);
             return true;
         } catch (error) {
@@ -181,7 +128,7 @@ export default class ResourceService {
      */
     async delete(id: number): Promise<boolean> {
         try {
-            await resourcesDatabase('resources').where({ id }).del();
+            await knexInstance('resources').where({ id }).del();
             this.logger.info(`Deleted resource with id ${id}`);
             return true;
         } catch (error) {
@@ -195,7 +142,7 @@ export default class ResourceService {
      */
     async clear(): Promise<void> {
         try {
-            await resourcesDatabase('resources').del();
+            await knexInstance('resources').del();
             this.logger.info(`All resources cleared.`);
         } catch (error) {
             this.logger.error(`Failed to delete resources`, error);
@@ -209,7 +156,7 @@ export default class ResourceService {
      */
     async importData(resources: IResource[]): Promise<boolean> {
         try {
-            const result = await resourcesDatabase('resources').insert(resources);
+            const result = await knexInstance('resources').insert(resources);
             this.logger.info(`Resource data imported`);
             return result.length > 0;
         } catch (error) {

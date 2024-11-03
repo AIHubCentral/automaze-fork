@@ -56,25 +56,7 @@ const Botdata = {
         const client = interaction.client;
         const service = new resourcesService_1.default(client.logger);
         const id = interaction.options.getInteger('id') ?? 1; // defaults to 1
-        if (interaction.options.getSubcommand() === 'create') {
-            const databaseCreated = await service.createDatabase();
-            if (databaseCreated) {
-                await interaction.reply({ content: 'Database created.' });
-            }
-            else {
-                await interaction.reply({ content: 'Failed to create database.' });
-            }
-        }
-        else if (interaction.options.getSubcommand() === 'drop') {
-            const databaseDropped = await service.dropDatabase();
-            if (databaseDropped) {
-                await interaction.reply({ content: 'Database dropped.' });
-            }
-            else {
-                await interaction.reply({ content: 'Failed to drop database.' });
-            }
-        }
-        else if (interaction.options.getSubcommand() === 'find_all') {
+        if (interaction.options.getSubcommand() === 'find_all') {
             const pageNumber = 1;
             const { data, totalPages } = await (0, botUtilities_1.getPaginatedData)(pageNumber, service);
             if (!data || data.length === 0) {

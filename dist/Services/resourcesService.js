@@ -4,61 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const promises_1 = __importDefault(require("fs/promises"));
-const dbManager_1 = require("../Database/dbManager");
+const db_1 = __importDefault(require("../db"));
 class ResourceService {
     logger;
     constructor(logger) {
         this.logger = logger;
-    }
-    /**
-     * Initializes the resources.sqlite database schema by creating the tables
-     *
-     * @returns boolean Whether the database was successfully created or not
-     */
-    async createDatabase() {
-        try {
-            await dbManager_1.resourcesDatabase.schema.createTable('resources', (table) => {
-                table.increments('id').primary();
-                table.string('category').notNullable();
-                table.string('url').notNullable();
-                table.string('displayTitle');
-                table.string('emoji');
-                table.string('authors');
-            });
-            await dbManager_1.resourcesDatabase.schema.createTable('collaborators', (table) => {
-                table.string('discordId').primary();
-                table.string('username').notNullable();
-                table.string('displayName');
-            });
-            await dbManager_1.resourcesDatabase.schema.createTable('settings', (table) => {
-                table.increments('id').primary();
-                table.string('debug_guild_id');
-                table.string('debug_guild_channel_id');
-                table.boolean('send_logs');
-                table.boolean('send_automated_messages');
-            });
-            return true;
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        }
-        catch (error) {
-            return false;
-        }
-    }
-    /**
-     * Drops the resources database
-     * @returns boolean If the database was successfully removed
-     */
-    async dropDatabase() {
-        try {
-            await dbManager_1.resourcesDatabase.destroy();
-            await promises_1.default.unlink(dbManager_1.RESOURCES_DATABASE_PATH);
-            return true;
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        }
-        catch (error) {
-            return false;
-        }
     }
     /**
      * Inserts a resource in the database
@@ -67,7 +17,7 @@ class ResourceService {
      */
     async insert(resource) {
         try {
-            const [id] = await (0, dbManager_1.resourcesDatabase)('resources').insert(resource);
+            const [id] = await (0, db_1.default)('resources').insert(resource);
             this.logger.info(`Resource created with ID: ${id}`);
             return id;
         }
@@ -81,12 +31,12 @@ class ResourceService {
      * @returns Array of IResource
      */
     async findAll() {
-        const queryResult = await (0, dbManager_1.resourcesDatabase)('resources').select('*');
+        const queryResult = await (0, db_1.default)('resources').select('*');
         return queryResult;
     }
     async findById(id) {
         try {
-            const resource = await (0, dbManager_1.resourcesDatabase)('resources').where({ id }).first();
+            const resource = await (0, db_1.default)('resources').where({ id }).first();
             this.logger.info('Resource fetched:', resource);
             return resource;
         }
@@ -96,7 +46,7 @@ class ResourceService {
     }
     async findByCategory(category) {
         try {
-            const resources = await (0, dbManager_1.resourcesDatabase)('resources').where({ category });
+            const resources = await (0, db_1.default)('resources').where({ category });
             if (!resources) {
                 this.logger.debug(`No resource found for ${category}`);
                 return [];
@@ -114,19 +64,19 @@ class ResourceService {
         let data = null;
         let counter = undefined;
         if (filter) {
-            data = await (0, dbManager_1.resourcesDatabase)('resources')
+            data = await (0, db_1.default)('resources')
                 .select('*')
                 .where(filter.column, filter.value)
                 .limit(recordsPerPage)
                 .offset(offset);
-            counter = await (0, dbManager_1.resourcesDatabase)('resources')
+            counter = await (0, db_1.default)('resources')
                 .where(filter.column, filter.value)
                 .count('* as count')
                 .first();
         }
         else {
-            data = await (0, dbManager_1.resourcesDatabase)('resources').select('*').limit(recordsPerPage).offset(offset);
-            counter = await (0, dbManager_1.resourcesDatabase)('resources').count('* as count').first();
+            data = await (0, db_1.default)('resources').select('*').limit(recordsPerPage).offset(offset);
+            counter = await (0, db_1.default)('resources').count('* as count').first();
         }
         return { data, counter };
     }
@@ -138,7 +88,7 @@ class ResourceService {
      */
     async update(id, resource) {
         try {
-            await (0, dbManager_1.resourcesDatabase)('resources').where({ id }).update(resource);
+            await (0, db_1.default)('resources').where({ id }).update(resource);
             this.logger.info(`Resouce with id ${id} updated`);
             return true;
         }
@@ -153,7 +103,7 @@ class ResourceService {
      */
     async delete(id) {
         try {
-            await (0, dbManager_1.resourcesDatabase)('resources').where({ id }).del();
+            await (0, db_1.default)('resources').where({ id }).del();
             this.logger.info(`Deleted resource with id ${id}`);
             return true;
         }
@@ -167,7 +117,7 @@ class ResourceService {
      */
     async clear() {
         try {
-            await (0, dbManager_1.resourcesDatabase)('resources').del();
+            await (0, db_1.default)('resources').del();
             this.logger.info(`All resources cleared.`);
         }
         catch (error) {
@@ -181,7 +131,7 @@ class ResourceService {
      */
     async importData(resources) {
         try {
-            const result = await (0, dbManager_1.resourcesDatabase)('resources').insert(resources);
+            const result = await (0, db_1.default)('resources').insert(resources);
             this.logger.info(`Resource data imported`);
             return result.length > 0;
         }

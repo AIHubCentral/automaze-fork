@@ -1,6 +1,5 @@
-import fs from 'fs/promises';
-import { RESOURCES_DATABASE_PATH, resourcesDatabase } from '../Database/dbManager';
 import winston from 'winston';
+import knexInstance from '../db';
 
 export interface ICollaborator {
     discordId: string;
@@ -17,7 +16,7 @@ export default class CollaboratorService {
 
     async insert(resource: ICollaborator): Promise<number> {
         try {
-            const [discord_id] = await resourcesDatabase('collaborators').insert(resource);
+            const [discord_id] = await knexInstance('collaborators').insert(resource);
             this.logger.info(`Collaborator ${discord_id} added`);
             return discord_id;
         } catch (error) {
@@ -27,13 +26,13 @@ export default class CollaboratorService {
     }
 
     async findAll(): Promise<ICollaborator[]> {
-        const queryResult: ICollaborator[] = await resourcesDatabase('collaborators').select('*');
+        const queryResult: ICollaborator[] = await knexInstance('collaborators').select('*');
         return queryResult;
     }
 
     async findById(id: string): Promise<ICollaborator | undefined> {
         try {
-            const resource = await resourcesDatabase('collaborators').where({ discordId: id }).first();
+            const resource = await knexInstance('collaborators').where({ discordId: id }).first();
             this.logger.info('Collaborator fetched:', resource);
             return resource;
         } catch (error) {
@@ -44,7 +43,7 @@ export default class CollaboratorService {
     /*
     async update(id: number, resource: Partial<ICollaborator>): Promise<boolean> {
         try {
-            await resourcesDatabase('resources').where({ id }).update(resource);
+            await knexInstance('resources').where({ id }).update(resource);
             this.logger.info(`Resouce with id ${id} updated`);
             return true;
         }
@@ -60,7 +59,7 @@ export default class CollaboratorService {
      */
     async delete(id: string): Promise<boolean> {
         try {
-            await resourcesDatabase('collaborators').where({ discordId: id }).del();
+            await knexInstance('collaborators').where({ discordId: id }).del();
             this.logger.info(`Deleted collaborator with id ${id}`);
             return true;
         } catch (error) {

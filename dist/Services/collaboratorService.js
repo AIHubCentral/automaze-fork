@@ -1,6 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const dbManager_1 = require("../Database/dbManager");
+const db_1 = __importDefault(require("../db"));
 class CollaboratorService {
     logger;
     constructor(logger) {
@@ -8,7 +11,7 @@ class CollaboratorService {
     }
     async insert(resource) {
         try {
-            const [discord_id] = await (0, dbManager_1.resourcesDatabase)('collaborators').insert(resource);
+            const [discord_id] = await (0, db_1.default)('collaborators').insert(resource);
             this.logger.info(`Collaborator ${discord_id} added`);
             return discord_id;
         }
@@ -18,12 +21,12 @@ class CollaboratorService {
         }
     }
     async findAll() {
-        const queryResult = await (0, dbManager_1.resourcesDatabase)('collaborators').select('*');
+        const queryResult = await (0, db_1.default)('collaborators').select('*');
         return queryResult;
     }
     async findById(id) {
         try {
-            const resource = await (0, dbManager_1.resourcesDatabase)('collaborators').where({ discordId: id }).first();
+            const resource = await (0, db_1.default)('collaborators').where({ discordId: id }).first();
             this.logger.info('Collaborator fetched:', resource);
             return resource;
         }
@@ -34,7 +37,7 @@ class CollaboratorService {
     /*
     async update(id: number, resource: Partial<ICollaborator>): Promise<boolean> {
         try {
-            await resourcesDatabase('resources').where({ id }).update(resource);
+            await knexInstance('resources').where({ id }).update(resource);
             this.logger.info(`Resouce with id ${id} updated`);
             return true;
         }
@@ -49,7 +52,7 @@ class CollaboratorService {
      */
     async delete(id) {
         try {
-            await (0, dbManager_1.resourcesDatabase)('collaborators').where({ discordId: id }).del();
+            await (0, db_1.default)('collaborators').where({ discordId: id }).del();
             this.logger.info(`Deleted collaborator with id ${id}`);
             return true;
         }
