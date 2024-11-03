@@ -1,9 +1,9 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
-import ExtendedClient from '../../Core/extendedClient';
 import { EmbedData } from '../../Interfaces/BotData';
-import UserService from '../../Services/userService';
 import { createEmbed } from '../../Utils/discordUtilities';
+import { getAllUsers } from '../../Services/userService';
+import knexInstance from '../../db';
 
 const TopBanana: SlashCommand = {
     category: 'Fun',
@@ -15,8 +15,6 @@ const TopBanana: SlashCommand = {
             option.setName('limit').setDescription('How many users to show (max 50)')
         ),
     async execute(interaction) {
-        const client = <ExtendedClient>interaction.client;
-
         await interaction.deferReply();
 
         const embedData: EmbedData = {
@@ -26,16 +24,13 @@ const TopBanana: SlashCommand = {
             description: [],
         };
 
-        const userService = new UserService(client.knexInstance);
-
         let totalToShow = interaction.options.getInteger('limit') ?? 15;
 
         if (totalToShow > 50) {
             totalToShow = 50;
         }
 
-        const users = await userService.getAll('bananas', true, totalToShow);
-        //client.knexInstance('user').orderBy('bananas', 'desc').limit(15);
+        const users = await getAllUsers(knexInstance, totalToShow, 'bananas', 'desc');
 
         if (users.length === 0) {
             embedData.description?.push(
@@ -48,7 +43,7 @@ const TopBanana: SlashCommand = {
         let rankCounter = 1;
         for (const entry of users) {
             const user = entry;
-            const userDisplay = user.displayName ?? user.userName;
+            const userDisplay = user.display_name ?? user.username;
             const userProfileLink = 'https://discordapp.com/users/' + user.id;
             embedData.description?.push(
                 `${rankCounter}. [${userDisplay}](${userProfileLink}) — ${user.bananas}`

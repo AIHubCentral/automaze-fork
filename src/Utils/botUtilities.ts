@@ -28,7 +28,7 @@ import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { ButtonData, EmbedData, SelectMenuData, SelectMenuOption } from '../Interfaces/BotData';
 import { createButtons, createEmbed, createEmbeds, getChannelById, getGuildById } from './discordUtilities';
-import UserService, { UserModel } from '../Services/userService';
+import { createUser, getUser, incrementBananaCount, updateUser, UserDTO } from '../Services/userService';
 import path from 'path';
 import fs from 'fs';
 import { getAllFiles } from './fileUtilities';
@@ -37,6 +37,8 @@ import winston from 'winston';
 import i18next from '../i18n';
 import { generateRandomId, processTranslation, TranslationResult } from './generalUtilities';
 import natural from 'natural';
+
+import knexInstance from '../db';
 
 /* Enums */
 export enum CloudPlatform {
@@ -621,24 +623,31 @@ export async function banan(
     }
 
     /* check if user exists in database, otherwise add it */
-    const userService = new UserService(client.knexInstance);
-    let userModel = await userService.getById(member.id);
+    let userModel = await getUser(knexInstance, member.id);
 
     if (!userModel) {
         client.logger.debug(`User ${member.id} not found in database, creating...`);
-        const newUser: UserModel = {
+        const newUser: UserDTO = {
             id: `${member.id}`,
-            userName: member.username,
-            displayName: guildMember.displayName ?? guildMember.nickname ?? member.username,
+            username: member.username,
+            display_name: guildMember.displayName ?? guildMember.nickname ?? member.username,
             bananas: 0,
         };
-        userModel = await userService.add(newUser);
-        client.logger.debug(`${userModel.userName} (${userModel.id}) added to database`);
+
+        await createUser(knexInstance, newUser);
+
+        userModel = await getUser(knexInstance, newUser.id);
+
+        if (userModel) {
+            client.logger.debug(`${userModel.username} (${userModel.id}) added to database`);
+        }
     }
 
     // check if display name changed
-    if (guildMember.displayName != null && guildMember.displayName !== userModel.displayName) {
-        await userService.update(member.id, { display_name: guildMember.nickname ?? member.displayName });
+    if (userModel && guildMember.displayName != null && guildMember.displayName !== userModel.display_name) {
+        await updateUser(knexInstance, member.id, {
+            display_name: guildMember.nickname ?? member.displayName,
+        });
         client.logger.debug(
             `Added ${guildMember.nickname ?? member.displayName} display name for ${member.username}`
         );
@@ -646,7 +655,8 @@ export async function banan(
 
     /* increment banana count */
 
-    userModel = await userService.incrementBananaCount(member.id);
+    userModel = await incrementBananaCount(knexInstance, member.id);
+
     if (!userModel) {
         client.logger.error(`Failed to update ${member.username} banan count`);
         return interaction.reply({ content: 'Failed to banan user.', ephemeral: true });
@@ -660,7 +670,7 @@ export async function banan(
     embedData.description[0] = embedData.description[0].replaceAll('$member', member);
     embedData.footer = embedData.footer.replace('$quantity', userModel.bananas);
 
-    if (userModel.bananas > 1) {
+    if (userModel.bananas && userModel.bananas > 1) {
         embedData.footer = embedData.footer.replace('TIME', 'TIMES');
     }
 

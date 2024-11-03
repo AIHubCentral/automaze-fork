@@ -1,4 +1,6 @@
-import knex from 'knex';
+import Knex from 'knex';
+
+// TODO: swap UserModel and UserDTO field names
 
 export interface UserModel {
     id: string;
@@ -7,83 +9,64 @@ export interface UserModel {
     bananas: number;
 }
 
-interface IUserService {
-    database: knex.Knex;
-    getAll(orderBy?: string, descending?: boolean, limit?: number): Promise<UserModel[]>;
-    getById(id: string): Promise<UserModel | undefined>;
-    add(user: UserModel): Promise<UserModel>;
-    update(id: string, data: any): Promise<boolean>;
-    incrementBananaCount(id: string): Promise<UserModel | undefined>;
+export interface UserDTO {
+    id: string;
+    username: string;
+    display_name: string;
+    bananas?: number;
 }
 
-class UserService implements IUserService {
-    database: knex.Knex;
-
-    constructor(database: knex.Knex) {
-        this.database = database;
-    }
-
-    async getById(id: string): Promise<UserModel | undefined> {
-        let query = this.database('user');
-        const result = await query.where('id', id).first();
-        if (!result) return;
-        const foundUser: UserModel = {
-            id: result.id,
-            userName: result.username,
-            displayName: result.display_name,
-            bananas: result.bananas,
-        };
-        return foundUser;
-    }
-
-    async getAll(orderBy?: string, descending?: boolean, limit?: number): Promise<UserModel[]> {
-        let query = this.database('user');
-
-        if (orderBy) {
-            query = query.orderBy(orderBy, descending ? 'desc' : 'asc');
-        }
-
-        if (limit) {
-            query = query.limit(limit);
-        }
-
-        const result = await query.select('*');
-
-        const users: UserModel[] = [];
-
-        for (const item of result) {
-            users.push({
-                id: item.id,
-                userName: item.username,
-                displayName: item.display_name,
-                bananas: item.bananas,
-            });
-        }
-
-        return users;
-    }
-
-    async add(user: UserModel): Promise<UserModel> {
-        const userDb = this.database('user');
-        await userDb.insert(user);
-        return user;
-    }
-
-    async update(userId: string, data: any): Promise<boolean> {
-        const userDb = this.database('user');
-        try {
-            await userDb.update(data).where({ id: userId });
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    async incrementBananaCount(userId: string): Promise<UserModel | undefined> {
-        await this.database('user').where('id', userId).increment('bananas', 1);
-        const updatedUser = await this.getById(userId);
-        return updatedUser;
-    }
+export async function createUser(knexInstance: Knex.Knex, userData: UserDTO) {
+    const [id] = await knexInstance('users').insert(userData).returning('id');
+    return id;
 }
 
-export default UserService;
+export async function getUser(knexInstance: Knex.Knex, id: string) {
+    const users = await knexInstance('users').where({ id }).first();
+
+    if (users) {
+        const userData = users as UserDTO;
+        return userData;
+    }
+
+    return null;
+}
+
+export async function getAllUsers(
+    knexInstance: Knex.Knex,
+    limit?: number,
+    sortBy?: string,
+    order: 'asc' | 'desc' = 'asc'
+): Promise<UserDTO[]> {
+    const query = knexInstance('users').select('*');
+
+    if (sortBy) {
+        query.orderBy(sortBy, order);
+    }
+
+    if (limit) {
+        query.limit(limit);
+    }
+
+    return await query;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function updateUser(knexInstance: Knex.Knex, id: string, userData: any) {
+    await knexInstance('users').where({ id }).update(userData);
+    return getUser(knexInstance, id); // Return updated user data
+}
+
+export async function deleteUser(knexInstance: Knex.Knex, id: string) {
+    await knexInstance('users').where({ id }).del();
+}
+
+export async function deleteAllUsers(knexInstance: Knex.Knex) {
+    await knexInstance('users').del();
+}
+
+export async function incrementBananaCount(knexInstance: Knex.Knex, userId: string) {
+    await knexInstance('user').where('id', userId).increment('bananas', 1);
+    const updatedUser = await getUser(knexInstance, userId);
+    return updatedUser;
+}

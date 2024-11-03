@@ -8,7 +8,7 @@ async function seed(knex) {
     await knex('settings').insert([
         { debug_guild_id: '1234567890' },
         { debug_guild_channel_id: '0987654321' },
-        { sendLogs: true },
+        { send_logs: true },
         { send_automated_replies: false },
     ]);
 }

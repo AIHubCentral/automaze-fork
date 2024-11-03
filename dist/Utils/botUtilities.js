@@ -26,7 +26,7 @@ exports.getLanguageByChannelId = getLanguageByChannelId;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
-const userService_1 = __importDefault(require("../Services/userService"));
+const userService_1 = require("../Services/userService");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const fileUtilities_1 = require("./fileUtilities");
@@ -34,6 +34,7 @@ const resourcesService_1 = __importDefault(require("../Services/resourcesService
 const i18n_1 = __importDefault(require("../i18n"));
 const generalUtilities_1 = require("./generalUtilities");
 const natural_1 = __importDefault(require("natural"));
+const db_1 = __importDefault(require("../db"));
 /* Enums */
 var CloudPlatform;
 (function (CloudPlatform) {
@@ -492,26 +493,30 @@ async function banan(interaction, targetUser, guildMember) {
         botRevenge = true;
     }
     /* check if user exists in database, otherwise add it */
-    const userService = new userService_1.default(client.knexInstance);
-    let userModel = await userService.getById(member.id);
+    let userModel = await (0, userService_1.getUser)(db_1.default, member.id);
     if (!userModel) {
         client.logger.debug(`User ${member.id} not found in database, creating...`);
         const newUser = {
             id: `${member.id}`,
-            userName: member.username,
-            displayName: guildMember.displayName ?? guildMember.nickname ?? member.username,
+            username: member.username,
+            display_name: guildMember.displayName ?? guildMember.nickname ?? member.username,
             bananas: 0,
         };
-        userModel = await userService.add(newUser);
-        client.logger.debug(`${userModel.userName} (${userModel.id}) added to database`);
+        await (0, userService_1.createUser)(db_1.default, newUser);
+        userModel = await (0, userService_1.getUser)(db_1.default, newUser.id);
+        if (userModel) {
+            client.logger.debug(`${userModel.username} (${userModel.id}) added to database`);
+        }
     }
     // check if display name changed
-    if (guildMember.displayName != null && guildMember.displayName !== userModel.displayName) {
-        await userService.update(member.id, { display_name: guildMember.nickname ?? member.displayName });
+    if (userModel && guildMember.displayName != null && guildMember.displayName !== userModel.display_name) {
+        await (0, userService_1.updateUser)(db_1.default, member.id, {
+            display_name: guildMember.nickname ?? member.displayName,
+        });
         client.logger.debug(`Added ${guildMember.nickname ?? member.displayName} display name for ${member.username}`);
     }
     /* increment banana count */
-    userModel = await userService.incrementBananaCount(member.id);
+    userModel = await (0, userService_1.incrementBananaCount)(db_1.default, member.id);
     if (!userModel) {
         client.logger.error(`Failed to update ${member.username} banan count`);
         return interaction.reply({ content: 'Failed to banan user.', ephemeral: true });
