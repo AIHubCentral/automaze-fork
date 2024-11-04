@@ -19,7 +19,7 @@ async function up(knex) {
         table.string('authors');
     });
     await knex.schema.createTable('collaborators', (table) => {
-        table.string('discordId').primary();
+        table.string('id').primary();
         table.string('username').notNullable();
         table.string('displayName');
     });

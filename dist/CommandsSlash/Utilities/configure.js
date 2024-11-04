@@ -4,9 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-const generalUtilities_js_1 = require("../../Utils/generalUtilities.js");
-const botUtilities_js_1 = require("../../Utils/botUtilities.js");
-const collaboratorService_js_1 = __importDefault(require("../../Services/collaboratorService.js"));
+const generalUtilities_1 = require("../../Utils/generalUtilities");
+const botUtilities_1 = require("../../Utils/botUtilities");
+const collaboratorService_1 = __importDefault(require("../../Services/collaboratorService"));
+const db_1 = __importDefault(require("../../db"));
 const Configure = {
     category: 'Utilities',
     cooldown: 15,
@@ -97,7 +98,7 @@ const Configure = {
         .setRequired(false))),
     async execute(interaction) {
         const client = interaction.client;
-        const { botConfigs, logger } = client;
+        const { botConfigs } = client;
         if (interaction.options.getSubcommand() === 'comission') {
             await configureCommision(interaction, botConfigs);
         }
@@ -126,7 +127,7 @@ const Configure = {
             await configureLogs(interaction);
         }
         else if (interaction.options.getSubcommand() === 'collaborators') {
-            const service = new collaboratorService_js_1.default(logger);
+            const service = new collaboratorService_1.default(db_1.default);
             await configureCollaborators(interaction, service);
         }
     },
@@ -175,7 +176,7 @@ async function configureTheme(interaction, configs) {
     });
     collector.on('collect', (i) => {
         const themeName = i.values[0];
-        const themes = (0, botUtilities_js_1.getThemes)();
+        const themes = (0, botUtilities_1.getThemes)();
         configs.colors.theme = themes[themeName];
         i.reply(`Theme changed to ** ${themeName}**.`);
     });
@@ -187,7 +188,7 @@ async function configureStatus(interaction) {
     await interaction.deferReply({ ephemeral: true });
     const selectedStatus = interaction.options.getString('statuses') ?? 'online';
     interaction.client.user.setStatus(selectedStatus);
-    await (0, generalUtilities_js_1.delay)(5000);
+    await (0, generalUtilities_1.delay)(5000);
     await interaction.editReply({ content: `Status: ${selectedStatus} ` });
 }
 async function configureActivity(interaction) {
@@ -197,7 +198,7 @@ async function configureActivity(interaction) {
     let activityType = undefined;
     if (activityTypeInput === 'reset') {
         interaction.client.user.setPresence({});
-        await (0, generalUtilities_js_1.delay)(3000);
+        await (0, generalUtilities_1.delay)(3000);
         await interaction.editReply({ content: 'Activity reseted' });
     }
     else {
@@ -213,7 +214,7 @@ async function configureActivity(interaction) {
             name: activityName,
             type: activityType,
         });
-        await (0, generalUtilities_js_1.delay)(3000);
+        await (0, generalUtilities_1.delay)(3000);
         await interaction.editReply({ content: 'Activity updated!' });
     }
 }
@@ -268,22 +269,21 @@ async function configureCooldownImmunity(interaction) {
     await interaction.reply({ embeds: [embed], ephemeral: true });
 }
 async function configureAutomatedMessages(interaction) {
-    const sendMessages = interaction.options.getBoolean('send_messages') ?? false;
+    //const sendMessages = interaction.options.getBoolean('send_messages') ?? false;
     const botResponse = { ephemeral: true };
-    const client = interaction.client;
-    if (sendMessages) {
+    //const client = interaction.client as ExtendedClient;
+    /* if (sendMessages) {
         if (client.scheduler.isRunning) {
             botResponse.content = 'Scheduler is already running.';
-        }
-        else {
+        } else {
             botResponse.content = 'Scheduler started.';
             client.scheduler.start();
         }
-    }
-    else {
+    } else {
         botResponse.content = 'Scheduler stopped.';
         client.scheduler.stop();
-    }
+    } */
+    botResponse.content = 'Unavailable';
     await interaction.reply(botResponse);
 }
 async function configureDebugGuild(interaction) {
@@ -329,12 +329,12 @@ async function configureCollaborators(interaction, service) {
     const embedColor = taskName === 'remove' ? discord_js_1.Colors.DarkOrange : discord_js_1.Colors.DarkGreen;
     const embed = new discord_js_1.EmbedBuilder().setTitle('Collaborators').setColor(embedColor);
     const collaborator = {
-        discordId: userDiscordId,
+        id: userDiscordId,
         username,
         displayName,
     };
     if (taskName === 'add') {
-        const id = await service.insert(collaborator);
+        const id = await service.create(collaborator);
         if (id === -1) {
             embed.setDescription('Failed to insert collaborator');
             embed.setColor(discord_js_1.Colors.Red);
@@ -344,26 +344,44 @@ async function configureCollaborators(interaction, service) {
         }
     }
     else if (taskName === 'remove') {
-        const successfullyRemoved = await service.delete(collaborator.discordId);
-        if (successfullyRemoved) {
-            embed.setDescription(`Removed collaborator with id: ${collaborator.discordId}`);
+        const fetchedCollaborator = await service.find(collaborator.id);
+        if (!fetchedCollaborator) {
+            await interaction.reply({
+                content: `Couldn't find collaborator with ID ${collaborator.id}`,
+                ephemeral: true,
+            });
+            return;
+        }
+        const affectedRows = await service.delete(collaborator.id);
+        if (affectedRows === 1) {
+            embed.setTitle('🗑 Removed collaborator');
+            embed.setColor(discord_js_1.Colors.Green);
+            const descriptionLines = [
+                `${(0, discord_js_1.bold)('ID')} ${(0, discord_js_1.inlineCode)(fetchedCollaborator.id)}`,
+                `${(0, discord_js_1.bold)('username')} ${(0, discord_js_1.inlineCode)(fetchedCollaborator.username)}`,
+            ];
+            if (fetchedCollaborator.displayName) {
+                descriptionLines.push(`${(0, discord_js_1.bold)('display')} ${(0, discord_js_1.inlineCode)(fetchedCollaborator.displayName)}`);
+            }
+            embed.setDescription((0, discord_js_1.unorderedList)(descriptionLines));
         }
         else {
-            embed.setDescription(`Failed to remove collaborator with id: ${collaborator.discordId}`);
+            embed.setDescription(`Failed to remove collaborator with id: ${collaborator.id}`);
             embed.setColor(discord_js_1.Colors.Red);
         }
     }
     else {
-        const collaborators = await service.findAll();
-        if (collaborators.length === 0) {
+        const result = await service.findAll();
+        if (result.data.length === 0) {
             embed.setDescription('> No collaborator found');
+            embed.setColor(discord_js_1.Colors.Orange);
         }
         else {
-            const embedDescriptionLines = [];
-            collaborators.forEach((collaborator) => {
-                embedDescriptionLines.push(`- ${collaborator.discordId}: ${collaborator.username} (${collaborator.displayName || 'No display name'})`);
+            const descriptionLines = [];
+            result.data.forEach((collaborator) => {
+                descriptionLines.push(`${(0, discord_js_1.inlineCode)(collaborator.id)}: ${collaborator.username} (${collaborator.displayName || 'No display name'})`);
             });
-            embed.setDescription(embedDescriptionLines.join('\n'));
+            embed.setDescription((0, discord_js_1.unorderedList)(descriptionLines));
         }
     }
     await interaction.reply({ embeds: [embed] });

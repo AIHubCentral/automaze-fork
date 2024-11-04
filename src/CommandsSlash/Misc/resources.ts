@@ -13,6 +13,7 @@ import CollaboratorService from '../../Services/collaboratorService';
 import { createPaginatedEmbed, getPaginatedData } from '../../Utils/botUtilities';
 import slashCommandData from '../../../JSON/slashCommandData.json';
 import { createStringOption } from '../../Utils/discordUtilities';
+import knexInstance from '../../db';
 
 const commandData = slashCommandData.resources;
 
@@ -33,8 +34,8 @@ const Resources: SlashCommand = {
 
         client.logger.debug('/resources', logData);
 
-        const collaboratorsService = new CollaboratorService(client.logger);
-        const collaboratorUser = await collaboratorsService.findById(interaction.user.id);
+        const collaboratorsService = new CollaboratorService(knexInstance);
+        const collaboratorUser = await collaboratorsService.find(interaction.user.id);
 
         if (!collaboratorUser) {
             await interaction.reply({

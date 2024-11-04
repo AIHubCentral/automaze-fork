@@ -13,10 +13,8 @@
         "node_modules",
         "dist",
         "Archive",
-        "src/Commands/Utilities",
         "src/CommandsSlash/Utilities/database.js",
         "src/CommandsSlash/Utilities/embedData.js",
-        "src/CommandsSlash/Utilities/logs.js",
-        "src/Core/",
+        "src/CommandsSlash/Utilities/logs.js"
     ]
 }

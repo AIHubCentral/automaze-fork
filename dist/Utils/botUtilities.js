@@ -34,6 +34,7 @@ const resourcesService_1 = __importDefault(require("../Services/resourcesService
 const i18n_1 = __importDefault(require("../i18n"));
 const generalUtilities_1 = require("./generalUtilities");
 const natural_1 = __importDefault(require("natural"));
+//import cron, { ScheduledTask } from 'node-cron';
 const db_1 = __importDefault(require("../db"));
 /* Enums */
 var CloudPlatform;
@@ -525,7 +526,7 @@ async function banan(interaction, targetUser, guildMember) {
     embedData.title = embedData.title.replace('$username', guildMember.nickname ?? member.displayName ?? member.username);
     embedData.description[0] = embedData.description[0].replaceAll('$member', member);
     embedData.footer = embedData.footer.replace('$quantity', userModel.bananas);
-    if (userModel.bananas > 1) {
+    if (userModel.bananas && userModel.bananas > 1) {
         embedData.footer = embedData.footer.replace('TIME', 'TIMES');
     }
     const embed = (0, discordUtilities_1.createEmbed)(embedData, 'Yellow');
@@ -665,3 +666,77 @@ function getLanguageByChannelId(channelId) {
     };
     return languages[channelId] || 'en';
 }
+// export class CronJobService {
+//     private client: ExtendedClient;
+//     private isRunning: boolean;
+//     private cronExpression: string;
+//     private task: ScheduledTask | null = null;
+//     constructor(client: ExtendedClient) {
+//         this.client = client;
+//         this.isRunning = false;
+//     }
+//     /**
+//      * Schedule a new cron job with the specified interval and task.
+//      * @param cronExpression - The cron expression string (e.g., '* * * * *' for every minute).
+//      * @param taskFunction - The function to be executed on each scheduled interval.
+//      */
+//     public scheduleJob(cronExpression: string, taskFunction: () => void): void {
+//         if (this.task) {
+//             console.log('A job is already scheduled. Stop it before scheduling a new one.');
+//             return;
+//         }
+//         this.task = cron.schedule(cronExpression, taskFunction, {
+//             scheduled: true,
+//             timezone: 'America/New_York', // Specify timezone if needed
+//         });
+//         console.log('Job scheduled with expression:', cronExpression);
+//     }
+//     start() {
+//         this.task.start();
+//         this.isRunning = true;
+//         console.log('Task started!');
+//     }
+//     stop() {
+//         this.task.stop();
+//         this.isRunning = false;
+//         console.log('Task stopped!');
+//     }
+//     executeTask() {
+//         console.log('Running task...');
+//         this.sendGuides();
+//     }
+//     async sendGuides() {
+//         const { discordIDs, botConfigs, botData } = this.client;
+//         const availableColors = getAvailableColors(botConfigs);
+//         const guild = this.client.guilds.cache.get(discordIDs.Guild);
+//         const botResponse = {};
+//         // send guides to help-okada
+//         botResponse.embeds = createEmbeds(botData.embeds.help.WOkada, availableColors);
+//         const helpOkadaChannel = await getChannelById(discordIDs.Channel.HelpWOkada, guild);
+//         await helpOkadaChannel.send(botResponse);
+//         await wait(120_000);
+//         // send guides to help channel
+//         botResponse.content = '# RVC Guides (How to Make AI Cover)';
+//         botResponse.embeds = createEmbeds(botData.embeds.guides.rvc.en, availableColors);
+//         const helpChannel = await getChannelById(discordIDs.Channel.HelpRVC, guild);
+//         await helpChannel.send(botResponse);
+//         await wait(60_000);
+//         /*
+//         // send guides to making datasets
+//         botResponse.content = '';
+//         botResponse.embeds = createEmbeds(botData.embeds.guides.audio.en, availableColors);
+//         const datasetsChannel = await getChannelById(discordIDs.Channel.MakingDatasets, guild);
+//         await datasetsChannel.send(botResponse);
+//         await wait(60_000);
+//         */
+//         this.client.logger.debug('Guides sent');
+//         if (botConfigs.sendLogs && botConfigs.debugGuild.id && botConfigs.debugGuild.channelId) {
+//             // notify dev server
+//             botResponse.embeds = [];
+//             botResponse.content = `📚 Guides sent to ${helpChannel} and ${helpOkadaChannel}.`;
+//             const debugServerGuild = this.client.guilds.cache.get(botConfigs.debugGuild.id);
+//             const debugChannel = await getChannelById(botConfigs.debugChannel.id, debugServerGuild);
+//             await debugChannel.send(botResponse);
+//         }
+//     }
+// }

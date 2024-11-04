@@ -1,6 +1,5 @@
 "use strict";
 /* eslint-disable */
-// @ts-nocheck
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -24,11 +23,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = __importStar(require("discord.js"));
-const dbManager_1 = require("../Database/dbManager");
-const utils_1 = require("../utils");
-const botUtilities_1 = require("../Utils/botUtilities");
+const db_1 = __importDefault(require("../db"));
 class ExtendedClient extends Discord.Client {
     commands;
     slashCommands;
@@ -46,7 +46,7 @@ class ExtendedClient extends Discord.Client {
     botUtils;
     botResponses;
     botCache;
-    scheduler;
+    //scheduler: any;
     knexInstance;
     repliedUsers;
     constructor(options, extendedOptions) {
@@ -64,7 +64,7 @@ class ExtendedClient extends Discord.Client {
         this.forumSpammer = null;
         this.logger = extendedOptions.logger;
         // database
-        this.knexInstance = (0, dbManager_1.createInstance)(`${process.cwd()}/database/knex.sqlite`);
+        this.knexInstance = db_1.default;
         this.botData = {
             embeds: require('../../JSON/embeds.json'),
             reactionKeywords: require('../../JSON/reactionKeywords.json'),
@@ -79,14 +79,9 @@ class ExtendedClient extends Discord.Client {
         this.botCache = new Discord.Collection();
         this.repliedUsers = extendedOptions.repliedUsers;
         // cron job
-        this.scheduler = new utils_1.Scheduler(this);
+        //this.scheduler = new Scheduler(this);
         // finish setup
         this.setupBot();
-    }
-    loadThemes() {
-        const themes = (0, botUtilities_1.getThemes)();
-        const selectedTheme = process.env.theme ?? 'defaultTheme';
-        this.botConfigs.colors.theme = themes[selectedTheme];
     }
     setupBot() {
         const devMode = process.env.dev;
@@ -94,7 +89,6 @@ class ExtendedClient extends Discord.Client {
             // when in production environment, send a message on startup to the dev server
             this.botConfigs.messageOnStartup = true;
         }
-        this.loadThemes();
     }
 }
 exports.default = ExtendedClient;

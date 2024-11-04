@@ -1,17 +1,18 @@
 /* eslint-disable */
-// @ts-nocheck
 
 import * as Discord from 'discord.js';
 import winston from 'winston';
 import ICooldowns from '../Interfaces/Cooldowns';
 import BotData from '../Interfaces/BotData';
 import IDiscordIDs from '../Interfaces/DiscordIDs';
-import { createInstance } from '../Database/dbManager';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import IBotUtils from '../Interfaces/BotUtils';
-import { Scheduler } from '../utils';
-import { getThemes } from '../Utils/botUtilities';
+//import { getTheme } from '../Utils/botUtilities';
 import { IResource } from '../Services/resourcesService';
+
+import Knex from 'knex';
+import knexInstance from '../db';
+
 
 export interface ExtendedClientOptions {
     logger: winston.Logger;
@@ -43,8 +44,8 @@ class ExtendedClient extends Discord.Client {
     botUtils: IBotUtils;
     botResponses: any;
     botCache: Discord.Collection<string, any>;
-    scheduler: any;
-    knexInstance;
+    //scheduler: any;
+    knexInstance: Knex.Knex;
     repliedUsers: Discord.Collection<string, number>;
 
     constructor(options: Discord.ClientOptions, extendedOptions: ExtendedClientOptions) {
@@ -65,7 +66,7 @@ class ExtendedClient extends Discord.Client {
         this.logger = extendedOptions.logger;
 
         // database
-        this.knexInstance = createInstance(`${process.cwd()}/database/knex.sqlite`);
+        this.knexInstance = knexInstance;
 
         this.botData = {
             embeds: require('../../JSON/embeds.json'),
@@ -83,16 +84,10 @@ class ExtendedClient extends Discord.Client {
         this.repliedUsers = extendedOptions.repliedUsers;
 
         // cron job
-        this.scheduler = new Scheduler(this);
+        //this.scheduler = new Scheduler(this);
 
         // finish setup
         this.setupBot();
-    }
-
-    loadThemes(): void {
-        const themes: any = getThemes();
-        const selectedTheme = process.env.theme ?? 'defaultTheme';
-        this.botConfigs.colors.theme = themes[selectedTheme];
     }
 
     setupBot(): void {
@@ -101,7 +96,6 @@ class ExtendedClient extends Discord.Client {
             // when in production environment, send a message on startup to the dev server
             this.botConfigs.messageOnStartup = true;
         }
-        this.loadThemes();
     }
 }
 

@@ -9,6 +9,7 @@ const collaboratorService_1 = __importDefault(require("../../Services/collaborat
 const botUtilities_1 = require("../../Utils/botUtilities");
 const slashCommandData_json_1 = __importDefault(require("../../../JSON/slashCommandData.json"));
 const discordUtilities_1 = require("../../Utils/discordUtilities");
+const db_1 = __importDefault(require("../../db"));
 const commandData = slashCommandData_json_1.default.resources;
 const Resources = {
     category: 'Misc',
@@ -24,8 +25,8 @@ const Resources = {
             userName: interaction.user.username,
         };
         client.logger.debug('/resources', logData);
-        const collaboratorsService = new collaboratorService_1.default(client.logger);
-        const collaboratorUser = await collaboratorsService.findById(interaction.user.id);
+        const collaboratorsService = new collaboratorService_1.default(db_1.default);
+        const collaboratorUser = await collaboratorsService.find(interaction.user.id);
         if (!collaboratorUser) {
             await interaction.reply({
                 content: 'Ask **RayTracer** if you want to use this command!',

@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 // Libraries needed
 const fs = require('fs');
 const path = require('node:path');
@@ -78,82 +77,6 @@ function saveJSON(filename, data) {
 exports.saveJSON = saveJSON;
 
 const wait = require('node:timers/promises').setTimeout;
-const cron = require('node-cron');
-
-class Scheduler {
-    constructor(client) {
-        this.client = client;
-        this.isRunning = false;
-        this.cronExpression = '0 */6 * * *';
-        this.task = cron.schedule(
-            this.cronExpression,
-            () => {
-                // runs every 6 hours
-                this.executeTask();
-            },
-            { scheduled: false }
-        );
-    }
-
-    start() {
-        this.task.start();
-        this.isRunning = true;
-        console.log('Task started!');
-    }
-
-    stop() {
-        this.task.stop();
-        this.isRunning = false;
-        console.log('Task stopped!');
-    }
-
-    executeTask() {
-        console.log('Running task...');
-        this.sendGuides();
-    }
-
-    async sendGuides() {
-        const { discordIDs, botConfigs, botData } = this.client;
-        const availableColors = getAvailableColors(botConfigs);
-        const guild = this.client.guilds.cache.get(discordIDs.Guild);
-        const botResponse = {};
-
-        // send guides to help-okada
-        botResponse.embeds = createEmbeds(botData.embeds.help.WOkada, availableColors);
-        const helpOkadaChannel = await getChannelById(discordIDs.Channel.HelpWOkada, guild);
-        await helpOkadaChannel.send(botResponse);
-        await wait(120_000);
-
-        // send guides to help channel
-        botResponse.content = '# RVC Guides (How to Make AI Cover)';
-        botResponse.embeds = createEmbeds(botData.embeds.guides.rvc.en, availableColors);
-        const helpChannel = await getChannelById(discordIDs.Channel.HelpRVC, guild);
-        await helpChannel.send(botResponse);
-        await wait(60_000);
-
-        /*
-		// send guides to making datasets
-		botResponse.content = '';
-		botResponse.embeds = createEmbeds(botData.embeds.guides.audio.en, availableColors);
-		const datasetsChannel = await getChannelById(discordIDs.Channel.MakingDatasets, guild);
-		await datasetsChannel.send(botResponse);
-		await wait(60_000);
-		*/
-
-        this.client.logger.debug('Guides sent');
-
-        if (botConfigs.sendLogs && botConfigs.debugGuild.id && botConfigs.debugGuild.channelId) {
-            // notify dev server
-            botResponse.embeds = [];
-            botResponse.content = `📚 Guides sent to ${helpChannel} and ${helpOkadaChannel}.`;
-            const debugServerGuild = this.client.guilds.cache.get(botConfigs.debugGuild.id);
-            const debugChannel = await getChannelById(botConfigs.debugChannel.id, debugServerGuild);
-            await debugChannel.send(botResponse);
-        }
-    }
-}
-
-exports.Scheduler = Scheduler;
 
 class BotResponseBuilder {
     /* utility class for creating bot responses */
