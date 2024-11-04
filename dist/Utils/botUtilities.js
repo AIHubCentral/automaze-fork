@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TagResponseSender = exports.CloudPlatform = void 0;
+exports.BananManager = exports.TagResponseSender = exports.CloudPlatform = void 0;
 exports.resourcesToUnorderedList = resourcesToUnorderedList;
 exports.processResource = processResource;
 exports.resourcesToUnorderedListAlt = resourcesToUnorderedListAlt;
@@ -562,6 +562,47 @@ async function banan(interaction, targetUser, guildMember) {
         await channel.send({ embeds: [debugEmbed] });
     }
 }
+class BananManager {
+    authorId;
+    cooldownCollection;
+    /**
+     *
+     * @param authorId {string} - Who used the command
+     * @param cooldownCollection - Collection to store banan cooldowns
+     */
+    constructor(authorId, cooldownCollection) {
+        this.authorId = authorId;
+        this.cooldownCollection = cooldownCollection;
+    }
+    /**
+     * Checks if the author of the command is on cooldown
+     * @returns boolean
+     */
+    isAuthorOnCooldown() {
+        const result = this.cooldownCollection.get(this.authorId);
+        if (result)
+            return true;
+        return false;
+    }
+    addAuthorCooldown() {
+        if (this.isAuthorOnCooldown())
+            return;
+        this.cooldownCollection.set(this.authorId, Date.now());
+    }
+    removeAuthorCooldown() {
+        if (this.isAuthorOnCooldown()) {
+            this.cooldownCollection.delete(this.authorId);
+        }
+    }
+    // TODO: continue this...
+    /**
+     * Checks if cooldown has expired and remove user from it
+     */
+    isCooldownExpired() {
+        return false;
+    }
+}
+exports.BananManager = BananManager;
 function createMenuOptions(availableOptions) {
     const menuOptions = [];
     for (const option of availableOptions ?? []) {

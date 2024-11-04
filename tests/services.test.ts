@@ -9,6 +9,8 @@ import {
     updateUser,
     UserDTO,
 } from '../src/Services/userService';
+import { BananManager } from '../src/Utils/botUtilities';
+import { Collection } from 'discord.js';
 
 const knex = Knex(knexConfig.test);
 
@@ -128,4 +130,33 @@ describe('User Service CRUD Operations', () => {
         fetchedUsers = await getAllUsers(knex, limit);
         expect(fetchedUsers.length).toBe(limit);
     });
+});
+
+describe('Banan', () => {
+    const bananCooldown = new Collection<string, number>();
+    const authorUserId = '123456789';
+
+    const bananManager = new BananManager(authorUserId, bananCooldown);
+
+    it('should return false if author did not use the command', () => {
+        expect(bananManager.authorId).toBeDefined();
+        expect(bananManager.isAuthorOnCooldown()).toBeFalsy();
+    });
+
+    it('should should add author to cooldown', () => {
+        bananManager.addAuthorCooldown();
+        expect(bananManager.isAuthorOnCooldown()).toBeTruthy();
+    });
+
+    it('should remove author from cooldown', () => {
+        bananManager.removeAuthorCooldown();
+        expect(bananManager.isAuthorOnCooldown()).toBeFalsy();
+    });
+
+    /* it('should handle cooldown expiration', () => {
+        bananManager.removeAuthorCooldown();
+        bananManager.addAuthorCooldown();
+
+        expect(bananManager.isAuthorOnCooldown()).toBeTruthy();
+    }); */
 });

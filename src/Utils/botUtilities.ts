@@ -717,6 +717,51 @@ export async function banan(
     }
 }
 
+export class BananManager {
+    authorId: string;
+    cooldownCollection: Collection<string, number>;
+
+    /**
+     *
+     * @param authorId {string} - Who used the command
+     * @param cooldownCollection - Collection to store banan cooldowns
+     */
+    constructor(authorId: string, cooldownCollection: Collection<string, number>) {
+        this.authorId = authorId;
+        this.cooldownCollection = cooldownCollection;
+    }
+
+    /**
+     * Checks if the author of the command is on cooldown
+     * @returns boolean
+     */
+    isAuthorOnCooldown(): boolean {
+        const result = this.cooldownCollection.get(this.authorId);
+        if (result) return true;
+        return false;
+    }
+
+    addAuthorCooldown(): void {
+        if (this.isAuthorOnCooldown()) return;
+        this.cooldownCollection.set(this.authorId, Date.now());
+    }
+
+    removeAuthorCooldown(): void {
+        if (this.isAuthorOnCooldown()) {
+            this.cooldownCollection.delete(this.authorId);
+        }
+    }
+
+    // TODO: continue this...
+
+    /**
+     * Checks if cooldown has expired and remove user from it
+     */
+    isCooldownExpired(): boolean {
+        return false;
+    }
+}
+
 function createMenuOptions(availableOptions: SelectMenuOption[]): StringSelectMenuOptionBuilder[] {
     const menuOptions: StringSelectMenuOptionBuilder[] = [];
 
