@@ -1,5 +1,7 @@
 "use strict";
-/* Initialize knex database and create tables */
+/**
+ * Roll back the last migration and destroy the tables / database
+ */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -11,19 +13,18 @@ const db_1 = __importDefault(require("../db"));
 const fileUtilities_1 = require("../Utils/fileUtilities");
 (async () => {
     const environment = process.env.NODE_ENV || 'development';
-    console.log('Estabilishing connection...');
     // Use SQLite on development env
     if (environment === 'development') {
         const RESOURCES_DATABASE_PATH = node_path_1.default.join(process.cwd(), 'database', 'resources.sqlite');
-        const databaseFileExists = await (0, fileUtilities_1.fileExists)(RESOURCES_DATABASE_PATH);
-        if (databaseFileExists) {
-            console.log(`${RESOURCES_DATABASE_PATH} already exists...Skipping`);
-            return;
+        const successfullyDeleted = await (0, fileUtilities_1.deleteFileIfExists)(RESOURCES_DATABASE_PATH);
+        if (successfullyDeleted) {
+            console.log(`${RESOURCES_DATABASE_PATH} successfully removed`);
         }
+        return;
     }
+    console.log('Estabilishing connection...');
     try {
-        await db_1.default.migrate.latest();
-        console.log('Migration run successfully.');
+        await db_1.default.migrate.rollback();
     }
     catch (error) {
         if (error instanceof Error) {

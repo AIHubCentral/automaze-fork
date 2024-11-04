@@ -6,6 +6,7 @@
         "build": "tsc",
         "dev": "tsc && node dist/index.js",
         "dbInit": "node ./dist/Database/dbInit.js",
+        "dbDestroy": "node ./dist/Database/dbDestroy.js",
         "deploy": "node ./dist/deployInteractive.js",
         "test": "jest"
     },
