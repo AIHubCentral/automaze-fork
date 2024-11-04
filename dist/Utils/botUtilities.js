@@ -34,7 +34,6 @@ const resourcesService_1 = __importDefault(require("../Services/resourcesService
 const i18n_1 = __importDefault(require("../i18n"));
 const generalUtilities_1 = require("./generalUtilities");
 const natural_1 = __importDefault(require("natural"));
-//import cron, { ScheduledTask } from 'node-cron';
 const db_1 = __importDefault(require("../db"));
 /* Enums */
 var CloudPlatform;
@@ -563,16 +562,20 @@ async function banan(interaction, targetUser, guildMember) {
     }
 }
 class BananManager {
+    knex;
     authorId;
     cooldownCollection;
+    embed;
     /**
      *
      * @param authorId {string} - Who used the command
      * @param cooldownCollection - Collection to store banan cooldowns
      */
-    constructor(authorId, cooldownCollection) {
+    constructor(knex, authorId, cooldownCollection) {
+        this.knex = knex;
         this.authorId = authorId;
         this.cooldownCollection = cooldownCollection;
+        this.embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Yellow);
     }
     /**
      * Checks if the author of the command is on cooldown
@@ -594,12 +597,25 @@ class BananManager {
             this.cooldownCollection.delete(this.authorId);
         }
     }
-    // TODO: continue this...
     /**
-     * Checks if cooldown has expired and remove user from it
+     * Checks if cooldown has expired
+     * Cooldown lasts for 15 minutes
      */
     isCooldownExpired() {
-        return false;
+        const timestamp = this.cooldownCollection.get(this.authorId);
+        if (!timestamp)
+            return true;
+        const expireMinutes = 15;
+        const minutesInMs = expireMinutes * 60 * 1000;
+        return Date.now() > timestamp + minutesInMs;
+    }
+    /**
+     * Increment banana count
+     */
+    async incrementCounter() {
+        await this.knex('users').where({ id: this.authorId }).increment('bananas', 1);
+        const updatedRow = await this.knex('users').where({ id: this.authorId }).first();
+        return updatedRow['bananas'];
     }
 }
 exports.BananManager = BananManager;

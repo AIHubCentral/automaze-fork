@@ -136,7 +136,7 @@ describe('Banan', () => {
     const bananCooldown = new Collection<string, number>();
     const authorUserId = '123456789';
 
-    const bananManager = new BananManager(authorUserId, bananCooldown);
+    const bananManager = new BananManager(knex, authorUserId, bananCooldown);
 
     it('should return false if author did not use the command', () => {
         expect(bananManager.authorId).toBeDefined();
@@ -153,10 +153,60 @@ describe('Banan', () => {
         expect(bananManager.isAuthorOnCooldown()).toBeFalsy();
     });
 
-    /* it('should handle cooldown expiration', () => {
-        bananManager.removeAuthorCooldown();
+    it('should return true if the cooldown is expired (16 minutes passed)', () => {
+        const userId = '0001';
+
+        bananManager.authorId = userId;
         bananManager.addAuthorCooldown();
 
-        expect(bananManager.isAuthorOnCooldown()).toBeTruthy();
-    }); */
+        // set the timestamp to 16 minutes ago
+        const now = Date.now();
+        bananCooldown.set(userId, now - 16 * 60 * 1000);
+
+        expect(bananManager.isCooldownExpired()).toBe(true);
+    });
+
+    it('should return false if the cooldown is still active (less than 15 minutes)', () => {
+        const userId = '0002';
+
+        bananManager.authorId = userId;
+        bananManager.addAuthorCooldown();
+
+        // Set a timestamp 10 minutes ago (cooldown not yet expired)
+        const now = Date.now();
+        bananCooldown.set(userId, now - 10 * 60 * 1000);
+
+        expect(bananManager.isCooldownExpired()).toBe(false);
+    });
+
+    it('should return true if there is no cooldown set for the user', () => {
+        bananCooldown.clear();
+
+        const userId = '0002';
+        bananManager.authorId = userId;
+
+        expect(bananManager.isCooldownExpired()).toBe(true);
+    });
+
+    it('should increment the banana counter', async () => {
+        const userData: UserDTO = {
+            id: '0003',
+            username: 'testuser03',
+            display_name: 'TestUser 03',
+        };
+
+        createUser(knex, userData);
+
+        // initially the counter should be zero
+        const fetchedUser = await getUser(knex, userData.id);
+
+        expect(fetchedUser?.bananas).toBe(0);
+
+        bananManager.authorId = userData.id;
+        bananManager.addAuthorCooldown();
+
+        await bananManager.incrementCounter();
+        const counter = await bananManager.incrementCounter();
+        expect(counter).toBe(2);
+    });
 });

@@ -39,6 +39,7 @@ import { generateRandomId, processTranslation, TranslationResult } from './gener
 import natural from 'natural';
 //import cron, { ScheduledTask } from 'node-cron';
 
+import Knex from 'knex';
 import knexInstance from '../db';
 
 /* Enums */
@@ -718,17 +719,21 @@ export async function banan(
 }
 
 export class BananManager {
+    knex: Knex.Knex;
     authorId: string;
     cooldownCollection: Collection<string, number>;
+    embed: EmbedBuilder;
 
     /**
      *
      * @param authorId {string} - Who used the command
      * @param cooldownCollection - Collection to store banan cooldowns
      */
-    constructor(authorId: string, cooldownCollection: Collection<string, number>) {
+    constructor(knex: Knex.Knex, authorId: string, cooldownCollection: Collection<string, number>) {
+        this.knex = knex;
         this.authorId = authorId;
         this.cooldownCollection = cooldownCollection;
+        this.embed = new EmbedBuilder().setColor(Colors.Yellow);
     }
 
     /**
@@ -752,13 +757,28 @@ export class BananManager {
         }
     }
 
-    // TODO: continue this...
-
     /**
-     * Checks if cooldown has expired and remove user from it
+     * Checks if cooldown has expired
+     * Cooldown lasts for 15 minutes
      */
     isCooldownExpired(): boolean {
-        return false;
+        const timestamp = this.cooldownCollection.get(this.authorId);
+        if (!timestamp) return true;
+
+        const expireMinutes = 15;
+        const minutesInMs = expireMinutes * 60 * 1000;
+
+        return Date.now() > timestamp + minutesInMs;
+    }
+
+    /**
+     * Increment banana count
+     */
+    async incrementCounter(): Promise<number> {
+        await this.knex('users').where({ id: this.authorId }).increment('bananas', 1);
+
+        const updatedRow = await this.knex('users').where({ id: this.authorId }).first();
+        return updatedRow['bananas'];
     }
 }
 
