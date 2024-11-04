@@ -617,6 +617,13 @@ class BananManager {
         const updatedRow = await this.knex('users').where({ id: this.authorId }).first();
         return updatedRow['bananas'];
     }
+    async clearCounter(userId) {
+        // check if user exists in database
+        const fetchedUser = await (0, userService_1.getUser)(this.knex, userId);
+        if (!fetchedUser)
+            return;
+        await (0, userService_1.updateUser)(this.knex, userId, { bananas: 0 });
+    }
 }
 exports.BananManager = BananManager;
 function createMenuOptions(availableOptions) {

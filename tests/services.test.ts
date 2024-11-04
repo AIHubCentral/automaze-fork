@@ -209,4 +209,31 @@ describe('Banan', () => {
         const counter = await bananManager.incrementCounter();
         expect(counter).toBe(2);
     });
+
+    it('should clear the banana counter for a particular user id', async () => {
+        const userData: UserDTO = {
+            id: '0004',
+            username: 'testuser04',
+            display_name: 'TestUser 04',
+        };
+
+        createUser(knex, userData);
+
+        // initially the counter should be zero
+        let fetchedUser = await getUser(knex, userData.id);
+
+        expect(fetchedUser?.bananas).toBe(0);
+
+        bananManager.authorId = userData.id;
+        bananManager.addAuthorCooldown();
+
+        await bananManager.incrementCounter();
+        await bananManager.incrementCounter();
+        await bananManager.incrementCounter();
+
+        await bananManager.clearCounter(userData.id);
+
+        fetchedUser = await getUser(knex, userData.id);
+        expect(fetchedUser?.bananas).toBe(0);
+    });
 });
