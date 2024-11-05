@@ -1,7 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const botUtilities_js_1 = require("../../Utils/botUtilities.js");
+const db_js_1 = __importDefault(require("../../db.js"));
+const i18next_1 = __importDefault(require("i18next"));
+const discordUtilities_js_1 = require("../../Utils/discordUtilities.js");
 const Banana = {
     category: 'Fun',
     data: new discord_js_1.SlashCommandBuilder()
@@ -11,16 +17,32 @@ const Banana = {
     async execute(interaction) {
         const client = interaction.client;
         const targetUser = interaction.options.getUser('user', true);
-        let guildMember = interaction.guild?.members.cache.get(targetUser.id);
-        if (!guildMember) {
-            client.logger.debug(`Guild member ${targetUser.id} not found in cache...Fetching`);
-            guildMember = await interaction.guild?.members.fetch(targetUser.id);
+        if (targetUser.bot) {
+            await interaction.reply({
+                content: i18next_1.default.t('general.bot_user', { lng: interaction.locale }),
+                ephemeral: true,
+            });
+            return;
         }
-        if (!guildMember) {
-            client.logger.debug(`Failed to get guild member ${targetUser.id}`);
-            return interaction.reply({ content: 'Failed to banan user.', ephemeral: true });
+        const bananManager = new botUtilities_js_1.BananManager(db_js_1.default, interaction.user.id, client.cooldowns.banana);
+        if (bananManager.isAuthorOnCooldown() && !bananManager.isCooldownExpired()) {
+            await interaction.reply(`dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${client.cooldowns.banana.get(interaction.user.id) - Date.now()} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`);
+            return;
         }
-        await (0, botUtilities_js_1.banan)(interaction, targetUser, guildMember);
+        await interaction.deferReply();
+        const targetUserDisplayName = await (0, discordUtilities_js_1.getDisplayName)(targetUser, interaction.guild);
+        try {
+            const embed = await bananManager.banan({
+                id: targetUser.id,
+                username: targetUser.username,
+                display_name: targetUserDisplayName === targetUser.username ? '' : targetUserDisplayName,
+            });
+            await interaction.editReply({ embeds: [embed] });
+        }
+        catch (error) {
+            client.logger.error('failed to banan', error);
+            await interaction.editReply({ content: 'Failed to banan user' });
+        }
     },
 };
 exports.default = Banana;

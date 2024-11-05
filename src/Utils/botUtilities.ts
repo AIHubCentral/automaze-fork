@@ -28,8 +28,8 @@ import {
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { ButtonData, EmbedData, SelectMenuData, SelectMenuOption } from '../Interfaces/BotData';
-import { createButtons, createEmbed, createEmbeds, getChannelById, getGuildById } from './discordUtilities';
-import { createUser, getUser, incrementBananaCount, updateUser, UserDTO } from '../Services/userService';
+import { createButtons, createEmbeds } from './discordUtilities';
+import { createUser, getUser, updateUser, UserDTO } from '../Services/userService';
 import path from 'path';
 import fs from 'fs';
 import { getAllFiles } from './fileUtilities';
@@ -41,7 +41,6 @@ import natural from 'natural';
 //import cron, { ScheduledTask } from 'node-cron';
 
 import Knex from 'knex';
-import knexInstance from '../db';
 
 /* Enums */
 export enum CloudPlatform {
@@ -582,143 +581,6 @@ build() {
 }
 */
 
-export async function banan(
-    interaction: ChatInputCommandInteraction | UserContextMenuCommandInteraction,
-    targetUser: User,
-    guildMember: GuildMember
-): Promise<any> {
-    const user = interaction.user;
-    const client = interaction.client as ExtendedClient;
-
-    client.logger.debug('executing banan', {
-        more: {
-            guildId: interaction.guildId,
-            channelId: interaction.channelId,
-        },
-    });
-
-    // check if user is on cooldown
-    if (Date.now() <= client.cooldowns.banana.get(user.id)) {
-        return interaction.reply(
-            `dumbass yuo alredy banan ppl, wait GRRRRRRRRRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!! yu gto ${client.cooldowns.banana.get(interaction.user.id) - Date.now()} milliseconds left im too lazy to do math do it yourself GRRRRRRRRRR`
-        );
-    }
-
-    let member = targetUser;
-    const botResponses = client.botResponses.responses.banana;
-    let selectedResponse = null;
-
-    // if its true automaze banan the user instead
-    let botRevenge = false;
-
-    if (!member) return interaction.reply(botResponses.targetNone);
-
-    if (member.bot) {
-        const responses = botResponses.targetBot;
-        selectedResponse = responses[Math.floor(Math.random() * responses.length)];
-        if (!selectedResponse.startsWith('NO,')) {
-            return interaction.reply(selectedResponse);
-        }
-
-        // change the banan target to the user who tried to banan a bot
-        member = interaction.user;
-        botRevenge = true;
-    }
-
-    /* check if user exists in database, otherwise add it */
-    let userModel = await getUser(knexInstance, member.id);
-
-    if (!userModel) {
-        client.logger.debug(`User ${member.id} not found in database, creating...`);
-        const newUser: UserDTO = {
-            id: `${member.id}`,
-            username: member.username,
-            display_name: guildMember.displayName ?? guildMember.nickname ?? member.username,
-            bananas: 0,
-        };
-
-        await createUser(knexInstance, newUser);
-
-        userModel = await getUser(knexInstance, newUser.id);
-
-        if (userModel) {
-            client.logger.debug(`${userModel.username} (${userModel.id}) added to database`);
-        }
-    }
-
-    // check if display name changed
-    if (userModel && guildMember.displayName != null && guildMember.displayName !== userModel.display_name) {
-        await updateUser(knexInstance, member.id, {
-            display_name: guildMember.nickname ?? member.displayName,
-        });
-        client.logger.debug(
-            `Added ${guildMember.nickname ?? member.displayName} display name for ${member.username}`
-        );
-    }
-
-    /* increment banana count */
-
-    userModel = await incrementBananaCount(knexInstance, member.id);
-
-    if (!userModel) {
-        client.logger.error(`Failed to update ${member.username} banan count`);
-        return interaction.reply({ content: 'Failed to banan user.', ephemeral: true });
-    }
-
-    const embedData = JSON.parse(JSON.stringify(client.botData.embeds.banana));
-    embedData.title = embedData.title.replace(
-        '$username',
-        guildMember.nickname ?? member.displayName ?? member.username
-    );
-    embedData.description[0] = embedData.description[0].replaceAll('$member', member);
-    embedData.footer = embedData.footer.replace('$quantity', userModel.bananas);
-
-    if (userModel.bananas && userModel.bananas > 1) {
-        embedData.footer = embedData.footer.replace('TIME', 'TIMES');
-    }
-
-    const embed = createEmbed(embedData, 'Yellow');
-
-    // cooldown expires in 1 minute
-    client.cooldowns.banana.set(interaction.user.id, Date.now() + 1 * 60 * 1000);
-
-    if (botRevenge) {
-        await interaction.reply(selectedResponse);
-        return await interaction.followUp({ embeds: [embed] });
-    }
-
-    await interaction.reply({ embeds: [embed] });
-
-    client.logger.debug('Banan', {
-        more: {
-            targetUserId: targetUser.id,
-        },
-    });
-
-    if (
-        client.botConfigs.sendLogs &&
-        client.botConfigs.debugGuild.id &&
-        client.botConfigs.debugGuild.channelId
-    ) {
-        const embedDescription = [
-            `- **Guild**: ${interaction.guildId} (${interaction.guild?.name})`,
-            `- **Channel**: ${interaction.channelId}`,
-        ];
-        const debugEmbed = new EmbedBuilder()
-            .setTitle('Banan')
-            .setColor('Yellow')
-            .setDescription(embedDescription.join('\n'));
-
-        const guild = await getGuildById(client.botConfigs.debugGuild.id, client);
-        if (!guild) return;
-
-        const channel = await getChannelById(client.botConfigs.debugGuild.channelId, guild);
-        if (!channel) return;
-
-        await (channel as TextChannel).send({ embeds: [debugEmbed] });
-    }
-}
-
 export class BananManager {
     knex: Knex.Knex;
     authorId: string;
@@ -794,6 +656,11 @@ export class BananManager {
      * Increments banana counter and constructs the final embed
      */
     async banan(targetUser: UserDTO): Promise<EmbedBuilder> {
+        // remove author from cooldown if it's expired
+        if (this.isCooldownExpired()) {
+            this.removeAuthorCooldown();
+        }
+
         // check if target user is in database
         let fetchedUser = await getUser(this.knex, targetUser.id);
 
