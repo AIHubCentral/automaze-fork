@@ -25,7 +25,7 @@ exports.getLanguageByChannelId = getLanguageByChannelId;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
-const userService_1 = require("../Services/userService");
+const userService_1 = __importDefault(require("../Services/userService"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const fileUtilities_1 = require("./fileUtilities");
@@ -465,6 +465,7 @@ class BananManager {
     authorId;
     cooldownCollection;
     embed;
+    service;
     /**
      *
      * @param authorId {string} - Who used the command
@@ -475,6 +476,7 @@ class BananManager {
         this.authorId = authorId;
         this.cooldownCollection = cooldownCollection;
         this.embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Yellow);
+        this.service = new userService_1.default(this.knex);
     }
     /**
      * Checks if the author of the command is on cooldown
@@ -518,10 +520,10 @@ class BananManager {
     }
     async clearCounter(userId) {
         // check if user exists in database
-        const fetchedUser = await (0, userService_1.getUser)(this.knex, userId);
+        const fetchedUser = await this.service.find(userId);
         if (!fetchedUser)
             return;
-        await (0, userService_1.updateUser)(this.knex, userId, { bananas: 0 });
+        await this.service.update(userId, { bananas: 0 });
     }
     /**
      * Increments banana counter and constructs the final embed
@@ -532,18 +534,18 @@ class BananManager {
             this.removeAuthorCooldown();
         }
         // check if target user is in database
-        let fetchedUser = await (0, userService_1.getUser)(this.knex, targetUser.id);
+        let fetchedUser = await this.service.find(targetUser.id);
         // otherwise create it
         if (!fetchedUser) {
-            await (0, userService_1.createUser)(this.knex, targetUser);
-            fetchedUser = await (0, userService_1.getUser)(this.knex, targetUser.id);
+            await this.service.create(targetUser);
+            fetchedUser = await this.service.find(targetUser.id);
             if (!fetchedUser)
                 throw new Error(`Couldn't add user with id ${targetUser.id}`);
         }
         else {
             // if already exists and display name changed, update the new display name in database
             if (fetchedUser.display_name !== targetUser.display_name) {
-                await (0, userService_1.updateUser)(this.knex, targetUser.id, { display_name: targetUser.display_name });
+                await this.service.update(targetUser.id, { display_name: targetUser.display_name });
                 fetchedUser.display_name = targetUser.display_name;
             }
         }

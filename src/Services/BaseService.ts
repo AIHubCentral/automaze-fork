@@ -53,4 +53,8 @@ export default class BaseService<T extends BaseEntity> {
     async delete(id: string | number): Promise<number> {
         return await this.knex(this.tableName).where({ id }).delete();
     }
+
+    async clearAll(): Promise<void> {
+        return await this.knex(this.tableName).del();
+    }
 }

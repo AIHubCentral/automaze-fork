@@ -33,5 +33,8 @@ class BaseService {
     async delete(id) {
         return await this.knex(this.tableName).where({ id }).delete();
     }
+    async clearAll() {
+        return await this.knex(this.tableName).del();
+    }
 }
 exports.default = BaseService;

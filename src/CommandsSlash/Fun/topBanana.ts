@@ -2,8 +2,8 @@ import { SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 import { EmbedData } from '../../Interfaces/BotData';
 import { createEmbed } from '../../Utils/discordUtilities';
-import { getAllUsers } from '../../Services/userService';
 import knexInstance from '../../db';
+import UserService from '../../Services/userService';
 
 const TopBanana: SlashCommand = {
     category: 'Fun',
@@ -30,9 +30,15 @@ const TopBanana: SlashCommand = {
             totalToShow = 50;
         }
 
-        const users = await getAllUsers(knexInstance, totalToShow, 'bananas', 'desc');
+        const service = new UserService(knexInstance);
 
-        if (users.length === 0) {
+        const result = await service.findAll({
+            limit: totalToShow,
+            sortBy: 'bananas',
+            sortOrder: 'desc',
+        });
+
+        if (result.data.length === 0) {
             embedData.description?.push(
                 '> The leaderboard is empty, `/banana` someone to show results here!'
             );
@@ -41,7 +47,7 @@ const TopBanana: SlashCommand = {
         }
 
         let rankCounter = 1;
-        for (const entry of users) {
+        for (const entry of result.data) {
             const user = entry;
             const userDisplay = user.display_name ?? user.username;
             const userProfileLink = 'https://discordapp.com/users/' + user.id;

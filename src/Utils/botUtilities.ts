@@ -29,7 +29,7 @@ import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { ButtonData, EmbedData, SelectMenuData, SelectMenuOption } from '../Interfaces/BotData';
 import { createButtons, createEmbeds } from './discordUtilities';
-import { createUser, getUser, updateUser, UserDTO } from '../Services/userService';
+import UserService, { UserDTO } from '../Services/userService';
 import path from 'path';
 import fs from 'fs';
 import { getAllFiles } from './fileUtilities';
@@ -586,6 +586,7 @@ export class BananManager {
     authorId: string;
     cooldownCollection: Collection<string, number>;
     embed: EmbedBuilder;
+    service: UserService;
 
     /**
      *
@@ -597,6 +598,7 @@ export class BananManager {
         this.authorId = authorId;
         this.cooldownCollection = cooldownCollection;
         this.embed = new EmbedBuilder().setColor(Colors.Yellow);
+        this.service = new UserService(this.knex);
     }
 
     /**
@@ -646,10 +648,10 @@ export class BananManager {
 
     async clearCounter(userId: string): Promise<void> {
         // check if user exists in database
-        const fetchedUser = await getUser(this.knex, userId);
+        const fetchedUser = await this.service.find(userId);
         if (!fetchedUser) return;
 
-        await updateUser(this.knex, userId, { bananas: 0 });
+        await this.service.update(userId, { bananas: 0 });
     }
 
     /**
@@ -662,18 +664,18 @@ export class BananManager {
         }
 
         // check if target user is in database
-        let fetchedUser = await getUser(this.knex, targetUser.id);
+        let fetchedUser = await this.service.find(targetUser.id);
 
         // otherwise create it
         if (!fetchedUser) {
-            await createUser(this.knex, targetUser);
-            fetchedUser = await getUser(this.knex, targetUser.id);
+            await this.service.create(targetUser);
+            fetchedUser = await this.service.find(targetUser.id);
 
             if (!fetchedUser) throw new Error(`Couldn't add user with id ${targetUser.id}`);
         } else {
             // if already exists and display name changed, update the new display name in database
             if (fetchedUser.display_name !== targetUser.display_name) {
-                await updateUser(this.knex, targetUser.id, { display_name: targetUser.display_name });
+                await this.service.update(targetUser.id, { display_name: targetUser.display_name });
                 fetchedUser.display_name = targetUser.display_name;
             }
         }

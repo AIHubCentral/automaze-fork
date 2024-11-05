@@ -1,18 +1,11 @@
 import Knex from 'knex';
 import knexConfig from '../src/Database/knexfile';
-import {
-    createUser,
-    deleteAllUsers,
-    deleteUser,
-    getAllUsers,
-    getUser,
-    updateUser,
-    UserDTO,
-} from '../src/Services/userService';
+import UserService, { UserDTO } from '../src/Services/userService';
 import { BananManager } from '../src/Utils/botUtilities';
 import { Collection } from 'discord.js';
 
 const knex = Knex(knexConfig.test);
+const userService = new UserService(knex);
 
 beforeAll(async () => {
     await knex.migrate.latest();
@@ -34,44 +27,45 @@ describe('User Service CRUD Operations', () => {
     };
 
     it('should create a new user', async () => {
-        const newUser = await createUser(knex, userData);
-        expect(newUser).toHaveProperty('id');
-        expect(newUser.id).toEqual(userData.id);
-    });
+        const newUserId = await userService.create(userData);
+        expect(newUserId).toBe(userData.id);
 
-    it('should read an existing user', async () => {
-        const user = await getUser(knex, userData.id);
+        const fetchedUser = await userService.find(newUserId);
 
-        expect(user).toHaveProperty('id');
-        expect(user).toHaveProperty('username');
-        expect(user).toHaveProperty('display_name');
-        expect(user).toHaveProperty('bananas');
+        expect(fetchedUser).toBeDefined();
 
-        expect(user!.username).toEqual(userData.username);
-        expect(user!.display_name).toEqual(userData.display_name);
-        expect(user!.bananas).toEqual(0);
+        expect(fetchedUser).toHaveProperty('id', userData.id);
+        expect(fetchedUser).toHaveProperty('username', userData.username);
+        expect(fetchedUser).toHaveProperty('display_name', userData.display_name);
+        expect(fetchedUser).toHaveProperty('bananas', 0);
     });
 
     it('should handle non existing user', async () => {
-        const user = await getUser(knex, '0000000000');
-        expect(user).toBeNull();
+        const user = await userService.find('0000000000');
+        expect(user).toBeUndefined();
     });
 
     it('should update an existing user', async () => {
         const updatedData = { display_name: 'Dummy' };
-        const updatedUser = await updateUser(knex, userData.id, updatedData);
 
-        expect(updatedUser?.display_name).toEqual(updatedData.display_name);
+        const affectedRows = await userService.update(userData.id, updatedData);
+        expect(affectedRows).toBe(1);
+
+        const fetchedUser = await userService.find(userData.id);
+
+        expect(fetchedUser!.display_name).toEqual(updatedData.display_name);
 
         // shouldn't affect previous values
-        expect(updatedUser!.username).toEqual(userData.username);
-        expect(updatedUser!.bananas).toEqual(0);
+        expect(fetchedUser!.username).toEqual(userData.username);
+        expect(fetchedUser!.bananas).toEqual(0);
     });
 
     it('should delete an existing user', async () => {
-        await deleteUser(knex, userData.id);
-        const user = await getUser(knex, userData.id);
-        expect(user).toBeNull(); // User should no longer exist
+        const affectedRows = await userService.delete(userData.id);
+        expect(affectedRows).toBe(1);
+
+        const user = await userService.find(userData.id);
+        expect(user).toBeUndefined(); // User should no longer exist
     });
 
     it('should delete all users', async () => {
@@ -90,16 +84,18 @@ describe('User Service CRUD Operations', () => {
             },
         ];
 
-        await Promise.all(users.map((currentUser) => createUser(knex, currentUser)));
-        await deleteAllUsers(knex);
+        await Promise.all(users.map((currentUser) => userService.create(currentUser)));
 
-        const allUsers = await getAllUsers(knex);
+        await userService.clearAll();
 
-        expect(allUsers).toEqual([]);
+        const allUsers = await userService.findAll();
+
+        expect(allUsers.data).toEqual([]);
+        expect(allUsers.hasNext).toBe(false);
     });
 
     it('should return multiple users', async () => {
-        await deleteAllUsers(knex);
+        await userService.clearAll();
 
         const users: UserDTO[] = [
             {
@@ -119,16 +115,17 @@ describe('User Service CRUD Operations', () => {
             },
         ];
 
-        await Promise.all(users.map((currentUser) => createUser(knex, currentUser)));
+        await Promise.all(users.map((currentUser) => userService.create(currentUser)));
 
-        let fetchedUsers = await getAllUsers(knex);
+        let fetchedUsers = await userService.findAll();
 
-        expect(fetchedUsers.length).toBe(3);
+        expect(fetchedUsers.data.length).toBe(3);
 
         // limiting to 1 row
         const limit = 1;
-        fetchedUsers = await getAllUsers(knex, limit);
-        expect(fetchedUsers.length).toBe(limit);
+        fetchedUsers = await userService.findAll({ limit });
+        expect(fetchedUsers.data.length).toBe(limit);
+        expect(fetchedUsers.hasNext).toBe(true);
     });
 });
 
@@ -195,10 +192,10 @@ describe('Banan', () => {
             display_name: 'TestUser 03',
         };
 
-        createUser(knex, userData);
+        await userService.create(userData);
 
         // initially the counter should be zero
-        const fetchedUser = await getUser(knex, userData.id);
+        const fetchedUser = await userService.find(userData.id);
 
         expect(fetchedUser?.bananas).toBe(0);
 
@@ -217,10 +214,10 @@ describe('Banan', () => {
             display_name: 'TestUser 04',
         };
 
-        createUser(knex, userData);
+        await userService.create(userData);
 
         // initially the counter should be zero
-        let fetchedUser = await getUser(knex, userData.id);
+        let fetchedUser = await userService.find(userData.id);
 
         expect(fetchedUser?.bananas).toBe(0);
 
@@ -233,7 +230,7 @@ describe('Banan', () => {
 
         await bananManager.clearCounter(userData.id);
 
-        fetchedUser = await getUser(knex, userData.id);
+        fetchedUser = await userService.find(userData.id);
         expect(fetchedUser?.bananas).toBe(0);
     });
 
@@ -251,8 +248,8 @@ describe('Banan', () => {
         };
 
         // initially target user is not in database and author not in cooldown
-        let fetchedUser = await getUser(knex, targetUser.id);
-        expect(fetchedUser).toBeNull();
+        let fetchedUser = await userService.find(targetUser.id);
+        expect(fetchedUser).toBeUndefined();
         expect(bananCooldown.has(authorUser.id)).toBe(false);
 
         // after banan the author is added to cooldown and user to database
@@ -261,7 +258,7 @@ describe('Banan', () => {
 
         expect(bananCooldown.has(authorUser.id)).toBe(true);
 
-        fetchedUser = await getUser(knex, targetUser.id);
+        fetchedUser = await userService.find(targetUser.id);
         expect(fetchedUser).toBeDefined();
         expect(fetchedUser).toHaveProperty('id', targetUser.id);
         expect(fetchedUser).toHaveProperty('username', targetUser.username);
@@ -283,7 +280,7 @@ describe('Banan', () => {
 
         embed = await bananManager.banan(targetUser);
 
-        fetchedUser = await getUser(knex, targetUser.id);
+        fetchedUser = await userService.find(targetUser.id);
         expect(fetchedUser).toHaveProperty('bananas', 2);
         expect(fetchedUser).toHaveProperty('display_name', targetUser.display_name);
 

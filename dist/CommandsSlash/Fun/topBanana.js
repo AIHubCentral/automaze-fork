@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
-const userService_1 = require("../../Services/userService");
 const db_1 = __importDefault(require("../../db"));
+const userService_1 = __importDefault(require("../../Services/userService"));
 const TopBanana = {
     category: 'Fun',
     cooldown: 15,
@@ -26,14 +26,19 @@ const TopBanana = {
         if (totalToShow > 50) {
             totalToShow = 50;
         }
-        const users = await (0, userService_1.getAllUsers)(db_1.default, totalToShow, 'bananas', 'desc');
-        if (users.length === 0) {
+        const service = new userService_1.default(db_1.default);
+        const result = await service.findAll({
+            limit: totalToShow,
+            sortBy: 'bananas',
+            sortOrder: 'desc',
+        });
+        if (result.data.length === 0) {
             embedData.description?.push('> The leaderboard is empty, `/banana` someone to show results here!');
             await interaction.editReply({ embeds: [(0, discordUtilities_1.createEmbed)(embedData)] });
             return;
         }
         let rankCounter = 1;
-        for (const entry of users) {
+        for (const entry of result.data) {
             const user = entry;
             const userDisplay = user.display_name ?? user.username;
             const userProfileLink = 'https://discordapp.com/users/' + user.id;
