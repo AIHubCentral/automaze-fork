@@ -51,8 +51,7 @@ export async function getAllUsers(
     return await query;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function updateUser(knexInstance: Knex.Knex, id: string, userData: any) {
+export async function updateUser(knexInstance: Knex.Knex, id: string, userData: Partial<UserDTO>) {
     await knexInstance('users').where({ id }).update(userData);
     return getUser(knexInstance, id); // Return updated user data
 }

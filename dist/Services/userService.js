@@ -29,7 +29,6 @@ async function getAllUsers(knexInstance, limit, sortBy, order = 'asc') {
     }
     return await query;
 }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function updateUser(knexInstance, id, userData) {
     await knexInstance('users').where({ id }).update(userData);
     return getUser(knexInstance, id); // Return updated user data

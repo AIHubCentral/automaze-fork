@@ -205,8 +205,8 @@ describe('Banan', () => {
         bananManager.authorId = userData.id;
         bananManager.addAuthorCooldown();
 
-        await bananManager.incrementCounter();
-        const counter = await bananManager.incrementCounter();
+        await bananManager.incrementCounter(userData.id);
+        const counter = await bananManager.incrementCounter(userData.id);
         expect(counter).toBe(2);
     });
 
@@ -227,13 +227,71 @@ describe('Banan', () => {
         bananManager.authorId = userData.id;
         bananManager.addAuthorCooldown();
 
-        await bananManager.incrementCounter();
-        await bananManager.incrementCounter();
-        await bananManager.incrementCounter();
+        await bananManager.incrementCounter(userData.id);
+        await bananManager.incrementCounter(userData.id);
+        await bananManager.incrementCounter(userData.id);
 
         await bananManager.clearCounter(userData.id);
 
         fetchedUser = await getUser(knex, userData.id);
         expect(fetchedUser?.bananas).toBe(0);
+    });
+
+    it('should banan correctly', async () => {
+        const authorUser: UserDTO = {
+            id: '012345',
+            username: 'author012345',
+            display_name: 'Author 012345',
+        };
+
+        const targetUser: UserDTO = {
+            id: '543210',
+            username: 'target543210',
+            display_name: '',
+        };
+
+        // initially target user is not in database and author not in cooldown
+        let fetchedUser = await getUser(knex, targetUser.id);
+        expect(fetchedUser).toBeNull();
+        expect(bananCooldown.has(authorUser.id)).toBe(false);
+
+        // after banan the author is added to cooldown and user to database
+        bananManager.authorId = authorUser.id;
+        let embed = await bananManager.banan(targetUser);
+
+        expect(bananCooldown.has(authorUser.id)).toBe(true);
+
+        fetchedUser = await getUser(knex, targetUser.id);
+        expect(fetchedUser).toBeDefined();
+        expect(fetchedUser).toHaveProperty('id', targetUser.id);
+        expect(fetchedUser).toHaveProperty('username', targetUser.username);
+        expect(fetchedUser).toHaveProperty('display_name', targetUser.display_name);
+
+        // check if target user banana increased to 1
+        expect(fetchedUser).toHaveProperty('bananas', 1);
+
+        // if display_name not provided use the username in embed title
+        expect(embed.data.title).toMatch(/target543210/);
+
+        // first time should say banan'd once
+        expect(embed.data.footer?.text).toMatch(/ONCE/);
+        expect(embed.data.footer?.text).not.toMatch(/TIMES/);
+
+        // update target user display name in database if it changed
+        targetUser.display_name = 'New Display';
+        bananManager.removeAuthorCooldown();
+
+        embed = await bananManager.banan(targetUser);
+
+        fetchedUser = await getUser(knex, targetUser.id);
+        expect(fetchedUser).toHaveProperty('bananas', 2);
+        expect(fetchedUser).toHaveProperty('display_name', targetUser.display_name);
+
+        // if display_name provided use it in embed title
+        expect(embed.data.title).toMatch(/New Display/);
+
+        // second time should say banan'd 2 times
+        expect(embed.data.footer?.text).toMatch(/2 TIMES/);
+        expect(embed.data.footer?.text).not.toMatch(/ONCE/);
     });
 });

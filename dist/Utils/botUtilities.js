@@ -610,11 +610,11 @@ class BananManager {
         return Date.now() > timestamp + minutesInMs;
     }
     /**
-     * Increment banana count
+     * Increment banana count given a user id
      */
-    async incrementCounter() {
-        await this.knex('users').where({ id: this.authorId }).increment('bananas', 1);
-        const updatedRow = await this.knex('users').where({ id: this.authorId }).first();
+    async incrementCounter(userId) {
+        await this.knex('users').where({ id: userId }).increment('bananas', 1);
+        const updatedRow = await this.knex('users').where({ id: userId }).first();
         return updatedRow['bananas'];
     }
     async clearCounter(userId) {
@@ -623,6 +623,43 @@ class BananManager {
         if (!fetchedUser)
             return;
         await (0, userService_1.updateUser)(this.knex, userId, { bananas: 0 });
+    }
+    /**
+     * Increments banana counter and constructs the final embed
+     */
+    async banan(targetUser) {
+        // check if target user is in database
+        let fetchedUser = await (0, userService_1.getUser)(this.knex, targetUser.id);
+        // otherwise create it
+        if (!fetchedUser) {
+            await (0, userService_1.createUser)(this.knex, targetUser);
+            fetchedUser = await (0, userService_1.getUser)(this.knex, targetUser.id);
+            if (!fetchedUser)
+                throw new Error(`Couldn't add user with id ${targetUser.id}`);
+        }
+        else {
+            // if already exists and display name changed, update the new display name in database
+            if (fetchedUser.display_name !== targetUser.display_name) {
+                await (0, userService_1.updateUser)(this.knex, targetUser.id, { display_name: targetUser.display_name });
+                fetchedUser.display_name = targetUser.display_name;
+            }
+        }
+        // increment counter
+        const bananaCounter = await this.incrementCounter(targetUser.id);
+        // add author to cooldown
+        this.addAuthorCooldown();
+        // construct the embed and return it
+        const embedDescriptionLines = [];
+        for (let i = 1; i <= 3; i++) {
+            embedDescriptionLines.push(`HEY YOU ${(0, discord_js_1.userMention)(targetUser.id)} YOU FUCKING GOT BANAN LMFAOOOOOOOOO`);
+        }
+        this.embed.setTitle(`${fetchedUser.display_name.length ? fetchedUser.display_name : fetchedUser.username} GOT BANANA LOL LOL LOL`);
+        this.embed.setDescription(embedDescriptionLines.join('\n'));
+        this.embed.setImage('https://media.tenor.com/29FOpiFsnn8AAAAC/banana-meme.gif');
+        this.embed.setFooter({
+            text: `BRO GOT BANAN'D ${bananaCounter > 1 ? bananaCounter + ' TIMES' : 'ONCE'} XDDDDDD`,
+        });
+        return this.embed;
     }
 }
 exports.BananManager = BananManager;
