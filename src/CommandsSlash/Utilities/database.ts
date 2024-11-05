@@ -1,139 +1,214 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const discord_js_1 = require("discord.js");
-const db_1 = __importDefault(require("../../db"));
-const userService_1 = __importDefault(require("../../Services/userService"));
-const axios_1 = __importDefault(require("axios"));
-var DatabaseTables;
-(function (DatabaseTables) {
-    DatabaseTables["Collaborators"] = "collaborators";
-    DatabaseTables["Resources"] = "resources";
-    DatabaseTables["Settings"] = "settings";
-    DatabaseTables["Users"] = "users";
-})(DatabaseTables || (DatabaseTables = {}));
-const Database = {
+import {
+    SlashCommandBuilder,
+    EmbedBuilder,
+    ChatInputCommandInteraction,
+    Colors,
+    codeBlock,
+    AttachmentBuilder,
+} from 'discord.js';
+import { SlashCommand } from '../../Interfaces/Command';
+
+import knexInstance from '../../db';
+import UserService from '../../Services/userService';
+import axios from 'axios';
+
+enum DatabaseTables {
+    Collaborators = 'collaborators',
+    Resources = 'resources',
+    Settings = 'settings',
+    Users = 'users',
+}
+
+const Database: SlashCommand = {
     category: 'Utilities',
-    data: new discord_js_1.SlashCommandBuilder()
+    data: new SlashCommandBuilder()
         .setName('database')
         .setDescription('Manage database operations')
-        .addSubcommand((subcommand) => subcommand
-        .setName('create')
-        .setDescription('Create a new entry in the database')
-        .addAttachmentOption((option) => option.setName('file').setDescription('JSON file to upload').setRequired(true))
-        .addStringOption((option) => option
-        .setName('source')
-        .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
-        .setRequired(true)))
-        .addSubcommand((subcommand) => subcommand
-        .setName('read')
-        .setDescription('Read entries from the database')
-        .addStringOption((option) => option
-        .setName('source')
-        .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
-        .setRequired(true)))
-        .addSubcommand((subcommand) => subcommand
-        .setName('update')
-        .setDescription('Update an existing entry in the database')
-        .addStringOption((option) => option.setName('id').setDescription('Record ID').setRequired(true))
-        .addAttachmentOption((option) => option.setName('file').setDescription('JSON file to upload').setRequired(true))
-        .addStringOption((option) => option
-        .setName('source')
-        .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
-        .setRequired(true)))
-        .addSubcommand((subcommand) => subcommand
-        .setName('delete')
-        .setDescription('Delete an entry from the database')
-        .addStringOption((option) => option.setName('id').setDescription('Record ID').setRequired(true))
-        .addStringOption((option) => option
-        .setName('source')
-        .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
-        .setRequired(true)))
-        .addSubcommand((subcommand) => subcommand
-        .setName('import')
-        .setDescription('Import data into the database')
-        .addStringOption((option) => option
-        .setName('source')
-        .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
-        .setRequired(true))
-        .addAttachmentOption((option) => option.setName('file').setDescription('JSON data to import').setRequired(true)))
-        .addSubcommand((subcommand) => subcommand
-        .setName('export')
-        .setDescription('Export data from the database')
-        .addStringOption((option) => option
-        .setName('source')
-        .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
-        .setRequired(true))),
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName('create')
+                .setDescription('Create a new entry in the database')
+                .addAttachmentOption((option) =>
+                    option.setName('file').setDescription('JSON file to upload').setRequired(true)
+                )
+                .addStringOption((option) =>
+                    option
+                        .setName('source')
+                        .setDescription('The source table')
+                        .addChoices(
+                            { name: 'Users', value: DatabaseTables.Users },
+                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
+                            { name: 'Resources', value: DatabaseTables.Resources },
+                            { name: 'Settings', value: DatabaseTables.Settings }
+                        )
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName('read')
+                .setDescription('Read entries from the database')
+                .addStringOption((option) =>
+                    option
+                        .setName('source')
+                        .setDescription('The source table')
+                        .addChoices(
+                            { name: 'Users', value: DatabaseTables.Users },
+                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
+                            { name: 'Resources', value: DatabaseTables.Resources },
+                            { name: 'Settings', value: DatabaseTables.Settings }
+                        )
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName('update')
+                .setDescription('Update an existing entry in the database')
+                .addStringOption((option) =>
+                    option.setName('id').setDescription('Record ID').setRequired(true)
+                )
+                .addAttachmentOption((option) =>
+                    option.setName('file').setDescription('JSON file to upload').setRequired(true)
+                )
+                .addStringOption((option) =>
+                    option
+                        .setName('source')
+                        .setDescription('The source table')
+                        .addChoices(
+                            { name: 'Users', value: DatabaseTables.Users },
+                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
+                            { name: 'Resources', value: DatabaseTables.Resources },
+                            { name: 'Settings', value: DatabaseTables.Settings }
+                        )
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName('delete')
+                .setDescription('Delete an entry from the database')
+                .addStringOption((option) =>
+                    option.setName('id').setDescription('Record ID').setRequired(true)
+                )
+                .addStringOption((option) =>
+                    option
+                        .setName('source')
+                        .setDescription('The source table')
+                        .addChoices(
+                            { name: 'Users', value: DatabaseTables.Users },
+                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
+                            { name: 'Resources', value: DatabaseTables.Resources },
+                            { name: 'Settings', value: DatabaseTables.Settings }
+                        )
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName('import')
+                .setDescription('Import data into the database')
+                .addStringOption((option) =>
+                    option
+                        .setName('source')
+                        .setDescription('The source table')
+                        .addChoices(
+                            { name: 'Users', value: DatabaseTables.Users },
+                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
+                            { name: 'Resources', value: DatabaseTables.Resources },
+                            { name: 'Settings', value: DatabaseTables.Settings }
+                        )
+                        .setRequired(true)
+                )
+                .addAttachmentOption((option) =>
+                    option.setName('file').setDescription('JSON data to import').setRequired(true)
+                )
+        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName('export')
+                .setDescription('Export data from the database')
+                .addStringOption((option) =>
+                    option
+                        .setName('source')
+                        .setDescription('The source table')
+                        .addChoices(
+                            { name: 'Users', value: DatabaseTables.Users },
+                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
+                            { name: 'Resources', value: DatabaseTables.Resources },
+                            { name: 'Settings', value: DatabaseTables.Settings }
+                        )
+                        .setRequired(true)
+                )
+        ),
     async execute(interaction) {
         const subCommand = interaction.options.getSubcommand();
         const source = interaction.options.getString('source', true);
+
         let Service = null;
+
         if (source === DatabaseTables.Users) {
-            Service = userService_1.default;
+            Service = UserService;
         }
+
         if (!Service) {
             await interaction.reply({ content: 'Failed to select a database service', ephemeral: true });
             return;
         }
+
         await interaction.deferReply({ ephemeral: true });
-        const selectedService = new Service(db_1.default);
+
+        const selectedService = new Service(knexInstance);
+
         if (subCommand === 'create') {
             const attachment = interaction.options.getAttachment('file', true);
+
             try {
-                const response = await axios_1.default.get(attachment.url);
-                const jsonData = response.data;
+                const response = await axios.get(attachment.url);
+                const jsonData = response.data as unknown;
+
                 await handleDatabaseCreate(interaction, selectedService, jsonData);
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Error reading JSON file:', error);
                 return interaction.reply('Failed to process JSON file.');
             }
-        }
-        else if (subCommand === 'read') {
+        } else if (subCommand === 'read') {
             await handleDatabaseRead(interaction, selectedService);
-        }
-        else if (subCommand === 'update') {
+        } else if (subCommand === 'update') {
             const attachment = interaction.options.getAttachment('file', true);
             const id = interaction.options.getString('id', true);
+
             try {
-                const response = await axios_1.default.get(attachment.url);
-                const jsonData = response.data;
+                const response = await axios.get(attachment.url);
+                const jsonData = response.data as unknown;
+
                 await handleDatabaseUpdate(interaction, selectedService, id, jsonData);
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Error reading JSON file:', error);
                 return interaction.reply('Failed to process JSON file.');
             }
-        }
-        else if (subCommand === 'delete') {
+        } else if (subCommand === 'delete') {
             const userId = interaction.options.getString('id', true);
             await handleDatabaseDelete(interaction, selectedService, userId);
-        }
-        else if (subCommand === 'import') {
+        } else if (subCommand === 'import') {
             const attachment = interaction.options.getAttachment('file', true);
+
             try {
-                const response = await axios_1.default.get(attachment.url);
-                const jsonData = response.data;
+                const response = await axios.get(attachment.url);
+                const jsonData = response.data as unknown;
+
                 await handleDatabaseImport(interaction, selectedService, jsonData);
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Error reading JSON file:', error);
                 return interaction.reply('Failed to process JSON file.');
             }
-        }
-        else if (subCommand === 'export') {
+        } else if (subCommand === 'export') {
             await handleDatabaseExport(interaction, selectedService);
         }
+
         //if (source === DatabaseTables.Users) {
         //const userService = new UserService(knexInstance);
+
         /* await interaction.deferReply({ ephemeral: true });
             await delay(1000);
     
@@ -361,67 +436,111 @@ const Database = {
         //}
     },
 };
-exports.default = Database;
-async function handleDatabaseCreate(interaction, service, newData) {
+
+export default Database;
+
+type ServiceTypes = UserService;
+
+async function handleDatabaseCreate(
+    interaction: ChatInputCommandInteraction,
+    service: UserService,
+    newData: any
+) {
     let fetchedData = await service.find(newData.id);
     if (fetchedData) {
         return await interaction.editReply({ content: `Record with ID ${newData.id} already exists` });
     }
+
     const savedId = await service.create(newData);
     fetchedData = await service.find(savedId);
-    const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.LightGrey).setTitle('Database - Create');
-    embed.setDescription((0, discord_js_1.codeBlock)(JSON.stringify(fetchedData, null, 4)));
+
+    const embed = new EmbedBuilder().setColor(Colors.LightGrey).setTitle('Database - Create');
+    embed.setDescription(codeBlock(JSON.stringify(fetchedData, null, 4)));
+
     await interaction.editReply({ embeds: [embed] });
 }
-async function handleDatabaseRead(interaction, service) {
+
+async function handleDatabaseRead(interaction: ChatInputCommandInteraction, service: ServiceTypes) {
     const records = await service.findAll();
+
     if (!records.data.length) {
         return await interaction.editReply({ content: 'No records' });
     }
-    const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Navy).setTitle('Database - Read');
-    embed.setDescription((0, discord_js_1.codeBlock)(JSON.stringify(records.data, null, 4)));
+
+    const embed = new EmbedBuilder().setColor(Colors.Navy).setTitle('Database - Read');
+    embed.setDescription(codeBlock(JSON.stringify(records.data, null, 4)));
+
     await interaction.editReply({ embeds: [embed] });
 }
-async function handleDatabaseUpdate(interaction, service, id, newData) {
+
+async function handleDatabaseUpdate(
+    interaction: ChatInputCommandInteraction,
+    service: UserService,
+    id: string,
+    newData: any
+) {
     let fetchedData = await service.find(id);
     if (!fetchedData) {
         return await interaction.editReply({ content: `Record with ID ${id} not found` });
     }
+
     const affectedRows = await service.update(id, newData);
     if (affectedRows < 1) {
         return await interaction.editReply({ content: `Failed to update record with ID ${id}` });
     }
+
     fetchedData = await service.find(id);
-    const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Orange).setTitle('Database - Update');
-    embed.setDescription((0, discord_js_1.codeBlock)(JSON.stringify(fetchedData, null, 4)));
+
+    const embed = new EmbedBuilder().setColor(Colors.Orange).setTitle('Database - Update');
+    embed.setDescription(codeBlock(JSON.stringify(fetchedData, null, 4)));
+
     await interaction.editReply({ embeds: [embed] });
 }
-async function handleDatabaseDelete(interaction, service, id) {
+
+async function handleDatabaseDelete(
+    interaction: ChatInputCommandInteraction,
+    service: UserService,
+    id: string
+) {
     const fetchedData = await service.find(id);
     if (!fetchedData) {
         return await interaction.editReply({ content: `Record with ID ${id} not found` });
     }
+
     const affectedRows = await service.delete(id);
     if (affectedRows < 1) {
         return await interaction.editReply({ content: `Failed to delete record with ID ${id}` });
     }
-    const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Red).setTitle('Database - Delete');
+
+    const embed = new EmbedBuilder().setColor(Colors.Red).setTitle('Database - Delete');
     embed.setDescription(`Deleted record with ID ${id}`);
+
     await interaction.editReply({ embeds: [embed] });
 }
-async function handleDatabaseImport(interaction, service, newData) {
+
+async function handleDatabaseImport(
+    interaction: ChatInputCommandInteraction,
+    service: UserService,
+    newData: any
+) {
     await service.clearAll();
-    for (const item of newData) {
+
+    for (const item of newData as Array<any>) {
         await service.create(item);
     }
+
     const fetchedData = await service.findAll();
-    const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.LightGrey).setTitle('Database - Import');
-    embed.setDescription((0, discord_js_1.codeBlock)(JSON.stringify(fetchedData, null, 4)));
+
+    const embed = new EmbedBuilder().setColor(Colors.LightGrey).setTitle('Database - Import');
+    embed.setDescription(codeBlock(JSON.stringify(fetchedData, null, 4)));
+
     await interaction.editReply({ embeds: [embed] });
 }
-async function handleDatabaseExport(interaction, service) {
+
+async function handleDatabaseExport(interaction: ChatInputCommandInteraction, service: UserService) {
     const allRecords = await service.findAll();
+
     const buffer = Buffer.from(JSON.stringify(allRecords.data), 'utf-8');
-    const attachment = new discord_js_1.AttachmentBuilder(buffer, { name: 'exported.json' });
+    const attachment = new AttachmentBuilder(buffer, { name: 'exported.json' });
     await interaction.editReply({ files: [attachment] });
 }

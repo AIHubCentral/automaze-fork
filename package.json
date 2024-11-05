@@ -4,6 +4,7 @@
     "main": "index.js",
     "scripts": {
         "build": "tsc",
+        "start": "ts-node ./src/index.ts",
         "dev": "tsc && node dist/index.js",
         "dbInit": "node ./dist/Database/dbInit.js",
         "dbDestroy": "node ./dist/Database/dbDestroy.js",

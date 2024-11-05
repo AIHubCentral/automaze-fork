@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable('users', (table) => {
         table.string('id', 19).primary();
         table.string('username', 32).notNullable();
-        table.string('display_name');
+        table.string('display_name').defaultTo('');
         table.integer('bananas').defaultTo(0);
         table.timestamps(true, true);
     });
@@ -26,6 +26,7 @@ export async function up(knex: Knex): Promise<void> {
 
     await knex.schema.createTable('settings', (table) => {
         table.increments('id').primary();
+        table.string('theme');
         table.string('debug_guild_id');
         table.string('debug_guild_channel_id');
         table.boolean('send_logs');
@@ -34,8 +35,8 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-    await knex.schema.dropTableIfExists('users');
-    await knex.schema.dropTableIfExists('resources');
     await knex.schema.dropTableIfExists('collaborators');
+    await knex.schema.dropTableIfExists('resources');
     await knex.schema.dropTableIfExists('settings');
+    await knex.schema.dropTableIfExists('users');
 }
