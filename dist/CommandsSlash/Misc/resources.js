@@ -9,6 +9,7 @@ const collaboratorService_1 = __importDefault(require("../../Services/collaborat
 const slashCommandData_json_1 = __importDefault(require("../../../JSON/slashCommandData.json"));
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const db_1 = __importDefault(require("../../db"));
+const generalUtilities_1 = require("../../Utils/generalUtilities");
 const commandData = slashCommandData_json_1.default.resources;
 const Resources = {
     category: 'Misc',
@@ -78,18 +79,102 @@ const Resources = {
         }
         else if (interaction.options.getSubcommand() === 'show') {
             const category = interaction.options.getString('category', true);
-            const allResources = await service.findAll({
+            let offset = 0;
+            let currentPage = 1;
+            const limit = 2;
+            let resources = await service.findAll({
+                offset,
+                limit,
                 filter: { column: 'category', value: category },
             });
-            const totalResources = allResources.data.length;
+            const totalResources = resources.data.length;
             if (totalResources === 0) {
                 await interaction.reply({ content: 'No resource was found.' });
                 return;
             }
             const embed = new discord_js_1.EmbedBuilder().setTitle('📋 Resources - Show').setColor(discord_js_1.Colors.Blurple);
-            embed.setDescription((0, discord_js_1.codeBlock)(JSON.stringify(allResources.data, null, 4)));
-            await interaction.reply({ embeds: [embed] });
-            // `- ID: **${resource.id}** | Category: **${resource.category}** | URL: **${resource.url}** | title: **${resource.displayTitle || 'None'}** | authors: **${resource.authors || 'None'}** | emoji: **${resource.emoji || 'None'}**`
+            embed.setFields([
+                {
+                    name: 'Category',
+                    value: category,
+                    inline: false,
+                },
+                {
+                    name: 'Items',
+                    value: (0, discord_js_1.codeBlock)('json', JSON.stringify(resources.data, null, 2)),
+                    inline: false,
+                },
+            ]);
+            embed.setTimestamp();
+            const prevButtonId = `btn_prev_${(0, generalUtilities_1.generateRandomId)(6)}`;
+            const nextButtonId = `btn_next_${(0, generalUtilities_1.generateRandomId)(6)}`;
+            const btnPrevious = new discord_js_1.ButtonBuilder()
+                .setCustomId(prevButtonId)
+                .setStyle(discord_js_1.ButtonStyle.Primary)
+                .setLabel('Previous')
+                .setDisabled(true);
+            const btnNext = new discord_js_1.ButtonBuilder()
+                .setCustomId(nextButtonId)
+                .setStyle(discord_js_1.ButtonStyle.Primary)
+                .setLabel('Next');
+            const actionRow = new discord_js_1.ActionRowBuilder();
+            actionRow.addComponents(btnPrevious, btnNext);
+            embed.setFooter({ text: `Page ${offset + 1} of ?` });
+            const message = await interaction.reply({
+                embeds: [embed],
+                components: [actionRow],
+                fetchReply: true,
+            });
+            const collector = message.createMessageComponentCollector({
+                componentType: discord_js_1.ComponentType.Button,
+                time: 2 * 60 * 1000, // expires after 5 minutes
+            });
+            collector.on('collect', async (buttonInteraction) => {
+                // Check which button was pressed and update the embed accordingly
+                if (buttonInteraction.customId === prevButtonId) {
+                    offset -= limit;
+                    resources = await service.findAll({
+                        offset,
+                        limit,
+                        filter: { column: 'category', value: category },
+                    });
+                    currentPage--;
+                }
+                else if (buttonInteraction.customId === nextButtonId) {
+                    offset += limit;
+                    resources = await service.findAll({
+                        offset,
+                        limit,
+                        filter: { column: 'category', value: category },
+                    });
+                    currentPage++;
+                }
+                embed.setFields([
+                    {
+                        name: 'Category',
+                        value: category,
+                        inline: false,
+                    },
+                    {
+                        name: 'Items',
+                        value: (0, discord_js_1.codeBlock)('json', JSON.stringify(resources.data, null, 2)),
+                        inline: false,
+                    },
+                ]);
+                embed.setFooter({ text: `Page ${currentPage} of ?` });
+                btnPrevious.setDisabled(offset === 0);
+                btnNext.setDisabled(!resources.hasNext);
+                // Update the message with the new embed
+                await buttonInteraction.update({ embeds: [embed], components: [actionRow] });
+            });
+            collector.on('end', async () => {
+                // After 5 minutes, disable the buttons
+                const disabledRow = new discord_js_1.ActionRowBuilder().addComponents(btnPrevious.setDisabled(true), btnNext.setDisabled(true));
+                // Update the message to show the disabled buttons
+                await interaction.editReply({
+                    components: [disabledRow],
+                });
+            });
         }
         else if (interaction.options.getSubcommand() === 'update') {
             const id = interaction.options.getInteger('id', true);

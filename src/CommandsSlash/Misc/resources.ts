@@ -1,4 +1,14 @@
-import { codeBlock, Colors, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonInteraction,
+    ButtonStyle,
+    codeBlock,
+    Colors,
+    ComponentType,
+    EmbedBuilder,
+    SlashCommandBuilder,
+} from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
 import ResourceService, { IResource } from '../../Services/resourceService';
@@ -6,6 +16,7 @@ import CollaboratorService from '../../Services/collaboratorService';
 import slashCommandData from '../../../JSON/slashCommandData.json';
 import { createStringOption } from '../../Utils/discordUtilities';
 import knexInstance from '../../db';
+import { generateRandomId } from '../../Utils/generalUtilities';
 
 const commandData = slashCommandData.resources;
 
@@ -89,11 +100,17 @@ const Resources: SlashCommand = {
         } else if (interaction.options.getSubcommand() === 'show') {
             const category = interaction.options.getString('category', true);
 
-            const allResources = await service.findAll({
+            let offset = 0;
+            let currentPage = 1;
+            const limit = 2;
+
+            let resources = await service.findAll({
+                offset,
+                limit,
                 filter: { column: 'category', value: category },
             });
 
-            const totalResources = allResources.data.length;
+            const totalResources = resources.data.length;
 
             if (totalResources === 0) {
                 await interaction.reply({ content: 'No resource was found.' });
@@ -101,10 +118,108 @@ const Resources: SlashCommand = {
             }
 
             const embed = new EmbedBuilder().setTitle('📋 Resources - Show').setColor(Colors.Blurple);
-            embed.setDescription(codeBlock(JSON.stringify(allResources.data, null, 4)));
-            await interaction.reply({ embeds: [embed] });
 
-            // `- ID: **${resource.id}** | Category: **${resource.category}** | URL: **${resource.url}** | title: **${resource.displayTitle || 'None'}** | authors: **${resource.authors || 'None'}** | emoji: **${resource.emoji || 'None'}**`
+            embed.setFields([
+                {
+                    name: 'Category',
+                    value: category,
+                    inline: false,
+                },
+                {
+                    name: 'Items',
+                    value: codeBlock('json', JSON.stringify(resources.data, null, 2)),
+                    inline: false,
+                },
+            ]);
+            embed.setTimestamp();
+
+            const prevButtonId = `btn_prev_${generateRandomId(6)}`;
+            const nextButtonId = `btn_next_${generateRandomId(6)}`;
+
+            const btnPrevious = new ButtonBuilder()
+                .setCustomId(prevButtonId)
+                .setStyle(ButtonStyle.Primary)
+                .setLabel('Previous')
+                .setDisabled(true);
+
+            const btnNext = new ButtonBuilder()
+                .setCustomId(nextButtonId)
+                .setStyle(ButtonStyle.Primary)
+                .setLabel('Next');
+
+            const actionRow = new ActionRowBuilder<ButtonBuilder>();
+            actionRow.addComponents(btnPrevious, btnNext);
+
+            embed.setFooter({ text: `Page ${offset + 1} of ?` });
+
+            const message = await interaction.reply({
+                embeds: [embed],
+                components: [actionRow],
+                fetchReply: true,
+            });
+
+            const collector = message.createMessageComponentCollector({
+                componentType: ComponentType.Button,
+                time: 2 * 60 * 1000, // expires after 5 minutes
+            });
+
+            collector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+                // Check which button was pressed and update the embed accordingly
+                if (buttonInteraction.customId === prevButtonId) {
+                    offset -= limit;
+
+                    resources = await service.findAll({
+                        offset,
+                        limit,
+                        filter: { column: 'category', value: category },
+                    });
+
+                    currentPage--;
+                } else if (buttonInteraction.customId === nextButtonId) {
+                    offset += limit;
+
+                    resources = await service.findAll({
+                        offset,
+                        limit,
+                        filter: { column: 'category', value: category },
+                    });
+
+                    currentPage++;
+                }
+
+                embed.setFields([
+                    {
+                        name: 'Category',
+                        value: category,
+                        inline: false,
+                    },
+                    {
+                        name: 'Items',
+                        value: codeBlock('json', JSON.stringify(resources.data, null, 2)),
+                        inline: false,
+                    },
+                ]);
+
+                embed.setFooter({ text: `Page ${currentPage} of ?` });
+                btnPrevious.setDisabled(offset === 0);
+                btnNext.setDisabled(!resources.hasNext);
+
+                // Update the message with the new embed
+                await buttonInteraction.update({ embeds: [embed], components: [actionRow] });
+            });
+
+            collector.on('end', async () => {
+                // After 5 minutes, disable the buttons
+                const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    btnPrevious.setDisabled(true),
+                    btnNext.setDisabled(true)
+                );
+
+                // Update the message to show the disabled buttons
+                await interaction.editReply({
+                    components: [disabledRow],
+                });
+            });
         } else if (interaction.options.getSubcommand() === 'update') {
             const id = interaction.options.getInteger('id', true);
 
