@@ -24,8 +24,6 @@ import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
 import IBotConfigs from '../../Interfaces/BotConfigs';
 import { getThemes } from '../../Utils/botUtilities';
-import CollaboratorService, { ICollaborator } from '../../Services/collaboratorService';
-import knexInstance from '../../db';
 
 const Configure: SlashCommand = {
     category: 'Utilities',
@@ -160,34 +158,6 @@ const Configure: SlashCommand = {
                 .addBooleanOption((option) =>
                     option.setName('enabled').setDescription('Enable or disable this log')
                 )
-        )
-        .addSubcommand((subcommand) =>
-            subcommand
-                .setName('collaborators')
-                .setDescription('Configure who can edit bot links')
-                .addStringOption((option) =>
-                    option
-                        .setName('task')
-                        .setDescription('Add or remove a collaborator')
-                        .setRequired(true)
-                        .addChoices(
-                            { name: 'Add', value: 'add' },
-                            { name: 'Remove', value: 'remove' },
-                            { name: 'List', value: 'showAll' }
-                        )
-                )
-                .addStringOption((option) =>
-                    option.setName('discord_id').setDescription('Discord ID of the user').setRequired(true)
-                )
-                .addStringOption((option) =>
-                    option.setName('discord_username').setDescription('Discord username').setRequired(true)
-                )
-                .addStringOption((option) =>
-                    option
-                        .setName('discord_displayname')
-                        .setDescription('Discord display name')
-                        .setRequired(false)
-                )
         ),
     async execute(interaction) {
         const client = interaction.client as ExtendedClient;
@@ -211,9 +181,6 @@ const Configure: SlashCommand = {
             await configureDebugGuild(interaction);
         } else if (interaction.options.getSubcommand() === 'logs') {
             await configureLogs(interaction);
-        } else if (interaction.options.getSubcommand() === 'collaborators') {
-            const service = new CollaboratorService(knexInstance);
-            await configureCollaborators(interaction, service);
         }
     },
 };
@@ -458,84 +425,4 @@ async function configureLogs(interaction: ChatInputCommandInteraction): Promise<
         embeds: [embed],
         ephemeral: true,
     });
-}
-
-async function configureCollaborators(
-    interaction: ChatInputCommandInteraction,
-    service: CollaboratorService
-): Promise<void> {
-    const taskName = interaction.options.getString('task', true);
-    const userDiscordId = interaction.options.getString('discord_id', true);
-    const username = interaction.options.getString('discord_username', true);
-    const displayName = interaction.options.getString('discord_displayname') ?? '';
-
-    const embedColor = taskName === 'remove' ? Colors.DarkOrange : Colors.DarkGreen;
-
-    const embed = new EmbedBuilder().setTitle('Collaborators').setColor(embedColor);
-
-    const collaborator: ICollaborator = {
-        id: userDiscordId,
-        username,
-        displayName,
-    };
-
-    if (taskName === 'add') {
-        const id = await service.create(collaborator);
-
-        if (id === -1) {
-            embed.setDescription('Failed to insert collaborator');
-            embed.setColor(Colors.Red);
-        } else {
-            embed.setDescription(`Added collaborator with id: ${id}`);
-        }
-    } else if (taskName === 'remove') {
-        const fetchedCollaborator = await service.find(collaborator.id);
-
-        if (!fetchedCollaborator) {
-            await interaction.reply({
-                content: `Couldn't find collaborator with ID ${collaborator.id}`,
-                ephemeral: true,
-            });
-            return;
-        }
-
-        const affectedRows = await service.delete(collaborator.id);
-
-        if (affectedRows === 1) {
-            embed.setTitle('🗑 Removed collaborator');
-            embed.setColor(Colors.Green);
-
-            const descriptionLines = [
-                `${bold('ID')} ${inlineCode(fetchedCollaborator.id)}`,
-                `${bold('username')} ${inlineCode(fetchedCollaborator.username)}`,
-            ];
-
-            if (fetchedCollaborator.displayName) {
-                descriptionLines.push(`${bold('display')} ${inlineCode(fetchedCollaborator.displayName)}`);
-            }
-
-            embed.setDescription(unorderedList(descriptionLines));
-        } else {
-            embed.setDescription(`Failed to remove collaborator with id: ${collaborator.id}`);
-            embed.setColor(Colors.Red);
-        }
-    } else {
-        const result = await service.findAll();
-
-        if (result.data.length === 0) {
-            embed.setDescription('> No collaborator found');
-            embed.setColor(Colors.Orange);
-        } else {
-            const descriptionLines: string[] = [];
-
-            result.data.forEach((collaborator) => {
-                descriptionLines.push(
-                    `${inlineCode(collaborator.id)}: ${collaborator.username} (${collaborator.displayName || 'No display name'})`
-                );
-            });
-            embed.setDescription(unorderedList(descriptionLines));
-        }
-    }
-
-    await interaction.reply({ embeds: [embed] });
 }

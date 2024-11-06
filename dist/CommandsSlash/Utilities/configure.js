@@ -1,13 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const generalUtilities_1 = require("../../Utils/generalUtilities");
 const botUtilities_1 = require("../../Utils/botUtilities");
-const collaboratorService_1 = __importDefault(require("../../Services/collaboratorService"));
-const db_1 = __importDefault(require("../../db"));
 const Configure = {
     category: 'Utilities',
     cooldown: 15,
@@ -81,21 +76,7 @@ const Configure = {
         .setDescription('Which log to configure')
         .setRequired(true)
         .addChoices({ name: 'Emojis', value: 'emojis' }, { name: 'Stickers', value: 'stickers' }, { name: 'Models', value: 'models' }, { name: 'ModelRequests', value: 'modelRequests' }))
-        .addBooleanOption((option) => option.setName('enabled').setDescription('Enable or disable this log')))
-        .addSubcommand((subcommand) => subcommand
-        .setName('collaborators')
-        .setDescription('Configure who can edit bot links')
-        .addStringOption((option) => option
-        .setName('task')
-        .setDescription('Add or remove a collaborator')
-        .setRequired(true)
-        .addChoices({ name: 'Add', value: 'add' }, { name: 'Remove', value: 'remove' }, { name: 'List', value: 'showAll' }))
-        .addStringOption((option) => option.setName('discord_id').setDescription('Discord ID of the user').setRequired(true))
-        .addStringOption((option) => option.setName('discord_username').setDescription('Discord username').setRequired(true))
-        .addStringOption((option) => option
-        .setName('discord_displayname')
-        .setDescription('Discord display name')
-        .setRequired(false))),
+        .addBooleanOption((option) => option.setName('enabled').setDescription('Enable or disable this log'))),
     async execute(interaction) {
         const client = interaction.client;
         const { botConfigs } = client;
@@ -125,10 +106,6 @@ const Configure = {
         }
         else if (interaction.options.getSubcommand() === 'logs') {
             await configureLogs(interaction);
-        }
-        else if (interaction.options.getSubcommand() === 'collaborators') {
-            const service = new collaboratorService_1.default(db_1.default);
-            await configureCollaborators(interaction, service);
         }
     },
 };
@@ -320,69 +297,4 @@ async function configureLogs(interaction) {
         embeds: [embed],
         ephemeral: true,
     });
-}
-async function configureCollaborators(interaction, service) {
-    const taskName = interaction.options.getString('task', true);
-    const userDiscordId = interaction.options.getString('discord_id', true);
-    const username = interaction.options.getString('discord_username', true);
-    const displayName = interaction.options.getString('discord_displayname') ?? '';
-    const embedColor = taskName === 'remove' ? discord_js_1.Colors.DarkOrange : discord_js_1.Colors.DarkGreen;
-    const embed = new discord_js_1.EmbedBuilder().setTitle('Collaborators').setColor(embedColor);
-    const collaborator = {
-        id: userDiscordId,
-        username,
-        displayName,
-    };
-    if (taskName === 'add') {
-        const id = await service.create(collaborator);
-        if (id === -1) {
-            embed.setDescription('Failed to insert collaborator');
-            embed.setColor(discord_js_1.Colors.Red);
-        }
-        else {
-            embed.setDescription(`Added collaborator with id: ${id}`);
-        }
-    }
-    else if (taskName === 'remove') {
-        const fetchedCollaborator = await service.find(collaborator.id);
-        if (!fetchedCollaborator) {
-            await interaction.reply({
-                content: `Couldn't find collaborator with ID ${collaborator.id}`,
-                ephemeral: true,
-            });
-            return;
-        }
-        const affectedRows = await service.delete(collaborator.id);
-        if (affectedRows === 1) {
-            embed.setTitle('🗑 Removed collaborator');
-            embed.setColor(discord_js_1.Colors.Green);
-            const descriptionLines = [
-                `${(0, discord_js_1.bold)('ID')} ${(0, discord_js_1.inlineCode)(fetchedCollaborator.id)}`,
-                `${(0, discord_js_1.bold)('username')} ${(0, discord_js_1.inlineCode)(fetchedCollaborator.username)}`,
-            ];
-            if (fetchedCollaborator.displayName) {
-                descriptionLines.push(`${(0, discord_js_1.bold)('display')} ${(0, discord_js_1.inlineCode)(fetchedCollaborator.displayName)}`);
-            }
-            embed.setDescription((0, discord_js_1.unorderedList)(descriptionLines));
-        }
-        else {
-            embed.setDescription(`Failed to remove collaborator with id: ${collaborator.id}`);
-            embed.setColor(discord_js_1.Colors.Red);
-        }
-    }
-    else {
-        const result = await service.findAll();
-        if (result.data.length === 0) {
-            embed.setDescription('> No collaborator found');
-            embed.setColor(discord_js_1.Colors.Orange);
-        }
-        else {
-            const descriptionLines = [];
-            result.data.forEach((collaborator) => {
-                descriptionLines.push(`${(0, discord_js_1.inlineCode)(collaborator.id)}: ${collaborator.username} (${collaborator.displayName || 'No display name'})`);
-            });
-            embed.setDescription((0, discord_js_1.unorderedList)(descriptionLines));
-        }
-    }
-    await interaction.reply({ embeds: [embed] });
 }

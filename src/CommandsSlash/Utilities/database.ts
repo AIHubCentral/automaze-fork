@@ -11,6 +11,7 @@ import { SlashCommand } from '../../Interfaces/Command';
 import knexInstance from '../../db';
 import UserService from '../../Services/userService';
 import axios from 'axios';
+import CollaboratorService from '../../Services/collaboratorService';
 
 enum DatabaseTables {
     Collaborators = 'collaborators',
@@ -18,6 +19,8 @@ enum DatabaseTables {
     Settings = 'settings',
     Users = 'users',
 }
+
+type ServiceTypes = UserService | CollaboratorService;
 
 const Database: SlashCommand = {
     category: 'Utilities',
@@ -145,20 +148,20 @@ const Database: SlashCommand = {
         const subCommand = interaction.options.getSubcommand();
         const source = interaction.options.getString('source', true);
 
-        let Service = null;
+        let service: ServiceTypes | null = null;
 
         if (source === DatabaseTables.Users) {
-            Service = UserService;
+            service = new UserService(knexInstance);
+        } else if (source === DatabaseTables.Collaborators) {
+            service = new CollaboratorService(knexInstance);
         }
 
-        if (!Service) {
+        if (!service) {
             await interaction.reply({ content: 'Failed to select a database service', ephemeral: true });
             return;
         }
 
         await interaction.deferReply({ ephemeral: true });
-
-        const selectedService = new Service(knexInstance);
 
         if (subCommand === 'create') {
             const attachment = interaction.options.getAttachment('file', true);
@@ -167,13 +170,13 @@ const Database: SlashCommand = {
                 const response = await axios.get(attachment.url);
                 const jsonData = response.data as unknown;
 
-                await handleDatabaseCreate(interaction, selectedService, jsonData);
+                await handleDatabaseCreate(interaction, service, jsonData);
             } catch (error) {
                 console.error('Error reading JSON file:', error);
                 return interaction.reply('Failed to process JSON file.');
             }
         } else if (subCommand === 'read') {
-            await handleDatabaseRead(interaction, selectedService);
+            await handleDatabaseRead(interaction, service);
         } else if (subCommand === 'update') {
             const attachment = interaction.options.getAttachment('file', true);
             const id = interaction.options.getString('id', true);
@@ -182,14 +185,14 @@ const Database: SlashCommand = {
                 const response = await axios.get(attachment.url);
                 const jsonData = response.data as unknown;
 
-                await handleDatabaseUpdate(interaction, selectedService, id, jsonData);
+                await handleDatabaseUpdate(interaction, service, id, jsonData);
             } catch (error) {
                 console.error('Error reading JSON file:', error);
                 return interaction.reply('Failed to process JSON file.');
             }
         } else if (subCommand === 'delete') {
             const userId = interaction.options.getString('id', true);
-            await handleDatabaseDelete(interaction, selectedService, userId);
+            await handleDatabaseDelete(interaction, service, userId);
         } else if (subCommand === 'import') {
             const attachment = interaction.options.getAttachment('file', true);
 
@@ -197,13 +200,13 @@ const Database: SlashCommand = {
                 const response = await axios.get(attachment.url);
                 const jsonData = response.data as unknown;
 
-                await handleDatabaseImport(interaction, selectedService, jsonData);
+                await handleDatabaseImport(interaction, service, jsonData);
             } catch (error) {
                 console.error('Error reading JSON file:', error);
                 return interaction.reply('Failed to process JSON file.');
             }
         } else if (subCommand === 'export') {
-            await handleDatabaseExport(interaction, selectedService);
+            await handleDatabaseExport(interaction, service);
         }
 
         //if (source === DatabaseTables.Users) {
@@ -439,11 +442,9 @@ const Database: SlashCommand = {
 
 export default Database;
 
-type ServiceTypes = UserService;
-
 async function handleDatabaseCreate(
     interaction: ChatInputCommandInteraction,
-    service: UserService,
+    service: ServiceTypes,
     newData: any
 ) {
     let fetchedData = await service.find(newData.id);
@@ -475,7 +476,7 @@ async function handleDatabaseRead(interaction: ChatInputCommandInteraction, serv
 
 async function handleDatabaseUpdate(
     interaction: ChatInputCommandInteraction,
-    service: UserService,
+    service: ServiceTypes,
     id: string,
     newData: any
 ) {
@@ -499,7 +500,7 @@ async function handleDatabaseUpdate(
 
 async function handleDatabaseDelete(
     interaction: ChatInputCommandInteraction,
-    service: UserService,
+    service: ServiceTypes,
     id: string
 ) {
     const fetchedData = await service.find(id);
@@ -520,7 +521,7 @@ async function handleDatabaseDelete(
 
 async function handleDatabaseImport(
     interaction: ChatInputCommandInteraction,
-    service: UserService,
+    service: ServiceTypes,
     newData: any
 ) {
     await service.clearAll();
@@ -537,7 +538,7 @@ async function handleDatabaseImport(
     await interaction.editReply({ embeds: [embed] });
 }
 
-async function handleDatabaseExport(interaction: ChatInputCommandInteraction, service: UserService) {
+async function handleDatabaseExport(interaction: ChatInputCommandInteraction, service: ServiceTypes) {
     const allRecords = await service.findAll();
 
     const buffer = Buffer.from(JSON.stringify(allRecords.data), 'utf-8');

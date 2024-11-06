@@ -7,6 +7,7 @@ const discord_js_1 = require("discord.js");
 const db_1 = __importDefault(require("../../db"));
 const userService_1 = __importDefault(require("../../Services/userService"));
 const axios_1 = __importDefault(require("axios"));
+const collaboratorService_1 = __importDefault(require("../../Services/collaboratorService"));
 var DatabaseTables;
 (function (DatabaseTables) {
     DatabaseTables["Collaborators"] = "collaborators";
@@ -75,22 +76,24 @@ const Database = {
     async execute(interaction) {
         const subCommand = interaction.options.getSubcommand();
         const source = interaction.options.getString('source', true);
-        let Service = null;
+        let service = null;
         if (source === DatabaseTables.Users) {
-            Service = userService_1.default;
+            service = new userService_1.default(db_1.default);
         }
-        if (!Service) {
+        else if (source === DatabaseTables.Collaborators) {
+            service = new collaboratorService_1.default(db_1.default);
+        }
+        if (!service) {
             await interaction.reply({ content: 'Failed to select a database service', ephemeral: true });
             return;
         }
         await interaction.deferReply({ ephemeral: true });
-        const selectedService = new Service(db_1.default);
         if (subCommand === 'create') {
             const attachment = interaction.options.getAttachment('file', true);
             try {
                 const response = await axios_1.default.get(attachment.url);
                 const jsonData = response.data;
-                await handleDatabaseCreate(interaction, selectedService, jsonData);
+                await handleDatabaseCreate(interaction, service, jsonData);
             }
             catch (error) {
                 console.error('Error reading JSON file:', error);
@@ -98,7 +101,7 @@ const Database = {
             }
         }
         else if (subCommand === 'read') {
-            await handleDatabaseRead(interaction, selectedService);
+            await handleDatabaseRead(interaction, service);
         }
         else if (subCommand === 'update') {
             const attachment = interaction.options.getAttachment('file', true);
@@ -106,7 +109,7 @@ const Database = {
             try {
                 const response = await axios_1.default.get(attachment.url);
                 const jsonData = response.data;
-                await handleDatabaseUpdate(interaction, selectedService, id, jsonData);
+                await handleDatabaseUpdate(interaction, service, id, jsonData);
             }
             catch (error) {
                 console.error('Error reading JSON file:', error);
@@ -115,14 +118,14 @@ const Database = {
         }
         else if (subCommand === 'delete') {
             const userId = interaction.options.getString('id', true);
-            await handleDatabaseDelete(interaction, selectedService, userId);
+            await handleDatabaseDelete(interaction, service, userId);
         }
         else if (subCommand === 'import') {
             const attachment = interaction.options.getAttachment('file', true);
             try {
                 const response = await axios_1.default.get(attachment.url);
                 const jsonData = response.data;
-                await handleDatabaseImport(interaction, selectedService, jsonData);
+                await handleDatabaseImport(interaction, service, jsonData);
             }
             catch (error) {
                 console.error('Error reading JSON file:', error);
@@ -130,7 +133,7 @@ const Database = {
             }
         }
         else if (subCommand === 'export') {
-            await handleDatabaseExport(interaction, selectedService);
+            await handleDatabaseExport(interaction, service);
         }
         //if (source === DatabaseTables.Users) {
         //const userService = new UserService(knexInstance);
