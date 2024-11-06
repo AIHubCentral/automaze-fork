@@ -18,7 +18,6 @@ exports.isAskingForGirlModel = isAskingForGirlModel;
 exports.getResourceData = getResourceData;
 exports.getThemeColors = getThemeColors;
 exports.getThemes = getThemes;
-exports.getPaginatedData = getPaginatedData;
 exports.createPaginatedEmbed = createPaginatedEmbed;
 exports.handleSendRealtimeGuides = handleSendRealtimeGuides;
 exports.getLanguageByChannelId = getLanguageByChannelId;
@@ -29,10 +28,11 @@ const userService_1 = __importDefault(require("../Services/userService"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const fileUtilities_1 = require("./fileUtilities");
-const resourcesService_1 = __importDefault(require("../Services/resourcesService"));
+const resourceService_1 = __importDefault(require("../Services/resourceService"));
 const i18n_1 = __importDefault(require("../i18n"));
 const generalUtilities_1 = require("./generalUtilities");
 const natural_1 = __importDefault(require("natural"));
+const db_1 = __importDefault(require("../db"));
 /* Enums */
 var CloudPlatform;
 (function (CloudPlatform) {
@@ -235,17 +235,18 @@ function isAskingForGirlModel(text) {
     return pattern.test(text);
 }
 async function getResourceData(queryKey, cache, logger) {
-    //const now = Date.now();
     // try to get from cache first
     if (cache.has(queryKey)) {
         const cachedData = cache.get(queryKey) || [];
         return cachedData;
     }
     logger.debug(`Requesting ${queryKey} data from DB`);
-    const resourceService = new resourcesService_1.default(logger);
-    const resources = await resourceService.findByCategory(queryKey);
-    cache.set(queryKey, resources);
-    return resources;
+    const resourceService = new resourceService_1.default(db_1.default);
+    const resources = await resourceService.findAll({
+        filter: { column: 'category', value: 'queryKey' },
+    });
+    cache.set(queryKey, resources.data);
+    return resources.data;
 }
 function getThemeColors(botConfigs) {
     const colors = [
@@ -266,15 +267,6 @@ function getThemes() {
         themes[themeName] = JSON.parse(themeData);
     });
     return themes;
-}
-async function getPaginatedData(page, resourceService, filter) {
-    const perPage = 10;
-    const offset = (page - 1) * perPage;
-    const { data, counter } = await resourceService.getPaginatedResult(offset, perPage, filter);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const totalPages = Math.ceil(counter.count / perPage);
-    return { data, totalPages };
 }
 function createPaginatedEmbed(data, currentPage, totalPages) {
     return new discord_js_1.EmbedBuilder()

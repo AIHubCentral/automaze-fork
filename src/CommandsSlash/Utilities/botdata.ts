@@ -1,15 +1,8 @@
-import {
-    ActionRowBuilder,
-    AttachmentBuilder,
-    ButtonBuilder,
-    ButtonStyle,
-    codeBlock,
-    SlashCommandBuilder,
-} from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
-import ResourceService, { IResource } from '../../Services/resourcesService';
-import { createPaginatedEmbed, getPaginatedData } from '../../Utils/botUtilities';
+import ResourceService, { IResource } from '../../Services/resourceService';
+import knexInstance from '../../db';
 
 const Botdata: SlashCommand = {
     category: 'Utilities',
@@ -103,10 +96,10 @@ const Botdata: SlashCommand = {
         ),
     async execute(interaction) {
         const client = interaction.client as ExtendedClient;
-        const service = new ResourceService(client.logger);
+        const service = new ResourceService(knexInstance);
         const id = interaction.options.getInteger('id') ?? 1; // defaults to 1
 
-        if (interaction.options.getSubcommand() === 'find_all') {
+        /* if (interaction.options.getSubcommand() === 'find_all') {
             const pageNumber = 1;
 
             const { data, totalPages } = await getPaginatedData(pageNumber, service);
@@ -144,6 +137,7 @@ const Botdata: SlashCommand = {
                 if (!i.isButton()) return;
 
                 const currentPage = parseInt(i.customId.split('_')[1]);
+
                 const { data, totalPages } = await getPaginatedData(currentPage, service);
 
                 const embed = createPaginatedEmbed(data, currentPage, totalPages);
@@ -268,7 +262,7 @@ const Botdata: SlashCommand = {
             const insertedValues: boolean = await service.importData(jsonResult);
             const replyMessage = insertedValues ? `Data imported` : 'No data provided';
             await interaction.reply({ content: replyMessage, ephemeral: true });
-        }
+        } */
     },
 };
 

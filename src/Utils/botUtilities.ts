@@ -33,7 +33,7 @@ import UserService, { UserDTO } from '../Services/userService';
 import path from 'path';
 import fs from 'fs';
 import { getAllFiles } from './fileUtilities';
-import ResourceService, { IResource } from '../Services/resourcesService';
+import ResourceService, { IResource } from '../Services/resourceService';
 import winston from 'winston';
 import i18next from '../i18n';
 import { generateRandomId, processTranslation, TranslationResult } from './generalUtilities';
@@ -41,6 +41,7 @@ import natural from 'natural';
 //import cron, { ScheduledTask } from 'node-cron';
 
 import Knex from 'knex';
+import knexInstance from '../db';
 
 /* Enums */
 export enum CloudPlatform {
@@ -273,8 +274,6 @@ export async function getResourceData(
     cache: Collection<string, IResource[]>,
     logger: winston.Logger
 ): Promise<IResource[]> {
-    //const now = Date.now();
-
     // try to get from cache first
     if (cache.has(queryKey)) {
         const cachedData = cache.get(queryKey) || [];
@@ -283,12 +282,14 @@ export async function getResourceData(
 
     logger.debug(`Requesting ${queryKey} data from DB`);
 
-    const resourceService = new ResourceService(logger);
+    const resourceService = new ResourceService(knexInstance);
 
-    const resources = await resourceService.findByCategory(queryKey);
-    cache.set(queryKey, resources);
+    const resources = await resourceService.findAll({
+        filter: { column: 'category', value: 'queryKey' },
+    });
+    cache.set(queryKey, resources.data);
 
-    return resources;
+    return resources.data;
 }
 
 export function getThemeColors(botConfigs: IBotConfigs): ColorResolvable[] {
@@ -311,20 +312,6 @@ export function getThemes() {
         themes[themeName] = JSON.parse(themeData);
     });
     return themes;
-}
-
-export async function getPaginatedData(
-    page: number,
-    resourceService: ResourceService,
-    filter?: { column: string; value: string }
-): Promise<any> {
-    const perPage = 10;
-    const offset = (page - 1) * perPage;
-    const { data, counter } = await resourceService.getPaginatedResult(offset, perPage, filter);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const totalPages = Math.ceil(counter.count / perPage);
-    return { data, totalPages };
 }
 
 export function createPaginatedEmbed(data: any, currentPage: number, totalPages: number): EmbedBuilder {

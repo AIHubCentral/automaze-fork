@@ -4,9 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-const resourcesService_1 = __importDefault(require("../../Services/resourcesService"));
+const resourceService_1 = __importDefault(require("../../Services/resourceService"));
 const collaboratorService_1 = __importDefault(require("../../Services/collaboratorService"));
-const botUtilities_1 = require("../../Utils/botUtilities");
 const slashCommandData_json_1 = __importDefault(require("../../../JSON/slashCommandData.json"));
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const db_1 = __importDefault(require("../../db"));
@@ -17,7 +16,7 @@ const Resources = {
     data: createSlashCommandData(),
     async execute(interaction) {
         const client = interaction.client;
-        const service = new resourcesService_1.default(client.logger);
+        const service = new resourceService_1.default(db_1.default);
         const logData = {
             guildId: interaction.guildId,
             channelId: interaction.channelId,
@@ -40,7 +39,7 @@ const Resources = {
             const title = interaction.options.getString('title') ?? '';
             const authors = interaction.options.getString('authors') ?? '';
             const emoji = interaction.options.getString('emoji') ?? '';
-            const resourceId = await service.insert({
+            const resourceId = await service.create({
                 category,
                 url,
                 authors,
@@ -48,20 +47,14 @@ const Resources = {
                 displayTitle: title,
             });
             const embed = new discord_js_1.EmbedBuilder();
-            if (resourceId === -1) {
-                embed.setTitle('Failed to add resource');
-                embed.setColor(discord_js_1.Colors.Red);
-            }
-            else {
-                embed.setTitle('Resource added!');
-                embed.setDescription(`ID: **${resourceId}**, URL: ${url}`);
-                embed.setColor(discord_js_1.Colors.DarkGreen);
-            }
+            embed.setTitle('Resource added!');
+            embed.setDescription(`ID: **${resourceId}**, URL: ${url}`);
+            embed.setColor(discord_js_1.Colors.DarkGreen);
             await interaction.reply({ embeds: [embed] });
         }
         else if (interaction.options.getSubcommand() === 'delete') {
             const id = interaction.options.getInteger('id', true);
-            const resource = await service.findById(id);
+            const resource = await service.find(id);
             const embed = new discord_js_1.EmbedBuilder();
             if (!resource) {
                 embed.setTitle('Invalid resource');
@@ -70,8 +63,8 @@ const Resources = {
                 await interaction.reply({ embeds: [embed] });
                 return;
             }
-            const deletedSuccessfully = await service.delete(id);
-            if (deletedSuccessfully) {
+            const affectedRows = await service.delete(id);
+            if (affectedRows === 1) {
                 embed.setTitle('Resource deleted');
                 embed.setDescription(`ID: ${id}, URL: ${resource.url}`);
                 embed.setColor(discord_js_1.Colors.DarkGreen);
@@ -85,69 +78,22 @@ const Resources = {
         }
         else if (interaction.options.getSubcommand() === 'show') {
             const category = interaction.options.getString('category', true);
-            const pageNumber = 1;
-            const { data, totalPages } = await (0, botUtilities_1.getPaginatedData)(pageNumber, service, {
-                column: 'category',
-                value: category,
+            const allResources = await service.findAll({
+                filter: { column: 'category', value: category },
             });
-            if (!data || data.length === 0) {
+            const totalResources = allResources.data.length;
+            if (totalResources === 0) {
                 await interaction.reply({ content: 'No resource was found.' });
                 return;
             }
-            const embed = (0, botUtilities_1.createPaginatedEmbed)(data, pageNumber, totalPages);
-            const row = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
-                .setCustomId(`prev_0`)
-                .setLabel('Previous')
-                .setStyle(discord_js_1.ButtonStyle.Primary)
-                .setDisabled(true), new discord_js_1.ButtonBuilder()
-                .setCustomId(`next_2`)
-                .setLabel('Next')
-                .setStyle(discord_js_1.ButtonStyle.Primary)
-                .setDisabled(pageNumber === totalPages));
-            const sentMessage = await interaction.reply({
-                embeds: [embed],
-                components: [row],
-                fetchReply: true,
-            });
-            // show for 5 minutes (300k ms)
-            const collector = sentMessage.createMessageComponentCollector({ time: 300_000 });
-            collector.on('collect', async (i) => {
-                if (!i.isButton())
-                    return;
-                const currentPage = parseInt(i.customId.split('_')[1]);
-                const { data, totalPages } = await (0, botUtilities_1.getPaginatedData)(currentPage, service, {
-                    column: 'category',
-                    value: category,
-                });
-                const embed = (0, botUtilities_1.createPaginatedEmbed)(data, currentPage, totalPages);
-                const row = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
-                    .setCustomId(`prev_${currentPage - 1}`)
-                    .setLabel('Previous')
-                    .setStyle(discord_js_1.ButtonStyle.Primary)
-                    .setDisabled(currentPage === 1), new discord_js_1.ButtonBuilder()
-                    .setCustomId(`next_${currentPage + 1}`)
-                    .setLabel('Next')
-                    .setStyle(discord_js_1.ButtonStyle.Primary)
-                    .setDisabled(currentPage === totalPages));
-                await i.update({ embeds: [embed], components: [row] });
-            });
-            collector.on('end', async () => {
-                const disabledRow = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
-                    .setCustomId('prev_0')
-                    .setLabel('Previous')
-                    .setStyle(discord_js_1.ButtonStyle.Primary)
-                    .setDisabled(true), new discord_js_1.ButtonBuilder()
-                    .setCustomId('next_2')
-                    .setLabel('Next')
-                    .setStyle(discord_js_1.ButtonStyle.Primary)
-                    .setDisabled(true));
-                await sentMessage.edit({ components: [disabledRow] });
-            });
+            const embed = new discord_js_1.EmbedBuilder().setTitle('📋 Resources - Show').setColor(discord_js_1.Colors.Blurple);
+            embed.setDescription((0, discord_js_1.codeBlock)(JSON.stringify(allResources.data, null, 4)));
+            await interaction.reply({ embeds: [embed] });
             // `- ID: **${resource.id}** | Category: **${resource.category}** | URL: **${resource.url}** | title: **${resource.displayTitle || 'None'}** | authors: **${resource.authors || 'None'}** | emoji: **${resource.emoji || 'None'}**`
         }
         else if (interaction.options.getSubcommand() === 'update') {
             const id = interaction.options.getInteger('id', true);
-            const resource = await service.findById(id);
+            const resource = await service.find(id);
             const embed = new discord_js_1.EmbedBuilder();
             if (!resource) {
                 embed.setTitle('Invalid resource');
@@ -168,7 +114,8 @@ const Resources = {
                 ...(emoji && { emoji }),
                 ...(authors && { authors }),
             };
-            const updatedSuccessfully = await service.update(id, updatedData);
+            const affectedRows = await service.update(id, updatedData);
+            const updatedSuccessfully = affectedRows === 1;
             if (updatedSuccessfully) {
                 embed.setTitle('Resource updated');
                 embed.setDescription(`**ID**: \`${id}\`, **URL**: ${url}`);

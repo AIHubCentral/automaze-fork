@@ -5,6 +5,7 @@ export interface PaginationOptions {
     offset?: number;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
+    filter?: { column: string; value: string };
 }
 
 interface BaseEntity {
@@ -26,15 +27,27 @@ export default class BaseService<T extends BaseEntity> {
     }
 
     async findAll(options: PaginationOptions = {}): Promise<{ data: T[]; hasNext: boolean }> {
-        const { limit = 100, offset = 0, sortBy = 'id', sortOrder = 'asc' } = options;
+        const { limit = 100, offset = 0, sortBy = 'id', sortOrder = 'asc', filter } = options;
 
-        const data = (await this.knex<T>(this.tableName)
+        const query = this.knex<T>(this.tableName)
             .select('*')
             .limit(limit)
             .offset(offset)
-            .orderBy(sortBy, sortOrder)) as T[];
+            .orderBy(sortBy, sortOrder);
 
-        const totalItemsResult = await this.knex(this.tableName).count('* as count').first();
+        // Apply filter if filter column and value are provided
+        if (filter?.column && filter.value !== undefined) {
+            query.where(filter.column, filter.value);
+        }
+
+        const data = (await query) as T[];
+
+        // Get the total number of items (considering the filter) for pagination
+        const totalItemsQuery = this.knex(this.tableName).count('* as count');
+        if (filter && filter.column && filter.value !== undefined) {
+            totalItemsQuery.where(filter.column, filter.value);
+        }
+        const totalItemsResult = await totalItemsQuery.first();
         const totalItems = parseInt(totalItemsResult?.count as string, 10) || 0;
         const hasNext = totalItems > offset + data.length;
 

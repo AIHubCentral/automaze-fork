@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-const resourcesService_1 = __importDefault(require("../../Services/resourcesService"));
-const botUtilities_1 = require("../../Utils/botUtilities");
+const resourceService_1 = __importDefault(require("../../Services/resourceService"));
+const db_1 = __importDefault(require("../../db"));
 const Botdata = {
     category: 'Utilities',
     cooldown: 5,
@@ -54,88 +54,106 @@ const Botdata = {
         .addSubcommand((subcommand) => subcommand.setName('export_data').setDescription('Exports data from database to a JSON file')),
     async execute(interaction) {
         const client = interaction.client;
-        const service = new resourcesService_1.default(client.logger);
+        const service = new resourceService_1.default(db_1.default);
         const id = interaction.options.getInteger('id') ?? 1; // defaults to 1
-        if (interaction.options.getSubcommand() === 'find_all') {
+        /* if (interaction.options.getSubcommand() === 'find_all') {
             const pageNumber = 1;
-            const { data, totalPages } = await (0, botUtilities_1.getPaginatedData)(pageNumber, service);
+
+            const { data, totalPages } = await getPaginatedData(pageNumber, service);
+
             if (!data || data.length === 0) {
                 await interaction.reply({ content: 'No resource was found.' });
                 return;
             }
-            const embed = (0, botUtilities_1.createPaginatedEmbed)(data, pageNumber, totalPages);
-            const row = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
-                .setCustomId(`prev_0`)
-                .setLabel('Previous')
-                .setStyle(discord_js_1.ButtonStyle.Primary)
-                .setDisabled(true), new discord_js_1.ButtonBuilder()
-                .setCustomId(`next_2`)
-                .setLabel('Next')
-                .setStyle(discord_js_1.ButtonStyle.Primary)
-                .setDisabled(totalPages === 1));
+
+            const embed = createPaginatedEmbed(data, pageNumber, totalPages);
+
+            const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`prev_0`)
+                    .setLabel('Previous')
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(true),
+                new ButtonBuilder()
+                    .setCustomId(`next_2`)
+                    .setLabel('Next')
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(totalPages === 1)
+            );
+
             const sentMessage = await interaction.reply({
                 embeds: [embed],
                 components: [row],
                 fetchReply: true,
             });
+
             // show for 5 minutes (300k ms)
             const collector = sentMessage.createMessageComponentCollector({ time: 300_000 });
+
             collector.on('collect', async (i) => {
-                if (!i.isButton())
-                    return;
+                if (!i.isButton()) return;
+
                 const currentPage = parseInt(i.customId.split('_')[1]);
-                const { data, totalPages } = await (0, botUtilities_1.getPaginatedData)(currentPage, service);
-                const embed = (0, botUtilities_1.createPaginatedEmbed)(data, currentPage, totalPages);
-                const row = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
-                    .setCustomId(`prev_${currentPage - 1}`)
-                    .setLabel('Previous')
-                    .setStyle(discord_js_1.ButtonStyle.Primary)
-                    .setDisabled(currentPage === 1), new discord_js_1.ButtonBuilder()
-                    .setCustomId(`next_${currentPage + 1}`)
-                    .setLabel('Next')
-                    .setStyle(discord_js_1.ButtonStyle.Primary)
-                    .setDisabled(currentPage === totalPages));
+
+                const { data, totalPages } = await getPaginatedData(currentPage, service);
+
+                const embed = createPaginatedEmbed(data, currentPage, totalPages);
+
+                const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`prev_${currentPage - 1}`)
+                        .setLabel('Previous')
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(currentPage === 1),
+                    new ButtonBuilder()
+                        .setCustomId(`next_${currentPage + 1}`)
+                        .setLabel('Next')
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(currentPage === totalPages)
+                );
+
                 await i.update({ embeds: [embed], components: [row] });
             });
+
             collector.on('end', async () => {
-                const disabledRow = new discord_js_1.ActionRowBuilder().addComponents(new discord_js_1.ButtonBuilder()
-                    .setCustomId('prev_0')
-                    .setLabel('Previous')
-                    .setStyle(discord_js_1.ButtonStyle.Primary)
-                    .setDisabled(true), new discord_js_1.ButtonBuilder()
-                    .setCustomId('next_2')
-                    .setLabel('Next')
-                    .setStyle(discord_js_1.ButtonStyle.Primary)
-                    .setDisabled(true));
+                const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('prev_0')
+                        .setLabel('Previous')
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(true),
+                    new ButtonBuilder()
+                        .setCustomId('next_2')
+                        .setLabel('Next')
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(true)
+                );
+
                 await sentMessage.edit({ components: [disabledRow] });
             });
-        }
-        else if (interaction.options.getSubcommand() === 'find_by_category') {
+        } else if (interaction.options.getSubcommand() === 'find_by_category') {
             const category = interaction.options.getString('category') ?? 'rvc';
             const resource = await service.findByCategory(category);
             if (!resource) {
                 await interaction.reply({ content: 'No resource was found.' });
-            }
-            else {
+            } else {
                 await interaction.reply({
-                    content: (0, discord_js_1.codeBlock)('javascript', JSON.stringify(resource, null, 4)),
+                    content: codeBlock('javascript', JSON.stringify(resource, null, 4)),
                 });
             }
-        }
-        else if (interaction.options.getSubcommand() === 'delete') {
+        } else if (interaction.options.getSubcommand() === 'delete') {
             await service.delete(id);
             await interaction.reply({ content: `Deleted resource with id ${id}` });
-        }
-        else if (interaction.options.getSubcommand() === 'clear') {
+        } else if (interaction.options.getSubcommand() === 'clear') {
             await service.clear();
             await interaction.reply({ content: 'Done.' });
-        }
-        else if (interaction.options.getSubcommand() === 'insert') {
+        } else if (interaction.options.getSubcommand() === 'insert') {
             const resourceCategory = interaction.options.getString('category') ?? '';
             const url = interaction.options.getString('url') ?? '';
             const displayTitle = interaction.options.getString('display_title') ?? '';
             const emoji = interaction.options.getString('emoji') ?? '';
             const authors = interaction.options.getString('authors') ?? '';
+
             const result = {
                 category: resourceCategory,
                 url,
@@ -143,62 +161,65 @@ const Botdata = {
                 emoji,
                 authors,
             };
+
             const resourceId = await service.insert(result);
+
             if (resourceId == -1) {
                 await interaction.reply({ content: 'Failed to insert data', ephemeral: true });
-            }
-            else {
+            } else {
                 await interaction.reply({
                     content: `Inserted new resource with id ${resourceId}`,
                     ephemeral: true,
                 });
             }
-        }
-        else if (interaction.options.getSubcommand() === 'update') {
+        } else if (interaction.options.getSubcommand() === 'update') {
             const resourceCategory = interaction.options.getString('category');
             const url = interaction.options.getString('url');
             const displayTitle = interaction.options.getString('display_title');
             const emoji = interaction.options.getString('emoji');
             const authors = interaction.options.getString('authors');
-            const result = {
+
+            const result: Partial<IResource> = {
                 ...(resourceCategory && { category: resourceCategory }),
                 ...(url && { url }),
                 ...(displayTitle && { displayTitle }),
                 ...(emoji && { emoji }),
                 ...(authors && { authors }),
             };
-            const resourceUpdated = await service.update(id, result);
+
+            const resourceUpdated: boolean = await service.update(id, result);
+
             if (!resourceUpdated) {
                 await interaction.reply({ content: 'Failed to update data', ephemeral: true });
-            }
-            else {
+            } else {
                 await interaction.reply({ content: `Updated resource with id ${id}`, ephemeral: true });
             }
-        }
-        else if (interaction.options.getSubcommand() === 'export_data') {
-            const resources = await service.findAll();
+        } else if (interaction.options.getSubcommand() === 'export_data') {
+            const resources: IResource[] = await service.findAll();
+
             if (resources.length === 0) {
                 await interaction.reply({ content: `No resource found`, ephemeral: true });
-            }
-            else {
+            } else {
                 const jsonResult = JSON.stringify(resources, null, 4);
                 const buffer = Buffer.from(jsonResult, 'utf-8');
-                const attachment = new discord_js_1.AttachmentBuilder(buffer, { name: 'resources.json' });
+                const attachment = new AttachmentBuilder(buffer, { name: 'resources.json' });
                 await interaction.reply({ files: [attachment], ephemeral: true });
             }
-        }
-        else if (interaction.options.getSubcommand() === 'import_data') {
+        } else if (interaction.options.getSubcommand() === 'import_data') {
             const file = interaction.options.getAttachment('file');
+
             if (!file?.name.endsWith('.json')) {
                 await interaction.reply({ content: 'Not a valid JSON file', ephemeral: true });
                 return;
             }
+
             const response = await fetch(file.url);
-            const jsonResult = (await response.json());
-            const insertedValues = await service.importData(jsonResult);
+            const jsonResult = (await response.json()) as IResource[];
+
+            const insertedValues: boolean = await service.importData(jsonResult);
             const replyMessage = insertedValues ? `Data imported` : 'No data provided';
             await interaction.reply({ content: replyMessage, ephemeral: true });
-        }
+        } */
     },
 };
 exports.default = Botdata;

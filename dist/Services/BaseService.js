@@ -12,13 +12,23 @@ class BaseService {
         return result;
     }
     async findAll(options = {}) {
-        const { limit = 100, offset = 0, sortBy = 'id', sortOrder = 'asc' } = options;
-        const data = (await this.knex(this.tableName)
+        const { limit = 100, offset = 0, sortBy = 'id', sortOrder = 'asc', filter } = options;
+        const query = this.knex(this.tableName)
             .select('*')
             .limit(limit)
             .offset(offset)
-            .orderBy(sortBy, sortOrder));
-        const totalItemsResult = await this.knex(this.tableName).count('* as count').first();
+            .orderBy(sortBy, sortOrder);
+        // Apply filter if filter column and value are provided
+        if (filter?.column && filter.value !== undefined) {
+            query.where(filter.column, filter.value);
+        }
+        const data = (await query);
+        // Get the total number of items (considering the filter) for pagination
+        const totalItemsQuery = this.knex(this.tableName).count('* as count');
+        if (filter && filter.column && filter.value !== undefined) {
+            totalItemsQuery.where(filter.column, filter.value);
+        }
+        const totalItemsResult = await totalItemsQuery.first();
         const totalItems = parseInt(totalItemsResult?.count, 10) || 0;
         const hasNext = totalItems > offset + data.length;
         return { data, hasNext };

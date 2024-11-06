@@ -1,16 +1,8 @@
-import {
-    ActionRowBuilder,
-    ButtonBuilder,
-    ButtonStyle,
-    Colors,
-    EmbedBuilder,
-    SlashCommandBuilder,
-} from 'discord.js';
+import { codeBlock, Colors, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
-import ResourceService, { IResource } from '../../Services/resourcesService';
+import ResourceService, { IResource } from '../../Services/resourceService';
 import CollaboratorService from '../../Services/collaboratorService';
-import { createPaginatedEmbed, getPaginatedData } from '../../Utils/botUtilities';
 import slashCommandData from '../../../JSON/slashCommandData.json';
 import { createStringOption } from '../../Utils/discordUtilities';
 import knexInstance from '../../db';
@@ -23,7 +15,7 @@ const Resources: SlashCommand = {
     data: createSlashCommandData(),
     async execute(interaction) {
         const client = interaction.client as ExtendedClient;
-        const service = new ResourceService(client.logger);
+        const service = new ResourceService(knexInstance);
 
         const logData = {
             guildId: interaction.guildId,
@@ -52,7 +44,7 @@ const Resources: SlashCommand = {
             const authors = interaction.options.getString('authors') ?? '';
             const emoji = interaction.options.getString('emoji') ?? '';
 
-            const resourceId = await service.insert({
+            const resourceId = await service.create({
                 category,
                 url,
                 authors,
@@ -61,21 +53,15 @@ const Resources: SlashCommand = {
             });
 
             const embed = new EmbedBuilder();
-
-            if (resourceId === -1) {
-                embed.setTitle('Failed to add resource');
-                embed.setColor(Colors.Red);
-            } else {
-                embed.setTitle('Resource added!');
-                embed.setDescription(`ID: **${resourceId}**, URL: ${url}`);
-                embed.setColor(Colors.DarkGreen);
-            }
+            embed.setTitle('Resource added!');
+            embed.setDescription(`ID: **${resourceId}**, URL: ${url}`);
+            embed.setColor(Colors.DarkGreen);
 
             await interaction.reply({ embeds: [embed] });
         } else if (interaction.options.getSubcommand() === 'delete') {
             const id = interaction.options.getInteger('id', true);
 
-            const resource = await service.findById(id);
+            const resource = await service.find(id);
 
             const embed = new EmbedBuilder();
 
@@ -87,9 +73,9 @@ const Resources: SlashCommand = {
                 return;
             }
 
-            const deletedSuccessfully: boolean = await service.delete(id);
+            const affectedRows = await service.delete(id);
 
-            if (deletedSuccessfully) {
+            if (affectedRows === 1) {
                 embed.setTitle('Resource deleted');
                 embed.setDescription(`ID: ${id}, URL: ${resource.url}`);
                 embed.setColor(Colors.DarkGreen);
@@ -102,91 +88,27 @@ const Resources: SlashCommand = {
             await interaction.reply({ embeds: [embed] });
         } else if (interaction.options.getSubcommand() === 'show') {
             const category = interaction.options.getString('category', true);
-            const pageNumber = 1;
 
-            const { data, totalPages } = await getPaginatedData(pageNumber, service, {
-                column: 'category',
-                value: category,
+            const allResources = await service.findAll({
+                filter: { column: 'category', value: category },
             });
 
-            if (!data || data.length === 0) {
+            const totalResources = allResources.data.length;
+
+            if (totalResources === 0) {
                 await interaction.reply({ content: 'No resource was found.' });
                 return;
             }
 
-            const embed = createPaginatedEmbed(data, pageNumber, totalPages);
-
-            const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder()
-                    .setCustomId(`prev_0`)
-                    .setLabel('Previous')
-                    .setStyle(ButtonStyle.Primary)
-                    .setDisabled(true),
-                new ButtonBuilder()
-                    .setCustomId(`next_2`)
-                    .setLabel('Next')
-                    .setStyle(ButtonStyle.Primary)
-                    .setDisabled(pageNumber === totalPages)
-            );
-
-            const sentMessage = await interaction.reply({
-                embeds: [embed],
-                components: [row],
-                fetchReply: true,
-            });
-
-            // show for 5 minutes (300k ms)
-            const collector = sentMessage.createMessageComponentCollector({ time: 300_000 });
-
-            collector.on('collect', async (i) => {
-                if (!i.isButton()) return;
-
-                const currentPage = parseInt(i.customId.split('_')[1]);
-                const { data, totalPages } = await getPaginatedData(currentPage, service, {
-                    column: 'category',
-                    value: category,
-                });
-
-                const embed = createPaginatedEmbed(data, currentPage, totalPages);
-
-                const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-                    new ButtonBuilder()
-                        .setCustomId(`prev_${currentPage - 1}`)
-                        .setLabel('Previous')
-                        .setStyle(ButtonStyle.Primary)
-                        .setDisabled(currentPage === 1),
-                    new ButtonBuilder()
-                        .setCustomId(`next_${currentPage + 1}`)
-                        .setLabel('Next')
-                        .setStyle(ButtonStyle.Primary)
-                        .setDisabled(currentPage === totalPages)
-                );
-
-                await i.update({ embeds: [embed], components: [row] });
-            });
-
-            collector.on('end', async () => {
-                const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-                    new ButtonBuilder()
-                        .setCustomId('prev_0')
-                        .setLabel('Previous')
-                        .setStyle(ButtonStyle.Primary)
-                        .setDisabled(true),
-                    new ButtonBuilder()
-                        .setCustomId('next_2')
-                        .setLabel('Next')
-                        .setStyle(ButtonStyle.Primary)
-                        .setDisabled(true)
-                );
-
-                await sentMessage.edit({ components: [disabledRow] });
-            });
+            const embed = new EmbedBuilder().setTitle('📋 Resources - Show').setColor(Colors.Blurple);
+            embed.setDescription(codeBlock(JSON.stringify(allResources.data, null, 4)));
+            await interaction.reply({ embeds: [embed] });
 
             // `- ID: **${resource.id}** | Category: **${resource.category}** | URL: **${resource.url}** | title: **${resource.displayTitle || 'None'}** | authors: **${resource.authors || 'None'}** | emoji: **${resource.emoji || 'None'}**`
         } else if (interaction.options.getSubcommand() === 'update') {
             const id = interaction.options.getInteger('id', true);
 
-            const resource = await service.findById(id);
+            const resource = await service.find(id);
 
             const embed = new EmbedBuilder();
 
@@ -212,7 +134,8 @@ const Resources: SlashCommand = {
                 ...(authors && { authors }),
             };
 
-            const updatedSuccessfully: boolean = await service.update(id, updatedData);
+            const affectedRows = await service.update(id, updatedData);
+            const updatedSuccessfully = affectedRows === 1;
 
             if (updatedSuccessfully) {
                 embed.setTitle('Resource updated');

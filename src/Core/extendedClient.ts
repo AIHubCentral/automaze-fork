@@ -8,7 +8,7 @@ import IDiscordIDs from '../Interfaces/DiscordIDs';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import IBotUtils from '../Interfaces/BotUtils';
 //import { getTheme } from '../Utils/botUtilities';
-import { IResource } from '../Services/resourcesService';
+import { IResource } from '../Services/resourceService';
 
 import Knex from 'knex';
 import knexInstance from '../db';
