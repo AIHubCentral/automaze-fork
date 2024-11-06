@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseService_1 = __importDefault(require("./BaseService"));
-class ResouceService extends BaseService_1.default {
+class ResourceService extends BaseService_1.default {
     constructor(knex) {
         super(knex, 'resources');
     }
 }
-exports.default = ResouceService;
+exports.default = ResourceService;
 // export default class ResourceService {
 //     private logger: winston.Logger;
 //     constructor(logger: winston.Logger) {

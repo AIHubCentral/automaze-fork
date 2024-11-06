@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const i18next_1 = __importDefault(require("i18next"));
 const botUtilities_1 = require("../../Utils/botUtilities");
+const discord_js_1 = require("discord.js");
 const Audio = {
     name: 'audio',
     description: 'Guides on how to isolate audio for making datasets',
@@ -22,6 +23,7 @@ const Audio = {
                 title: i18next_1.default.t('common.emojis.book') +
                     ' ' +
                     i18next_1.default.t('tags.audio.embed.title', { lng: language }),
+                color: discord_js_1.Colors.Blue,
                 description: [(0, botUtilities_1.resourcesToUnorderedListAlt)(resources, language)],
                 footer: i18next_1.default.t('tags.audio.embed.footer', { lng: language }),
             },

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
 const botUtilities_1 = require("../../Utils/botUtilities");
 const i18n_1 = __importDefault(require("../../i18n"));
 const Kaggle = {
@@ -20,6 +21,7 @@ const Kaggle = {
         const content = [
             {
                 title: i18n_1.default.t('tags.kaggle.embed.title', { lng: language }),
+                color: discord_js_1.Colors.DarkBlue,
                 description: [
                     (0, botUtilities_1.resourcesToUnorderedList)(resources, language),
                     i18n_1.default.t('tags.kaggle.guide', { lng: language }),

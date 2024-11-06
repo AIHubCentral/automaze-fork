@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
     SlashCommandBuilder,
     EmbedBuilder,
@@ -8,10 +9,11 @@ import {
 } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 
-import knexInstance from '../../db';
 import UserService from '../../Services/userService';
-import axios from 'axios';
 import CollaboratorService from '../../Services/collaboratorService';
+import ResourceService from '../../Services/resourceService';
+
+import knexInstance from '../../db';
 
 enum DatabaseTables {
     Collaborators = 'collaborators',
@@ -20,7 +22,7 @@ enum DatabaseTables {
     Users = 'users',
 }
 
-type ServiceTypes = UserService | CollaboratorService;
+type ServiceTypes = UserService | CollaboratorService | ResourceService;
 
 const Database: SlashCommand = {
     category: 'Utilities',
@@ -154,6 +156,8 @@ const Database: SlashCommand = {
             service = new UserService(knexInstance);
         } else if (source === DatabaseTables.Collaborators) {
             service = new CollaboratorService(knexInstance);
+        } else if (source === DatabaseTables.Resources) {
+            service = new ResourceService(knexInstance);
         }
 
         if (!service) {
@@ -469,7 +473,14 @@ async function handleDatabaseRead(interaction: ChatInputCommandInteraction, serv
     }
 
     const embed = new EmbedBuilder().setColor(Colors.Navy).setTitle('Database - Read');
-    embed.setDescription(codeBlock(JSON.stringify(records.data, null, 4)));
+
+    const jsonOutput = codeBlock(JSON.stringify(records.data, null, 4));
+
+    if (jsonOutput.length > 4000) {
+        embed.setDescription(`Read ${records.data.length} items`);
+    } else {
+        embed.setDescription(jsonOutput);
+    }
 
     await interaction.editReply({ embeds: [embed] });
 }
@@ -533,7 +544,14 @@ async function handleDatabaseImport(
     const fetchedData = await service.findAll();
 
     const embed = new EmbedBuilder().setColor(Colors.LightGrey).setTitle('Database - Import');
-    embed.setDescription(codeBlock(JSON.stringify(fetchedData, null, 4)));
+
+    const jsonOutput = codeBlock(JSON.stringify(fetchedData.data, null, 4));
+
+    if (jsonOutput.length > 4000) {
+        embed.setDescription(`Imported ${fetchedData.data.length} items`);
+    } else {
+        embed.setDescription(jsonOutput);
+    }
 
     await interaction.editReply({ embeds: [embed] });
 }

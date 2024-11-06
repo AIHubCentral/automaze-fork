@@ -243,7 +243,7 @@ async function getResourceData(queryKey, cache, logger) {
     logger.debug(`Requesting ${queryKey} data from DB`);
     const resourceService = new resourceService_1.default(db_1.default);
     const resources = await resourceService.findAll({
-        filter: { column: 'category', value: 'queryKey' },
+        filter: { column: 'category', value: queryKey },
     });
     cache.set(queryKey, resources.data);
     return resources.data;

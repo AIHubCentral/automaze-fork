@@ -3,11 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const discord_js_1 = require("discord.js");
-const db_1 = __importDefault(require("../../db"));
-const userService_1 = __importDefault(require("../../Services/userService"));
 const axios_1 = __importDefault(require("axios"));
+const discord_js_1 = require("discord.js");
+const userService_1 = __importDefault(require("../../Services/userService"));
 const collaboratorService_1 = __importDefault(require("../../Services/collaboratorService"));
+const resourceService_1 = __importDefault(require("../../Services/resourceService"));
+const db_1 = __importDefault(require("../../db"));
 var DatabaseTables;
 (function (DatabaseTables) {
     DatabaseTables["Collaborators"] = "collaborators";
@@ -82,6 +83,9 @@ const Database = {
         }
         else if (source === DatabaseTables.Collaborators) {
             service = new collaboratorService_1.default(db_1.default);
+        }
+        else if (source === DatabaseTables.Resources) {
+            service = new resourceService_1.default(db_1.default);
         }
         if (!service) {
             await interaction.reply({ content: 'Failed to select a database service', ephemeral: true });
@@ -382,7 +386,13 @@ async function handleDatabaseRead(interaction, service) {
         return await interaction.editReply({ content: 'No records' });
     }
     const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Navy).setTitle('Database - Read');
-    embed.setDescription((0, discord_js_1.codeBlock)(JSON.stringify(records.data, null, 4)));
+    const jsonOutput = (0, discord_js_1.codeBlock)(JSON.stringify(records.data, null, 4));
+    if (jsonOutput.length > 4000) {
+        embed.setDescription(`Read ${records.data.length} items`);
+    }
+    else {
+        embed.setDescription(jsonOutput);
+    }
     await interaction.editReply({ embeds: [embed] });
 }
 async function handleDatabaseUpdate(interaction, service, id, newData) {
@@ -419,7 +429,13 @@ async function handleDatabaseImport(interaction, service, newData) {
     }
     const fetchedData = await service.findAll();
     const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.LightGrey).setTitle('Database - Import');
-    embed.setDescription((0, discord_js_1.codeBlock)(JSON.stringify(fetchedData, null, 4)));
+    const jsonOutput = (0, discord_js_1.codeBlock)(JSON.stringify(fetchedData.data, null, 4));
+    if (jsonOutput.length > 4000) {
+        embed.setDescription(`Imported ${fetchedData.data.length} items`);
+    }
+    else {
+        embed.setDescription(jsonOutput);
+    }
     await interaction.editReply({ embeds: [embed] });
 }
 async function handleDatabaseExport(interaction, service) {

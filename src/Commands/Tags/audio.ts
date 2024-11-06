@@ -7,6 +7,7 @@ import {
     resourcesToUnorderedListAlt,
     TagResponseSender,
 } from '../../Utils/botUtilities';
+import { Colors } from 'discord.js';
 
 const Audio: PrefixCommand = {
     name: 'audio',
@@ -30,6 +31,7 @@ const Audio: PrefixCommand = {
                     i18next.t('common.emojis.book') +
                     ' ' +
                     i18next.t('tags.audio.embed.title', { lng: language }),
+                color: Colors.Blue,
                 description: [resourcesToUnorderedListAlt(resources, language)],
                 footer: i18next.t('tags.audio.embed.footer', { lng: language }),
             },

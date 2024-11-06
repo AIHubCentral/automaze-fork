@@ -12,7 +12,7 @@ export interface IResource {
     authors?: string;
 }
 
-export default class ResouceService extends BaseService<IResource> {
+export default class ResourceService extends BaseService<IResource> {
     constructor(knex: Knex.Knex) {
         super(knex, 'resources');
     }

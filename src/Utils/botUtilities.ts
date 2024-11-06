@@ -285,7 +285,7 @@ export async function getResourceData(
     const resourceService = new ResourceService(knexInstance);
 
     const resources = await resourceService.findAll({
-        filter: { column: 'category', value: 'queryKey' },
+        filter: { column: 'category', value: queryKey },
     });
     cache.set(queryKey, resources.data);
 

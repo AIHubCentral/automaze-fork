@@ -1,3 +1,4 @@
+import { Colors } from 'discord.js';
 import { EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
 import {
@@ -27,6 +28,7 @@ const Kaggle: PrefixCommand = {
         const content: EmbedData[] = [
             {
                 title: i18next.t('tags.kaggle.embed.title', { lng: language }),
+                color: Colors.DarkBlue,
                 description: [
                     resourcesToUnorderedList(resources, language),
                     i18next.t('tags.kaggle.guide', { lng: language }),
