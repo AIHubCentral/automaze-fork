@@ -24,12 +24,14 @@ async function up(knex) {
         table.string('displayName');
     });
     await knex.schema.createTable('settings', (table) => {
-        table.increments('id').primary();
-        table.string('theme');
+        table.string('id').primary();
+        table.string('theme').notNullable().defaultTo('default');
+        table.boolean('send_logs').defaultTo(false);
+        table.boolean('send_automated_replies').defaultTo(false);
+        table.boolean('add_reactions').defaultTo(true);
+        table.boolean('delete_messages').defaultTo(true);
         table.string('debug_guild_id');
         table.string('debug_guild_channel_id');
-        table.boolean('send_logs');
-        table.boolean('send_automated_replies');
     });
 }
 async function down(knex) {

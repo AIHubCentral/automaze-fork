@@ -3,15 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DATABASE_PATH = void 0;
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const RESOURCES_DATABASE_PATH = path_1.default.join(process.cwd(), 'database', 'resources.sqlite');
+exports.DATABASE_PATH = path_1.default.join(process.cwd(), 'database', 'database.sqlite');
 const knexConfig = {
     development: {
         client: 'sqlite3',
         connection: {
-            filename: RESOURCES_DATABASE_PATH,
+            filename: exports.DATABASE_PATH,
         },
         useNullAsDefault: true,
         migrations: {

@@ -3,13 +3,13 @@ import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const RESOURCES_DATABASE_PATH = path.join(process.cwd(), 'database', 'resources.sqlite');
+export const DATABASE_PATH = path.join(process.cwd(), 'database', 'database.sqlite');
 
 const knexConfig = {
     development: {
         client: 'sqlite3',
         connection: {
-            filename: RESOURCES_DATABASE_PATH,
+            filename: DATABASE_PATH,
         },
         useNullAsDefault: true,
         migrations: {

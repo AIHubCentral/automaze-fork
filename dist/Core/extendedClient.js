@@ -29,6 +29,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = __importStar(require("discord.js"));
 const db_1 = __importDefault(require("../db"));
+const settingsService_1 = __importDefault(require("../Services/settingsService"));
 class ExtendedClient extends Discord.Client {
     commands;
     slashCommands;
@@ -89,6 +90,17 @@ class ExtendedClient extends Discord.Client {
             // when in production environment, send a message on startup to the dev server
             this.botConfigs.messageOnStartup = true;
         }
+        (async () => {
+            // add settings to cache
+            const settingsService = new settingsService_1.default(this.knexInstance);
+            const currentSettings = await settingsService.find('main_settings');
+            if (!currentSettings) {
+                this.logger.warn('Could not find a settings configuration');
+                return;
+            }
+            this.botCache.set('settings', currentSettings);
+            this.logger.debug('Added settings to cache');
+        })();
     }
 }
 exports.default = ExtendedClient;

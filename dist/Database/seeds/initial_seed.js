@@ -4,11 +4,13 @@ exports.seed = seed;
 async function seed(knex) {
     // Deletes ALL existing entries
     await knex('settings').del();
-    // Inserts seed entries
-    await knex('settings').insert([
-        { debug_guild_id: '1234567890' },
-        { debug_guild_channel_id: '0987654321' },
-        { send_logs: true },
-        { send_automated_replies: false },
-    ]);
+    const initialSettings = {
+        id: 'main_settings',
+        theme: 'default',
+        send_logs: false,
+        send_automated_replies: false,
+        add_reactions: true,
+        delete_messages: true,
+    };
+    await knex('settings').insert(initialSettings);
 }

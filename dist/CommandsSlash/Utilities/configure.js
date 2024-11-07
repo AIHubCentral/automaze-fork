@@ -1,8 +1,18 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const generalUtilities_1 = require("../../Utils/generalUtilities");
-const botUtilities_1 = require("../../Utils/botUtilities");
+const settingsService_1 = __importDefault(require("../../Services/settingsService"));
+const db_1 = __importDefault(require("../../db"));
+var ColorThemes;
+(function (ColorThemes) {
+    ColorThemes["Default"] = "default";
+    ColorThemes["Spooky"] = "spooky";
+    ColorThemes["Christmas"] = "xmas";
+})(ColorThemes || (ColorThemes = {}));
 const Configure = {
     category: 'Utilities',
     cooldown: 15,
@@ -20,7 +30,14 @@ const Configure = {
         .setName('delete_messages')
         .setDescription('Whether the bot should delete messages from users that doesnt have appropriate roles')
         .setRequired(true)))
-        .addSubcommand((subcommand) => subcommand.setName('theme').setDescription('Configure color theme'))
+        .addSubcommand((subcommand) => subcommand
+        .setName('theme')
+        .setDescription('Configure color theme')
+        .addStringOption((option) => option
+        .setName('name')
+        .setDescription('Theme name')
+        .addChoices({ name: 'Default', value: ColorThemes.Default }, { name: 'Spooky', value: ColorThemes.Spooky }, { name: 'Christmas', value: ColorThemes.Christmas })
+        .setRequired(true)))
         .addSubcommand((subcommand) => subcommand
         .setName('status')
         .setDescription('Configure bot status')
@@ -84,7 +101,7 @@ const Configure = {
             await configureCommision(interaction, botConfigs);
         }
         else if (interaction.options.getSubcommand() === 'theme') {
-            await configureTheme(interaction, botConfigs);
+            await configureTheme(interaction, db_1.default);
         }
         else if (interaction.options.getSubcommand() === 'status') {
             await configureStatus(interaction);
@@ -121,45 +138,21 @@ async function configureCommision(interaction, configs) {
     ];
     await interaction.reply({ content: responseLines.join('\n'), ephemeral: true });
 }
-async function configureTheme(interaction, configs) {
-    const themeOptions = [
-        {
-            label: 'Default',
-            description: 'Default theme',
-            value: 'defaultTheme',
-            emoji: '📁',
-        },
-        {
-            label: 'Christmas',
-            description: 'Christmas theme',
-            value: 'xmasTheme',
-            emoji: '🎄',
-        },
-    ];
-    const selectMenu = new discord_js_1.StringSelectMenuBuilder()
-        .setCustomId(interaction.id)
-        .setPlaceholder('Select the desired theme')
-        .addOptions(themeOptions.map((theme) => new discord_js_1.StringSelectMenuOptionBuilder()
-        .setLabel(theme.label)
-        .setDescription(theme.description)
-        .setValue(theme.value)
-        .setEmoji(theme.emoji)));
-    const actionRow = new discord_js_1.ActionRowBuilder().addComponents(selectMenu);
-    const botReply = await interaction.reply({ components: [actionRow] });
-    const collector = botReply.createMessageComponentCollector({
-        componentType: discord_js_1.ComponentType.StringSelect,
-        filter: (i) => i.user.id === interaction.user.id && i.customId === interaction.id,
-        time: 60_000,
+async function configureTheme(interaction, knex) {
+    const service = new settingsService_1.default(knex);
+    const selectedTheme = interaction.options.getString('name', true);
+    const affectedRows = await service.update('main_settings', { theme: selectedTheme });
+    const updatedSettings = await service.find('main_settings');
+    if (affectedRows !== 1 || !updatedSettings) {
+        await interaction.reply({ content: 'Failed to update theme', ephemeral: true });
+        return;
+    }
+    const embed = new discord_js_1.EmbedBuilder().setTitle('Configure - Theme').setColor(discord_js_1.Colors.Purple).addFields({
+        name: 'Theme',
+        value: updatedSettings.theme,
+        inline: true,
     });
-    collector.on('collect', (i) => {
-        const themeName = i.values[0];
-        const themes = (0, botUtilities_1.getThemes)();
-        configs.colors.theme = themes[themeName];
-        i.reply(`Theme changed to ** ${themeName}**.`);
-    });
-    collector.on('end', async () => {
-        await botReply.delete();
-    });
+    await interaction.reply({ embeds: [embed], ephemeral: true });
 }
 async function configureStatus(interaction) {
     await interaction.deferReply({ ephemeral: true });

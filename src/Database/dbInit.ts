@@ -3,10 +3,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import path from 'node:path';
-
 import knexInstance from '../db';
 import { fileExists } from '../Utils/fileUtilities';
+import { DATABASE_PATH } from './knexfile';
 
 (async () => {
     const environment = process.env.NODE_ENV || 'development';
@@ -15,18 +14,17 @@ import { fileExists } from '../Utils/fileUtilities';
 
     // Use SQLite on development env
     if (environment === 'development') {
-        const RESOURCES_DATABASE_PATH = path.join(process.cwd(), 'database', 'resources.sqlite');
-
-        const databaseFileExists = await fileExists(RESOURCES_DATABASE_PATH);
+        const databaseFileExists = await fileExists(DATABASE_PATH);
 
         if (databaseFileExists) {
-            console.log(`${RESOURCES_DATABASE_PATH} already exists...Skipping`);
+            console.log(`${DATABASE_PATH} already exists...Skipping`);
             return;
         }
     }
 
     try {
         await knexInstance.migrate.latest();
+        await knexInstance.seed.run();
         console.log('Migration run successfully.');
     } catch (error) {
         if (error instanceof Error) {

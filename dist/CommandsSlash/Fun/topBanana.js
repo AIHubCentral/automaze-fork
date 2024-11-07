@@ -40,9 +40,9 @@ const TopBanana = {
         let rankCounter = 1;
         for (const entry of result.data) {
             const user = entry;
-            const userDisplay = user.display_name ?? user.username;
+            const userDisplay = user.display_name && user.display_name.length ? user.display_name : user.username;
             const userProfileLink = 'https://discordapp.com/users/' + user.id;
-            embedData.description?.push(`${rankCounter}. [${userDisplay}](${userProfileLink}) — ${user.bananas}`);
+            embedData.description?.push(`${rankCounter}. ${(0, discord_js_1.hyperlink)(userDisplay, userProfileLink)} — ${user.bananas}`);
             rankCounter++;
         }
         await interaction.editReply({ embeds: [(0, discordUtilities_1.createEmbed)(embedData)] });

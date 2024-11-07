@@ -8,17 +8,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const node_path_1 = __importDefault(require("node:path"));
 const db_1 = __importDefault(require("../db"));
 const fileUtilities_1 = require("../Utils/fileUtilities");
+const knexfile_1 = require("./knexfile");
 (async () => {
     const environment = process.env.NODE_ENV || 'development';
     // Use SQLite on development env
     if (environment === 'development') {
-        const RESOURCES_DATABASE_PATH = node_path_1.default.join(process.cwd(), 'database', 'resources.sqlite');
-        const successfullyDeleted = await (0, fileUtilities_1.deleteFileIfExists)(RESOURCES_DATABASE_PATH);
+        const successfullyDeleted = await (0, fileUtilities_1.deleteFileIfExists)(knexfile_1.DATABASE_PATH);
         if (successfullyDeleted) {
-            console.log(`${RESOURCES_DATABASE_PATH} successfully removed`);
+            console.log(`${knexfile_1.DATABASE_PATH} successfully removed`);
         }
         return;
     }

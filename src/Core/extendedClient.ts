@@ -7,11 +7,10 @@ import BotData from '../Interfaces/BotData';
 import IDiscordIDs from '../Interfaces/DiscordIDs';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import IBotUtils from '../Interfaces/BotUtils';
-//import { getTheme } from '../Utils/botUtilities';
-import { IResource } from '../Services/resourceService';
 
 import Knex from 'knex';
 import knexInstance from '../db';
+import SettingsService from '../Services/settingsService';
 
 
 export interface ExtendedClientOptions {
@@ -96,6 +95,18 @@ class ExtendedClient extends Discord.Client {
             // when in production environment, send a message on startup to the dev server
             this.botConfigs.messageOnStartup = true;
         }
+
+        (async () => {
+            // add settings to cache
+            const settingsService = new SettingsService(this.knexInstance);
+            const currentSettings = await settingsService.find('main_settings');
+            if (!currentSettings) {
+                this.logger.warn('Could not find a settings configuration');
+                return;
+            }
+            this.botCache.set('settings', currentSettings);
+            this.logger.debug('Added settings to cache');
+        })();
     }
 }
 

@@ -5,22 +5,19 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import path from 'node:path';
-
 import knexInstance from '../db';
 import { deleteFileIfExists } from '../Utils/fileUtilities';
+import { DATABASE_PATH } from './knexfile';
 
 (async () => {
     const environment = process.env.NODE_ENV || 'development';
 
     // Use SQLite on development env
     if (environment === 'development') {
-        const RESOURCES_DATABASE_PATH = path.join(process.cwd(), 'database', 'resources.sqlite');
-
-        const successfullyDeleted = await deleteFileIfExists(RESOURCES_DATABASE_PATH);
+        const successfullyDeleted = await deleteFileIfExists(DATABASE_PATH);
 
         if (successfullyDeleted) {
-            console.log(`${RESOURCES_DATABASE_PATH} successfully removed`);
+            console.log(`${DATABASE_PATH} successfully removed`);
         }
 
         return;

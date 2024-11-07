@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 import {
     SlashCommandBuilder,
@@ -6,6 +7,11 @@ import {
     Colors,
     codeBlock,
     AttachmentBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    ActionRowBuilder,
+    ComponentType,
+    ButtonInteraction,
 } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 
@@ -14,6 +20,8 @@ import CollaboratorService from '../../Services/collaboratorService';
 import ResourceService from '../../Services/resourceService';
 
 import knexInstance from '../../db';
+import { generateRandomId } from '../../Utils/generalUtilities';
+import SettingsService from '../../Services/settingsService';
 
 enum DatabaseTables {
     Collaborators = 'collaborators',
@@ -22,7 +30,7 @@ enum DatabaseTables {
     Users = 'users',
 }
 
-type ServiceTypes = UserService | CollaboratorService | ResourceService;
+type ServiceTypes = UserService | CollaboratorService | ResourceService | SettingsService;
 
 const Database: SlashCommand = {
     category: 'Utilities',
@@ -158,6 +166,8 @@ const Database: SlashCommand = {
             service = new CollaboratorService(knexInstance);
         } else if (source === DatabaseTables.Resources) {
             service = new ResourceService(knexInstance);
+        } else if (source === DatabaseTables.Settings) {
+            service = new SettingsService(knexInstance);
         }
 
         if (!service) {
@@ -212,235 +222,6 @@ const Database: SlashCommand = {
         } else if (subCommand === 'export') {
             await handleDatabaseExport(interaction, service);
         }
-
-        //if (source === DatabaseTables.Users) {
-        //const userService = new UserService(knexInstance);
-
-        /* await interaction.deferReply({ ephemeral: true });
-            await delay(1000);
-    
-            const subcommandGroup = interaction.options.getSubcommandGroup();
-            const subcommand = interaction.options.getSubcommand();
-            const { client } = interaction;
-    
-            if (subcommandGroup === 'manage') {
-                if (subcommand === 'import') {
-                    const file = interaction.options.getAttachment('file');
-    
-                    if (file.contentType.includes('application/json')) {
-                        try {
-                            const response = await fetch(file.url);
-    
-                            if (response.ok) {
-                                const data = await response.json();
-    
-                                client.logger.info('Inserting records into database...');
-    
-                                for (const record of data) {
-                                    const dataToInsert = {
-                                        id: record.user_id,
-                                        username: record.userName,
-                                        bananas: record.bananaCount,
-                                    };
-                                    client.logger.debug(dataToInsert);
-                                    await client.knexInstance('user').insert(dataToInsert);
-                                }
-    
-                                client.logger.info('Records inserted!');
-                                await interaction.editReply({ content: 'JSON data updated!' });
-                            } else {
-                                await interaction.editReply({ content: 'Failed to fetch JSON' });
-                            }
-                        } catch (error) {
-                            await interaction.editReply({ content: `Invalid JSON:\n> ${error.message}` });
-                        }
-                    } else {
-                        await interaction.editReply({ content: 'Not a JSON file' });
-                    }
-                } else if (subcommand === 'export') {
-                    const jsonData = [];
-                    const users = await client.knexInstance('user').orderBy('bananas', 'desc');
-    
-                    if (users.length === 0) {
-                        return await interaction.editReply({ content: 'The leaderboard is empty.' });
-                    }
-    
-                    for (const user of users) {
-                        jsonData.push({
-                            user_id: user.id,
-                            userName: user.username,
-                            bananaCount: user.bananas,
-                        });
-                    }
-    
-                    const data = JSON.stringify(jsonData);
-                    const buffer = Buffer.from(data, 'utf-8');
-                    const attachment = new AttachmentBuilder(buffer, { name: 'database.json' });
-                    await interaction.editReply({ files: [attachment] });
-                }
-            } else if (subcommandGroup === 'users') {
-                const userId = interaction.options.getString('user_id');
-                let User;
-    
-                if (subcommand === 'create') {
-                    const userName = interaction.options.getString('user_name').toLowerCase();
-                    client.logger.debug(`/database users create user_id:${userId} user_name:${userName}`);
-    
-                    User = await client.knexInstance('user').where('id', userId).first();
-                    if (!User) {
-                        await client.knexInstance('user').insert({
-                            id: userId,
-                            username: userName,
-                        });
-                        return await interaction.editReply({ content: `User ${userId} added.` });
-                    }
-                    await interaction.editReply({ content: 'That user is already in database.' });
-                } else if (subcommand === 'read') {
-                    client.logger.debug(`/database users read user_id: ${userId}`);
-                    User = await client.knexInstance('user').where('id', userId).first();
-    
-                    if (!User) {
-                        return await interaction.editReply({ content: 'User not found.' });
-                    }
-    
-                    const embedDescription = [
-                        `- **ID**: ${User.id}`,
-                        `- **Username**: ${User.username}`,
-                        `- **Display**: ${User.display_name ?? 'N/A'}`,
-                        `- **Bananas**: ${User.bananas}`,
-                    ];
-    
-                    const embed = new EmbedBuilder()
-                        .setTitle('User')
-                        .setDescription(embedDescription.join('\n'))
-                        .setColor('Blurple');
-                    await interaction.editReply({ embeds: [embed] });
-                } else if (subcommand === 'update') {
-                    const userName = interaction.options.getString('username');
-                    const displayName = interaction.options.getString('display_name');
-                    const bananas = interaction.options.getInteger('bananas');
-    
-                    client.logger.debug(
-                        `/database users update user_id: ${userId} username:${userName} display_name: ${displayName} bananas: ${bananas}`
-                    );
-    
-                    User = await client.knexInstance('user').where('id', userId).first();
-    
-                    if (!User) {
-                        return await interaction.editReply({ content: 'User not found.' });
-                    }
-    
-                    const dataToUpdate = {};
-    
-                    if (userName) {
-                        dataToUpdate['username'] = userName;
-                    }
-    
-                    if (displayName) {
-                        dataToUpdate['display_name'] = displayName;
-                    }
-    
-                    if (bananas) {
-                        dataToUpdate['bananas'] = bananas;
-                    }
-    
-                    if (Object.keys(dataToUpdate).length === 0) {
-                        return await interaction.editReply({ content: 'Nothing changed.' });
-                    }
-    
-                    await client.knexInstance('user').where('id', userId).update(dataToUpdate);
-                    await interaction.editReply({ content: `User ${userId} updated.` });
-                } else if (subcommand === 'delete') {
-                    client.logger.debug(`/database users delete user_id: ${userId}`);
-                    User = await client.knexInstance('user').where('id', userId).first();
-    
-                    if (!User) {
-                        return await interaction.editReply({ content: 'User not found.' });
-                    }
-    
-                    await client.knexInstance('user').where('id', userId).del();
-    
-                    await interaction.editReply({ content: `User ${userId} deleted.` });
-                } else if (subcommand === 'get_all') {
-                    client.logger.debug('/database users get_all');
-                    const users = await client.knexInstance.select('*').from('user');
-    
-                    if (users.length === 0) {
-                        return await interaction.editReply({ content: 'No users in database.' });
-                    }
-    
-                    const embedDescription = users.map((user) => `- ${user.id}: ${user.username}`);
-    
-                    const itemsPerPage = 10;
-                    const pages = Math.ceil(embedDescription.length / itemsPerPage);
-                    let currentPage = 1;
-    
-                    const getEmbed = (page) => {
-                        const startIndex = (page - 1) * itemsPerPage;
-                        const endIndex = Math.min(page * itemsPerPage, embedDescription.length);
-                        const listedItems = embedDescription.slice(startIndex, endIndex);
-    
-                        const embed = new EmbedBuilder()
-                            .setTitle('Users')
-                            .setDescription(listedItems.join('\n'))
-                            .setColor('Blurple')
-                            .setFooter({ text: `Page ${currentPage} of ${pages}` });
-    
-                        const row = new ActionRowBuilder();
-    
-                        row.addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('previous')
-                                .setLabel('Previous')
-                                .setStyle(ButtonStyle.Primary)
-                                .setDisabled(currentPage === 1)
-                        );
-    
-                        row.addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('next')
-                                .setLabel('Next')
-                                .setStyle(ButtonStyle.Primary)
-                                .setDisabled(currentPage === pages)
-                        );
-    
-                        return { embeds: [embed], components: [row] };
-                    };
-    
-                    const response = await interaction.editReply(getEmbed(currentPage));
-                    const interactionDuration = 60_000;
-    
-                    const collector = response.createMessageComponentCollector({
-                        componentType: ComponentType.Button,
-                        time: interactionDuration,
-                    });
-    
-                    collector.on('collect', async (buttonInteraction) => {
-                        if (!buttonInteraction.isButton()) return;
-                        await buttonInteraction.deferUpdate();
-    
-                        if (buttonInteraction.customId === 'previous') {
-                            currentPage--;
-                        } else if (buttonInteraction.customId === 'next') {
-                            currentPage++;
-                        }
-    
-                        await buttonInteraction.editReply(getEmbed(currentPage));
-    
-                        // Reset timeout on interaction
-                        collector.resetTimer();
-                    });
-    
-                    collector.on('end', async () => {
-                        const embed = new EmbedBuilder()
-                            .setTitle('Users')
-                            .setDescription('Interaction timed out.')
-                            .setColor('Red');
-                        await interaction.editReply({ embeds: [embed], components: [] });
-                    });
-                }
-            } */
-        //}
     },
 };
 
@@ -466,23 +247,116 @@ async function handleDatabaseCreate(
 }
 
 async function handleDatabaseRead(interaction: ChatInputCommandInteraction, service: ServiceTypes) {
-    const records = await service.findAll();
+    let offset = 0;
+    let currentPage = 1;
+    const limit = 2;
 
-    if (!records.data.length) {
+    let resources = await service.findAll({
+        offset,
+        limit,
+    });
+
+    if (!resources.data.length) {
         return await interaction.editReply({ content: 'No records' });
     }
 
-    const embed = new EmbedBuilder().setColor(Colors.Navy).setTitle('Database - Read');
+    const totalResources = resources.data.length;
 
-    const jsonOutput = codeBlock(JSON.stringify(records.data, null, 4));
-
-    if (jsonOutput.length > 4000) {
-        embed.setDescription(`Read ${records.data.length} items`);
-    } else {
-        embed.setDescription(jsonOutput);
+    if (totalResources === 0) {
+        await interaction.reply({ content: 'No resource was found.' });
+        return;
     }
 
-    await interaction.editReply({ embeds: [embed] });
+    const embed = new EmbedBuilder().setTitle('📋 Resources - Show').setColor(Colors.Blurple);
+
+    embed.setFields([
+        {
+            name: 'Items',
+            value: codeBlock('json', JSON.stringify(resources.data, null, 2)),
+            inline: false,
+        },
+    ]);
+    embed.setTimestamp();
+
+    const prevButtonId = `btn_prev_${generateRandomId(6)}`;
+    const nextButtonId = `btn_next_${generateRandomId(6)}`;
+
+    const btnPrevious = new ButtonBuilder()
+        .setCustomId(prevButtonId)
+        .setStyle(ButtonStyle.Primary)
+        .setLabel('Previous')
+        .setDisabled(true);
+
+    const btnNext = new ButtonBuilder()
+        .setCustomId(nextButtonId)
+        .setStyle(ButtonStyle.Primary)
+        .setLabel('Next');
+
+    const actionRow = new ActionRowBuilder<ButtonBuilder>();
+    actionRow.addComponents(btnPrevious, btnNext);
+
+    embed.setFooter({ text: `Page ${offset + 1} of ?` });
+
+    const message = await interaction.editReply({
+        embeds: [embed],
+        components: [actionRow],
+    });
+
+    const collector = message.createMessageComponentCollector({
+        componentType: ComponentType.Button,
+        time: 2 * 60 * 1000, // expires after 5 minutes
+    });
+
+    collector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+        // Check which button was pressed and update the embed accordingly
+        if (buttonInteraction.customId === prevButtonId) {
+            offset -= limit;
+
+            resources = await service.findAll({
+                offset,
+                limit,
+            });
+
+            currentPage--;
+        } else if (buttonInteraction.customId === nextButtonId) {
+            offset += limit;
+
+            resources = await service.findAll({
+                offset,
+                limit,
+            });
+
+            currentPage++;
+        }
+
+        embed.setFields([
+            {
+                name: 'Items',
+                value: codeBlock('json', JSON.stringify(resources.data, null, 2)),
+                inline: false,
+            },
+        ]);
+
+        embed.setFooter({ text: `Page ${currentPage} of ?` });
+        btnPrevious.setDisabled(offset === 0);
+        btnNext.setDisabled(!resources.hasNext);
+
+        // Update the message with the new embed
+        await buttonInteraction.update({ embeds: [embed], components: [actionRow] });
+    });
+
+    collector.on('end', async () => {
+        // After 5 minutes, disable the buttons
+        const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+            btnPrevious.setDisabled(true),
+            btnNext.setDisabled(true)
+        );
+
+        // Update the message to show the disabled buttons
+        await interaction.editReply({
+            components: [disabledRow],
+        });
+    });
 }
 
 async function handleDatabaseUpdate(

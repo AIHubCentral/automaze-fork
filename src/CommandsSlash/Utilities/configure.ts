@@ -24,6 +24,15 @@ import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
 import IBotConfigs from '../../Interfaces/BotConfigs';
 import { getThemes } from '../../Utils/botUtilities';
+import SettingsService from '../../Services/settingsService';
+import Knex from 'knex';
+import knexInstance from '../../db';
+
+enum ColorThemes {
+    Default = 'default',
+    Spooky = 'spooky',
+    Christmas = 'xmas',
+}
 
 const Configure: SlashCommand = {
     category: 'Utilities',
@@ -50,7 +59,22 @@ const Configure: SlashCommand = {
                         .setRequired(true)
                 )
         )
-        .addSubcommand((subcommand) => subcommand.setName('theme').setDescription('Configure color theme'))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName('theme')
+                .setDescription('Configure color theme')
+                .addStringOption((option) =>
+                    option
+                        .setName('name')
+                        .setDescription('Theme name')
+                        .addChoices(
+                            { name: 'Default', value: ColorThemes.Default },
+                            { name: 'Spooky', value: ColorThemes.Spooky },
+                            { name: 'Christmas', value: ColorThemes.Christmas }
+                        )
+                        .setRequired(true)
+                )
+        )
         .addSubcommand((subcommand) =>
             subcommand
                 .setName('status')
@@ -166,7 +190,7 @@ const Configure: SlashCommand = {
         if (interaction.options.getSubcommand() === 'comission') {
             await configureCommision(interaction, botConfigs);
         } else if (interaction.options.getSubcommand() === 'theme') {
-            await configureTheme(interaction, botConfigs);
+            await configureTheme(interaction, knexInstance);
         } else if (interaction.options.getSubcommand() === 'status') {
             await configureStatus(interaction);
         } else if (interaction.options.getSubcommand() === 'activity') {
@@ -205,55 +229,25 @@ async function configureCommision(
     await interaction.reply({ content: responseLines.join('\n'), ephemeral: true });
 }
 
-async function configureTheme(interaction: ChatInputCommandInteraction, configs: IBotConfigs): Promise<void> {
-    const themeOptions = [
-        {
-            label: 'Default',
-            description: 'Default theme',
-            value: 'defaultTheme',
-            emoji: '📁',
-        },
-        {
-            label: 'Christmas',
-            description: 'Christmas theme',
-            value: 'xmasTheme',
-            emoji: '🎄',
-        },
-    ];
+async function configureTheme(interaction: ChatInputCommandInteraction, knex: Knex.Knex): Promise<void> {
+    const service = new SettingsService(knex);
 
-    const selectMenu = new StringSelectMenuBuilder()
-        .setCustomId(interaction.id)
-        .setPlaceholder('Select the desired theme')
-        .addOptions(
-            themeOptions.map((theme) =>
-                new StringSelectMenuOptionBuilder()
-                    .setLabel(theme.label)
-                    .setDescription(theme.description)
-                    .setValue(theme.value)
-                    .setEmoji(theme.emoji)
-            )
-        );
+    const selectedTheme = interaction.options.getString('name', true);
+    const affectedRows = await service.update('main_settings', { theme: selectedTheme });
+    const updatedSettings = await service.find('main_settings');
 
-    const actionRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
+    if (affectedRows !== 1 || !updatedSettings) {
+        await interaction.reply({ content: 'Failed to update theme', ephemeral: true });
+        return;
+    }
 
-    const botReply = await interaction.reply({ components: [actionRow] });
-
-    const collector = botReply.createMessageComponentCollector({
-        componentType: ComponentType.StringSelect,
-        filter: (i) => i.user.id === interaction.user.id && i.customId === interaction.id,
-        time: 60_000,
+    const embed = new EmbedBuilder().setTitle('Configure').setColor(Colors.Purple).addFields({
+        name: 'Theme',
+        value: updatedSettings.theme,
+        inline: true,
     });
 
-    collector.on('collect', (i) => {
-        const themeName = i.values[0];
-        const themes = getThemes();
-        configs.colors.theme = themes[themeName];
-        i.reply(`Theme changed to ** ${themeName}**.`);
-    });
-
-    collector.on('end', async () => {
-        await botReply.delete();
-    });
+    await interaction.reply({ embeds: [embed], ephemeral: true });
 }
 
 async function configureStatus(interaction: ChatInputCommandInteraction): Promise<void> {

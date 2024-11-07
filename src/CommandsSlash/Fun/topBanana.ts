@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { hyperlink, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 import { EmbedData } from '../../Interfaces/BotData';
 import { createEmbed } from '../../Utils/discordUtilities';
@@ -49,10 +49,11 @@ const TopBanana: SlashCommand = {
         let rankCounter = 1;
         for (const entry of result.data) {
             const user = entry;
-            const userDisplay = user.display_name ?? user.username;
+            const userDisplay =
+                user.display_name && user.display_name.length ? user.display_name : user.username;
             const userProfileLink = 'https://discordapp.com/users/' + user.id;
             embedData.description?.push(
-                `${rankCounter}. [${userDisplay}](${userProfileLink}) — ${user.bananas}`
+                `${rankCounter}. ${hyperlink(userDisplay, userProfileLink)} — ${user.bananas}`
             );
             rankCounter++;
         }
