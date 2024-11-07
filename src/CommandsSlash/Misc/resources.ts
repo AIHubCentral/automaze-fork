@@ -160,7 +160,7 @@ const Resources: SlashCommand = {
 
             const collector = message.createMessageComponentCollector({
                 componentType: ComponentType.Button,
-                time: 2 * 60 * 1000, // expires after 5 minutes
+                time: 10 * 60 * 1000, // expires after 10 minutes
             });
 
             collector.on('collect', async (buttonInteraction: ButtonInteraction) => {

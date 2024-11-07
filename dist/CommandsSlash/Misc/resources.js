@@ -127,7 +127,7 @@ const Resources = {
             });
             const collector = message.createMessageComponentCollector({
                 componentType: discord_js_1.ComponentType.Button,
-                time: 2 * 60 * 1000, // expires after 5 minutes
+                time: 10 * 60 * 1000, // expires after 10 minutes
             });
             collector.on('collect', async (buttonInteraction) => {
                 // Check which button was pressed and update the embed accordingly

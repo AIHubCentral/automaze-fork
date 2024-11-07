@@ -147,7 +147,7 @@ async function configureTheme(interaction, knex) {
         await interaction.reply({ content: 'Failed to update theme', ephemeral: true });
         return;
     }
-    const embed = new discord_js_1.EmbedBuilder().setTitle('Configure - Theme').setColor(discord_js_1.Colors.Purple).addFields({
+    const embed = new discord_js_1.EmbedBuilder().setTitle('Configure').setColor(discord_js_1.Colors.Purple).addFields({
         name: 'Theme',
         value: updatedSettings.theme,
         inline: true,
