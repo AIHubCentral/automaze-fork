@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -12,13 +35,24 @@ const resourceService_1 = __importDefault(require("../../Services/resourceServic
 const db_1 = __importDefault(require("../../db"));
 const generalUtilities_1 = require("../../Utils/generalUtilities");
 const settingsService_1 = __importDefault(require("../../Services/settingsService"));
+const modelService_1 = __importStar(require("../../Services/modelService"));
 var DatabaseTables;
 (function (DatabaseTables) {
     DatabaseTables["Collaborators"] = "collaborators";
     DatabaseTables["Resources"] = "resources";
     DatabaseTables["Settings"] = "settings";
     DatabaseTables["Users"] = "users";
+    DatabaseTables["Models"] = "models";
+    DatabaseTables["WeightsModel"] = "weights_models";
 })(DatabaseTables || (DatabaseTables = {}));
+const choices = [
+    { name: 'Collaborators', value: DatabaseTables.Collaborators },
+    { name: 'Models', value: DatabaseTables.Models },
+    { name: 'Resources', value: DatabaseTables.Resources },
+    { name: 'Settings', value: DatabaseTables.Settings },
+    { name: 'Users', value: DatabaseTables.Users },
+    { name: 'Weights', value: DatabaseTables.WeightsModel },
+];
 const Database = {
     category: 'Utilities',
     data: new discord_js_1.SlashCommandBuilder()
@@ -31,7 +65,7 @@ const Database = {
         .addStringOption((option) => option
         .setName('source')
         .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
+        .addChoices(choices)
         .setRequired(true)))
         .addSubcommand((subcommand) => subcommand
         .setName('read')
@@ -39,7 +73,7 @@ const Database = {
         .addStringOption((option) => option
         .setName('source')
         .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
+        .addChoices(choices)
         .setRequired(true)))
         .addSubcommand((subcommand) => subcommand
         .setName('update')
@@ -49,7 +83,7 @@ const Database = {
         .addStringOption((option) => option
         .setName('source')
         .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
+        .addChoices(choices)
         .setRequired(true)))
         .addSubcommand((subcommand) => subcommand
         .setName('delete')
@@ -58,7 +92,7 @@ const Database = {
         .addStringOption((option) => option
         .setName('source')
         .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
+        .addChoices(choices)
         .setRequired(true)))
         .addSubcommand((subcommand) => subcommand
         .setName('import')
@@ -66,7 +100,7 @@ const Database = {
         .addStringOption((option) => option
         .setName('source')
         .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
+        .addChoices(choices)
         .setRequired(true))
         .addAttachmentOption((option) => option.setName('file').setDescription('JSON data to import').setRequired(true)))
         .addSubcommand((subcommand) => subcommand
@@ -75,7 +109,7 @@ const Database = {
         .addStringOption((option) => option
         .setName('source')
         .setDescription('The source table')
-        .addChoices({ name: 'Users', value: DatabaseTables.Users }, { name: 'Collaborators', value: DatabaseTables.Collaborators }, { name: 'Resources', value: DatabaseTables.Resources }, { name: 'Settings', value: DatabaseTables.Settings })
+        .addChoices(choices)
         .setRequired(true))),
     async execute(interaction) {
         const subCommand = interaction.options.getSubcommand();
@@ -92,6 +126,12 @@ const Database = {
         }
         else if (source === DatabaseTables.Settings) {
             service = new settingsService_1.default(db_1.default);
+        }
+        else if (source === DatabaseTables.Models) {
+            service = new modelService_1.default(db_1.default);
+        }
+        else if (source === DatabaseTables.WeightsModel) {
+            service = new modelService_1.WeightsModelService(db_1.default);
         }
         if (!service) {
             await interaction.reply({ content: 'Failed to select a database service', ephemeral: true });

@@ -33,10 +33,27 @@ async function up(knex) {
         table.string('debug_guild_id');
         table.string('debug_guild_channel_id');
     });
+    await knex.schema.createTable('models', (table) => {
+        table.string('id', 20).primary();
+        table.string('parent_id', 20).notNullable();
+        table.string('author_id', 20).notNullable();
+        table.string('title', 100).notNullable();
+        table.boolean('is_request').notNullable();
+        table.text('description');
+    });
+    await knex.schema.createTable('weights_models', (table) => {
+        table.string('id', 32).primary();
+        table.string('url', 255).unique();
+        table.string('image_url', 255).notNullable();
+        table.string('title', 100).notNullable();
+        table.text('description');
+    });
 }
 async function down(knex) {
     await knex.schema.dropTableIfExists('collaborators');
     await knex.schema.dropTableIfExists('resources');
     await knex.schema.dropTableIfExists('settings');
     await knex.schema.dropTableIfExists('users');
+    await knex.schema.dropTableIfExists('models');
+    await knex.schema.dropTableIfExists('weights_models');
 }

@@ -22,15 +22,33 @@ import ResourceService from '../../Services/resourceService';
 import knexInstance from '../../db';
 import { generateRandomId } from '../../Utils/generalUtilities';
 import SettingsService from '../../Services/settingsService';
+import ModelService, { WeightsModelService } from '../../Services/modelService';
 
 enum DatabaseTables {
     Collaborators = 'collaborators',
     Resources = 'resources',
     Settings = 'settings',
     Users = 'users',
+    Models = 'models',
+    WeightsModel = 'weights_models',
 }
 
-type ServiceTypes = UserService | CollaboratorService | ResourceService | SettingsService;
+const choices = [
+    { name: 'Collaborators', value: DatabaseTables.Collaborators },
+    { name: 'Models', value: DatabaseTables.Models },
+    { name: 'Resources', value: DatabaseTables.Resources },
+    { name: 'Settings', value: DatabaseTables.Settings },
+    { name: 'Users', value: DatabaseTables.Users },
+    { name: 'Weights', value: DatabaseTables.WeightsModel },
+];
+
+type ServiceTypes =
+    | UserService
+    | CollaboratorService
+    | ResourceService
+    | SettingsService
+    | ModelService
+    | WeightsModelService;
 
 const Database: SlashCommand = {
     category: 'Utilities',
@@ -48,12 +66,7 @@ const Database: SlashCommand = {
                     option
                         .setName('source')
                         .setDescription('The source table')
-                        .addChoices(
-                            { name: 'Users', value: DatabaseTables.Users },
-                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
-                            { name: 'Resources', value: DatabaseTables.Resources },
-                            { name: 'Settings', value: DatabaseTables.Settings }
-                        )
+                        .addChoices(choices)
                         .setRequired(true)
                 )
         )
@@ -65,12 +78,7 @@ const Database: SlashCommand = {
                     option
                         .setName('source')
                         .setDescription('The source table')
-                        .addChoices(
-                            { name: 'Users', value: DatabaseTables.Users },
-                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
-                            { name: 'Resources', value: DatabaseTables.Resources },
-                            { name: 'Settings', value: DatabaseTables.Settings }
-                        )
+                        .addChoices(choices)
                         .setRequired(true)
                 )
         )
@@ -88,12 +96,7 @@ const Database: SlashCommand = {
                     option
                         .setName('source')
                         .setDescription('The source table')
-                        .addChoices(
-                            { name: 'Users', value: DatabaseTables.Users },
-                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
-                            { name: 'Resources', value: DatabaseTables.Resources },
-                            { name: 'Settings', value: DatabaseTables.Settings }
-                        )
+                        .addChoices(choices)
                         .setRequired(true)
                 )
         )
@@ -108,12 +111,7 @@ const Database: SlashCommand = {
                     option
                         .setName('source')
                         .setDescription('The source table')
-                        .addChoices(
-                            { name: 'Users', value: DatabaseTables.Users },
-                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
-                            { name: 'Resources', value: DatabaseTables.Resources },
-                            { name: 'Settings', value: DatabaseTables.Settings }
-                        )
+                        .addChoices(choices)
                         .setRequired(true)
                 )
         )
@@ -125,12 +123,7 @@ const Database: SlashCommand = {
                     option
                         .setName('source')
                         .setDescription('The source table')
-                        .addChoices(
-                            { name: 'Users', value: DatabaseTables.Users },
-                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
-                            { name: 'Resources', value: DatabaseTables.Resources },
-                            { name: 'Settings', value: DatabaseTables.Settings }
-                        )
+                        .addChoices(choices)
                         .setRequired(true)
                 )
                 .addAttachmentOption((option) =>
@@ -145,12 +138,7 @@ const Database: SlashCommand = {
                     option
                         .setName('source')
                         .setDescription('The source table')
-                        .addChoices(
-                            { name: 'Users', value: DatabaseTables.Users },
-                            { name: 'Collaborators', value: DatabaseTables.Collaborators },
-                            { name: 'Resources', value: DatabaseTables.Resources },
-                            { name: 'Settings', value: DatabaseTables.Settings }
-                        )
+                        .addChoices(choices)
                         .setRequired(true)
                 )
         ),
@@ -168,6 +156,10 @@ const Database: SlashCommand = {
             service = new ResourceService(knexInstance);
         } else if (source === DatabaseTables.Settings) {
             service = new SettingsService(knexInstance);
+        } else if (source === DatabaseTables.Models) {
+            service = new ModelService(knexInstance);
+        } else if (source === DatabaseTables.WeightsModel) {
+            service = new WeightsModelService(knexInstance);
         }
 
         if (!service) {

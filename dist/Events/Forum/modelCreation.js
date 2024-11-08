@@ -1,26 +1,30 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const db_1 = __importDefault(require("../../db"));
+const modelService_1 = __importDefault(require("../../Services/modelService"));
 const ModelCreation = {
     name: discord_js_1.Events.ThreadCreate,
     once: false,
-    async run(client, thread) {
-        const { botConfigs, discordIDs } = client;
-        if (botConfigs.logs.models && thread.parentId == discordIDs.Forum.VoiceModel) {
-            const logData = {
-                more: {
-                    threadName: thread.name,
-                    ownerId: thread.ownerId,
-                    createdAt: '',
-                    appliedTags: thread.appliedTags,
-                    link: `https://discordapp.com/channels/${thread.guild.id}/${thread.parentId}/${thread.id}`,
-                },
-            };
-            if (thread.createdTimestamp) {
-                logData.more.createdAt = new Date(thread.createdTimestamp).toISOString();
-            }
-            client.logger.info('New model added', logData);
-        }
+    async run(client, channel) {
+        if (!channel.isThread())
+            return;
+        if (channel.parentId != client.discordIDs.Forum.VoiceModel)
+            return;
+        const service = new modelService_1.default(db_1.default);
+        const starterMessage = await channel.fetchStarterMessage();
+        const description = starterMessage ? starterMessage.content : '';
+        await service.create({
+            id: channel.id,
+            parent_id: channel.parentId ?? '',
+            author_id: channel.ownerId ?? '',
+            title: channel.name,
+            is_request: false,
+            description,
+        });
     },
 };
 exports.default = ModelCreation;

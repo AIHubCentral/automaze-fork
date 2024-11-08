@@ -18,6 +18,8 @@ import ExtendedClient from '../../Core/extendedClient';
 import { createEmbed, DiscordErrorCodes } from '../../Utils/discordUtilities';
 import { delay } from '../../Utils/generalUtilities';
 import { isAskingForGirlModel } from '../../Utils/botUtilities';
+import knexInstance from '../../db';
+import ModelService from '../../Services/modelService';
 
 async function handleFreeRequest(client: ExtendedClient, thread: ThreadChannel): Promise<void> {
     // latina E-Girl
@@ -39,7 +41,6 @@ async function handleFreeRequest(client: ExtendedClient, thread: ThreadChannel):
                 }),
             ];
         }
-
         await thread.send(response);
     } catch (error) {
         if (error instanceof DiscordAPIError) {
@@ -52,14 +53,21 @@ async function handleFreeRequest(client: ExtendedClient, thread: ThreadChannel):
                 client.logger.error('Unexpected error handling free model request', error);
             }
         }
-    }
+    } finally {
+        const service = new ModelService(knexInstance);
 
-    client.logger.info('free model request', {
-        guildId: thread.guildId,
-        threadId: thread.id,
-        threadName: thread.name,
-        parentChannelId: thread.parentId,
-    });
+        const starterMessage = await thread.fetchStarterMessage();
+        const description = starterMessage ? starterMessage.content : '';
+
+        await service.create({
+            id: thread.id,
+            parent_id: thread.parentId ?? '',
+            author_id: thread.ownerId ?? '',
+            title: thread.name,
+            is_request: true,
+            description,
+        });
+    }
 }
 
 async function handlePaidRequest(client: ExtendedClient, thread: ThreadChannel): Promise<void> {
