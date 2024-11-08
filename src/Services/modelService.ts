@@ -44,4 +44,11 @@ export class WeightsModelService extends BaseService<WeightsModel> {
     constructor(knex: Knex.Knex) {
         super(knex, 'weights_models');
     }
+
+    async create(data: Partial<WeightsModel>): Promise<string | number> {
+        if (!data.url) {
+            data.url = `https://www.weights.gg/models/${data.id}`;
+        }
+        return super.create(data);
+    }
 }

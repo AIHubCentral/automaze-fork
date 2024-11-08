@@ -10,6 +10,8 @@ const ModelCreation = {
     name: discord_js_1.Events.ThreadCreate,
     once: false,
     async run(client, channel) {
+        if (channel.guildId != client.discordIDs.Guild)
+            return;
         if (!channel.isThread())
             return;
         if (channel.parentId != client.discordIDs.Forum.VoiceModel)

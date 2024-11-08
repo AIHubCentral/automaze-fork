@@ -19,5 +19,11 @@ class WeightsModelService extends BaseService_1.default {
     constructor(knex) {
         super(knex, 'weights_models');
     }
+    async create(data) {
+        if (!data.url) {
+            data.url = `https://www.weights.gg/models/${data.id}`;
+        }
+        return super.create(data);
+    }
 }
 exports.WeightsModelService = WeightsModelService;

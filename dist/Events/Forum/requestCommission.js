@@ -1,9 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const generalUtilities_1 = require("../../Utils/generalUtilities");
 const botUtilities_1 = require("../../Utils/botUtilities");
+const db_1 = __importDefault(require("../../db"));
+const modelService_1 = __importDefault(require("../../Services/modelService"));
 async function handleFreeRequest(client, thread) {
     // latina E-Girl
     const stickerId = '1159469403843346443';
@@ -36,12 +41,19 @@ async function handleFreeRequest(client, thread) {
             }
         }
     }
-    client.logger.info('free model request', {
-        guildId: thread.guildId,
-        threadId: thread.id,
-        threadName: thread.name,
-        parentChannelId: thread.parentId,
-    });
+    finally {
+        const service = new modelService_1.default(db_1.default);
+        const starterMessage = await thread.fetchStarterMessage();
+        const description = starterMessage ? starterMessage.content : '';
+        await service.create({
+            id: thread.id,
+            parent_id: thread.parentId ?? '',
+            author_id: thread.ownerId ?? '',
+            title: thread.name,
+            is_request: true,
+            description,
+        });
+    }
 }
 async function handlePaidRequest(client, thread) {
     const modelMasterRoleId = client.discordIDs.Roles['ModelMaster'];
