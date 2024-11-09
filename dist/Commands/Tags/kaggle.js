@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const botUtilities_1 = require("../../Utils/botUtilities");
 const i18n_1 = __importDefault(require("../../i18n"));
+const discordUtilities_1 = require("../../Utils/discordUtilities");
 const Kaggle = {
     name: 'kaggle',
     description: 'Links to kaggle notebooks',
@@ -30,8 +31,9 @@ const Kaggle = {
                 footer: i18n_1.default.t('tags.kaggle.embed.footer', { lng: language }),
             },
         ];
+        const embeds = content.map((item) => (0, discordUtilities_1.createEmbed)(item, item.color));
         const sender = new botUtilities_1.TagResponseSender(client);
-        sender.setEmbeds(content);
+        sender.setEmbeds(embeds);
         sender.config(message);
         await sender.send();
     },

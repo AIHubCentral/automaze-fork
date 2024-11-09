@@ -74,7 +74,21 @@ const Guides = {
                 lng: language,
                 returnObjects: true,
             });
-            const embeds = (0, discordUtilities_1.createEmbeds)(content, [discord_js_1.Colors.Aqua, discord_js_1.Colors.Blue, discord_js_1.Colors.DarkBlue]);
+            let selectedTheme = null;
+            const settings = client.botCache.get('main_settings');
+            if (!settings) {
+                selectedTheme = discordUtilities_1.ColorThemes.Default;
+            }
+            else {
+                selectedTheme = settings.theme;
+            }
+            const apiEmbedData = content.map((item) => {
+                return {
+                    title: item.title,
+                    description: item.description?.join('\n'),
+                };
+            });
+            const embeds = (0, discordUtilities_1.createThemedEmbeds)(apiEmbedData, selectedTheme);
             logger.info(`sent guides with /${interaction.commandName}`, {
                 guildId: interaction.guildId,
                 channelId: interaction.channelId,

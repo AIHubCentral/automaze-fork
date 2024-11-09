@@ -21,9 +21,15 @@ async function handleFreeRequest(client, thread) {
         else {
             response.embeds = [
                 (0, discordUtilities_1.createEmbed)({
-                    color: client.botConfigs.colors.theme.accent_1,
+                    color: discord_js_1.Colors.Blurple,
+                    title: '💡 Tip',
                     description: [
-                        `💡 ${(0, discord_js_1.bold)('Tip')}: You can try using the ${(0, discord_js_1.inlineCode)('/search')} or ${(0, discord_js_1.inlineCode)('/find')} command from ${(0, discord_js_1.userMention)('1156937396517081169')} or ${(0, discord_js_1.userMention)('1138318590760718416')} to check if someone already made this model. Alternatively, you can check the ${(0, discord_js_1.channelMention)('1175430844685484042')} channel or use ${(0, discord_js_1.hyperlink)('weights.gg', 'https://weights.gg/')}, but keep in mind that weights receive the models after us, so if something new comes out, you'll find it on our server first.`,
+                        'You can check if someone already made this model. Try the following:',
+                        '- Search for it in <#1175430844685484042>',
+                        '- Alternatively, in <#1163592055830880266>:',
+                        '    - Send " <@1144714449563955302> search (name of the model)", without the ()',
+                        '- Use the command `/find` with <@1138318590760718416> bot',
+                        '- Visit <https://weights.gg/> and search for the model (login required)',
                     ],
                 }),
             ];
@@ -60,7 +66,7 @@ async function handlePaidRequest(client, thread) {
     const embeds = [];
     if (thread.ownerId) {
         embeds.push((0, discordUtilities_1.createEmbed)({
-            color: client.botConfigs.colors.theme.primary,
+            color: discord_js_1.Colors.Aqua,
             description: [
                 `Hello, ${(0, discord_js_1.userMention)(thread.ownerId)}!`,
                 '\nPeople will contact you to offer their services. However, if you created a **paid** request by mistake or if someone already finished your request, use the `/close` command to archive this post.',
@@ -68,7 +74,7 @@ async function handlePaidRequest(client, thread) {
         }));
     }
     embeds.push((0, discordUtilities_1.createEmbed)({
-        color: client.botConfigs.colors.theme.secondary,
+        color: discord_js_1.Colors.Blue,
         description: [
             '\n**Some general recommendations regarding commissions:**',
             "- Don't rush! You'll receive many requests, so take your time to review the best offer. The first person who contacts you may not always be the best option.",

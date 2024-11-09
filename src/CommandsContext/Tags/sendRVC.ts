@@ -1,4 +1,5 @@
 import {
+    APIEmbed,
     ApplicationCommandType,
     ContextMenuCommandBuilder,
     ContextMenuCommandType,
@@ -7,10 +8,11 @@ import {
 } from 'discord.js';
 import { ContextCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
-import { createEmbeds, getAvailableColors, handleDiscordError } from '../../Utils/discordUtilities';
+import { ColorThemes, createThemedEmbeds, handleDiscordError } from '../../Utils/discordUtilities';
 import { EmbedData } from '../../Interfaces/BotData';
 import i18next from '../../i18n';
 import ms from 'pretty-ms';
+import { ISettings } from '../../Services/settingsService';
 
 const SendRVCGuides: ContextCommand = {
     category: 'Tags',
@@ -38,17 +40,28 @@ const SendRVCGuides: ContextCommand = {
             });
         }
 
-        const { botConfigs } = client;
-
-        const availableColors = getAvailableColors(botConfigs);
-
         const content = i18next.t('tags.rvc.embeds', { returnObjects: true }) as EmbedData[];
 
         const startTime = Date.now();
         try {
+            let selectedTheme: string | null = null;
+            const settings = client.botCache.get('main_settings') as ISettings;
+            if (!settings) {
+                selectedTheme = ColorThemes.Default;
+            } else {
+                selectedTheme = settings.theme;
+            }
+
+            const apiEmbedData: APIEmbed[] = content.map((item) => {
+                return {
+                    title: item.title,
+                    description: item.description?.join('\n'),
+                };
+            });
+
             const botResponse: InteractionReplyOptions = {
                 content: `Hello, ${targetUser}! Here are some recommended resources for you!`,
-                embeds: createEmbeds(content, availableColors),
+                embeds: createThemedEmbeds(apiEmbedData, selectedTheme as ColorThemes),
             };
 
             interaction.reply(botResponse);

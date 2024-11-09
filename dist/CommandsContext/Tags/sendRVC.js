@@ -29,14 +29,26 @@ const SendRVCGuides = {
                 ephemeral: true,
             });
         }
-        const { botConfigs } = client;
-        const availableColors = (0, discordUtilities_1.getAvailableColors)(botConfigs);
         const content = i18n_1.default.t('tags.rvc.embeds', { returnObjects: true });
         const startTime = Date.now();
         try {
+            let selectedTheme = null;
+            const settings = client.botCache.get('main_settings');
+            if (!settings) {
+                selectedTheme = discordUtilities_1.ColorThemes.Default;
+            }
+            else {
+                selectedTheme = settings.theme;
+            }
+            const apiEmbedData = content.map((item) => {
+                return {
+                    title: item.title,
+                    description: item.description?.join('\n'),
+                };
+            });
             const botResponse = {
                 content: `Hello, ${targetUser}! Here are some recommended resources for you!`,
-                embeds: (0, discordUtilities_1.createEmbeds)(content, availableColors),
+                embeds: (0, discordUtilities_1.createThemedEmbeds)(apiEmbedData, selectedTheme),
             };
             interaction.reply(botResponse);
         }

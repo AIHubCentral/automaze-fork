@@ -7,15 +7,13 @@ const Tracker = {
     description: 'RVC real time tracker in spreadsheet',
     aliases: ['ss', 'spreadsheet'],
     async run(client, message) {
-        const content = [
-            {
-                title: '📊 RVC Archive Tracker(outdated)',
-                color: discord_js_1.Colors.Red,
-                description: ['Massive spreadsheet with RVC models created by **kalomaze**.'],
-            },
-        ];
         const sender = new botUtilities_1.TagResponseSender(client);
-        sender.setEmbeds(content);
+        sender.setEmbeds([
+            new discord_js_1.EmbedBuilder()
+                .setTitle('📊 RVC Archive Tracker(outdated)')
+                .setColor(discord_js_1.Colors.Red)
+                .setDescription('Massive spreadsheet with RVC models created by **kalomaze**.'),
+        ]);
         sender.setButtons([
             {
                 label: 'View Spreadsheet',

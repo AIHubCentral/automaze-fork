@@ -1,4 +1,4 @@
-import { Colors } from 'discord.js';
+import { Colors, EmbedBuilder } from 'discord.js';
 import { PrefixCommand } from '../../Interfaces/Command';
 import { TagResponseSender } from '../../Utils/botUtilities';
 
@@ -7,15 +7,13 @@ const Tracker: PrefixCommand = {
     description: 'RVC real time tracker in spreadsheet',
     aliases: ['ss', 'spreadsheet'],
     async run(client, message) {
-        const content = [
-            {
-                title: '📊 RVC Archive Tracker(outdated)',
-                color: Colors.Red,
-                description: ['Massive spreadsheet with RVC models created by **kalomaze**.'],
-            },
-        ];
         const sender = new TagResponseSender(client);
-        sender.setEmbeds(content);
+        sender.setEmbeds([
+            new EmbedBuilder()
+                .setTitle('📊 RVC Archive Tracker(outdated)')
+                .setColor(Colors.Red)
+                .setDescription('Massive spreadsheet with RVC models created by **kalomaze**.'),
+        ]);
         sender.setButtons([
             {
                 label: 'View Spreadsheet',

@@ -8,6 +8,7 @@ import {
 } from '../../Utils/botUtilities';
 import { EmbedData } from '../../Interfaces/BotData';
 import i18next from 'i18next';
+import { createEmbed } from '../../Utils/discordUtilities';
 
 const Colab: PrefixCommand = {
     name: 'colab',
@@ -38,8 +39,10 @@ const Colab: PrefixCommand = {
             },
         ];
 
+        const embeds = content.map((item) => createEmbed(item, item.color));
+
         const sender = new TagResponseSender(client);
-        sender.setEmbeds(content);
+        sender.setEmbeds(embeds);
         sender.config(message);
         await sender.send();
     },

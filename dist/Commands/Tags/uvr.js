@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const i18n_1 = __importDefault(require("../../i18n"));
 const botUtilities_1 = require("../../Utils/botUtilities");
+const discordUtilities_1 = require("../../Utils/discordUtilities");
 const UVR = {
     name: 'uvr',
     description: 'Ultimate Vocal Remover',
@@ -15,8 +16,9 @@ const UVR = {
             lng: language,
             returnObjects: true,
         });
+        const embed = (0, discordUtilities_1.createEmbed)(content.embed);
         const sender = new botUtilities_1.TagResponseSender(client);
-        sender.setEmbeds([content.embed]);
+        sender.setEmbeds([embed]);
         sender.setButtons(content.buttons);
         sender.config(message);
         await sender.send();

@@ -1,8 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DiscordErrorCodes = void 0;
+exports.DiscordErrorCodes = exports.ColorThemes = void 0;
 exports.createEmbed = createEmbed;
-exports.createEmbeds = createEmbeds;
+exports.createThemedEmbed = createThemedEmbed;
+exports.createThemedEmbeds = createThemedEmbeds;
 exports.getAvailableColors = getAvailableColors;
 exports.getGuildById = getGuildById;
 exports.getChannelById = getChannelById;
@@ -11,6 +15,7 @@ exports.handleDiscordError = handleDiscordError;
 exports.createStringOption = createStringOption;
 exports.createButtons = createButtons;
 const discord_js_1 = require("discord.js");
+const themes_json_1 = __importDefault(require("../../JSON/themes.json"));
 function createEmbed(data, color) {
     /**
      * Creates a discord embed from an object passed as `data` argument
@@ -20,7 +25,7 @@ function createEmbed(data, color) {
     if (!color) {
         color = data.color;
     }
-    embed.setColor(color ?? discord_js_1.Colors.Yellow);
+    embed.setColor(color ?? discord_js_1.Colors.Blue);
     if (data.title) {
         embed.setTitle(data.title);
     }
@@ -44,16 +49,36 @@ function createEmbed(data, color) {
     }
     return embed;
 }
-function createEmbeds(contents, colors) {
-    /* create embeds from an array of objects and assign colors */
+var ColorThemes;
+(function (ColorThemes) {
+    ColorThemes["Default"] = "default";
+    //Spooky = 'spooky',
+    ColorThemes["Christmas"] = "xmas";
+})(ColorThemes || (exports.ColorThemes = ColorThemes = {}));
+function createThemedEmbed(data, colorTheme, colorKey) {
+    const selectedTheme = themes_json_1.default[colorTheme];
+    const embed = new discord_js_1.EmbedBuilder().setColor(selectedTheme[colorKey]);
+    if (data.title) {
+        embed.setTitle(data.title);
+    }
+    if (data.description) {
+        embed.setDescription(data.description);
+    }
+    if (data.fields) {
+        embed.setFields(data.fields);
+    }
+    if (data.footer) {
+        embed.setFooter(data.footer);
+    }
+    return embed;
+}
+function createThemedEmbeds(data, colorTheme) {
+    const embeds = [];
+    const colorNames = ['primary', 'secondary', 'tertiary'];
     let colorIndex = 0;
-    const embeds = contents.map((item) => {
-        if (colorIndex >= colors.length) {
-            // goes back to the start of the array after reaching the end
-            colorIndex = 0;
-        }
-        const selectedColor = item.color ?? colors[colorIndex++];
-        return createEmbed(item, selectedColor);
+    data.forEach((item) => {
+        embeds.push(createThemedEmbed(item, colorTheme, colorNames[colorIndex]));
+        colorIndex = (colorIndex + 1) % colorNames.length;
     });
     return embeds;
 }

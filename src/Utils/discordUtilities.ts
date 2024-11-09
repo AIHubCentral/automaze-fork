@@ -8,16 +8,16 @@ import {
     DiscordAPIError,
     ApplicationCommandStringOptionData,
     SlashCommandStringOption,
-    TextChannel,
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
+    APIEmbed,
 } from 'discord.js';
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { ButtonData, EmbedData } from '../Interfaces/BotData';
 import winston from 'winston';
-import { generateRandomId } from './generalUtilities';
+import themes from '../../JSON/themes.json';
 
 export function createEmbed(data: EmbedData, color?: ColorResolvable): EmbedBuilder {
     /**
@@ -30,7 +30,7 @@ export function createEmbed(data: EmbedData, color?: ColorResolvable): EmbedBuil
         color = data.color as ColorResolvable;
     }
 
-    embed.setColor(color ?? Colors.Yellow);
+    embed.setColor(color ?? Colors.Blue);
 
     if (data.title) {
         embed.setTitle(data.title);
@@ -63,17 +63,58 @@ export function createEmbed(data: EmbedData, color?: ColorResolvable): EmbedBuil
     return embed;
 }
 
-export function createEmbeds(contents: EmbedData[], colors: ColorResolvable[]): EmbedBuilder[] {
-    /* create embeds from an array of objects and assign colors */
+export enum ColorThemes {
+    Default = 'default',
+    //Spooky = 'spooky',
+    Christmas = 'xmas',
+}
+
+export interface Theme {
+    primary: string;
+    secondary: string;
+    tertiary: string;
+    accent_1: string;
+    accent_2: string;
+}
+
+export function createThemedEmbed(
+    data: APIEmbed,
+    colorTheme: ColorThemes,
+    colorKey: keyof Theme
+): EmbedBuilder {
+    const selectedTheme = themes[colorTheme] as Theme;
+
+    const embed = new EmbedBuilder().setColor(selectedTheme[colorKey] as ColorResolvable);
+
+    if (data.title) {
+        embed.setTitle(data.title);
+    }
+
+    if (data.description) {
+        embed.setDescription(data.description);
+    }
+
+    if (data.fields) {
+        embed.setFields(data.fields);
+    }
+
+    if (data.footer) {
+        embed.setFooter(data.footer);
+    }
+
+    return embed;
+}
+
+export function createThemedEmbeds(data: APIEmbed[], colorTheme: ColorThemes): EmbedBuilder[] {
+    const embeds: EmbedBuilder[] = [];
+    const colorNames = ['primary', 'secondary', 'tertiary'];
     let colorIndex = 0;
-    const embeds = contents.map((item) => {
-        if (colorIndex >= colors.length) {
-            // goes back to the start of the array after reaching the end
-            colorIndex = 0;
-        }
-        const selectedColor = item.color ?? colors[colorIndex++];
-        return createEmbed(item, selectedColor);
+
+    data.forEach((item) => {
+        embeds.push(createThemedEmbed(item, colorTheme, colorNames[colorIndex] as keyof Theme));
+        colorIndex = (colorIndex + 1) % colorNames.length;
     });
+
     return embeds;
 }
 

@@ -70,7 +70,7 @@ const Close = {
                 const embedData = i18n_1.default.t('close.success.closed_by_author', {
                     returnObjects: true,
                 });
-                const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Green);
+                const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Blue);
                 if (embedData.title) {
                     embed.setTitle(`🔒 ${embedData.title}`);
                 }

@@ -5,7 +5,6 @@ import {
     ButtonInteraction,
     ButtonStyle,
     ChatInputCommandInteraction,
-    ColorResolvable,
     Colors,
     ComponentType,
     EmbedBuilder,
@@ -23,7 +22,7 @@ import {
 import { delay } from '../../Utils/generalUtilities';
 import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
-import { createEmbeds, getChannelById, getGuildById } from '../../Utils/discordUtilities';
+import { getChannelById, getGuildById } from '../../Utils/discordUtilities';
 import winston from 'winston';
 
 interface CustomError extends Error {
@@ -338,13 +337,31 @@ async function handleModalSubmit(
     channel: TextChannel,
     embed: EmbedBuilder
 ) {
-    const embedData: { title?: string; description?: string[] } = {};
+    /* const embedData: EmbedData = {};
 
     if (modalInteraction.fields.getTextInputValue('embed_title')) {
         embedData.title = modalInteraction.fields.getTextInputValue('embed_title');
     }
 
     embedData.description = [modalInteraction.fields.getTextInputValue('embed_description')];
+
+    let selectedTheme: string | null = null;
+    const client = interaction.client as ExtendedClient;
+    const settings = client.botCache.get('main_settings') as ISettings;
+    if (!settings) {
+        selectedTheme = ColorThemes.Default;
+    } else {
+        selectedTheme = settings.theme;
+    }
+
+    const apiEmbedData: APIEmbed[] = embedData.map((item) => {
+        return {
+            title: item.title,
+            description: item.description?.join('\n'),
+        };
+    });
+
+    const embeds = createThemedEmbeds(apiEmbedData, selectedTheme as ColorThemes);
 
     const botResponse = {
         embeds: createEmbeds(
@@ -361,7 +378,7 @@ async function handleModalSubmit(
     await modalInteraction.reply({
         embeds: [embed],
         ephemeral: true,
-    });
+    }); */
 }
 
 // Main function to handle the embed option

@@ -2,6 +2,7 @@ import i18next from '../../i18n';
 import { ButtonData, EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
 import { TagResponseSender } from '../../Utils/botUtilities';
+import { createEmbed } from '../../Utils/discordUtilities';
 
 type response = { embed: EmbedData; buttons: ButtonData[] };
 
@@ -14,8 +15,10 @@ const Karafan: PrefixCommand = {
             returnObjects: true,
         }) as response;
 
+        const embeds = [createEmbed(content.embed)];
+
         const sender = new TagResponseSender(client);
-        sender.setEmbeds([content.embed as EmbedData]);
+        sender.setEmbeds(embeds);
         sender.setButtons(content.buttons);
         sender.config(message);
         await sender.send();

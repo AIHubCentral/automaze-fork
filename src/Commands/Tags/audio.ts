@@ -1,5 +1,4 @@
 import i18next from 'i18next';
-import { EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
 import {
     getLanguageByChannelId,
@@ -7,7 +6,8 @@ import {
     resourcesToUnorderedListAlt,
     TagResponseSender,
 } from '../../Utils/botUtilities';
-import { Colors } from 'discord.js';
+import { ColorThemes, createThemedEmbed } from '../../Utils/discordUtilities';
+import { ISettings } from '../../Services/settingsService';
 
 const Audio: PrefixCommand = {
     name: 'audio',
@@ -25,20 +25,28 @@ const Audio: PrefixCommand = {
             return;
         }
 
-        const content: EmbedData[] = [
+        let selectedTheme: string | null = null;
+        const settings = client.botCache.get('main_settings') as ISettings;
+        if (!settings) {
+            selectedTheme = ColorThemes.Default;
+        } else {
+            selectedTheme = settings.theme;
+        }
+
+        const embed = createThemedEmbed(
             {
-                title:
-                    i18next.t('common.emojis.book') +
-                    ' ' +
-                    i18next.t('tags.audio.embed.title', { lng: language }),
-                color: Colors.Blue,
-                description: [resourcesToUnorderedListAlt(resources, language)],
-                footer: i18next.t('tags.audio.embed.footer', { lng: language }),
+                title: `${i18next.t('common.emojis.book')} ${i18next.t('tags.audio.embed.title', { lng: language })}`,
+                description: resourcesToUnorderedListAlt(resources, language),
+                footer: {
+                    text: i18next.t('tags.audio.embed.footer', { lng: language }),
+                },
             },
-        ];
+            selectedTheme as ColorThemes,
+            'primary'
+        );
 
         const sender = new TagResponseSender(client);
-        sender.setEmbeds(content);
+        sender.setEmbeds([embed]);
         sender.config(message);
         await sender.send();
     },

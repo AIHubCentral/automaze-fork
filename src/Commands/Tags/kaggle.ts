@@ -8,6 +8,7 @@ import {
     TagResponseSender,
 } from '../../Utils/botUtilities';
 import i18next from '../../i18n';
+import { createEmbed } from '../../Utils/discordUtilities';
 
 const Kaggle: PrefixCommand = {
     name: 'kaggle',
@@ -38,8 +39,10 @@ const Kaggle: PrefixCommand = {
             },
         ];
 
+        const embeds = content.map((item) => createEmbed(item, item.color));
+
         const sender = new TagResponseSender(client);
-        sender.setEmbeds(content);
+        sender.setEmbeds(embeds);
         sender.config(message);
         await sender.send();
     },

@@ -1,12 +1,13 @@
 import i18next from '../../i18n';
-import { EmbedData } from '../../Interfaces/BotData';
 import { PrefixCommand } from '../../Interfaces/Command';
+import { ISettings } from '../../Services/settingsService';
 import {
     getLanguageByChannelId,
     getResourceData,
     resourcesToUnorderedList,
     TagResponseSender,
 } from '../../Utils/botUtilities';
+import { ColorThemes, createThemedEmbed } from '../../Utils/discordUtilities';
 
 const Local: PrefixCommand = {
     name: 'local',
@@ -24,16 +25,26 @@ const Local: PrefixCommand = {
             return;
         }
 
-        const content: EmbedData[] = [
+        let selectedTheme: string | null = null;
+        const settings = client.botCache.get('main_settings') as ISettings;
+        if (!settings) {
+            selectedTheme = ColorThemes.Default;
+        } else {
+            selectedTheme = settings.theme;
+        }
+
+        const embed = createThemedEmbed(
             {
                 title: `${i18next.t('common.emojis.laptop')} ${i18next.t('tags.local.embed.title')}`,
-                description: [resourcesToUnorderedList(resources, language)],
-                footer: i18next.t('tags.local.embed.footer', { lng: language }),
+                description: resourcesToUnorderedList(resources, language),
+                footer: { text: i18next.t('tags.local.embed.footer', { lng: language }) },
             },
-        ];
+            selectedTheme as ColorThemes,
+            'primary'
+        );
 
         const sender = new TagResponseSender(client);
-        sender.setEmbeds(content);
+        sender.setEmbeds([embed]);
         sender.config(message);
         await sender.send();
     },

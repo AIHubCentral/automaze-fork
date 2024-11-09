@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ColorThemes = exports.BananManager = exports.TagResponseSender = exports.CloudPlatform = void 0;
+exports.BananManager = exports.TagResponseSender = exports.CloudPlatform = void 0;
 exports.resourcesToUnorderedList = resourcesToUnorderedList;
 exports.processResource = processResource;
 exports.resourcesToUnorderedListAlt = resourcesToUnorderedListAlt;
@@ -19,6 +19,7 @@ exports.getResourceData = getResourceData;
 exports.getThemeColors = getThemeColors;
 exports.getThemes = getThemes;
 exports.createPaginatedEmbed = createPaginatedEmbed;
+exports.EmbedDataToAPI = EmbedDataToAPI;
 exports.handleSendRealtimeGuides = handleSendRealtimeGuides;
 exports.getLanguageByChannelId = getLanguageByChannelId;
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -316,7 +317,7 @@ class TagResponseSender {
         this.sendAsReply = true;
     }
     setEmbeds(embeds) {
-        this.embeds = (0, discordUtilities_1.createEmbeds)(embeds, getThemeColors(this.client.botConfigs));
+        this.embeds = embeds;
     }
     setButtons(buttonsData) {
         if (!this.actionRow) {
@@ -560,6 +561,22 @@ class BananManager {
     }
 }
 exports.BananManager = BananManager;
+/**
+ * Converts custom EmbedData type to APIEmbed
+ */
+function EmbedDataToAPI(oldData) {
+    const convertedData = {};
+    if (oldData.title) {
+        convertedData.title = oldData.title;
+    }
+    if (oldData.description) {
+        convertedData.description = oldData.description.join('\n');
+    }
+    if (oldData.footer) {
+        convertedData.footer = { text: oldData.footer };
+    }
+    return convertedData;
+}
 function createMenuOptions(availableOptions) {
     const menuOptions = [];
     for (const option of availableOptions ?? []) {
@@ -591,8 +608,9 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
         .setPlaceholder(i18n_1.default.t('tags.realtime.placeholder', { lng: language }))
         .addOptions(menuOptions);
     const row = new discord_js_1.ActionRowBuilder().addComponents(realtimeGuidesSelectMenu);
+    let embeds = selectedGuide.embeds.map((item) => (0, discordUtilities_1.createEmbed)(item));
     const botResponse = {
-        embeds: (0, discordUtilities_1.createEmbeds)(selectedGuide.embeds, [discord_js_1.Colors.Blue, discord_js_1.Colors.Aqua]),
+        embeds,
         components: [row],
         content: '',
         ephemeral,
@@ -631,7 +649,8 @@ async function handleSendRealtimeGuides(message, targetUser, author, ephemeral =
                     lng: language,
                 });
             }
-            botResponse.embeds = (0, discordUtilities_1.createEmbeds)(guideEmbeds, [discord_js_1.Colors.Blue, discord_js_1.Colors.Aqua]);
+            embeds = guideEmbeds.map((item) => (0, discordUtilities_1.createEmbed)(item));
+            botResponse.embeds = embeds;
             i.editReply(botResponse);
         }
         else {
@@ -738,9 +757,3 @@ function getLanguageByChannelId(channelId) {
 //         }
 //     }
 // }
-var ColorThemes;
-(function (ColorThemes) {
-    ColorThemes["Default"] = "default";
-    ColorThemes["Spooky"] = "spooky";
-    ColorThemes["Christmas"] = "xmas";
-})(ColorThemes || (exports.ColorThemes = ColorThemes = {}));

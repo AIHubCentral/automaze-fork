@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     ActionRowBuilder,
+    APIEmbed,
     bold,
     ButtonBuilder,
     ButtonStyle,
@@ -28,7 +29,7 @@ import {
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { ButtonData, EmbedData, SelectMenuData, SelectMenuOption } from '../Interfaces/BotData';
-import { createButtons, createEmbeds } from './discordUtilities';
+import { createButtons, createEmbed } from './discordUtilities';
 import UserService, { UserDTO } from '../Services/userService';
 import path from 'path';
 import fs from 'fs';
@@ -373,8 +374,8 @@ export class TagResponseSender {
         this.sendAsReply = true;
     }
 
-    setEmbeds(embeds: EmbedData[]): void {
-        this.embeds = createEmbeds(embeds, getThemeColors(this.client.botConfigs));
+    setEmbeds(embeds: EmbedBuilder[]): void {
+        this.embeds = embeds;
     }
 
     setButtons(buttonsData: ButtonData[]): void {
@@ -695,6 +696,27 @@ export class BananManager {
     }
 }
 
+/**
+ * Converts custom EmbedData type to APIEmbed
+ */
+export function EmbedDataToAPI(oldData: EmbedData): APIEmbed {
+    const convertedData: APIEmbed = {};
+
+    if (oldData.title) {
+        convertedData.title = oldData.title;
+    }
+
+    if (oldData.description) {
+        convertedData.description = oldData.description.join('\n');
+    }
+
+    if (oldData.footer) {
+        convertedData.footer = { text: oldData.footer };
+    }
+
+    return convertedData;
+}
+
 function createMenuOptions(availableOptions: SelectMenuOption[]): StringSelectMenuOptionBuilder[] {
     const menuOptions: StringSelectMenuOptionBuilder[] = [];
 
@@ -741,8 +763,10 @@ export async function handleSendRealtimeGuides(
 
     const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(realtimeGuidesSelectMenu);
 
+    let embeds = selectedGuide.embeds.map((item) => createEmbed(item));
+
     const botResponse = {
-        embeds: createEmbeds(selectedGuide.embeds, [Colors.Blue, Colors.Aqua]),
+        embeds,
         components: [row],
         content: '',
         ephemeral,
@@ -793,7 +817,9 @@ export async function handleSendRealtimeGuides(
                 });
             }
 
-            botResponse.embeds = createEmbeds(guideEmbeds, [Colors.Blue, Colors.Aqua]);
+            embeds = guideEmbeds.map((item) => createEmbed(item));
+
+            botResponse.embeds = embeds;
 
             i.editReply(<InteractionUpdateOptions>botResponse);
         } else {
@@ -918,9 +944,3 @@ export { getLanguageByChannelId };
 //         }
 //     }
 // }
-
-export enum ColorThemes {
-    Default = 'default',
-    Spooky = 'spooky',
-    Christmas = 'xmas',
-}

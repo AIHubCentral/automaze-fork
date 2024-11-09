@@ -10,6 +10,8 @@ import {
 import { processTranslation } from '../src/Utils/generalUtilities';
 import { EmbedData } from '../src/Interfaces/BotData';
 import { initI18n } from '../src/i18n';
+import { ColorThemes, createThemedEmbed, createThemedEmbeds } from '../src/Utils/discordUtilities';
+import { APIEmbed, ColorResolvable, resolveColor } from 'discord.js';
 
 beforeAll(async () => {
     await initI18n();
@@ -365,6 +367,68 @@ describe('General Utilities', () => {
             expect(processTranslation(sample2)).toBe('');
             expect(processTranslation(sample3)).toBe('One\nTwo\nThree');
             expect(processTranslation(sample4)).toBe(sample4);
+        });
+    });
+});
+
+import themes from '../JSON/themes.json';
+
+describe('Discord utilities', () => {
+    describe('Create embeds', () => {
+        it('should create an embed with color theme', () => {
+            const embedData: APIEmbed = {};
+
+            let embed = createThemedEmbed(embedData, ColorThemes.Default, 'primary');
+            expect(embed.data.color).toBe(resolveColor(themes.default.primary as ColorResolvable));
+
+            embed = createThemedEmbed(embedData, ColorThemes.Default, 'secondary');
+            expect(embed.data.color).toBe(resolveColor(themes.default.secondary as ColorResolvable));
+
+            embed = createThemedEmbed(embedData, ColorThemes.Default, 'tertiary');
+            expect(embed.data.color).toBe(resolveColor(themes.default.tertiary as ColorResolvable));
+
+            embed = createThemedEmbed(embedData, ColorThemes.Default, 'accent_1');
+            expect(embed.data.color).toBe(resolveColor(themes.default.accent_1 as ColorResolvable));
+
+            embed = createThemedEmbed(embedData, ColorThemes.Default, 'accent_2');
+            expect(embed.data.color).toBe(resolveColor(themes.default.accent_2 as ColorResolvable));
+        });
+
+        it('should fill the embed data with values passed in data parameter', () => {
+            const embedData: APIEmbed = {};
+
+            let embed = createThemedEmbed(embedData, ColorThemes.Default, 'primary');
+            expect(embed.data.title).toBeUndefined();
+            expect(embed.data.description).toBeUndefined();
+            expect(embed.data.fields).toBeUndefined();
+            expect(embed.data.footer).toBeUndefined();
+
+            // fill values
+            embedData.title = 'Title';
+            embedData.description = 'Description';
+            embedData.fields = [{ name: 'Field 1', value: 'Value 1', inline: false }];
+            embedData.footer = { text: 'Footer' };
+
+            embed = createThemedEmbed(embedData, ColorThemes.Default, 'primary');
+            expect(embed.data.title).toBe('Title');
+            expect(embed.data.description).toBe('Description');
+            expect(embed.data.fields).toEqual([{ name: 'Field 1', value: 'Value 1', inline: false }]);
+            expect(embed.data.footer!.text).toBe('Footer');
+        });
+
+        it('should rotate colors when creating multiple embeds at once', () => {
+            const data: APIEmbed[] = [
+                { description: 'Test 1' },
+                { description: 'Test 2' },
+                { description: 'Test 3' },
+                { description: 'Test 4' },
+            ];
+
+            const embeds = createThemedEmbeds(data, ColorThemes.Default);
+            expect(embeds[0].data.color).toBe(resolveColor(themes.default.primary as ColorResolvable));
+            expect(embeds[1].data.color).toBe(resolveColor(themes.default.secondary as ColorResolvable));
+            expect(embeds[2].data.color).toBe(resolveColor(themes.default.tertiary as ColorResolvable));
+            expect(embeds[3].data.color).toBe(resolveColor(themes.default.primary as ColorResolvable));
         });
     });
 });

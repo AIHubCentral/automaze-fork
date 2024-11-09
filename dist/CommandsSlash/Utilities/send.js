@@ -229,22 +229,48 @@ function createEmbedModal() {
     return modal;
 }
 async function handleModalSubmit(interaction, modalInteraction, channel, embed) {
-    const embedData = {};
+    /* const embedData: EmbedData = {};
+
     if (modalInteraction.fields.getTextInputValue('embed_title')) {
         embedData.title = modalInteraction.fields.getTextInputValue('embed_title');
     }
+
     embedData.description = [modalInteraction.fields.getTextInputValue('embed_description')];
+
+    let selectedTheme: string | null = null;
+    const client = interaction.client as ExtendedClient;
+    const settings = client.botCache.get('main_settings') as ISettings;
+    if (!settings) {
+        selectedTheme = ColorThemes.Default;
+    } else {
+        selectedTheme = settings.theme;
+    }
+
+    const apiEmbedData: APIEmbed[] = embedData.map((item) => {
+        return {
+            title: item.title,
+            description: item.description?.join('\n'),
+        };
+    });
+
+    const embeds = createThemedEmbeds(apiEmbedData, selectedTheme as ColorThemes);
+
     const botResponse = {
-        embeds: (0, discordUtilities_1.createEmbeds)([embedData], [(modalInteraction.fields.getTextInputValue('embed_color') ?? 'Blurple')]),
+        embeds: createEmbeds(
+            [embedData],
+            [(modalInteraction.fields.getTextInputValue('embed_color') ?? 'Blurple') as ColorResolvable]
+        ),
         content: '',
         ephemeral: false,
     };
+
     await channel.send(botResponse);
-    embed.setTitle('✔ Embed sent').setColor(discord_js_1.Colors.Green).setDescription('Done.');
+
+    embed.setTitle('✔ Embed sent').setColor(Colors.Green).setDescription('Done.');
     await modalInteraction.reply({
         embeds: [embed],
         ephemeral: true,
-    });
+    }); */
 }
 // Main function to handle the embed option
 async function handleEmbedOption(guildId, channelId, interaction, embed, logger) {

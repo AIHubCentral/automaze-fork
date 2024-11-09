@@ -8,6 +8,7 @@ import {
     TagResponseSender,
 } from '../../Utils/botUtilities';
 import i18next from '../../i18n';
+import { createEmbed } from '../../Utils/discordUtilities';
 
 const Lightning: PrefixCommand = {
     name: 'light',
@@ -34,8 +35,10 @@ const Lightning: PrefixCommand = {
             },
         ];
 
+        const embeds = content.map((item) => createEmbed(item, item.color));
+
         const sender = new TagResponseSender(client);
-        sender.setEmbeds(content);
+        sender.setEmbeds(embeds);
         sender.config(message);
         await sender.send();
     },

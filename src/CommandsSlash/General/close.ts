@@ -90,7 +90,7 @@ const Close: SlashCommand = {
                 const embedData = i18next.t('close.success.closed_by_author', {
                     returnObjects: true,
                 }) as EmbedData;
-                const embed = new EmbedBuilder().setColor(Colors.Green);
+                const embed = new EmbedBuilder().setColor(Colors.Blue);
 
                 if (embedData.title) {
                     embed.setTitle(`🔒 ${embedData.title}`);

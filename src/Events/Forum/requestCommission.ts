@@ -1,15 +1,10 @@
 import {
-    ColorResolvable,
     Colors,
     DiscordAPIError,
     EmbedBuilder,
     Events,
     MessageCreateOptions,
     ThreadChannel,
-    bold,
-    channelMention,
-    hyperlink,
-    inlineCode,
     roleMention,
     userMention,
 } from 'discord.js';
@@ -34,9 +29,15 @@ async function handleFreeRequest(client: ExtendedClient, thread: ThreadChannel):
         } else {
             response.embeds = [
                 createEmbed({
-                    color: client.botConfigs.colors.theme.accent_1,
+                    color: Colors.Blurple,
+                    title: '💡 Tip',
                     description: [
-                        `💡 ${bold('Tip')}: You can try using the ${inlineCode('/search')} or ${inlineCode('/find')} command from ${userMention('1156937396517081169')} or ${userMention('1138318590760718416')} to check if someone already made this model. Alternatively, you can check the ${channelMention('1175430844685484042')} channel or use ${hyperlink('weights.gg', 'https://weights.gg/')}, but keep in mind that weights receive the models after us, so if something new comes out, you'll find it on our server first.`,
+                        'You can check if someone already made this model. Try the following:',
+                        '- Search for it in <#1175430844685484042>',
+                        '- Alternatively, in <#1163592055830880266>:',
+                        '    - Send " <@1144714449563955302> search (name of the model)", without the ()',
+                        '  - Use the command `/find` with <@1138318590760718416> bot',
+                        '- Visit <https://weights.gg/> and search for the model (login required)',
                     ],
                 }),
             ];
@@ -78,7 +79,7 @@ async function handlePaidRequest(client: ExtendedClient, thread: ThreadChannel):
     if (thread.ownerId) {
         embeds.push(
             createEmbed({
-                color: client.botConfigs.colors.theme.primary as ColorResolvable,
+                color: Colors.Aqua,
                 description: [
                     `Hello, ${userMention(thread.ownerId)}!`,
                     '\nPeople will contact you to offer their services. However, if you created a **paid** request by mistake or if someone already finished your request, use the `/close` command to archive this post.',
@@ -89,7 +90,7 @@ async function handlePaidRequest(client: ExtendedClient, thread: ThreadChannel):
 
     embeds.push(
         createEmbed({
-            color: client.botConfigs.colors.theme.secondary as ColorResolvable,
+            color: Colors.Blue,
             description: [
                 '\n**Some general recommendations regarding commissions:**',
                 "- Don't rush! You'll receive many requests, so take your time to review the best offer. The first person who contacts you may not always be the best option.",

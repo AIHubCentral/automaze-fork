@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const botUtilities_1 = require("../../Utils/botUtilities");
 const i18next_1 = __importDefault(require("i18next"));
+const discordUtilities_1 = require("../../Utils/discordUtilities");
 const Colab = {
     name: 'colab',
     description: 'Links to all working colabs/spaces',
@@ -29,8 +30,9 @@ const Colab = {
                 footer: i18next_1.default.t('tags.colab.embed.footer', { lng: language }),
             },
         ];
+        const embeds = content.map((item) => (0, discordUtilities_1.createEmbed)(item, item.color));
         const sender = new botUtilities_1.TagResponseSender(client);
-        sender.setEmbeds(content);
+        sender.setEmbeds(embeds);
         sender.config(message);
         await sender.send();
     },

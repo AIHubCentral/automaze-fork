@@ -1,0 +1,16 @@
+{
+    "default": {
+        "primary": "07C7F7",
+        "secondary": "077CF7",
+        "tertiary": "0730F7",
+        "accent_1": "07F7D9",
+        "accent_2": "07F788"
+    },
+    "xmas": {
+        "primary": "26A653",
+        "secondary": "BF213E",
+        "tertiary": "023059",
+        "accent_1": "F27244",
+        "accent_2": "F2C36B"
+    }
+}

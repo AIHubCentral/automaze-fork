@@ -1,8 +1,14 @@
-import { Colors, SlashCommandBuilder } from 'discord.js';
+import { APIEmbed, Colors, SlashCommandBuilder } from 'discord.js';
 
 import ExtendedClient from '../../Core/extendedClient';
 import { ButtonData, EmbedData } from '../../Interfaces/BotData';
-import { createButtons, createEmbed, createEmbeds, createStringOption } from '../../Utils/discordUtilities';
+import {
+    ColorThemes,
+    createButtons,
+    createEmbed,
+    createStringOption,
+    createThemedEmbeds,
+} from '../../Utils/discordUtilities';
 import { SlashCommand } from '../../Interfaces/Command';
 import slashCommandData from '../../../JSON/slashCommandData.json';
 import ms from 'pretty-ms';
@@ -12,6 +18,7 @@ import {
     resourcesToUnorderedListAlt,
 } from '../../Utils/botUtilities';
 import i18next from '../../i18n';
+import { ISettings } from '../../Services/settingsService';
 
 const commandData = slashCommandData.guides;
 
@@ -92,7 +99,23 @@ const Guides: SlashCommand = {
                 lng: language,
                 returnObjects: true,
             }) as EmbedData[];
-            const embeds = createEmbeds(content, [Colors.Aqua, Colors.Blue, Colors.DarkBlue]);
+
+            let selectedTheme: string | null = null;
+            const settings = client.botCache.get('main_settings') as ISettings;
+            if (!settings) {
+                selectedTheme = ColorThemes.Default;
+            } else {
+                selectedTheme = settings.theme;
+            }
+
+            const apiEmbedData: APIEmbed[] = content.map((item) => {
+                return {
+                    title: item.title,
+                    description: item.description?.join('\n'),
+                };
+            });
+
+            const embeds = createThemedEmbeds(apiEmbedData, selectedTheme as ColorThemes);
 
             logger.info(`sent guides with /${interaction.commandName}`, {
                 guildId: interaction.guildId,
