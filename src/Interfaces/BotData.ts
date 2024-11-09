@@ -1,4 +1,4 @@
-import { Collection, ColorResolvable } from 'discord.js';
+import { ColorResolvable } from 'discord.js';
 
 interface EmbedFields {
     name: string;
@@ -46,14 +46,6 @@ export interface LanguageData {
     menuOptions?: SelectMenuOption[];
 }
 
-interface LanguageDataSubmenu {
-    [country_code: string]: LanguageData;
-}
-
-interface EmbedsData {
-    [key: string]: LanguageDataSubmenu;
-}
-
 type KeywordType = 'text' | 'sticker';
 type ResponseFrequency = 'often' | 'sometimes' | 'rare';
 
@@ -68,7 +60,5 @@ interface ReactionKeywordsData {
 }
 
 export default interface BotData {
-    embeds: EmbedsData;
     reactionKeywords: ReactionKeywordsData[];
-    cooldownImmuneUsers: Collection<string, any>;
 }

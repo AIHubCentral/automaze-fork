@@ -776,12 +776,14 @@
             "faq": {
                 "embeds": [
                     {
-                        "title": "$t(common.emojis.question) Russian FAQ for voice changer",
+                        "title": "$t(common.emojis.question) FAQ",
                         "color": "#07F7D9",
                         "description": [
-                            "- 🔗 [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
-                        ],
-                        "footer": "$t(general.credits): blackcat76it, elektroeban, redoverflow and tntmaxim"
+                            "- [W-Okada FAQ](https://rentry.co/W-Okada-FAQ)",
+                            "- [W-Okada's Voice Changer Common Issues and Fixes](https://docs.google.com/document/d/e/2PACX-1vQIwJ3MVidhgEaXwWFl0xpVonVOVfneaNVADd7-NMWFgPIsfWWhG8NNqzQMsXDIOGlBIfxscoIm2_6I/pub), $t(general.credits): antasma245",
+                            "- [Sushi's Guides](https://linktr.ee/sushi2022)",
+                            "- [ultimate-voice-models-FAQ/Voice-Changer RU](https://github.com/MaHivka/ultimate-voice-models-FAQ), $t(general.credits): blackcat76it, elektroeban, redoverflow and tntmaxim"
+                        ]
                     }
                 ]
             },
@@ -799,8 +801,8 @@
                     "emoji": "$t(common.emojis.cloud)"
                 },
                 {
-                    "label": "Frequently Asked Questions (RU)",
-                    "description": "Russian FAQ for voice changer",
+                    "label": "FAQ",
+                    "description": "Frequently Asked Questions",
                     "value": "faq",
                     "emoji": "$t(common.emojis.question)"
                 }

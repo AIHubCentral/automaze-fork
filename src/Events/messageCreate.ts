@@ -25,6 +25,7 @@ import {
 } from '../Utils/botUtilities';
 import { delay } from '../Utils/generalUtilities';
 import winston from 'winston';
+import { ISettings } from '../Services/settingsService';
 
 const messageCreateEvent: IEventData = {
     name: 'messageCreate',
@@ -41,7 +42,10 @@ const messageCreateEvent: IEventData = {
             await handleBotMentioned(prefix, message, client);
 
             // tries to answer FAQs
-            if (client.botConfigs.general.automatedReplies) {
+            const settings = client.botCache.get('settings') as ISettings;
+            if (!settings) return;
+
+            if (settings.send_automated_replies) {
                 handleFaqQuestions(message.author.id, message, client.repliedUsers, client.logger);
 
                 // send !howtoask if user is asking for assistance

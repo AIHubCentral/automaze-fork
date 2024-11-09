@@ -2,15 +2,20 @@ import { DiscordAPIError, Message, TextChannel } from 'discord.js';
 import IEventData from '../../Interfaces/Events';
 import ExtendedClient from '../../Core/extendedClient';
 import { handleDiscordError } from '../../Utils/discordUtilities';
+import { ISettings } from '../../Services/settingsService';
 
 /* Checks when a non model master sends a message in a model request thread */
 const WriteComission: IEventData = {
     name: 'messageCreate',
     once: false,
     async run(client, message: Message) {
-        if (message.guildId != client.discordIDs.Guild) return;
-        if (!client.botConfigs.commissions.deleteMessages) return;
         if (message.author.bot) return;
+        if (message.guildId != client.discordIDs.Guild) return;
+
+        // only delete if settings allows it
+        if (!client.botCache.has('settings')) return;
+        const settings = client.botCache.get('settings') as ISettings;
+        if (!settings.delete_messages) return;
 
         const guild = message.guild;
         if (!guild) return;

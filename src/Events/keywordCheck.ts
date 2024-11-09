@@ -1,9 +1,19 @@
-import { Message, MessageReplyOptions, StickerResolvable, ChannelType, TextChannel } from 'discord.js';
+import {
+    Message,
+    MessageReplyOptions,
+    StickerResolvable,
+    ChannelType,
+    TextChannel,
+    EmbedBuilder,
+    Colors,
+} from 'discord.js';
 import ExtendedClient from '../Core/extendedClient';
 import IEventData from '../Interfaces/Events';
 import { getRandomFromArray, getRandomNumber } from '../Utils/generalUtilities';
 
 import { delay } from '../Utils/generalUtilities';
+import { ISettings } from '../Services/settingsService';
+import { getChannelById, getGuildById } from '../Utils/discordUtilities';
 
 function isUserOnCooldown(client: ExtendedClient, userId: string): boolean {
     let result = false;
@@ -121,16 +131,14 @@ const KeyWordCheck: IEventData = {
                                     );
                                     await message.reply(botResponse);
                                 } catch (error) {
-                                    if (client.botConfigs.logs.stickers) {
-                                        const logData = {
-                                            error: error,
-                                            more: {
-                                                messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
-                                                stickerId: item.stickerId,
-                                            },
-                                        };
-                                        client.logger.error('Failed to add sticker', logData);
-                                    }
+                                    const logData = {
+                                        error: error,
+                                        more: {
+                                            messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
+                                            stickerId: item.stickerId,
+                                        },
+                                    };
+                                    client.logger.error('Failed to add sticker', logData);
                                 }
 
                                 break;
@@ -162,17 +170,45 @@ const KeyWordCheck: IEventData = {
                         }
                     }
                 }
-                // console.log('End of keyword check');
             }
         } catch (error) {
-            if (client.botConfigs.logs.emojis) {
-                const logData = {
-                    error: error,
-                    more: {
-                        messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
-                    },
-                };
-                client.logger.error('Failed to add reaction', logData);
+            const logData = {
+                error: error,
+                more: {
+                    messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
+                },
+            };
+            client.logger.error('Failed to add reaction', logData);
+
+            if (client.botCache.has('settings')) {
+                const settings = client.botCache.get('settings') as ISettings;
+
+                if (settings.debug_guild_id && settings.debug_guild_channel_id) {
+                    const debugGuild = await getGuildById(settings.debug_guild_id, client);
+                    if (!debugGuild) return;
+
+                    const debugChannel = await getChannelById(settings.debug_guild_channel_id, debugGuild);
+                    if (!debugChannel) return;
+
+                    const errorObject = error as Error;
+
+                    const embed = new EmbedBuilder()
+                        .setTitle(`Error: ${errorObject.name}`)
+                        .setColor(Colors.Red)
+                        .setFields(
+                            {
+                                name: 'Name',
+                                value: errorObject.name,
+                            },
+                            {
+                                name: 'Message',
+                                value: errorObject.message,
+                            }
+                        )
+                        .setTimestamp();
+
+                    await (debugChannel as TextChannel).send({ embeds: [embed] });
+                }
             }
         }
     },

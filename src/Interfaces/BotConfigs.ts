@@ -33,7 +33,5 @@ export default interface IBotConfigs {
     debugChannelId: string;
     messageOnStartup: boolean;
     prefix: IPrefix;
-    logs: IConfigToggle;
     debugGuild: IDebugGuild;
-    sendLogs: true;
 }

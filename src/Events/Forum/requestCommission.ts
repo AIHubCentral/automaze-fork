@@ -154,14 +154,6 @@ const RequestComission: IEventData = {
             } else if (isFreeRequest) {
                 await handleFreeRequest(client, thread);
             }
-
-            if (botConfigs.logs.modelRequests) {
-                client.logger.debug('New model request', {
-                    more: {
-                        guildId: thread.guild.id,
-                    },
-                });
-            }
         } catch (error) {
             client.logger.error('Error on model request', error, logData);
         }

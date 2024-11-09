@@ -68,9 +68,7 @@ class ExtendedClient extends Discord.Client {
         this.knexInstance = knexInstance;
 
         this.botData = {
-            embeds: require('../../JSON/embeds.json'),
             reactionKeywords: require('../../JSON/reactionKeywords.json'),
-            cooldownImmuneUsers: new Discord.Collection<string, any>(),
         };
 
         this.prefix = extendedOptions.prefix;

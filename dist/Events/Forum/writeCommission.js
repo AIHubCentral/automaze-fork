@@ -7,11 +7,15 @@ const WriteComission = {
     name: 'messageCreate',
     once: false,
     async run(client, message) {
+        if (message.author.bot)
+            return;
         if (message.guildId != client.discordIDs.Guild)
             return;
-        if (!client.botConfigs.commissions.deleteMessages)
+        // only delete if settings allows it
+        if (!client.botCache.has('settings'))
             return;
-        if (message.author.bot)
+        const settings = client.botCache.get('settings');
+        if (!settings.delete_messages)
             return;
         const guild = message.guild;
         if (!guild)

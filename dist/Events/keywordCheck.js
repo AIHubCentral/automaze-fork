@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const generalUtilities_1 = require("../Utils/generalUtilities");
 const generalUtilities_2 = require("../Utils/generalUtilities");
+const discordUtilities_1 = require("../Utils/discordUtilities");
 function isUserOnCooldown(client, userId) {
     let result = false;
     if (client.cooldowns.reactions.has(userId)) {
@@ -106,16 +107,14 @@ const KeyWordCheck = {
                                     await message.reply(botResponse);
                                 }
                                 catch (error) {
-                                    if (client.botConfigs.logs.stickers) {
-                                        const logData = {
-                                            error: error,
-                                            more: {
-                                                messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
-                                                stickerId: item.stickerId,
-                                            },
-                                        };
-                                        client.logger.error('Failed to add sticker', logData);
-                                    }
+                                    const logData = {
+                                        error: error,
+                                        more: {
+                                            messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
+                                            stickerId: item.stickerId,
+                                        },
+                                    };
+                                    client.logger.error('Failed to add sticker', logData);
                                 }
                                 break;
                             case 'text':
@@ -147,18 +146,39 @@ const KeyWordCheck = {
                         }
                     }
                 }
-                // console.log('End of keyword check');
             }
         }
         catch (error) {
-            if (client.botConfigs.logs.emojis) {
-                const logData = {
-                    error: error,
-                    more: {
-                        messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
-                    },
-                };
-                client.logger.error('Failed to add reaction', logData);
+            const logData = {
+                error: error,
+                more: {
+                    messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
+                },
+            };
+            client.logger.error('Failed to add reaction', logData);
+            if (client.botCache.has('settings')) {
+                const settings = client.botCache.get('settings');
+                if (settings.debug_guild_id && settings.debug_guild_channel_id) {
+                    const debugGuild = await (0, discordUtilities_1.getGuildById)(settings.debug_guild_id, client);
+                    if (!debugGuild)
+                        return;
+                    const debugChannel = await (0, discordUtilities_1.getChannelById)(settings.debug_guild_channel_id, debugGuild);
+                    if (!debugChannel)
+                        return;
+                    const errorObject = error;
+                    const embed = new discord_js_1.EmbedBuilder()
+                        .setTitle(`Error: ${errorObject.name}`)
+                        .setColor(discord_js_1.Colors.Red)
+                        .setFields({
+                        name: 'Name',
+                        value: errorObject.name,
+                    }, {
+                        name: 'Message',
+                        value: errorObject.message,
+                    })
+                        .setTimestamp();
+                    await debugChannel.send({ embeds: [embed] });
+                }
             }
         }
     },

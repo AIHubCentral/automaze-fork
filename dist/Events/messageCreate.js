@@ -19,7 +19,10 @@ const messageCreateEvent = {
         else {
             await handleBotMentioned(prefix, message, client);
             // tries to answer FAQs
-            if (client.botConfigs.general.automatedReplies) {
+            const settings = client.botCache.get('settings');
+            if (!settings)
+                return;
+            if (settings.send_automated_replies) {
                 handleFaqQuestions(message.author.id, message, client.repliedUsers, client.logger);
                 // send !howtoask if user is asking for assistance
                 const helpChannels = [

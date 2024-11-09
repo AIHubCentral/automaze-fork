@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BananManager = exports.TagResponseSender = exports.CloudPlatform = void 0;
+exports.ColorThemes = exports.BananManager = exports.TagResponseSender = exports.CloudPlatform = void 0;
 exports.resourcesToUnorderedList = resourcesToUnorderedList;
 exports.processResource = processResource;
 exports.resourcesToUnorderedListAlt = resourcesToUnorderedListAlt;
@@ -738,3 +738,9 @@ function getLanguageByChannelId(channelId) {
 //         }
 //     }
 // }
+var ColorThemes;
+(function (ColorThemes) {
+    ColorThemes["Default"] = "default";
+    ColorThemes["Spooky"] = "spooky";
+    ColorThemes["Christmas"] = "xmas";
+})(ColorThemes || (exports.ColorThemes = ColorThemes = {}));

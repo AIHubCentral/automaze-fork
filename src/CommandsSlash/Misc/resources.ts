@@ -17,6 +17,7 @@ import slashCommandData from '../../../JSON/slashCommandData.json';
 import { createStringOption } from '../../Utils/discordUtilities';
 import knexInstance from '../../db';
 import { generateRandomId } from '../../Utils/generalUtilities';
+import SettingsService from '../../Services/settingsService';
 
 const commandData = slashCommandData.resources;
 
@@ -265,6 +266,11 @@ const Resources: SlashCommand = {
             await interaction.reply({ embeds: [embed] });
         } else if (interaction.options.getSubcommand() === 'refresh') {
             client.botCache.clear();
+
+            // reload settings
+            const settingsService = new SettingsService(knexInstance);
+            client.botCache.set('settings', settingsService.find('main_settings'));
+
             await interaction.reply({
                 embeds: [new EmbedBuilder().setTitle('🔃 Data refreshed').setColor(Colors.DarkBlue)],
             });

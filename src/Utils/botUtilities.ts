@@ -918,3 +918,9 @@ export { getLanguageByChannelId };
 //         }
 //     }
 // }
+
+export enum ColorThemes {
+    Default = 'default',
+    Spooky = 'spooky',
+    Christmas = 'xmas',
+}

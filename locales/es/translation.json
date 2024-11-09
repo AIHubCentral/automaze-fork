@@ -503,34 +503,22 @@
                     }
                 ]
             },
-            "faq": {
-                "embeds": [
-                    {
-                        "title": "$t(common.emojis.question) Preguntas frecuentes sobre el cambiador de voz en ruso",
-                        "color": "#07F7D9",
-                        "description": [
-                            "- 🔗 [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
-                        ],
-                        "footer": "$t(general.credits): blackcat76it, elektroeban, redoverflow and tntmaxim"
-                    }
-                ]
-            },
             "menuOptions": [
                 {
                     "label": "Opciones locales",
-                    "description": "Si tienes una GPU decente, estas pueden ser una buena opción",
+                    "description": "Si tienes una GPU decente",
                     "value": "local",
                     "emoji": "$t(common.emojis.laptop)"
                 },
                 {
                     "label": "Opciones en línea",
-                    "description": "Si NO tienes una GPU decente, estas pueden ser una buena opción",
+                    "description": "Si NO tienes una GPU decente",
                     "value": "online",
                     "emoji": "$t(common.emojis.cloud)"
                 },
                 {
-                    "label": "Preguntas Frecuentes (RU)",
-                    "description": "Preguntas frecuentes sobre el cambiador de voz en ruso",
+                    "label": "FAQ",
+                    "description": "Preguntas Frecuentes",
                     "value": "faq",
                     "emoji": "$t(common.emojis.question)"
                 }

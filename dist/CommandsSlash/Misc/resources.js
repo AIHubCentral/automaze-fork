@@ -10,6 +10,7 @@ const slashCommandData_json_1 = __importDefault(require("../../../JSON/slashComm
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const db_1 = __importDefault(require("../../db"));
 const generalUtilities_1 = require("../../Utils/generalUtilities");
+const settingsService_1 = __importDefault(require("../../Services/settingsService"));
 const commandData = slashCommandData_json_1.default.resources;
 const Resources = {
     category: 'Misc',
@@ -215,6 +216,9 @@ const Resources = {
         }
         else if (interaction.options.getSubcommand() === 'refresh') {
             client.botCache.clear();
+            // reload settings
+            const settingsService = new settingsService_1.default(db_1.default);
+            client.botCache.set('settings', settingsService.find('main_settings'));
             await interaction.reply({
                 embeds: [new discord_js_1.EmbedBuilder().setTitle('🔃 Data refreshed').setColor(discord_js_1.Colors.DarkBlue)],
             });

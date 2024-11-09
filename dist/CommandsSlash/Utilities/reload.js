@@ -25,7 +25,6 @@ const Reload = {
         .setName('cooldowns')
         .setDescription('Reset cooldowns')
         .addStringOption((option) => option.setName('user_id').setDescription('Resets the cooldowns for a specific user')))
-        .addSubcommand((subcommand) => subcommand.setName('embeds').setDescription('Reloads embed data'))
         .addSubcommand((subcommand) => subcommand.setName('bot').setDescription('Restart the bot'))
         .addSubcommand((subcommand) => subcommand.setName('repo').setDescription('Pulls the latest change from GitHub repo')),
     async execute(interaction) {
@@ -78,13 +77,6 @@ const Reload = {
                 responseBuilder.push('- Reseted banan cooldowns for every user');
             }
             return await interaction.reply({ content: responseBuilder.join('\n'), ephemeral: true });
-        }
-        else if (interaction.options.getSubcommand() === 'embeds') {
-            const embedsJsonPath = node_path_1.default.join(baseDir, 'JSON', 'embeds.json');
-            delete require.cache[require.resolve(embedsJsonPath)];
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
-            client.botData.embeds = require(embedsJsonPath);
-            return await interaction.reply({ content: 'Embeds restored to default.', ephemeral: true });
         }
         else if (interaction.options.getSubcommand() === 'bot') {
             await interaction.deferReply();

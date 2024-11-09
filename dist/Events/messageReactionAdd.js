@@ -14,17 +14,12 @@ const reactionAddEvent = {
         // don't add cooldown if the bot reacted to itself like the voting embed for instance
         if (reactionAuthor.id === botId)
             return;
-        // cooldown immune users
-        if (client.botData.cooldownImmuneUsers.has(reactionAuthor.id))
-            return;
         // add user to cooldown
         if (client.cooldowns.reactions.has(reactionAuthor.id))
             return;
         const expirationDate = new Date();
         expirationDate.setMinutes(expirationDate.getMinutes() + 5);
         client.cooldowns.reactions.set(reactionAuthor.id, expirationDate);
-        if (!client.botConfigs.logs.emojis)
-            return;
         client.logger.info('Added emoji reaction', {
             more: {
                 user: {

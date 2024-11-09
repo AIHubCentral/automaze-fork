@@ -122,18 +122,6 @@
                     }
                 ]
             },
-            "faq": {
-                "embeds": [
-                    {
-                        "title": "$t(common.emojis.question) FAQ russo para voice changer",
-                        "color": "#07F7D9",
-                        "description": [
-                            "- 🔗 [ultimate-voice-models-FAQ/Voice-Changer](https://github.com/MaHivka/ultimate-voice-models-FAQ)"
-                        ],
-                        "footer": "$t(general.credits): blackcat76it, elektroeban, redoverflow and tntmaxim"
-                    }
-                ]
-            },
             "menuOptions": [
                 {
                     "label": "Opções local",
@@ -148,8 +136,8 @@
                     "emoji": "$t(common.emojis.cloud)"
                 },
                 {
-                    "label": "Perguntas Frequentes (RU)",
-                    "description": "FAQ Russo para Voice Changer",
+                    "label": "FAQ",
+                    "description": "Perguntas Frequentes",
                     "value": "faq",
                     "emoji": "$t(common.emojis.question)"
                 }
