@@ -9,7 +9,7 @@ const ModelCreation: IEventData = {
     async run(client, channel: ThreadChannel) {
         if (channel.guildId != client.discordIDs.Guild) return;
         if (!channel.isThread()) return;
-        if (channel.parentId != client.discordIDs.Forum.VoiceModel) return;
+        if (channel.parentId != client.discordIDs.Forum.VoiceModels) return;
 
         const service = new ModelService(knexInstance);
 

@@ -47,7 +47,7 @@ const Close: SlashCommand = {
 
             const allowedChannels = [
                 client.discordIDs.Forum.RequestModel.ID,
-                client.discordIDs.Forum.VoiceModel,
+                client.discordIDs.Forum.VoiceModels,
             ];
 
             if (!allowedChannels.includes(thread.parentId!)) {

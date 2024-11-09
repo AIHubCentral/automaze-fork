@@ -34,7 +34,7 @@ const Close = {
             }
             const allowedChannels = [
                 client.discordIDs.Forum.RequestModel.ID,
-                client.discordIDs.Forum.VoiceModel,
+                client.discordIDs.Forum.VoiceModels,
             ];
             if (!allowedChannels.includes(thread.parentId)) {
                 client.logger.warn('tried closing a thread that is not allowed to close', logData);

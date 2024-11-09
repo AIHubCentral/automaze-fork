@@ -17,7 +17,7 @@ interface IRequestModel {
 
 interface IForum {
     Suggestions: string;
-    VoiceModel: string;
+    VoiceModels: string;
     TaskSTAFF: string;
     Guides: string;
     RequestModel: IRequestModel;

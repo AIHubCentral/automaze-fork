@@ -14,7 +14,7 @@ const ModelCreation = {
             return;
         if (!channel.isThread())
             return;
-        if (channel.parentId != client.discordIDs.Forum.VoiceModel)
+        if (channel.parentId != client.discordIDs.Forum.VoiceModels)
             return;
         const service = new modelService_1.default(db_1.default);
         const starterMessage = await channel.fetchStarterMessage();

@@ -19,7 +19,7 @@
     },
     "Forum": {
         "Suggestions": "1159516963014451302",
-        "VoiceModel": "1159289700490694666",
+        "VoiceModels": "1175430844685484042",
         "RequestModel": {
             "ID": "1159289738314919936",
             "Tags": {
@@ -28,13 +28,7 @@
                 "Taken": "1206704354770423828",
                 "Done": "1206704394406727760"
             },
-            "ComissionAllow": [
-                "ModelMaster",
-                "ModelQC",
-                "Helper",
-                "Mod",
-                "Admin"
-            ]
+            "ComissionAllow": ["ModelMaster", "ModelQC", "Helper", "Mod", "Admin"]
         },
         "TaskSTAFF": "1159562145994899487",
         "Guides": "1159513888199540817"

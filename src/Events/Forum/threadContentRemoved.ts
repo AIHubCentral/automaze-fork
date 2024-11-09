@@ -8,7 +8,7 @@ const ThreadUpdate: IEventData = {
     once: false,
     async run(client, oldThread: ThreadChannel, newThread: ThreadChannel) {
         const { discordIDs } = client;
-        if (newThread.parentId != discordIDs.Forum.VoiceModel) return;
+        if (newThread.parentId != discordIDs.Forum.VoiceModels) return;
         if (!newThread.name.toLowerCase().includes('deleted')) return;
 
         const logData = {
