@@ -2,6 +2,7 @@ import { Events, ThreadChannel } from 'discord.js';
 import IEventData from '../../Interfaces/Events';
 import knexInstance from '../../db';
 import ModelService from '../../Services/modelService';
+import { delay } from '../../Utils/generalUtilities';
 
 const ModelCreation: IEventData = {
     name: Events.ThreadCreate,
@@ -10,6 +11,8 @@ const ModelCreation: IEventData = {
         if (channel.guildId != client.discordIDs.Guild) return;
         if (!channel.isThread()) return;
         if (channel.parentId != client.discordIDs.Forum.VoiceModels) return;
+
+        await delay(10_000);
 
         const service = new ModelService(knexInstance);
 

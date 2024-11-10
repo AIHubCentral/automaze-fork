@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const db_1 = __importDefault(require("../../db"));
 const modelService_1 = __importDefault(require("../../Services/modelService"));
+const generalUtilities_1 = require("../../Utils/generalUtilities");
 const ModelCreation = {
     name: discord_js_1.Events.ThreadCreate,
     once: false,
@@ -16,9 +17,11 @@ const ModelCreation = {
             return;
         if (channel.parentId != client.discordIDs.Forum.VoiceModels)
             return;
+        await (0, generalUtilities_1.delay)(10_000);
         const service = new modelService_1.default(db_1.default);
         const starterMessage = await channel.fetchStarterMessage();
         const description = starterMessage ? starterMessage.content : '';
+        console.log(description);
         await service.create({
             id: channel.id,
             parent_id: channel.parentId ?? '',

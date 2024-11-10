@@ -28,7 +28,7 @@ async function handleFreeRequest(client, thread) {
                         '- Search for it in <#1175430844685484042>',
                         '- Alternatively, in <#1163592055830880266>:',
                         '    - Send " <@1144714449563955302> search (name of the model)", without the ()',
-                        '- Use the command `/find` with <@1138318590760718416> bot',
+                        '  - Use the command `/find` with <@1138318590760718416> bot',
                         '- Visit <https://weights.gg/> and search for the model (login required)',
                     ],
                 }),
@@ -104,7 +104,7 @@ const RequestComission = {
         if (thread.parentId != client.discordIDs.Forum.RequestModel.ID)
             return;
         // check if the thread was created successfully
-        await (0, generalUtilities_1.delay)(3_000);
+        await (0, generalUtilities_1.delay)(10_000);
         if (!thread.guild.channels.cache.get(thread.id))
             return;
         const { botConfigs } = client;

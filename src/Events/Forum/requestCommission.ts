@@ -124,7 +124,7 @@ const RequestComission: IEventData = {
         if (thread.parentId != client.discordIDs.Forum.RequestModel.ID) return;
 
         // check if the thread was created successfully
-        await delay(3_000);
+        await delay(10_000);
         if (!thread.guild.channels.cache.get(thread.id)) return;
 
         const { botConfigs } = client;
