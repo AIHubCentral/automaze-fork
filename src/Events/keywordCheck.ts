@@ -4,16 +4,14 @@ import {
     StickerResolvable,
     ChannelType,
     TextChannel,
-    EmbedBuilder,
-    Colors,
+    Events,
 } from 'discord.js';
 import ExtendedClient from '../Core/extendedClient';
 import IEventData from '../Interfaces/Events';
 import { getRandomFromArray, getRandomNumber } from '../Utils/generalUtilities';
 
 import { delay } from '../Utils/generalUtilities';
-import { ISettings } from '../Services/settingsService';
-import { getChannelById, getGuildById } from '../Utils/discordUtilities';
+import { sendErrorLog } from '../Utils/botUtilities';
 
 function isUserOnCooldown(client: ExtendedClient, userId: string): boolean {
     let result = false;
@@ -44,7 +42,7 @@ function getNumberBasedOnFrequency(frequency: string): number {
 }
 
 const KeyWordCheck: IEventData = {
-    name: 'messageCreate',
+    name: Events.MessageCreate,
     once: false,
     async run(client, message: Message) {
         // only proceed if reactions is enabled in configs
@@ -172,44 +170,12 @@ const KeyWordCheck: IEventData = {
                 }
             }
         } catch (error) {
-            const logData = {
-                error: error,
-                more: {
-                    messageLink: `https://discordapp.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`,
-                },
-            };
-            client.logger.error('Failed to add reaction', logData);
-
-            if (client.botCache.has('settings')) {
-                const settings = client.botCache.get('settings') as ISettings;
-
-                if (settings.debug_guild_id && settings.debug_guild_channel_id) {
-                    const debugGuild = await getGuildById(settings.debug_guild_id, client);
-                    if (!debugGuild) return;
-
-                    const debugChannel = await getChannelById(settings.debug_guild_channel_id, debugGuild);
-                    if (!debugChannel) return;
-
-                    const errorObject = error as Error;
-
-                    const embed = new EmbedBuilder()
-                        .setTitle(`Error: ${errorObject.name}`)
-                        .setColor(Colors.Red)
-                        .setFields(
-                            {
-                                name: 'Name',
-                                value: errorObject.name,
-                            },
-                            {
-                                name: 'Message',
-                                value: errorObject.message,
-                            }
-                        )
-                        .setTimestamp();
-
-                    await (debugChannel as TextChannel).send({ embeds: [embed] });
-                }
-            }
+            await sendErrorLog(client, error, {
+                command: `Event: MessageCreate`,
+                message: 'Failure on keyword checking',
+                guildId: message.guildId ?? '',
+                channelId: message.channelId,
+            });
         }
     },
 };

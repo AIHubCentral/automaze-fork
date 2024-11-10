@@ -16,6 +16,7 @@ import {
 import { SlashCommand } from '../../Interfaces/Command';
 import { getChannelById, getGuildById } from '../../Utils/discordUtilities';
 import ExtendedClient from '../../Core/extendedClient';
+import { sendErrorLog } from '../../Utils/botUtilities';
 
 const Debug: SlashCommand = {
     category: 'Utilities',
@@ -59,82 +60,91 @@ const Debug: SlashCommand = {
         embedContent.push(bold('Guild:'));
         embedContent.push(`Name: ${guild.name}`);
 
-        if (selectedOption === 'emojis') {
-            const guildEmojis = Array.from(guild.emojis.cache.values());
-            embedContent.push(`\n${bold('Guild Emojis')}:`);
+        try {
+            if (selectedOption === 'emojis') {
+                const guildEmojis = Array.from(guild.emojis.cache.values());
+                embedContent.push(`\n${bold('Guild Emojis')}:`);
 
-            const buffer = Buffer.from(JSON.stringify(guildEmojis, null, 4), 'utf-8');
-            const attachment = new AttachmentBuilder(buffer, { name: 'emojis.json' });
+                const buffer = Buffer.from(JSON.stringify(guildEmojis, null, 4), 'utf-8');
+                const attachment = new AttachmentBuilder(buffer, { name: 'emojis.json' });
 
-            botResponse.files = [attachment];
-        } else if (selectedOption === 'stickers') {
-            const guildStickers = Array.from(guild.stickers.cache.values());
-            embedContent.push(`\n${bold('Guild Stickers')}:`);
+                botResponse.files = [attachment];
+            } else if (selectedOption === 'stickers') {
+                const guildStickers = Array.from(guild.stickers.cache.values());
+                embedContent.push(`\n${bold('Guild Stickers')}:`);
 
-            const buffer = Buffer.from(JSON.stringify(guildStickers, null, 4), 'utf-8');
-            const attachment = new AttachmentBuilder(buffer, { name: 'stickers.json' });
+                const buffer = Buffer.from(JSON.stringify(guildStickers, null, 4), 'utf-8');
+                const attachment = new AttachmentBuilder(buffer, { name: 'stickers.json' });
 
-            botResponse.files = [attachment];
-        } else if (selectedOption === 'channel_info') {
-            const channelId = interaction.options.getString('channel_id') ?? '';
+                botResponse.files = [attachment];
+            } else if (selectedOption === 'channel_info') {
+                const channelId = interaction.options.getString('channel_id') ?? '';
 
-            if (channelId === '') {
-                await interaction.editReply({ content: 'Missing channel ID' });
-                return;
-            }
+                if (channelId === '') {
+                    await interaction.editReply({ content: 'Missing channel ID' });
+                    return;
+                }
 
-            const channel = await getChannelById(channelId, guild);
+                const channel = await getChannelById(channelId, guild);
 
-            if (!channel) {
-                await interaction.editReply({
-                    content: `Couldn'\t find channel with ID ${inlineCode(channelId)}`,
-                });
-                return;
-            }
+                if (!channel) {
+                    await interaction.editReply({
+                        content: `Couldn'\t find channel with ID ${inlineCode(channelId)}`,
+                    });
+                    return;
+                }
 
-            const isThread = channel.type === ChannelType.PublicThread;
-            const currentChannel = isThread ? (channel as ThreadChannel) : (channel as TextChannel);
+                const isThread = channel.type === ChannelType.PublicThread;
+                const currentChannel = isThread ? (channel as ThreadChannel) : (channel as TextChannel);
 
-            const embed = new EmbedBuilder()
-                .setTitle(`🪲 Channel Info (${guild.name})`)
-                .setColor(Colors.Greyple);
+                const embed = new EmbedBuilder()
+                    .setTitle(`🪲 Channel Info (${guild.name})`)
+                    .setColor(Colors.Greyple);
 
-            let embedDescription = [
-                heading(bold('Channel'), HeadingLevel.Two),
-                unorderedList([
-                    `Name: ${inlineCode(currentChannel.name)}`,
-                    `ID: ${inlineCode(currentChannel.id)}`,
-                    `Type: ${inlineCode(String(currentChannel.type))}`,
-                    `Is Thread: ${inlineCode(String(isThread))}`,
-                ]),
-            ];
-
-            if (currentChannel.type === ChannelType.PublicThread) {
-                embedDescription = [
-                    ...embedDescription,
-                    heading(bold('Thread'), HeadingLevel.Three),
+                let embedDescription = [
+                    heading(bold('Channel'), HeadingLevel.Two),
                     unorderedList([
-                        `Locked: ${inlineCode(String(currentChannel.locked))}`,
-                        `Message count: ${inlineCode(String(currentChannel.messageCount))}`,
-                        `Archived: ${inlineCode(String(currentChannel.archived))}`,
-                        `autoArchiveDuration: ${inlineCode(String(currentChannel.autoArchiveDuration))}`,
-                        `archiveTimestamp: ${inlineCode(String(currentChannel.archiveTimestamp))}`,
-                        `Owner ID: ${inlineCode(String(currentChannel.ownerId))}`,
-                        `Parent ID: ${inlineCode(String(channel.parentId))}`,
+                        `Name: ${inlineCode(currentChannel.name)}`,
+                        `ID: ${inlineCode(currentChannel.id)}`,
+                        `Type: ${inlineCode(String(currentChannel.type))}`,
+                        `Is Thread: ${inlineCode(String(isThread))}`,
                     ]),
                 ];
+
+                if (currentChannel.type === ChannelType.PublicThread) {
+                    embedDescription = [
+                        ...embedDescription,
+                        heading(bold('Thread'), HeadingLevel.Three),
+                        unorderedList([
+                            `Locked: ${inlineCode(String(currentChannel.locked))}`,
+                            `Message count: ${inlineCode(String(currentChannel.messageCount))}`,
+                            `Archived: ${inlineCode(String(currentChannel.archived))}`,
+                            `autoArchiveDuration: ${inlineCode(String(currentChannel.autoArchiveDuration))}`,
+                            `archiveTimestamp: ${inlineCode(String(currentChannel.archiveTimestamp))}`,
+                            `Owner ID: ${inlineCode(String(currentChannel.ownerId))}`,
+                            `Parent ID: ${inlineCode(String(channel.parentId))}`,
+                        ]),
+                    ];
+                }
+
+                embed.setDescription(embedDescription.join('\n'));
+
+                await interaction.editReply({ embeds: [embed] });
+
+                return;
             }
 
-            embed.setDescription(embedDescription.join('\n'));
+            botResponse.content = embedContent.join('\n');
 
-            await interaction.editReply({ embeds: [embed] });
-
-            return;
+            await interaction.editReply(botResponse);
+        } catch (error) {
+            await sendErrorLog(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'Failure on /debug',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
-
-        botResponse.content = embedContent.join('\n');
-
-        await interaction.editReply(botResponse);
     },
 };
 

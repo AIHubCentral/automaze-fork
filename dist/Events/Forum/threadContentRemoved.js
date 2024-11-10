@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const botUtilities_1 = require("../../Utils/botUtilities");
 /* checks if thread content was deleted */
 const ThreadUpdate = {
     name: discord_js_1.Events.ThreadUpdate,
@@ -28,6 +29,12 @@ const ThreadUpdate = {
         }
         catch (error) {
             logData.more.updatedMessage = 'Original message was deleted';
+            await (0, botUtilities_1.sendErrorLog)(client, error, {
+                command: `Event: ThreadContentRemoved`,
+                message: 'Failure on checking thread content removed',
+                guildId: newThread.guildId ?? '',
+                channelId: newThread.id,
+            });
         }
         client.logger.info('Voice model deleted', logData);
     },

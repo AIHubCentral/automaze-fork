@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const generalUtilities_1 = require("../../Utils/generalUtilities");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
+const botUtilities_1 = require("../../Utils/botUtilities");
 const Send = {
     category: 'Utilities',
     cooldown: 15,
@@ -192,16 +193,12 @@ async function handleReplyOption(textToSend, guildId, channelId, messageId, inte
         await interaction.editReply({ embeds: [embed] });
     }
     catch (error) {
-        const customError = error;
-        if (customError.code === 10008) {
-            // 10008 is the code for Unknown Message
-            logger.error('Unknown Message:', customError);
-            await interaction.editReply('The message could not be found. It might have been deleted.');
-        }
-        else {
-            logger.error('An unexpected error occurred:', customError);
-            await interaction.editReply('An unexpected error occurred while fetching the message.');
-        }
+        await (0, botUtilities_1.sendErrorLog)(client, error, {
+            command: `/${interaction.commandName}`,
+            message: 'Failure on /send',
+            guildId: interaction.guildId ?? '',
+            channelId: interaction.channelId,
+        });
     }
 }
 /* Sending embeds */

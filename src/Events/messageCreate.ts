@@ -5,6 +5,7 @@ import {
     Collection,
     Colors,
     EmbedBuilder,
+    Events,
     inlineCode,
     Message,
     PublicThreadChannel,
@@ -22,13 +23,14 @@ import {
     getFaqReply,
     isAskingForAssistance,
     processFaqReply,
+    sendErrorLog,
 } from '../Utils/botUtilities';
 import { delay } from '../Utils/generalUtilities';
 import winston from 'winston';
 import { ISettings } from '../Services/settingsService';
 
 const messageCreateEvent: IEventData = {
-    name: 'messageCreate',
+    name: Events.MessageCreate,
     once: false,
     async run(client, message: Message) {
         if (message.author.bot) return;
@@ -36,83 +38,92 @@ const messageCreateEvent: IEventData = {
         // handle prefix commands first
         const prefix = client.prefix;
 
-        if (message.content.startsWith(prefix)) {
-            handlePrefixCommand(prefix, message, client);
-        } else {
-            await handleBotMentioned(prefix, message, client);
+        try {
+            if (message.content.startsWith(prefix)) {
+                handlePrefixCommand(prefix, message, client);
+            } else {
+                await handleBotMentioned(prefix, message, client);
 
-            // tries to answer FAQs
-            const settings = client.botCache.get('settings') as ISettings;
-            if (!settings) return;
+                // tries to answer FAQs
+                const settings = client.botCache.get('settings') as ISettings;
+                if (!settings) return;
 
-            if (settings.send_automated_replies) {
-                handleFaqQuestions(message.author.id, message, client.repliedUsers, client.logger);
+                if (settings.send_automated_replies) {
+                    handleFaqQuestions(message.author.id, message, client.repliedUsers, client.logger);
 
-                // send !howtoask if user is asking for assistance
-                const helpChannels: string[] = [
-                    client.discordIDs.Channel.HelpRVC,
-                    client.discordIDs.Channel.HelpWOkada,
-                    client.discordIDs.Channel.HelpAiArt,
-                    client.discordIDs.Channel.Verified,
-                ];
+                    // send !howtoask if user is asking for assistance
+                    const helpChannels: string[] = [
+                        client.discordIDs.Channel.HelpRVC,
+                        client.discordIDs.Channel.HelpWOkada,
+                        client.discordIDs.Channel.HelpAiArt,
+                        client.discordIDs.Channel.Verified,
+                    ];
 
-                if (
-                    helpChannels.includes(message.channelId) &&
-                    isAskingForAssistance(message.content.toLowerCase()) &&
-                    message.attachments.size === 0
-                ) {
-                    const startTime = Date.now();
+                    if (
+                        helpChannels.includes(message.channelId) &&
+                        isAskingForAssistance(message.content.toLowerCase()) &&
+                        message.attachments.size === 0
+                    ) {
+                        const startTime = Date.now();
 
-                    // check if already replied to user
-                    if (client.repliedUsers.has(message.author.id)) return;
+                        // check if already replied to user
+                        if (client.repliedUsers.has(message.author.id)) return;
 
-                    const currentChannel = message.channel as TextChannel;
-                    const displayName = await getDisplayName(message.author, message.guild);
+                        const currentChannel = message.channel as TextChannel;
+                        const displayName = await getDisplayName(message.author, message.guild);
 
-                    await currentChannel.sendTyping();
-                    await delay(2_000);
+                        await currentChannel.sendTyping();
+                        await delay(2_000);
 
-                    const embed = new EmbedBuilder()
-                        .setColor(Colors.White)
-                        .setDescription(
-                            [
-                                `Hey, **${displayName}**! Please use the command ${inlineCode('!howtoask')} to increase your chance of getting help by structuring your question in a way others can understand better. Also make sure you're asking in the right help channel:`,
-                                `- ${bold('General RVC help')}: ${channelMention(client.discordIDs.Channel.HelpRVC)}`,
-                                `- ${bold('W-Okada / Realtime RVC')}: ${channelMention(client.discordIDs.Channel.HelpWOkada)}`,
-                                `- ${bold('AI image related')}: ${channelMention(client.discordIDs.Channel.HelpAiArt)}`,
-                            ].join('\n')
-                        );
+                        const embed = new EmbedBuilder()
+                            .setColor(Colors.White)
+                            .setDescription(
+                                [
+                                    `Hey, **${displayName}**! Please use the command ${inlineCode('!howtoask')} to increase your chance of getting help by structuring your question in a way others can understand better. Also make sure you're asking in the right help channel:`,
+                                    `- ${bold('General RVC help')}: ${channelMention(client.discordIDs.Channel.HelpRVC)}`,
+                                    `- ${bold('W-Okada / Realtime RVC')}: ${channelMention(client.discordIDs.Channel.HelpWOkada)}`,
+                                    `- ${bold('AI image related')}: ${channelMention(client.discordIDs.Channel.HelpAiArt)}`,
+                                ].join('\n')
+                            );
 
-                    await message.reply({
-                        embeds: [embed],
-                        allowedMentions: { repliedUser: true },
-                    });
+                        await message.reply({
+                            embeds: [embed],
+                            allowedMentions: { repliedUser: true },
+                        });
 
-                    client.repliedUsers.set(message.author.id, Date.now());
+                        client.repliedUsers.set(message.author.id, Date.now());
 
-                    client.logger.info('Sent !howtoask reply', {
-                        guildId: currentChannel.guildId,
-                        channelId: currentChannel.id,
-                        channelName: currentChannel.name,
-                        keyword: message.content,
-                        executionTime: (Date.now() - startTime) / 1_000,
-                    });
+                        client.logger.info('Sent !howtoask reply', {
+                            guildId: currentChannel.guildId,
+                            channelId: currentChannel.id,
+                            channelName: currentChannel.name,
+                            keyword: message.content,
+                            executionTime: (Date.now() - startTime) / 1_000,
+                        });
+                    }
+                }
+
+                // triggered on comission channel
+                if (message.channel.type !== ChannelType.PublicThread) return;
+
+                const messageChannel = <PublicThreadChannel>message.channel;
+
+                if (messageChannel.parentId != client.discordIDs.Forum.RequestModel.ID) return;
+                if (messageChannel.ownerId !== message.author.id) return;
+
+                const messageLowercase = message.content.toLowerCase();
+
+                if (messageLowercase.includes('taken')) {
+                    await message.reply('**Tip**: You can use the `/close` command to lock this post.');
                 }
             }
-
-            // triggered on comission channel
-            if (message.channel.type !== ChannelType.PublicThread) return;
-
-            const messageChannel = <PublicThreadChannel>message.channel;
-
-            if (messageChannel.parentId != client.discordIDs.Forum.RequestModel.ID) return;
-            if (messageChannel.ownerId !== message.author.id) return;
-
-            const messageLowercase = message.content.toLowerCase();
-
-            if (messageLowercase.includes('taken')) {
-                await message.reply('**Tip**: You can use the `/close` command to lock this post.');
-            }
+        } catch (error) {
+            await sendErrorLog(client, error, {
+                command: `Event: MessageCreate`,
+                message: 'Failure on message create',
+                guildId: message.guildId ?? '',
+                channelId: message.channelId,
+            });
         }
     },
 };

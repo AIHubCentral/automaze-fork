@@ -135,7 +135,7 @@ const Reload = {
                     .setTitle('✅ Success')
                     .setColor(discord_js_1.Colors.Green)
                     .setDescription([
-                    `${(0, discord_js_1.bold)('stdout:')} ${(0, discord_js_1.codeBlock)('json', stdout)}`,
+                    `${(0, discord_js_1.bold)('stdout:')} ${(0, discord_js_1.codeBlock)('json', stdout.substring(0, 3000) + '\n(extra lines ommited)')}`,
                     `${(0, discord_js_1.bold)('stderr:')} ${(0, discord_js_1.codeBlock)('json', stderr)}`,
                 ].join('\n'));
                 await interaction.editReply({ embeds: [responseEmbed] });

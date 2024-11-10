@@ -8,6 +8,7 @@ const slashCommandData_json_1 = __importDefault(require("../../../JSON/slashComm
 const pretty_ms_1 = __importDefault(require("pretty-ms"));
 const i18next_1 = __importDefault(require("i18next"));
 const generalUtilities_1 = require("../../Utils/generalUtilities");
+const botUtilities_1 = require("../../Utils/botUtilities");
 const commandData = slashCommandData_json_1.default.help;
 const Help = {
     category: 'Info',
@@ -67,23 +68,28 @@ const Help = {
                 ephemeral: true,
             });
         }
-        /*
-        if (language === '') {
-            language = interaction.locale;
+        try {
+            if (interaction.options.getSubcommand() === 'commands') {
+                await handleCommandOption(interaction, commandType, language, ephemeral);
+            }
+            else if (interaction.options.getSubcommand() === 'general') {
+                await handleGeneralOption(interaction, language, ephemeral);
+            }
+            logger.info('Help sent', {
+                guildId: interaction.guildId,
+                channelId: interaction.channelId,
+                commandParams: { commandType, language, ephemeral },
+                executionTime: (0, pretty_ms_1.default)((Date.now() - executionStart) / 1000),
+            });
         }
-        */
-        if (interaction.options.getSubcommand() === 'commands') {
-            await handleCommandOption(interaction, commandType, language, ephemeral);
+        catch (error) {
+            await (0, botUtilities_1.sendErrorLog)(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'Failure on /help',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
-        else if (interaction.options.getSubcommand() === 'general') {
-            await handleGeneralOption(interaction, language, ephemeral);
-        }
-        logger.info('Help sent', {
-            guildId: interaction.guildId,
-            channelId: interaction.channelId,
-            commandParams: { commandType, language, ephemeral },
-            executionTime: (0, pretty_ms_1.default)((Date.now() - executionStart) / 1000),
-        });
     },
 };
 exports.default = Help;

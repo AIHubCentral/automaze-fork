@@ -1,12 +1,12 @@
 import { EmbedBuilder, SlashCommandBuilder, SlashCommandStringOption } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
+import { sendErrorLog } from '../../Utils/botUtilities';
+import { delay, getRandomNumber } from '../../Utils/generalUtilities';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const Chance = require(`chance`);
 const chance = new Chance();
-
-const wait = require('node:timers/promises').setTimeout;
-const utils = require('../../utils.js');
 
 const EightBall: SlashCommand = {
     category: 'Fun',
@@ -18,13 +18,9 @@ const EightBall: SlashCommand = {
         ),
     async execute(interaction) {
         const client = <ExtendedClient>interaction.client;
+        const question = interaction.options.getString('question', true);
 
-        const question = interaction.options.getString('question');
-        if (!question) {
-            await interaction.reply(
-                'You need to provide a question!\n\n> Example: `/8ball` `Is RVC better than SVC?`'
-            );
-        } else {
+        try {
             const botResponses = client.botResponses.responses['8ball'];
             const affirmativeResponses = botResponses.affirmative;
             const noncommittalResponses = botResponses.nonCommital;
@@ -60,7 +56,7 @@ const EightBall: SlashCommand = {
             await interaction.reply({ embeds: [loadingEmbed] });
 
             // wait between 3 to 5 seconds
-            await wait(utils.getRandomNumber(3000, 5000));
+            await delay(getRandomNumber(3000, 5000));
 
             const answerEmbed = new EmbedBuilder()
                 .setTitle(question)
@@ -70,6 +66,13 @@ const EightBall: SlashCommand = {
                 );
 
             interaction.editReply({ embeds: [answerEmbed] });
+        } catch (error) {
+            await sendErrorLog(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'failure on /8ball',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
     },
 };

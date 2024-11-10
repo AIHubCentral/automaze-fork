@@ -4,6 +4,8 @@ import { EmbedData } from '../../Interfaces/BotData';
 import { createEmbed } from '../../Utils/discordUtilities';
 import knexInstance from '../../db';
 import UserService from '../../Services/userService';
+import { sendErrorLog } from '../../Utils/botUtilities';
+import ExtendedClient from '../../Core/extendedClient';
 
 const TopBanana: SlashCommand = {
     category: 'Fun',
@@ -30,35 +32,44 @@ const TopBanana: SlashCommand = {
             totalToShow = 50;
         }
 
-        const service = new UserService(knexInstance);
+        try {
+            const service = new UserService(knexInstance);
 
-        const result = await service.findAll({
-            limit: totalToShow,
-            sortBy: 'bananas',
-            sortOrder: 'desc',
-        });
+            const result = await service.findAll({
+                limit: totalToShow,
+                sortBy: 'bananas',
+                sortOrder: 'desc',
+            });
 
-        if (result.data.length === 0) {
-            embedData.description?.push(
-                '> The leaderboard is empty, `/banana` someone to show results here!'
-            );
+            if (result.data.length === 0) {
+                embedData.description?.push(
+                    '> The leaderboard is empty, `/banana` someone to show results here!'
+                );
+                await interaction.editReply({ embeds: [createEmbed(embedData)] });
+                return;
+            }
+
+            let rankCounter = 1;
+            for (const entry of result.data) {
+                const user = entry;
+                const userDisplay =
+                    user.display_name && user.display_name.length ? user.display_name : user.username;
+                const userProfileLink = 'https://discordapp.com/users/' + user.id;
+                embedData.description?.push(
+                    `${rankCounter}. ${hyperlink(userDisplay, userProfileLink)} — ${user.bananas}`
+                );
+                rankCounter++;
+            }
+
             await interaction.editReply({ embeds: [createEmbed(embedData)] });
-            return;
+        } catch (error) {
+            await sendErrorLog(interaction.client as ExtendedClient, error, {
+                command: `/${interaction.commandName}`,
+                message: 'failure on /topbanana',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
-
-        let rankCounter = 1;
-        for (const entry of result.data) {
-            const user = entry;
-            const userDisplay =
-                user.display_name && user.display_name.length ? user.display_name : user.username;
-            const userProfileLink = 'https://discordapp.com/users/' + user.id;
-            embedData.description?.push(
-                `${rankCounter}. ${hyperlink(userDisplay, userProfileLink)} — ${user.bananas}`
-            );
-            rankCounter++;
-        }
-
-        await interaction.editReply({ embeds: [createEmbed(embedData)] });
     },
 };
 

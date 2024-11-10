@@ -16,6 +16,7 @@ import {
     getResourceData,
     handleSendRealtimeGuides,
     resourcesToUnorderedListAlt,
+    sendErrorLog,
 } from '../../Utils/botUtilities';
 import i18next from '../../i18n';
 import { ISettings } from '../../Services/settingsService';
@@ -49,107 +50,109 @@ const Guides: SlashCommand = {
         const client = interaction.client as ExtendedClient;
         const { botCache, logger } = client;
 
-        /*         if (['pt'].includes(language)) {
-            return await interaction.reply({
-                content: i18next.t('general.translation_not_available', { lng: language }),
-                ephemeral: true,
-            });
-        } */
+        try {
+            if (category === 'audio' || category === 'local') {
+                const resources = await getResourceData(category, botCache, logger);
 
-        if (category === 'audio' || category === 'local') {
-            const resources = await getResourceData(category, botCache, logger);
+                if (resources.length === 0) {
+                    await interaction.reply({
+                        content: i18next.t('general.not_available', { lng: language }),
+                        ephemeral: true,
+                    });
+                    return;
+                }
 
-            if (resources.length === 0) {
-                await interaction.reply({
-                    content: i18next.t('general.not_available', { lng: language }),
-                    ephemeral: true,
+                const embed = createEmbed(
+                    {
+                        title:
+                            i18next.t(`common.emojis.${category === 'local' ? 'laptop' : 'book'}`) +
+                            ' ' +
+                            i18next.t(`tags.${category}.embed.title`, { lng: language }),
+                        description: [resourcesToUnorderedListAlt(resources, language)],
+                        footer: i18next.t(`tags.${category}.embed.footer`, { lng: language }),
+                    },
+                    Colors.Blue
+                );
+
+                logger.info(`sent guides with /${interaction.commandName}`, {
+                    guildId: interaction.guildId,
+                    channelId: interaction.channelId,
+                    params: {
+                        category,
+                        language,
+                        ephemeral,
+                    },
+                    executionTime: ms(Date.now() - startTime),
                 });
+
+                return await interaction.reply({ embeds: [embed], ephemeral });
+            } else if (category === 'realtime') {
+                await handleSendRealtimeGuides(interaction, undefined, mainUser, ephemeral, language);
                 return;
+            } else if (category === 'rvc') {
+                const content = i18next.t('tags.rvc.embeds', {
+                    lng: language,
+                    returnObjects: true,
+                }) as EmbedData[];
+
+                let selectedTheme: string | null = null;
+                const settings = client.botCache.get('main_settings') as ISettings;
+                if (!settings) {
+                    selectedTheme = ColorThemes.Default;
+                } else {
+                    selectedTheme = settings.theme;
+                }
+
+                const apiEmbedData: APIEmbed[] = content.map((item) => {
+                    return {
+                        title: item.title,
+                        description: item.description?.join('\n'),
+                    };
+                });
+
+                const embeds = createThemedEmbeds(apiEmbedData, selectedTheme as ColorThemes);
+
+                logger.info(`sent guides with /${interaction.commandName}`, {
+                    guildId: interaction.guildId,
+                    channelId: interaction.channelId,
+                    params: {
+                        category,
+                        language,
+                        ephemeral,
+                    },
+                    executionTime: ms(Date.now() - startTime),
+                });
+
+                return await interaction.reply({ embeds, ephemeral });
+            } else if (category === 'uvr') {
+                const content = i18next.t('tags.uvr', {
+                    lng: language,
+                    returnObjects: true,
+                }) as { embed: EmbedData; buttons: ButtonData[] };
+
+                logger.info(`sent guides with /${interaction.commandName}`, {
+                    guildId: interaction.guildId,
+                    channelId: interaction.channelId,
+                    params: {
+                        category,
+                        language,
+                        ephemeral,
+                    },
+                    executionTime: ms(Date.now() - startTime),
+                });
+
+                return await interaction.reply({
+                    embeds: [createEmbed(content.embed)],
+                    components: [createButtons(content.buttons)],
+                    ephemeral,
+                });
             }
-
-            const embed = createEmbed(
-                {
-                    title:
-                        i18next.t(`common.emojis.${category === 'local' ? 'laptop' : 'book'}`) +
-                        ' ' +
-                        i18next.t(`tags.${category}.embed.title`, { lng: language }),
-                    description: [resourcesToUnorderedListAlt(resources, language)],
-                    footer: i18next.t(`tags.${category}.embed.footer`, { lng: language }),
-                },
-                Colors.Blue
-            );
-
-            logger.info(`sent guides with /${interaction.commandName}`, {
-                guildId: interaction.guildId,
+        } catch (error) {
+            await sendErrorLog(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'Failure on /guides',
+                guildId: interaction.guildId ?? '',
                 channelId: interaction.channelId,
-                params: {
-                    category,
-                    language,
-                    ephemeral,
-                },
-                executionTime: ms(Date.now() - startTime),
-            });
-
-            return await interaction.reply({ embeds: [embed], ephemeral });
-        } else if (category === 'realtime') {
-            await handleSendRealtimeGuides(interaction, undefined, mainUser, ephemeral, language);
-            return;
-        } else if (category === 'rvc') {
-            const content = i18next.t('tags.rvc.embeds', {
-                lng: language,
-                returnObjects: true,
-            }) as EmbedData[];
-
-            let selectedTheme: string | null = null;
-            const settings = client.botCache.get('main_settings') as ISettings;
-            if (!settings) {
-                selectedTheme = ColorThemes.Default;
-            } else {
-                selectedTheme = settings.theme;
-            }
-
-            const apiEmbedData: APIEmbed[] = content.map((item) => {
-                return {
-                    title: item.title,
-                    description: item.description?.join('\n'),
-                };
-            });
-
-            const embeds = createThemedEmbeds(apiEmbedData, selectedTheme as ColorThemes);
-
-            logger.info(`sent guides with /${interaction.commandName}`, {
-                guildId: interaction.guildId,
-                channelId: interaction.channelId,
-                params: {
-                    category,
-                    language,
-                    ephemeral,
-                },
-                executionTime: ms(Date.now() - startTime),
-            });
-
-            return await interaction.reply({ embeds, ephemeral });
-        } else if (category === 'uvr') {
-            const content = i18next.t('tags.uvr', {
-                lng: language,
-                returnObjects: true,
-            }) as { embed: EmbedData; buttons: ButtonData[] };
-
-            logger.info(`sent guides with /${interaction.commandName}`, {
-                guildId: interaction.guildId,
-                channelId: interaction.channelId,
-                params: {
-                    category,
-                    language,
-                    ephemeral,
-                },
-                executionTime: ms(Date.now() - startTime),
-            });
-
-            return await interaction.reply({
-                embeds: [createEmbed(content.embed)],
-                components: [createButtons(content.buttons)],
-                ephemeral,
             });
         }
     },

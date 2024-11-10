@@ -7,6 +7,8 @@ import {
 
 import { delay } from '../../Utils/generalUtilities';
 import { SlashCommand } from '../../Interfaces/Command';
+import { sendErrorLog } from '../../Utils/botUtilities';
+import ExtendedClient from '../../Core/extendedClient';
 
 const Configure: SlashCommand = {
     category: 'Utilities',
@@ -76,24 +78,33 @@ async function configureActivity(interaction: ChatInputCommandInteraction): Prom
 
     let activityType: ActivityType | undefined = undefined;
 
-    if (activityTypeInput === 'reset') {
-        interaction.client.user.setPresence({});
-        await delay(3000);
-        await interaction.editReply({ content: 'Activity reseted' });
-    } else {
-        switch (activityTypeInput) {
-            case 'watching':
-                activityType = ActivityType.Watching;
-                break;
-            case 'listening':
-                activityType = ActivityType.Listening;
-                break;
+    try {
+        if (activityTypeInput === 'reset') {
+            interaction.client.user.setPresence({});
+            await delay(3000);
+            await interaction.editReply({ content: 'Activity reseted' });
+        } else {
+            switch (activityTypeInput) {
+                case 'watching':
+                    activityType = ActivityType.Watching;
+                    break;
+                case 'listening':
+                    activityType = ActivityType.Listening;
+                    break;
+            }
+            interaction.client.user.setActivity({
+                name: activityName,
+                type: activityType,
+            });
+            await delay(3000);
+            await interaction.editReply({ content: 'Activity updated!' });
         }
-        interaction.client.user.setActivity({
-            name: activityName,
-            type: activityType,
+    } catch (error) {
+        await sendErrorLog(interaction.client as ExtendedClient, error, {
+            command: `/${interaction.commandName}`,
+            message: 'Failure on /configure',
+            guildId: interaction.guildId ?? '',
+            channelId: interaction.channelId,
         });
-        await delay(3000);
-        await interaction.editReply({ content: 'Activity updated!' });
     }
 }

@@ -7,6 +7,7 @@ const discord_js_1 = require("discord.js");
 const db_1 = __importDefault(require("../../db"));
 const modelService_1 = __importDefault(require("../../Services/modelService"));
 const generalUtilities_1 = require("../../Utils/generalUtilities");
+const botUtilities_1 = require("../../Utils/botUtilities");
 const ModelCreation = {
     name: discord_js_1.Events.ThreadCreate,
     once: false,
@@ -18,18 +19,27 @@ const ModelCreation = {
         if (channel.parentId != client.discordIDs.Forum.VoiceModels)
             return;
         await (0, generalUtilities_1.delay)(10_000);
-        const service = new modelService_1.default(db_1.default);
-        const starterMessage = await channel.fetchStarterMessage();
-        const description = starterMessage ? starterMessage.content : '';
-        console.log(description);
-        await service.create({
-            id: channel.id,
-            parent_id: channel.parentId ?? '',
-            author_id: channel.ownerId ?? '',
-            title: channel.name,
-            is_request: false,
-            description,
-        });
+        try {
+            const service = new modelService_1.default(db_1.default);
+            const starterMessage = await channel.fetchStarterMessage();
+            const description = starterMessage ? starterMessage.content : '';
+            await service.create({
+                id: channel.id,
+                parent_id: channel.parentId ?? '',
+                author_id: channel.ownerId ?? '',
+                title: channel.name,
+                is_request: false,
+                description,
+            });
+        }
+        catch (error) {
+            await (0, botUtilities_1.sendErrorLog)(client, error, {
+                command: `Event: ThreadCreate`,
+                message: 'Failure on caching voice model',
+                guildId: channel.guildId ?? '',
+                channelId: channel.id,
+            });
+        }
     },
 };
 exports.default = ModelCreation;

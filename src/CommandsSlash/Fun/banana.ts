@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { BananManager } from '../../Utils/botUtilities.js';
+import { BananManager, sendErrorLog } from '../../Utils/botUtilities.js';
 import { SlashCommand } from '../../Interfaces/Command.js';
 import ExtendedClient from '../../Core/extendedClient.js';
 import knexInstance from '../../db.js';
@@ -45,8 +45,13 @@ const Banana: SlashCommand = {
             });
             await interaction.editReply({ embeds: [embed] });
         } catch (error) {
-            client.logger.error('failed to banan', error);
             await interaction.editReply({ content: 'Failed to banan user' });
+            await sendErrorLog(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'failed to banan',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
     },
 };

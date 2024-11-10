@@ -7,6 +7,7 @@ const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
 const db_1 = __importDefault(require("../../db"));
 const userService_1 = __importDefault(require("../../Services/userService"));
+const botUtilities_1 = require("../../Utils/botUtilities");
 const TopBanana = {
     category: 'Fun',
     cooldown: 15,
@@ -26,26 +27,36 @@ const TopBanana = {
         if (totalToShow > 50) {
             totalToShow = 50;
         }
-        const service = new userService_1.default(db_1.default);
-        const result = await service.findAll({
-            limit: totalToShow,
-            sortBy: 'bananas',
-            sortOrder: 'desc',
-        });
-        if (result.data.length === 0) {
-            embedData.description?.push('> The leaderboard is empty, `/banana` someone to show results here!');
+        try {
+            const service = new userService_1.default(db_1.default);
+            const result = await service.findAll({
+                limit: totalToShow,
+                sortBy: 'bananas',
+                sortOrder: 'desc',
+            });
+            if (result.data.length === 0) {
+                embedData.description?.push('> The leaderboard is empty, `/banana` someone to show results here!');
+                await interaction.editReply({ embeds: [(0, discordUtilities_1.createEmbed)(embedData)] });
+                return;
+            }
+            let rankCounter = 1;
+            for (const entry of result.data) {
+                const user = entry;
+                const userDisplay = user.display_name && user.display_name.length ? user.display_name : user.username;
+                const userProfileLink = 'https://discordapp.com/users/' + user.id;
+                embedData.description?.push(`${rankCounter}. ${(0, discord_js_1.hyperlink)(userDisplay, userProfileLink)} — ${user.bananas}`);
+                rankCounter++;
+            }
             await interaction.editReply({ embeds: [(0, discordUtilities_1.createEmbed)(embedData)] });
-            return;
         }
-        let rankCounter = 1;
-        for (const entry of result.data) {
-            const user = entry;
-            const userDisplay = user.display_name && user.display_name.length ? user.display_name : user.username;
-            const userProfileLink = 'https://discordapp.com/users/' + user.id;
-            embedData.description?.push(`${rankCounter}. ${(0, discord_js_1.hyperlink)(userDisplay, userProfileLink)} — ${user.bananas}`);
-            rankCounter++;
+        catch (error) {
+            await (0, botUtilities_1.sendErrorLog)(interaction.client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'failure on /topbanana',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
-        await interaction.editReply({ embeds: [(0, discordUtilities_1.createEmbed)(embedData)] });
     },
 };
 exports.default = TopBanana;

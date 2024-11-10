@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const generalUtilities_1 = require("../../Utils/generalUtilities");
+const botUtilities_1 = require("../../Utils/botUtilities");
 const Configure = {
     category: 'Utilities',
     cooldown: 15,
@@ -47,25 +48,35 @@ async function configureActivity(interaction) {
     const activityTypeInput = interaction.options.getString('activity_type');
     const activityName = interaction.options.getString('activity_name') ?? 'AI HUB';
     let activityType = undefined;
-    if (activityTypeInput === 'reset') {
-        interaction.client.user.setPresence({});
-        await (0, generalUtilities_1.delay)(3000);
-        await interaction.editReply({ content: 'Activity reseted' });
-    }
-    else {
-        switch (activityTypeInput) {
-            case 'watching':
-                activityType = discord_js_1.ActivityType.Watching;
-                break;
-            case 'listening':
-                activityType = discord_js_1.ActivityType.Listening;
-                break;
+    try {
+        if (activityTypeInput === 'reset') {
+            interaction.client.user.setPresence({});
+            await (0, generalUtilities_1.delay)(3000);
+            await interaction.editReply({ content: 'Activity reseted' });
         }
-        interaction.client.user.setActivity({
-            name: activityName,
-            type: activityType,
+        else {
+            switch (activityTypeInput) {
+                case 'watching':
+                    activityType = discord_js_1.ActivityType.Watching;
+                    break;
+                case 'listening':
+                    activityType = discord_js_1.ActivityType.Listening;
+                    break;
+            }
+            interaction.client.user.setActivity({
+                name: activityName,
+                type: activityType,
+            });
+            await (0, generalUtilities_1.delay)(3000);
+            await interaction.editReply({ content: 'Activity updated!' });
+        }
+    }
+    catch (error) {
+        await (0, botUtilities_1.sendErrorLog)(interaction.client, error, {
+            command: `/${interaction.commandName}`,
+            message: 'Failure on /configure',
+            guildId: interaction.guildId ?? '',
+            channelId: interaction.channelId,
         });
-        await (0, generalUtilities_1.delay)(3000);
-        await interaction.editReply({ content: 'Activity updated!' });
     }
 }

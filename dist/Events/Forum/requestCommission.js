@@ -111,17 +111,11 @@ const RequestComission = {
         // quit if configuration doesn't allow bot to send messages
         if (!botConfigs.commissions.sendMessages)
             return;
-        const logData = {
-            guildId: thread.guildId,
-            threadId: thread.id,
-            parentId: thread.parentId,
-        };
         try {
             // check if it's a free or paid request
             const isPaidRequest = Boolean(thread.appliedTags.find((tag) => tag == client.discordIDs.Forum.RequestModel.Tags.Paid));
             const isFreeRequest = Boolean(thread.appliedTags.find((tag) => tag == client.discordIDs.Forum.RequestModel.Tags.Free));
             if (isPaidRequest && isFreeRequest) {
-                client.logger.debug('Both free and paid request tags applied to this thread', logData);
                 await handlePaidRequest(client, thread);
             }
             else if (isPaidRequest) {
@@ -132,7 +126,12 @@ const RequestComission = {
             }
         }
         catch (error) {
-            client.logger.error('Error on model request', error, logData);
+            await (0, botUtilities_1.sendErrorLog)(client, error, {
+                command: `Event: ThreadCreate`,
+                message: 'Failure on model request',
+                guildId: thread.guildId ?? '',
+                channelId: thread.id,
+            });
         }
     },
 };

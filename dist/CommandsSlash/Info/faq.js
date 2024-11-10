@@ -8,6 +8,7 @@ const slashCommandData_json_1 = __importDefault(require("../../../JSON/slashComm
 const i18next_1 = __importDefault(require("i18next"));
 const generalUtilities_1 = require("../../Utils/generalUtilities");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
+const botUtilities_1 = require("../../Utils/botUtilities");
 const commandData = slashCommandData_json_1.default.faq;
 const Faq = {
     category: 'Info',
@@ -61,69 +62,79 @@ const Faq = {
             lng: language,
             returnObjects: true,
         });
-        if (typeof response === 'string' && response.startsWith('faq.')) {
-            await interaction.deferReply({ ephemeral: ephemeral });
-            await (0, generalUtilities_1.delay)(3_000);
-            const displayName = await (0, discordUtilities_1.getDisplayName)(interaction.user, interaction.guild);
-            const textResponse = i18next_1.default.t('faq.unknown.message', {
-                user: (0, discord_js_1.bold)(displayName),
-                lng: language,
-            });
-            const embedTitle = i18next_1.default.t('faq.unknown.embedData.title', {
-                lng: language,
-            });
-            const embedDescription = i18next_1.default.t('faq.unknown.embedData.description', {
-                lng: language,
-                returnObjects: true,
-            });
-            await interaction.editReply({
-                content: textResponse + ' 😭' + '\n',
-                embeds: [
-                    new discord_js_1.EmbedBuilder()
-                        .setTitle(`✍ ${embedTitle}`)
-                        .setColor(discord_js_1.Colors.Yellow)
-                        .setDescription((0, discord_js_1.unorderedList)(embedDescription)),
-                ],
-            });
-            logger.warn("Couldn't find topic", logData);
-            return;
-        }
-        const processedTranslation = (0, generalUtilities_1.processTranslation)(response);
-        const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Blue);
-        let hasButtons = false;
-        const rows = [];
-        if (typeof processedTranslation === 'string') {
-            embed.setDescription(processedTranslation);
-        }
-        else {
-            if (processedTranslation.title) {
-                embed.setTitle(processedTranslation.title);
+        try {
+            if (typeof response === 'string' && response.startsWith('faq.')) {
+                await interaction.deferReply({ ephemeral: ephemeral });
+                await (0, generalUtilities_1.delay)(3_000);
+                const displayName = await (0, discordUtilities_1.getDisplayName)(interaction.user, interaction.guild);
+                const textResponse = i18next_1.default.t('faq.unknown.message', {
+                    user: (0, discord_js_1.bold)(displayName),
+                    lng: language,
+                });
+                const embedTitle = i18next_1.default.t('faq.unknown.embedData.title', {
+                    lng: language,
+                });
+                const embedDescription = i18next_1.default.t('faq.unknown.embedData.description', {
+                    lng: language,
+                    returnObjects: true,
+                });
+                await interaction.editReply({
+                    content: textResponse + ' 😭' + '\n',
+                    embeds: [
+                        new discord_js_1.EmbedBuilder()
+                            .setTitle(`✍ ${embedTitle}`)
+                            .setColor(discord_js_1.Colors.Yellow)
+                            .setDescription((0, discord_js_1.unorderedList)(embedDescription)),
+                    ],
+                });
+                logger.warn("Couldn't find topic", logData);
+                return;
             }
-            if (processedTranslation.description) {
-                embed.setDescription(processedTranslation.description.join('\n'));
+            const processedTranslation = (0, generalUtilities_1.processTranslation)(response);
+            const embed = new discord_js_1.EmbedBuilder().setColor(discord_js_1.Colors.Blue);
+            let hasButtons = false;
+            const rows = [];
+            if (typeof processedTranslation === 'string') {
+                embed.setDescription(processedTranslation);
             }
-            if (processedTranslation.footer) {
-                embed.setFooter({ text: processedTranslation.footer });
+            else {
+                if (processedTranslation.title) {
+                    embed.setTitle(processedTranslation.title);
+                }
+                if (processedTranslation.description) {
+                    embed.setDescription(processedTranslation.description.join('\n'));
+                }
+                if (processedTranslation.footer) {
+                    embed.setFooter({ text: processedTranslation.footer });
+                }
+                if (processedTranslation.buttons) {
+                    hasButtons = true;
+                    rows.push((0, discordUtilities_1.createButtons)(processedTranslation.buttons));
+                }
             }
-            if (processedTranslation.buttons) {
-                hasButtons = true;
-                rows.push((0, discordUtilities_1.createButtons)(processedTranslation.buttons));
+            if (hasButtons) {
+                await interaction.reply({
+                    embeds: [embed],
+                    components: rows,
+                    ephemeral,
+                });
             }
+            else {
+                await interaction.reply({
+                    embeds: [embed],
+                    ephemeral,
+                });
+            }
+            logger.info('FAQ sent by slash command', logData);
         }
-        if (hasButtons) {
-            await interaction.reply({
-                embeds: [embed],
-                components: rows,
-                ephemeral,
+        catch (error) {
+            await (0, botUtilities_1.sendErrorLog)(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'Failure on /faq',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
             });
         }
-        else {
-            await interaction.reply({
-                embeds: [embed],
-                ephemeral,
-            });
-        }
-        logger.info('FAQ sent by slash command', logData);
     },
 };
 exports.default = Faq;

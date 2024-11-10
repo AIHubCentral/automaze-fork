@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("../../Utils/discordUtilities");
+const botUtilities_1 = require("../../Utils/botUtilities");
 const Debug = {
     category: 'Utilities',
     data: new discord_js_1.SlashCommandBuilder()
@@ -31,68 +32,78 @@ const Debug = {
         }
         embedContent.push((0, discord_js_1.bold)('Guild:'));
         embedContent.push(`Name: ${guild.name}`);
-        if (selectedOption === 'emojis') {
-            const guildEmojis = Array.from(guild.emojis.cache.values());
-            embedContent.push(`\n${(0, discord_js_1.bold)('Guild Emojis')}:`);
-            const buffer = Buffer.from(JSON.stringify(guildEmojis, null, 4), 'utf-8');
-            const attachment = new discord_js_1.AttachmentBuilder(buffer, { name: 'emojis.json' });
-            botResponse.files = [attachment];
-        }
-        else if (selectedOption === 'stickers') {
-            const guildStickers = Array.from(guild.stickers.cache.values());
-            embedContent.push(`\n${(0, discord_js_1.bold)('Guild Stickers')}:`);
-            const buffer = Buffer.from(JSON.stringify(guildStickers, null, 4), 'utf-8');
-            const attachment = new discord_js_1.AttachmentBuilder(buffer, { name: 'stickers.json' });
-            botResponse.files = [attachment];
-        }
-        else if (selectedOption === 'channel_info') {
-            const channelId = interaction.options.getString('channel_id') ?? '';
-            if (channelId === '') {
-                await interaction.editReply({ content: 'Missing channel ID' });
-                return;
+        try {
+            if (selectedOption === 'emojis') {
+                const guildEmojis = Array.from(guild.emojis.cache.values());
+                embedContent.push(`\n${(0, discord_js_1.bold)('Guild Emojis')}:`);
+                const buffer = Buffer.from(JSON.stringify(guildEmojis, null, 4), 'utf-8');
+                const attachment = new discord_js_1.AttachmentBuilder(buffer, { name: 'emojis.json' });
+                botResponse.files = [attachment];
             }
-            const channel = await (0, discordUtilities_1.getChannelById)(channelId, guild);
-            if (!channel) {
-                await interaction.editReply({
-                    content: `Couldn'\t find channel with ID ${(0, discord_js_1.inlineCode)(channelId)}`,
-                });
-                return;
+            else if (selectedOption === 'stickers') {
+                const guildStickers = Array.from(guild.stickers.cache.values());
+                embedContent.push(`\n${(0, discord_js_1.bold)('Guild Stickers')}:`);
+                const buffer = Buffer.from(JSON.stringify(guildStickers, null, 4), 'utf-8');
+                const attachment = new discord_js_1.AttachmentBuilder(buffer, { name: 'stickers.json' });
+                botResponse.files = [attachment];
             }
-            const isThread = channel.type === discord_js_1.ChannelType.PublicThread;
-            const currentChannel = isThread ? channel : channel;
-            const embed = new discord_js_1.EmbedBuilder()
-                .setTitle(`🪲 Channel Info (${guild.name})`)
-                .setColor(discord_js_1.Colors.Greyple);
-            let embedDescription = [
-                (0, discord_js_1.heading)((0, discord_js_1.bold)('Channel'), discord_js_1.HeadingLevel.Two),
-                (0, discord_js_1.unorderedList)([
-                    `Name: ${(0, discord_js_1.inlineCode)(currentChannel.name)}`,
-                    `ID: ${(0, discord_js_1.inlineCode)(currentChannel.id)}`,
-                    `Type: ${(0, discord_js_1.inlineCode)(String(currentChannel.type))}`,
-                    `Is Thread: ${(0, discord_js_1.inlineCode)(String(isThread))}`,
-                ]),
-            ];
-            if (currentChannel.type === discord_js_1.ChannelType.PublicThread) {
-                embedDescription = [
-                    ...embedDescription,
-                    (0, discord_js_1.heading)((0, discord_js_1.bold)('Thread'), discord_js_1.HeadingLevel.Three),
+            else if (selectedOption === 'channel_info') {
+                const channelId = interaction.options.getString('channel_id') ?? '';
+                if (channelId === '') {
+                    await interaction.editReply({ content: 'Missing channel ID' });
+                    return;
+                }
+                const channel = await (0, discordUtilities_1.getChannelById)(channelId, guild);
+                if (!channel) {
+                    await interaction.editReply({
+                        content: `Couldn'\t find channel with ID ${(0, discord_js_1.inlineCode)(channelId)}`,
+                    });
+                    return;
+                }
+                const isThread = channel.type === discord_js_1.ChannelType.PublicThread;
+                const currentChannel = isThread ? channel : channel;
+                const embed = new discord_js_1.EmbedBuilder()
+                    .setTitle(`🪲 Channel Info (${guild.name})`)
+                    .setColor(discord_js_1.Colors.Greyple);
+                let embedDescription = [
+                    (0, discord_js_1.heading)((0, discord_js_1.bold)('Channel'), discord_js_1.HeadingLevel.Two),
                     (0, discord_js_1.unorderedList)([
-                        `Locked: ${(0, discord_js_1.inlineCode)(String(currentChannel.locked))}`,
-                        `Message count: ${(0, discord_js_1.inlineCode)(String(currentChannel.messageCount))}`,
-                        `Archived: ${(0, discord_js_1.inlineCode)(String(currentChannel.archived))}`,
-                        `autoArchiveDuration: ${(0, discord_js_1.inlineCode)(String(currentChannel.autoArchiveDuration))}`,
-                        `archiveTimestamp: ${(0, discord_js_1.inlineCode)(String(currentChannel.archiveTimestamp))}`,
-                        `Owner ID: ${(0, discord_js_1.inlineCode)(String(currentChannel.ownerId))}`,
-                        `Parent ID: ${(0, discord_js_1.inlineCode)(String(channel.parentId))}`,
+                        `Name: ${(0, discord_js_1.inlineCode)(currentChannel.name)}`,
+                        `ID: ${(0, discord_js_1.inlineCode)(currentChannel.id)}`,
+                        `Type: ${(0, discord_js_1.inlineCode)(String(currentChannel.type))}`,
+                        `Is Thread: ${(0, discord_js_1.inlineCode)(String(isThread))}`,
                     ]),
                 ];
+                if (currentChannel.type === discord_js_1.ChannelType.PublicThread) {
+                    embedDescription = [
+                        ...embedDescription,
+                        (0, discord_js_1.heading)((0, discord_js_1.bold)('Thread'), discord_js_1.HeadingLevel.Three),
+                        (0, discord_js_1.unorderedList)([
+                            `Locked: ${(0, discord_js_1.inlineCode)(String(currentChannel.locked))}`,
+                            `Message count: ${(0, discord_js_1.inlineCode)(String(currentChannel.messageCount))}`,
+                            `Archived: ${(0, discord_js_1.inlineCode)(String(currentChannel.archived))}`,
+                            `autoArchiveDuration: ${(0, discord_js_1.inlineCode)(String(currentChannel.autoArchiveDuration))}`,
+                            `archiveTimestamp: ${(0, discord_js_1.inlineCode)(String(currentChannel.archiveTimestamp))}`,
+                            `Owner ID: ${(0, discord_js_1.inlineCode)(String(currentChannel.ownerId))}`,
+                            `Parent ID: ${(0, discord_js_1.inlineCode)(String(channel.parentId))}`,
+                        ]),
+                    ];
+                }
+                embed.setDescription(embedDescription.join('\n'));
+                await interaction.editReply({ embeds: [embed] });
+                return;
             }
-            embed.setDescription(embedDescription.join('\n'));
-            await interaction.editReply({ embeds: [embed] });
-            return;
+            botResponse.content = embedContent.join('\n');
+            await interaction.editReply(botResponse);
         }
-        botResponse.content = embedContent.join('\n');
-        await interaction.editReply(botResponse);
+        catch (error) {
+            await (0, botUtilities_1.sendErrorLog)(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'Failure on /debug',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
+        }
     },
 };
 exports.default = Debug;

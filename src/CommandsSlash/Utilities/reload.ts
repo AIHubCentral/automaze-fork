@@ -187,7 +187,7 @@ const Reload: SlashCommand = {
                     .setColor(Colors.Green)
                     .setDescription(
                         [
-                            `${bold('stdout:')} ${codeBlock('json', stdout)}`,
+                            `${bold('stdout:')} ${codeBlock('json', stdout.substring(0, 3000) + '\n(extra lines ommited)')}`,
                             `${bold('stderr:')} ${codeBlock('json', stderr)}`,
                         ].join('\n')
                     );

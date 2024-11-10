@@ -23,6 +23,8 @@ import knexInstance from '../../db';
 import { generateRandomId } from '../../Utils/generalUtilities';
 import SettingsService from '../../Services/settingsService';
 import ModelService, { WeightsModelService } from '../../Services/modelService';
+import { sendErrorLog } from '../../Utils/botUtilities';
+import ExtendedClient from '../../Core/extendedClient';
 
 enum DatabaseTables {
     Collaborators = 'collaborators',
@@ -167,52 +169,61 @@ const Database: SlashCommand = {
             return;
         }
 
-        await interaction.deferReply({ ephemeral: true });
+        try {
+            await interaction.deferReply({ ephemeral: true });
 
-        if (subCommand === 'create') {
-            const attachment = interaction.options.getAttachment('file', true);
+            if (subCommand === 'create') {
+                const attachment = interaction.options.getAttachment('file', true);
 
-            try {
-                const response = await axios.get(attachment.url);
-                const jsonData = response.data as unknown;
+                try {
+                    const response = await axios.get(attachment.url);
+                    const jsonData = response.data as unknown;
 
-                await handleDatabaseCreate(interaction, service, jsonData);
-            } catch (error) {
-                console.error('Error reading JSON file:', error);
-                return interaction.reply('Failed to process JSON file.');
+                    await handleDatabaseCreate(interaction, service, jsonData);
+                } catch (error) {
+                    console.error('Error reading JSON file:', error);
+                    return interaction.reply('Failed to process JSON file.');
+                }
+            } else if (subCommand === 'read') {
+                await handleDatabaseRead(interaction, service);
+            } else if (subCommand === 'update') {
+                const attachment = interaction.options.getAttachment('file', true);
+                const id = interaction.options.getString('id', true);
+
+                try {
+                    const response = await axios.get(attachment.url);
+                    const jsonData = response.data as unknown;
+
+                    await handleDatabaseUpdate(interaction, service, id, jsonData);
+                } catch (error) {
+                    console.error('Error reading JSON file:', error);
+                    return interaction.reply('Failed to process JSON file.');
+                }
+            } else if (subCommand === 'delete') {
+                const userId = interaction.options.getString('id', true);
+                await handleDatabaseDelete(interaction, service, userId);
+            } else if (subCommand === 'import') {
+                const attachment = interaction.options.getAttachment('file', true);
+
+                try {
+                    const response = await axios.get(attachment.url);
+                    const jsonData = response.data as unknown;
+
+                    await handleDatabaseImport(interaction, service, jsonData);
+                } catch (error) {
+                    console.error('Error reading JSON file:', error);
+                    return interaction.reply('Failed to process JSON file.');
+                }
+            } else if (subCommand === 'export') {
+                await handleDatabaseExport(interaction, service);
             }
-        } else if (subCommand === 'read') {
-            await handleDatabaseRead(interaction, service);
-        } else if (subCommand === 'update') {
-            const attachment = interaction.options.getAttachment('file', true);
-            const id = interaction.options.getString('id', true);
-
-            try {
-                const response = await axios.get(attachment.url);
-                const jsonData = response.data as unknown;
-
-                await handleDatabaseUpdate(interaction, service, id, jsonData);
-            } catch (error) {
-                console.error('Error reading JSON file:', error);
-                return interaction.reply('Failed to process JSON file.');
-            }
-        } else if (subCommand === 'delete') {
-            const userId = interaction.options.getString('id', true);
-            await handleDatabaseDelete(interaction, service, userId);
-        } else if (subCommand === 'import') {
-            const attachment = interaction.options.getAttachment('file', true);
-
-            try {
-                const response = await axios.get(attachment.url);
-                const jsonData = response.data as unknown;
-
-                await handleDatabaseImport(interaction, service, jsonData);
-            } catch (error) {
-                console.error('Error reading JSON file:', error);
-                return interaction.reply('Failed to process JSON file.');
-            }
-        } else if (subCommand === 'export') {
-            await handleDatabaseExport(interaction, service);
+        } catch (error) {
+            await sendErrorLog(interaction.client as ExtendedClient, error, {
+                command: `/${interaction.commandName}`,
+                message: 'Failure on /database',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
     },
 };

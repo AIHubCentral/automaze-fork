@@ -24,6 +24,7 @@ import { SlashCommand } from '../../Interfaces/Command';
 import ExtendedClient from '../../Core/extendedClient';
 import { getChannelById, getGuildById } from '../../Utils/discordUtilities';
 import winston from 'winston';
+import { sendErrorLog } from '../../Utils/botUtilities';
 
 interface CustomError extends Error {
     code?: number;
@@ -284,15 +285,12 @@ async function handleReplyOption(
             });
         await interaction.editReply({ embeds: [embed] });
     } catch (error) {
-        const customError = error as CustomError;
-        if (customError.code === 10008) {
-            // 10008 is the code for Unknown Message
-            logger.error('Unknown Message:', customError);
-            await interaction.editReply('The message could not be found. It might have been deleted.');
-        } else {
-            logger.error('An unexpected error occurred:', customError);
-            await interaction.editReply('An unexpected error occurred while fetching the message.');
-        }
+        await sendErrorLog(client, error, {
+            command: `/${interaction.commandName}`,
+            message: 'Failure on /send',
+            guildId: interaction.guildId ?? '',
+            channelId: interaction.channelId,
+        });
     }
 }
 

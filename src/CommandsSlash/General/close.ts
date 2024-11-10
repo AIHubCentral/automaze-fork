@@ -5,8 +5,6 @@ import {
     GuildMember,
     SlashCommandBuilder,
     ThreadChannel,
-    RESTJSONErrorCodes,
-    DiscordAPIError,
     ChannelType,
 } from 'discord.js';
 import { SlashCommand } from '../../Interfaces/Command';
@@ -14,6 +12,7 @@ import slashCommandData from '../../../JSON/slashCommandData.json';
 import ExtendedClient from '../../Core/extendedClient';
 import i18next from '../../i18n';
 import { EmbedData } from '../../Interfaces/BotData';
+import { sendErrorLog } from '../../Utils/botUtilities';
 
 const commandData = slashCommandData.close;
 
@@ -124,43 +123,17 @@ const Close: SlashCommand = {
 
             client.logger.info('thread locked successfully', logData);
         } catch (error) {
-            if (error instanceof DiscordAPIError) {
-                switch (error.code) {
-                    case RESTJSONErrorCodes.UnknownChannel:
-                        client.logger.error('The specified channel does not exist.', logData);
-                        await interaction.reply({
-                            content: i18next.t('close.invalid_channel', { lng: language }),
-                            ephemeral: true,
-                        });
-                        break;
-                    case RESTJSONErrorCodes.MissingPermissions:
-                        client.logger.error(
-                            'The bot does not have permission to perform this action.',
-                            logData
-                        );
-                        await interaction.reply({
-                            content: i18next.t('close.failure', { lng: language }),
-                            ephemeral: true,
-                        });
-                        break;
-                    default:
-                        client.logger.error(`Discord API error: ${error.message}`, logData);
-                        await interaction.reply({
-                            content: i18next.t('close.failure', { lng: language }),
-                            ephemeral: true,
-                        });
-                        break;
-                }
-            } else {
-                client.logger.error(
-                    `Error closing thread: ${error instanceof Error ? error.message : String(error)}`,
-                    logData
-                );
-                await interaction.reply({
-                    content: i18next.t('close.failure', { lng: language }),
-                    ephemeral: true,
-                });
-            }
+            await interaction.reply({
+                content: i18next.t('close.failure', { lng: language }),
+                ephemeral: true,
+            });
+
+            await sendErrorLog(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'Failed to close post',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
     },
 };

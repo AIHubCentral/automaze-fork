@@ -17,6 +17,7 @@ import ms from 'pretty-ms';
 import i18next from 'i18next';
 import { EmbedData } from '../../Interfaces/BotData';
 import { generateRandomId } from '../../Utils/generalUtilities';
+import { sendErrorLog } from '../../Utils/botUtilities';
 
 const commandData = slashCommandData.help;
 
@@ -114,24 +115,27 @@ const Help: SlashCommand = {
             });
         }
 
-        /*
-        if (language === '') {
-            language = interaction.locale;
-        }
-        */
+        try {
+            if (interaction.options.getSubcommand() === 'commands') {
+                await handleCommandOption(interaction, commandType, language, ephemeral);
+            } else if (interaction.options.getSubcommand() === 'general') {
+                await handleGeneralOption(interaction, language, ephemeral);
+            }
 
-        if (interaction.options.getSubcommand() === 'commands') {
-            await handleCommandOption(interaction, commandType, language, ephemeral);
-        } else if (interaction.options.getSubcommand() === 'general') {
-            await handleGeneralOption(interaction, language, ephemeral);
+            logger.info('Help sent', {
+                guildId: interaction.guildId,
+                channelId: interaction.channelId,
+                commandParams: { commandType, language, ephemeral },
+                executionTime: ms((Date.now() - executionStart) / 1000),
+            });
+        } catch (error) {
+            await sendErrorLog(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'Failure on /help',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
-
-        logger.info('Help sent', {
-            guildId: interaction.guildId,
-            channelId: interaction.channelId,
-            commandParams: { commandType, language, ephemeral },
-            executionTime: ms((Date.now() - executionStart) / 1000),
-        });
     },
 };
 

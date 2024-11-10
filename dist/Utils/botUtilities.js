@@ -22,6 +22,7 @@ exports.createPaginatedEmbed = createPaginatedEmbed;
 exports.EmbedDataToAPI = EmbedDataToAPI;
 exports.handleSendRealtimeGuides = handleSendRealtimeGuides;
 exports.getLanguageByChannelId = getLanguageByChannelId;
+exports.sendErrorLog = sendErrorLog;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const discord_js_1 = require("discord.js");
 const discordUtilities_1 = require("./discordUtilities");
@@ -683,77 +684,60 @@ function getLanguageByChannelId(channelId) {
     };
     return languages[channelId] || 'en';
 }
-// export class CronJobService {
-//     private client: ExtendedClient;
-//     private isRunning: boolean;
-//     private cronExpression: string;
-//     private task: ScheduledTask | null = null;
-//     constructor(client: ExtendedClient) {
-//         this.client = client;
-//         this.isRunning = false;
-//     }
-//     /**
-//      * Schedule a new cron job with the specified interval and task.
-//      * @param cronExpression - The cron expression string (e.g., '* * * * *' for every minute).
-//      * @param taskFunction - The function to be executed on each scheduled interval.
-//      */
-//     public scheduleJob(cronExpression: string, taskFunction: () => void): void {
-//         if (this.task) {
-//             console.log('A job is already scheduled. Stop it before scheduling a new one.');
-//             return;
-//         }
-//         this.task = cron.schedule(cronExpression, taskFunction, {
-//             scheduled: true,
-//             timezone: 'America/New_York', // Specify timezone if needed
-//         });
-//         console.log('Job scheduled with expression:', cronExpression);
-//     }
-//     start() {
-//         this.task.start();
-//         this.isRunning = true;
-//         console.log('Task started!');
-//     }
-//     stop() {
-//         this.task.stop();
-//         this.isRunning = false;
-//         console.log('Task stopped!');
-//     }
-//     executeTask() {
-//         console.log('Running task...');
-//         this.sendGuides();
-//     }
-//     async sendGuides() {
-//         const { discordIDs, botConfigs, botData } = this.client;
-//         const availableColors = getAvailableColors(botConfigs);
-//         const guild = this.client.guilds.cache.get(discordIDs.Guild);
-//         const botResponse = {};
-//         // send guides to help-okada
-//         botResponse.embeds = createEmbeds(botData.embeds.help.WOkada, availableColors);
-//         const helpOkadaChannel = await getChannelById(discordIDs.Channel.HelpWOkada, guild);
-//         await helpOkadaChannel.send(botResponse);
-//         await wait(120_000);
-//         // send guides to help channel
-//         botResponse.content = '# RVC Guides (How to Make AI Cover)';
-//         botResponse.embeds = createEmbeds(botData.embeds.guides.rvc.en, availableColors);
-//         const helpChannel = await getChannelById(discordIDs.Channel.HelpRVC, guild);
-//         await helpChannel.send(botResponse);
-//         await wait(60_000);
-//         /*
-//         // send guides to making datasets
-//         botResponse.content = '';
-//         botResponse.embeds = createEmbeds(botData.embeds.guides.audio.en, availableColors);
-//         const datasetsChannel = await getChannelById(discordIDs.Channel.MakingDatasets, guild);
-//         await datasetsChannel.send(botResponse);
-//         await wait(60_000);
-//         */
-//         this.client.logger.debug('Guides sent');
-//         if (botConfigs.sendLogs && botConfigs.debugGuild.id && botConfigs.debugGuild.channelId) {
-//             // notify dev server
-//             botResponse.embeds = [];
-//             botResponse.content = `📚 Guides sent to ${helpChannel} and ${helpOkadaChannel}.`;
-//             const debugServerGuild = this.client.guilds.cache.get(botConfigs.debugGuild.id);
-//             const debugChannel = await getChannelById(botConfigs.debugChannel.id, debugServerGuild);
-//             await debugChannel.send(botResponse);
-//         }
-//     }
-// }
+/**
+ * Sends error log to the debug guild
+ * @param client Discord client
+ */
+async function sendErrorLog(client, errorData, extraInfo) {
+    const settings = client.botCache.get('settings');
+    if (!settings)
+        return;
+    if (!settings.send_logs)
+        return;
+    if (!settings.debug_guild_id || !settings.debug_guild_channel_id)
+        return;
+    const debugGuild = await (0, discordUtilities_1.getGuildById)(settings.debug_guild_id, client);
+    if (!debugGuild)
+        return;
+    const debugChannel = await (0, discordUtilities_1.getChannelById)(settings.debug_guild_channel_id, debugGuild);
+    if (!debugChannel)
+        return;
+    const targetChannel = debugChannel;
+    const description = JSON.stringify(errorData, null, 4);
+    const originalGuild = await (0, discordUtilities_1.getGuildById)(extraInfo.guildId, client);
+    const originalGuildName = originalGuild ? originalGuild.name : extraInfo.guildId;
+    const embedData = {
+        color: discord_js_1.Colors.Red,
+        title: 'Errored',
+        fields: [
+            {
+                name: 'Guild',
+                value: originalGuildName,
+                inline: true,
+            },
+            { name: 'Channel', value: extraInfo.channelId, inline: true },
+            { name: 'URL', value: (0, discord_js_1.channelLink)(extraInfo.channelId, extraInfo.guildId), inline: false },
+            { name: 'Description', value: extraInfo.message, inline: false },
+        ],
+        // Trim description to 3000 characters
+        description: description.length > 3_000 ? description.substring(0, 3_000) + '...' : description,
+        footer: { text: `Command: ${extraInfo.command}` },
+    };
+    const logger = client.logger;
+    if (errorData instanceof discord_js_1.DiscordAPIError) {
+        embedData.title = 'Discord API Error';
+        embedData.description = (0, discord_js_1.blockQuote)(errorData.message);
+        embedData.fields?.push({ name: 'Code', value: String(errorData.code), inline: true });
+        embedData.fields?.push({ name: 'Method', value: errorData.method, inline: true });
+        embedData.fields?.push({ name: 'Status', value: String(errorData.status), inline: true });
+        logger.error(errorData.message, errorData);
+    }
+    else if (errorData instanceof Error) {
+        embedData.title = `Error: ${errorData.name}`;
+        embedData.description = (0, discord_js_1.blockQuote)(errorData.message);
+        embedData.fields?.push({ name: 'Stack', value: JSON.stringify(errorData, null, 4), inline: false });
+        logger.error(errorData.message, errorData);
+    }
+    const embed = new discord_js_1.EmbedBuilder(embedData).setTimestamp();
+    await targetChannel.send({ embeds: [embed] });
+}

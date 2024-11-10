@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const botUtilities_1 = require("../../Utils/botUtilities");
+const generalUtilities_1 = require("../../Utils/generalUtilities");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const Chance = require(`chance`);
 const chance = new Chance();
-const wait = require('node:timers/promises').setTimeout;
-const utils = require('../../utils.js');
 const EightBall = {
     category: 'Fun',
     data: new discord_js_1.SlashCommandBuilder()
@@ -13,11 +14,8 @@ const EightBall = {
         .addStringOption((option) => option.setName('question').setDescription('Ask questions about your life').setRequired(true)),
     async execute(interaction) {
         const client = interaction.client;
-        const question = interaction.options.getString('question');
-        if (!question) {
-            await interaction.reply('You need to provide a question!\n\n> Example: `/8ball` `Is RVC better than SVC?`');
-        }
-        else {
+        const question = interaction.options.getString('question', true);
+        try {
             const botResponses = client.botResponses.responses['8ball'];
             const affirmativeResponses = botResponses.affirmative;
             const noncommittalResponses = botResponses.nonCommital;
@@ -49,12 +47,20 @@ const EightBall = {
                 .setColor(`DarkButNotBlack`);
             await interaction.reply({ embeds: [loadingEmbed] });
             // wait between 3 to 5 seconds
-            await wait(utils.getRandomNumber(3000, 5000));
+            await (0, generalUtilities_1.delay)((0, generalUtilities_1.getRandomNumber)(3000, 5000));
             const answerEmbed = new discord_js_1.EmbedBuilder()
                 .setTitle(question)
                 .setColor(response[1])
                 .setDescription(`## ${response[0]}\n# ${percentToBar(100 - percent)} - ${100 - percent}% possible`);
             interaction.editReply({ embeds: [answerEmbed] });
+        }
+        catch (error) {
+            await (0, botUtilities_1.sendErrorLog)(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'failure on /8ball',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
     },
 };

@@ -40,8 +40,13 @@ const Banana = {
             await interaction.editReply({ embeds: [embed] });
         }
         catch (error) {
-            client.logger.error('failed to banan', error);
             await interaction.editReply({ content: 'Failed to banan user' });
+            await (0, botUtilities_js_1.sendErrorLog)(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'failed to banan',
+                guildId: interaction.guildId ?? '',
+                channelId: interaction.channelId,
+            });
         }
     },
 };

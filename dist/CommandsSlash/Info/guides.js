@@ -31,95 +31,99 @@ const Guides = {
         const mainUser = interaction.user;
         const client = interaction.client;
         const { botCache, logger } = client;
-        /*         if (['pt'].includes(language)) {
-            return await interaction.reply({
-                content: i18next.t('general.translation_not_available', { lng: language }),
-                ephemeral: true,
-            });
-        } */
-        if (category === 'audio' || category === 'local') {
-            const resources = await (0, botUtilities_1.getResourceData)(category, botCache, logger);
-            if (resources.length === 0) {
-                await interaction.reply({
-                    content: i18n_1.default.t('general.not_available', { lng: language }),
-                    ephemeral: true,
+        try {
+            if (category === 'audio' || category === 'local') {
+                const resources = await (0, botUtilities_1.getResourceData)(category, botCache, logger);
+                if (resources.length === 0) {
+                    await interaction.reply({
+                        content: i18n_1.default.t('general.not_available', { lng: language }),
+                        ephemeral: true,
+                    });
+                    return;
+                }
+                const embed = (0, discordUtilities_1.createEmbed)({
+                    title: i18n_1.default.t(`common.emojis.${category === 'local' ? 'laptop' : 'book'}`) +
+                        ' ' +
+                        i18n_1.default.t(`tags.${category}.embed.title`, { lng: language }),
+                    description: [(0, botUtilities_1.resourcesToUnorderedListAlt)(resources, language)],
+                    footer: i18n_1.default.t(`tags.${category}.embed.footer`, { lng: language }),
+                }, discord_js_1.Colors.Blue);
+                logger.info(`sent guides with /${interaction.commandName}`, {
+                    guildId: interaction.guildId,
+                    channelId: interaction.channelId,
+                    params: {
+                        category,
+                        language,
+                        ephemeral,
+                    },
+                    executionTime: (0, pretty_ms_1.default)(Date.now() - startTime),
                 });
+                return await interaction.reply({ embeds: [embed], ephemeral });
+            }
+            else if (category === 'realtime') {
+                await (0, botUtilities_1.handleSendRealtimeGuides)(interaction, undefined, mainUser, ephemeral, language);
                 return;
             }
-            const embed = (0, discordUtilities_1.createEmbed)({
-                title: i18n_1.default.t(`common.emojis.${category === 'local' ? 'laptop' : 'book'}`) +
-                    ' ' +
-                    i18n_1.default.t(`tags.${category}.embed.title`, { lng: language }),
-                description: [(0, botUtilities_1.resourcesToUnorderedListAlt)(resources, language)],
-                footer: i18n_1.default.t(`tags.${category}.embed.footer`, { lng: language }),
-            }, discord_js_1.Colors.Blue);
-            logger.info(`sent guides with /${interaction.commandName}`, {
-                guildId: interaction.guildId,
-                channelId: interaction.channelId,
-                params: {
-                    category,
-                    language,
-                    ephemeral,
-                },
-                executionTime: (0, pretty_ms_1.default)(Date.now() - startTime),
-            });
-            return await interaction.reply({ embeds: [embed], ephemeral });
-        }
-        else if (category === 'realtime') {
-            await (0, botUtilities_1.handleSendRealtimeGuides)(interaction, undefined, mainUser, ephemeral, language);
-            return;
-        }
-        else if (category === 'rvc') {
-            const content = i18n_1.default.t('tags.rvc.embeds', {
-                lng: language,
-                returnObjects: true,
-            });
-            let selectedTheme = null;
-            const settings = client.botCache.get('main_settings');
-            if (!settings) {
-                selectedTheme = discordUtilities_1.ColorThemes.Default;
+            else if (category === 'rvc') {
+                const content = i18n_1.default.t('tags.rvc.embeds', {
+                    lng: language,
+                    returnObjects: true,
+                });
+                let selectedTheme = null;
+                const settings = client.botCache.get('main_settings');
+                if (!settings) {
+                    selectedTheme = discordUtilities_1.ColorThemes.Default;
+                }
+                else {
+                    selectedTheme = settings.theme;
+                }
+                const apiEmbedData = content.map((item) => {
+                    return {
+                        title: item.title,
+                        description: item.description?.join('\n'),
+                    };
+                });
+                const embeds = (0, discordUtilities_1.createThemedEmbeds)(apiEmbedData, selectedTheme);
+                logger.info(`sent guides with /${interaction.commandName}`, {
+                    guildId: interaction.guildId,
+                    channelId: interaction.channelId,
+                    params: {
+                        category,
+                        language,
+                        ephemeral,
+                    },
+                    executionTime: (0, pretty_ms_1.default)(Date.now() - startTime),
+                });
+                return await interaction.reply({ embeds, ephemeral });
             }
-            else {
-                selectedTheme = settings.theme;
+            else if (category === 'uvr') {
+                const content = i18n_1.default.t('tags.uvr', {
+                    lng: language,
+                    returnObjects: true,
+                });
+                logger.info(`sent guides with /${interaction.commandName}`, {
+                    guildId: interaction.guildId,
+                    channelId: interaction.channelId,
+                    params: {
+                        category,
+                        language,
+                        ephemeral,
+                    },
+                    executionTime: (0, pretty_ms_1.default)(Date.now() - startTime),
+                });
+                return await interaction.reply({
+                    embeds: [(0, discordUtilities_1.createEmbed)(content.embed)],
+                    components: [(0, discordUtilities_1.createButtons)(content.buttons)],
+                    ephemeral,
+                });
             }
-            const apiEmbedData = content.map((item) => {
-                return {
-                    title: item.title,
-                    description: item.description?.join('\n'),
-                };
-            });
-            const embeds = (0, discordUtilities_1.createThemedEmbeds)(apiEmbedData, selectedTheme);
-            logger.info(`sent guides with /${interaction.commandName}`, {
-                guildId: interaction.guildId,
-                channelId: interaction.channelId,
-                params: {
-                    category,
-                    language,
-                    ephemeral,
-                },
-                executionTime: (0, pretty_ms_1.default)(Date.now() - startTime),
-            });
-            return await interaction.reply({ embeds, ephemeral });
         }
-        else if (category === 'uvr') {
-            const content = i18n_1.default.t('tags.uvr', {
-                lng: language,
-                returnObjects: true,
-            });
-            logger.info(`sent guides with /${interaction.commandName}`, {
-                guildId: interaction.guildId,
+        catch (error) {
+            await (0, botUtilities_1.sendErrorLog)(client, error, {
+                command: `/${interaction.commandName}`,
+                message: 'Failure on /guides',
+                guildId: interaction.guildId ?? '',
                 channelId: interaction.channelId,
-                params: {
-                    category,
-                    language,
-                    ephemeral,
-                },
-                executionTime: (0, pretty_ms_1.default)(Date.now() - startTime),
-            });
-            return await interaction.reply({
-                embeds: [(0, discordUtilities_1.createEmbed)(content.embed)],
-                components: [(0, discordUtilities_1.createButtons)(content.buttons)],
-                ephemeral,
             });
         }
     },

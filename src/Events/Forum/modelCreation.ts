@@ -3,6 +3,7 @@ import IEventData from '../../Interfaces/Events';
 import knexInstance from '../../db';
 import ModelService from '../../Services/modelService';
 import { delay } from '../../Utils/generalUtilities';
+import { sendErrorLog } from '../../Utils/botUtilities';
 
 const ModelCreation: IEventData = {
     name: Events.ThreadCreate,
@@ -14,19 +15,28 @@ const ModelCreation: IEventData = {
 
         await delay(10_000);
 
-        const service = new ModelService(knexInstance);
+        try {
+            const service = new ModelService(knexInstance);
 
-        const starterMessage = await channel.fetchStarterMessage();
-        const description = starterMessage ? starterMessage.content : '';
+            const starterMessage = await channel.fetchStarterMessage();
+            const description = starterMessage ? starterMessage.content : '';
 
-        await service.create({
-            id: channel.id,
-            parent_id: channel.parentId ?? '',
-            author_id: channel.ownerId ?? '',
-            title: channel.name,
-            is_request: false,
-            description,
-        });
+            await service.create({
+                id: channel.id,
+                parent_id: channel.parentId ?? '',
+                author_id: channel.ownerId ?? '',
+                title: channel.name,
+                is_request: false,
+                description,
+            });
+        } catch (error) {
+            await sendErrorLog(client, error, {
+                command: `Event: ThreadCreate`,
+                message: 'Failure on caching voice model',
+                guildId: channel.guildId ?? '',
+                channelId: channel.id,
+            });
+        }
     },
 };
 

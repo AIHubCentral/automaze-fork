@@ -2,13 +2,16 @@
 import {
     ActionRowBuilder,
     APIEmbed,
+    blockQuote,
     bold,
     ButtonBuilder,
     ButtonStyle,
+    channelLink,
     ChatInputCommandInteraction,
     Collection,
     ColorResolvable,
     Colors,
+    DiscordAPIError,
     EmbedBuilder,
     GuildMember,
     hyperlink,
@@ -29,7 +32,7 @@ import {
 import IBotConfigs from '../Interfaces/BotConfigs';
 import ExtendedClient from '../Core/extendedClient';
 import { ButtonData, EmbedData, SelectMenuData, SelectMenuOption } from '../Interfaces/BotData';
-import { createButtons, createEmbed } from './discordUtilities';
+import { createButtons, createEmbed, getChannelById, getGuildById } from './discordUtilities';
 import UserService, { UserDTO } from '../Services/userService';
 import path from 'path';
 import fs from 'fs';
@@ -43,6 +46,7 @@ import natural from 'natural';
 
 import Knex from 'knex';
 import knexInstance from '../db';
+import { ISettings } from '../Services/settingsService';
 
 /* Enums */
 export enum CloudPlatform {
@@ -857,90 +861,66 @@ function getLanguageByChannelId(channelId: string): string {
 
 export { getLanguageByChannelId };
 
-// export class CronJobService {
-//     private client: ExtendedClient;
-//     private isRunning: boolean;
-//     private cronExpression: string;
-//     private task: ScheduledTask | null = null;
+/**
+ * Sends error log to the debug guild
+ * @param client Discord client
+ */
+export async function sendErrorLog(
+    client: ExtendedClient,
+    errorData: unknown,
+    extraInfo: { command: string; message: string; guildId: string; channelId: string }
+) {
+    const settings = client.botCache.get('settings') as ISettings;
+    if (!settings) return;
+    if (!settings.send_logs) return;
+    if (!settings.debug_guild_id || !settings.debug_guild_channel_id) return;
 
-//     constructor(client: ExtendedClient) {
-//         this.client = client;
-//         this.isRunning = false;
-//     }
+    const debugGuild = await getGuildById(settings.debug_guild_id, client);
+    if (!debugGuild) return;
 
-//     /**
-//      * Schedule a new cron job with the specified interval and task.
-//      * @param cronExpression - The cron expression string (e.g., '* * * * *' for every minute).
-//      * @param taskFunction - The function to be executed on each scheduled interval.
-//      */
-//     public scheduleJob(cronExpression: string, taskFunction: () => void): void {
-//         if (this.task) {
-//             console.log('A job is already scheduled. Stop it before scheduling a new one.');
-//             return;
-//         }
+    const debugChannel = await getChannelById(settings.debug_guild_channel_id, debugGuild);
+    if (!debugChannel) return;
 
-//         this.task = cron.schedule(cronExpression, taskFunction, {
-//             scheduled: true,
-//             timezone: 'America/New_York', // Specify timezone if needed
-//         });
+    const targetChannel = debugChannel as TextChannel;
+    const description = JSON.stringify(errorData, null, 4);
 
-//         console.log('Job scheduled with expression:', cronExpression);
-//     }
+    const originalGuild = await getGuildById(extraInfo.guildId, client);
+    const originalGuildName = originalGuild ? originalGuild.name : extraInfo.guildId;
 
-//     start() {
-//         this.task.start();
-//         this.isRunning = true;
-//         console.log('Task started!');
-//     }
+    const embedData: APIEmbed = {
+        color: Colors.Red,
+        title: 'Errored',
+        fields: [
+            {
+                name: 'Guild',
+                value: originalGuildName,
+                inline: true,
+            },
+            { name: 'Channel', value: extraInfo.channelId, inline: true },
+            { name: 'URL', value: channelLink(extraInfo.channelId, extraInfo.guildId), inline: false },
+            { name: 'Description', value: extraInfo.message, inline: false },
+        ],
+        // Trim description to 3000 characters
+        description: description.length > 3_000 ? description.substring(0, 3_000) + '...' : description,
+        footer: { text: `Command: ${extraInfo.command}` },
+    };
 
-//     stop() {
-//         this.task.stop();
-//         this.isRunning = false;
-//         console.log('Task stopped!');
-//     }
+    const logger = client.logger;
 
-//     executeTask() {
-//         console.log('Running task...');
-//         this.sendGuides();
-//     }
+    if (errorData instanceof DiscordAPIError) {
+        embedData.title = 'Discord API Error';
+        embedData.description = blockQuote(errorData.message);
+        embedData.fields?.push({ name: 'Code', value: String(errorData.code), inline: true });
+        embedData.fields?.push({ name: 'Method', value: errorData.method, inline: true });
+        embedData.fields?.push({ name: 'Status', value: String(errorData.status), inline: true });
+        logger.error(errorData.message, errorData);
+    } else if (errorData instanceof Error) {
+        embedData.title = `Error: ${errorData.name}`;
+        embedData.description = blockQuote(errorData.message);
+        embedData.fields?.push({ name: 'Stack', value: JSON.stringify(errorData, null, 4), inline: false });
+        logger.error(errorData.message, errorData);
+    }
 
-//     async sendGuides() {
-//         const { discordIDs, botConfigs, botData } = this.client;
-//         const availableColors = getAvailableColors(botConfigs);
-//         const guild = this.client.guilds.cache.get(discordIDs.Guild);
-//         const botResponse = {};
-
-//         // send guides to help-okada
-//         botResponse.embeds = createEmbeds(botData.embeds.help.WOkada, availableColors);
-//         const helpOkadaChannel = await getChannelById(discordIDs.Channel.HelpWOkada, guild);
-//         await helpOkadaChannel.send(botResponse);
-//         await wait(120_000);
-
-//         // send guides to help channel
-//         botResponse.content = '# RVC Guides (How to Make AI Cover)';
-//         botResponse.embeds = createEmbeds(botData.embeds.guides.rvc.en, availableColors);
-//         const helpChannel = await getChannelById(discordIDs.Channel.HelpRVC, guild);
-//         await helpChannel.send(botResponse);
-//         await wait(60_000);
-
-//         /*
-//         // send guides to making datasets
-//         botResponse.content = '';
-//         botResponse.embeds = createEmbeds(botData.embeds.guides.audio.en, availableColors);
-//         const datasetsChannel = await getChannelById(discordIDs.Channel.MakingDatasets, guild);
-//         await datasetsChannel.send(botResponse);
-//         await wait(60_000);
-//         */
-
-//         this.client.logger.debug('Guides sent');
-
-//         if (botConfigs.sendLogs && botConfigs.debugGuild.id && botConfigs.debugGuild.channelId) {
-//             // notify dev server
-//             botResponse.embeds = [];
-//             botResponse.content = `📚 Guides sent to ${helpChannel} and ${helpOkadaChannel}.`;
-//             const debugServerGuild = this.client.guilds.cache.get(botConfigs.debugGuild.id);
-//             const debugChannel = await getChannelById(botConfigs.debugChannel.id, debugServerGuild);
-//             await debugChannel.send(botResponse);
-//         }
-//     }
-// }
+    const embed = new EmbedBuilder(embedData).setTimestamp();
+    await targetChannel.send({ embeds: [embed] });
+}

@@ -12,7 +12,7 @@ import IEventData from '../../Interfaces/Events';
 import ExtendedClient from '../../Core/extendedClient';
 import { createEmbed, DiscordErrorCodes } from '../../Utils/discordUtilities';
 import { delay } from '../../Utils/generalUtilities';
-import { isAskingForGirlModel } from '../../Utils/botUtilities';
+import { isAskingForGirlModel, sendErrorLog } from '../../Utils/botUtilities';
 import knexInstance from '../../db';
 import ModelService from '../../Services/modelService';
 
@@ -132,12 +132,6 @@ const RequestComission: IEventData = {
         // quit if configuration doesn't allow bot to send messages
         if (!botConfigs.commissions.sendMessages) return;
 
-        const logData = {
-            guildId: thread.guildId,
-            threadId: thread.id,
-            parentId: thread.parentId,
-        };
-
         try {
             // check if it's a free or paid request
             const isPaidRequest = Boolean(
@@ -148,7 +142,6 @@ const RequestComission: IEventData = {
             );
 
             if (isPaidRequest && isFreeRequest) {
-                client.logger.debug('Both free and paid request tags applied to this thread', logData);
                 await handlePaidRequest(client, thread);
             } else if (isPaidRequest) {
                 await handlePaidRequest(client, thread);
@@ -156,7 +149,12 @@ const RequestComission: IEventData = {
                 await handleFreeRequest(client, thread);
             }
         } catch (error) {
-            client.logger.error('Error on model request', error, logData);
+            await sendErrorLog(client, error, {
+                command: `Event: ThreadCreate`,
+                message: 'Failure on model request',
+                guildId: thread.guildId ?? '',
+                channelId: thread.id,
+            });
         }
     },
 };
